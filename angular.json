@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "attendmanager"
+    }
+  },
+  "defaultProject": "attendmanager",
+  "cli": {
+    "analytics": "caf6277e-abae-4911-9274-1823d5d831bd"
+  }
 }
