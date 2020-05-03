@@ -12,6 +12,10 @@ const routes: Routes = [
     path: 'create-event',
     loadChildren: () => import('./create-event/create-event.module').then(m => m.CreateEventModule)
   },
+  {
+    path: 'create-group',
+    loadChildren: () => import ('./create-group/create-group.module').then(m => m.CreateGroupModule)
+  },
 ];
 
 @NgModule({
