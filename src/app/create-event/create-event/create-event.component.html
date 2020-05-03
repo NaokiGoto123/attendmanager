@@ -1,1 +1,9 @@
-<p>create-event works!</p>
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <input type="text" formControlName="title" placeholder="ピクニック" required>
+  <input type="text" formControlName="description" placeholder="詳細" required>
+  <input type="text" formControlName="memberlimit" placeholder="参加人数条件" required>
+  <input type="text" formControlName="date" placeholder="日付" required>
+  <input type="text" formControlName="time" placeholder="時間" required>
+  <input type="text" formControlName="location" placeholder="場所" required>
+  <button>作成</button>
+</form>
