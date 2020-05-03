@@ -20,6 +20,10 @@ const routes: Routes = [
     path: 'events',
     loadChildren: () => import ('./events/events.module').then(m => m.EventsModule)
   },
+  {
+    path: 'shared',
+    loadChildren: () => import ('./shared/shared.module').then(m => m.SharedModule)
+  },
 ];
 
 @NgModule({
