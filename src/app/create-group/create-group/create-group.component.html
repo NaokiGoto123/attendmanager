@@ -1,1 +1,16 @@
-<p>create-group works!</p>
+<div class="container">
+  <h1>Create your group</h1>
+
+  <form [formGroup] = "form" (ngSubmit)="submit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Name your group</mat-label>
+      <input matInput formControlName="name" type="email" required>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Write group description</mat-label>
+      <input matInput formControlName="description" type = "text">
+    </mat-form-field>
+    <button mat-stroked-button (click)="openSnackBar()" [disabled]="form.invalid || form.pristine" color = "primary">Create!!</button>
+  </form>
+</div>
+
