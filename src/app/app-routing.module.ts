@@ -1,12 +1,17 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { CreateEventComponent } from './create-event/create-event/create-event.component';
 
 
 const routes: Routes = [
   {
     path: 'welcome',
     loadChildren: () => import('./welcome/welcome.module').then(m => m.WelcomeModule)
-  }
+  },
+  {
+    path: 'create-event',
+    loadChildren: () => import('./create-event/create-event.module').then(m => m.CreateEventModule)
+  },
 ];
 
 @NgModule({
