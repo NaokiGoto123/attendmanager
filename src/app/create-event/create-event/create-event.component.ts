@@ -24,7 +24,7 @@ export class CreateEventComponent implements OnInit {
     time: ['', [
       Validators.required
     ]],
-    location:['', [
+    location: ['', [
       Validators.required
     ]],
   });
