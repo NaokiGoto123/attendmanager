@@ -18,7 +18,7 @@ export class WelcomeComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private _snackBar: MatSnackBar
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -29,7 +29,7 @@ export class WelcomeComponent implements OnInit {
   }
 
   openSnackBar() {
-    this._snackBar.open('Signed in', '', {
+    this.snackBar.open('Signed in', '', {
       duration: 3000,
     });
   }
