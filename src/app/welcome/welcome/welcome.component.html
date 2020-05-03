@@ -1,1 +1,18 @@
-<p>welcome works!</p>
+<div class="container">
+  <h1>welcome!!</h1>
+
+  <form [formGroup] = "form" (ngSubmit)="submit()">
+    <mat-form-field appearance="fill">
+      <mat-label>Enter your Email address</mat-label>
+      <input matInput formControlName="email" autocomplete="email" placeholder="Email" type="email" required>
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Enter your password</mat-label>
+      <input matInput formControlName="password" [type]="hide ? 'password' : 'text'">
+      <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+    </mat-form-field>
+    <button mat-raised-button [disabled]="form.invalid || form.pristine" color = "primary">GO!!</button>
+  </form>
+</div>
