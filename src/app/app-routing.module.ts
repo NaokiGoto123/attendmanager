@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { CreateEventComponent } from './create-event/create-event/create-event.component';
+import { NotfoundComponent } from './notfound/notfound.component';
 
 
 const routes: Routes = [
@@ -27,6 +28,10 @@ const routes: Routes = [
   {
     path: 'search',
     loadChildren: () => import ('./search/search.module').then(m => m.SearchModule)
+  },
+  {
+    path: '**', // this path should be the last.
+    component: NotfoundComponent
   }
 ];
 
