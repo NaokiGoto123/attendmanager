@@ -1,18 +1,20 @@
 <div class="container">
-  <h1>welcome!!</h1>
+  <h1>WELCOME TO AttendManager!!</h1>
 
-  <form [formGroup] = "form" (ngSubmit)="submit()">
-    <mat-form-field appearance="outline">
-      <mat-label>Enter your Email address</mat-label>
-      <input matInput formControlName="email" autocomplete="email" placeholder="ex. attendmanager@gmail.com" type="email" required>
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>Enter your password</mat-label>
-      <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
-      <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-      <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-      </button>
-    </mat-form-field>
-    <button mat-stroked-button (click)="openSnackBar()" [disabled]="form.invalid || form.pristine" color = "primary">GO!!</button>
-  </form>
+  <mat-card class="signin-card">
+    <form [formGroup] = "form" (ngSubmit)="submit()">
+      <mat-form-field class="email-field" appearance="outline">
+        <mat-label>Enter your Email address</mat-label>
+        <input matInput formControlName="email" autocomplete="email" placeholder="ex. attendmanager@gmail.com" type="email" required>
+      </mat-form-field>
+      <mat-form-field class="password-field" appearance="outline">
+        <mat-label>Enter your password</mat-label>
+        <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
+        <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+      </mat-form-field>
+      <button mat-raised-button (click)="openSnackBar()" [disabled]="form.invalid || form.pristine" color = "primary">GO!!</button>
+    </form>
+  </mat-card>
 </div>
