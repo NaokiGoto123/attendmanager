@@ -18,8 +18,10 @@
     </mat-form-field>
 
     <mat-form-field class="create-event-field" appearance="outline">
-      <mat-label>When is it happening?</mat-label>
-      <input matInput formControlName="date" type = "text" required>
+      <mat-label>Choose a date</mat-label>
+      <input matInput formControlName="date" [matDatepicker]="picker" required>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field class="create-event-field" appearance="outline">
