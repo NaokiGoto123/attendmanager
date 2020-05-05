@@ -5,6 +5,15 @@
   left: 0;
   right: 0;
 
+  .sidenav-item1 {
+    margin-top: 25px;
+  }
+
+  .sidenav-item1, .sidenav-item2, .sidenav-item3, .sidenav-item4, .sidenav-item5 {
+    margin-bottom: 25px;
+    font-size: 19px;
+  }
+
   .sidenav-icon {
     margin-left: 10px;
     margin-right: 25px;
