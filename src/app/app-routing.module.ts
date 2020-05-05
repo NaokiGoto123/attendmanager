@@ -34,6 +34,10 @@ const routes: Routes = [
     loadChildren: () => import ('./settings/settings.module').then(m => m.SettingsModule)
   },
   {
+    path: 'account',
+    loadChildren: () => import ('./account/account.module').then(m => m.AccountModule)
+  },
+  {
     path: '**', // this path should be the last.
     component: NotfoundComponent
   }
