@@ -7,6 +7,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EventCardComponent implements OnInit {
 
+  title = 'Picnic';
+  creater = 'John Marqury';
+  description = 'Description: We will go for a walk this weekend. Attend or text in the chat if interested.';
+
   constructor() { }
 
   ngOnInit(): void {
