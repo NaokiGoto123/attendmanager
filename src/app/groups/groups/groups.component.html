@@ -1,1 +1,12 @@
-<mat-toolbar> <a [routerLink]="'create-group'"> <mat-icon> add </mat-icon> </a> </mat-toolbar>
+<mat-toolbar>
+  <a class="add-button" [routerLink]="'create-group'"> <mat-icon> add </mat-icon> </a>
+  <mat-chip-list aria-label="gruops">
+    <!-- chage the color to primary when selected -->
+    <mat-chip>Science class</mat-chip>
+    <mat-chip>English class</mat-chip>
+    <mat-chip>Picnic group</mat-chip>
+    <mat-chip>Fishers group</mat-chip>
+    <mat-chip>Angular study group</mat-chip>
+    <mat-chip>Flutter study group</mat-chip>
+  </mat-chip-list>
+</mat-toolbar>
