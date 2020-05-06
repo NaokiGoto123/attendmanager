@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SearchComponent implements OnInit {
 
-  value = 'Clear me';
+  value = 'Look for what you want';
 
   constructor() { }
 
