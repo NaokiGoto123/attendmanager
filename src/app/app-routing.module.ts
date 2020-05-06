@@ -42,6 +42,10 @@ const routes: Routes = [
     loadChildren: () => import ('./groups/groups.module').then(m => m.GroupsModule)
   },
   {
+    path: 'spinner',
+    loadChildren: () => import ('./spinner/spinner.module').then(m => m.SpinnerModule)
+  },
+  {
     path: '**', // this path should be the last.
     component: NotfoundComponent
   }
