@@ -6,6 +6,7 @@ import { GroupsComponent } from './groups/groups.component';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatChipsModule} from '@angular/material/chips';
 
 
 
@@ -17,6 +18,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
     MatMenuModule,
     MatIconModule,
     MatToolbarModule,
+    MatChipsModule,
   ]
 })
 export class GroupsModule { }
