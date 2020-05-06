@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -19,6 +21,8 @@ import {MatIconModule} from '@angular/material/icon';
     MatButtonModule,
     MatInputModule,
     MatIconModule,
+    MatToolbarModule,
+    SharedModule
   ]
 })
 export class SearchModule { }
