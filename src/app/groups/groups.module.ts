@@ -7,6 +7,7 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatChipsModule} from '@angular/material/chips';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -19,6 +20,7 @@ import {MatChipsModule} from '@angular/material/chips';
     MatIconModule,
     MatToolbarModule,
     MatChipsModule,
+    SharedModule,
   ]
 })
 export class GroupsModule { }
