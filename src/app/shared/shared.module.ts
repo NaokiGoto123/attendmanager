@@ -18,6 +18,9 @@ import {MatButtonModule} from '@angular/material/button';
     MatCardModule,
     MatButtonModule,
     FlexLayoutModule,
+  ],
+  exports: [
+    EventCardComponent,
   ]
 })
 export class SharedModule { }
