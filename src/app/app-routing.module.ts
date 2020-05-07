@@ -61,6 +61,11 @@ const routes: Routes = [
     loadChildren: () => import ('./notifications/notifications.module').then(m => m.NotificationsModule)
   },
   {
+    path: 'welcome/signup',
+    pathMatch: 'full',
+    loadChildren: () => import ('./signup/signup.module').then(m => m.SignupModule)
+  },
+  {
     path: '**', // this path should be the last.
     pathMatch: 'full',
     component: NotfoundComponent
