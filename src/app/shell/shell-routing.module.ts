@@ -55,24 +55,12 @@ const routes: Routes = [
       import('./groups/groups.module').then((m) => m.GroupsModule),
   },
   {
-    path: 'spinner',
-    pathMatch: 'full',
-    loadChildren: () =>
-      import('./spinner/spinner.module').then((m) => m.SpinnerModule),
-  },
-  {
     path: 'notifications',
     pathMatch: 'full',
     loadChildren: () =>
       import('./notifications/notifications.module').then(
         (m) => m.NotificationsModule
       ),
-  },
-  {
-    path: 'welcome/signup',
-    pathMatch: 'full',
-    loadChildren: () =>
-      import('./signup/signup.module').then((m) => m.SignupModule),
   },
 ];
 
