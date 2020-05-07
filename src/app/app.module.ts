@@ -4,8 +4,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HeaderComponent } from './shell/header/header.component';
-import { SharedModule } from './shell/shared/shared.module';
 
 // angular materials
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -16,7 +14,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent],
+  declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -26,7 +24,6 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatToolbarModule,
     MatButtonModule,
     MatIconModule,
-    SharedModule,
     MatBadgeModule,
   ],
   providers: [],
