@@ -1,37 +1,67 @@
 <div class="container">
-  <h1>Welcome to AttendManager!!</h1>
+  <h1>Welcome back to AttendManager!!</h1>
 
   <h2>Sign in</h2>
 
-    <form class="signin-form" [formGroup] = "form" (ngSubmit)="submit()">
+  <form class="signin-form" [formGroup]="form" (ngSubmit)="submit()">
+    <mat-form-field class="email-field" appearance="outline">
+      <mat-label>Enter your Email address</mat-label>
+      <input
+        matInput
+        formControlName="email"
+        autocomplete="email"
+        placeholder="ex. attendmanager@gmail.com"
+        type="email"
+        required
+      />
+    </mat-form-field>
 
-      <mat-form-field class="email-field" appearance="outline">
-        <mat-label>Enter your Email address</mat-label>
-        <input matInput formControlName="email" autocomplete="email" placeholder="ex. attendmanager@gmail.com" type="email" required>
-      </mat-form-field>
+    <mat-form-field class="password-field" appearance="outline">
+      <mat-label>Enter your password</mat-label>
+      <input
+        matInput
+        formControlName="password"
+        [type]="hide ? 'password' : 'text'"
+        required
+      />
+      <button
+        mat-icon-button
+        type="button"
+        matSuffix
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
 
-      <mat-form-field class="password-field" appearance="outline">
-        <mat-label>Enter your password</mat-label>
-        <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
-        <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-      </mat-form-field>
+    <button
+      mat-raised-button
+      class="submit-button"
+      (click)="openSnackBar()"
+      [disabled]="form.invalid || form.pristine"
+      color="primary"
+    >
+      GO!!
+    </button>
+  </form>
 
-      <button mat-raised-button class="submit-button" (click)="openSnackBar()" [disabled]="form.invalid || form.pristine" color = "primary">GO!!</button>
+  <h3>If you don't have an account, sign up using</h3>
 
-    </form>
+  <div class="sns-login">
+    <button mat-icon-button class="google-login">
+      <img class="google-logo" src="assets/images/google.png" />
+    </button>
+    <button mat-icon-button class="twitter-login">
+      <img class="twitter-logo" src="assets/images/twitter.png" />
+    </button>
+    <button mat-icon-button class="instagram-login">
+      <img class="instagram-logo" src="assets/images/instagram.png" />
+    </button>
+  </div>
 
-    <h3>If you don't have an account, sign up using</h3>
+  <h5>or</h5>
 
-    <div class="sns-login">
-      <button mat-icon-button class="google-login"><img class="google-logo" src="assets/images/google.png"></button>
-      <button mat-icon-button class="twitter-login"><img class="twitter-logo" src="assets/images/twitter.png"></button>
-      <button mat-icon-button class="instagram-login"><img class="instagram-logo" src="assets/images/instagram.png"></button>
-    </div>
-
-    <h5>or</h5>
-
-    <p><a [routerLink]="'signup'">Sign up with email and password</a></p>
-
+  <p><a [routerLink]="'signup'">Sign up with email and password</a></p>
 </div>

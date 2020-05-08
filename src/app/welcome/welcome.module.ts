@@ -4,15 +4,13 @@ import { CommonModule } from '@angular/common';
 import { WelcomeRoutingModule } from './welcome-routing.module';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatButtonModule} from '@angular/material/button';
-import {MatIconModule} from '@angular/material/icon';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatCardModule} from '@angular/material/card';
-
-
-
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatCardModule } from '@angular/material/card';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [WelcomeComponent],
@@ -26,7 +24,8 @@ import {MatCardModule} from '@angular/material/card';
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
-    MatCardModule
-  ]
+    MatCardModule,
+    MatToolbarModule,
+  ],
 })
-export class WelcomeModule { }
+export class WelcomeModule {}
