@@ -1,3 +1,12 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>AttendManager</span>
+    <span class="spacer"></span>
+    <button mat-button class="detail-button">About</button>
+    <button mat-button class="detail-button">Pricing</button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
 <div class="container">
   <h1>Welcome back to AttendManager!!</h1>
 
@@ -63,5 +72,7 @@
 
   <h5>or</h5>
 
-  <p><a [routerLink]="'signup'">Sign up with email and password</a></p>
+  <p>
+    Sign up with email and password! <a [routerLink]="'signup'">Click here.</a>
+  </p>
 </div>

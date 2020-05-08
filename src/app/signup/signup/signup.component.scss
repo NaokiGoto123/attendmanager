@@ -1,3 +1,16 @@
+.toolbar-title {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.detail-button {
+  padding: 0 20px;
+}
+
 .signin-form {
   width: 500px;
   text-align: center;
