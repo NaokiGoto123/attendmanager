@@ -1,11 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ShellRoutingModule } from './shell-routing.module';
+import { ShellComponent } from './shell/shell.component';
+import { HeaderComponent } from './header/header.component';
+import { SharedModule } from './shared/shared.module';
 
-// angular materials
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,11 +14,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [ShellComponent, HeaderComponent],
   imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
+    CommonModule,
+    ShellRoutingModule,
+    SharedModule,
     MatSidenavModule,
     MatListModule,
     MatToolbarModule,
@@ -26,7 +26,5 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatIconModule,
     MatBadgeModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class ShellModule {}
