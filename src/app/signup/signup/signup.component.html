@@ -1,24 +1,69 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span
+      ><a class="toolbar-title" [routerLink]="'/welcome'"
+        >AttendManager</a
+      ></span
+    >
+    <span class="spacer"></span>
+    <button mat-button class="detail-button">About</button>
+    <button mat-button class="detail-button">Pricing</button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
 <div class="container">
-  <h1>Welcome to AttendManager!!</h1>
+  <form class="signin-form" [formGroup]="form" (ngSubmit)="submit()">
+    <h1>Welcome to AttendManager!!</h1>
 
-  <h2>Sign up</h2>
+    <h2>Sign up</h2>
 
-    <form class="signin-form" [formGroup] = "form" (ngSubmit)="submit()">
+    <mat-form-field class="email-field" appearance="outline">
+      <mat-label>Enter your Email address</mat-label>
+      <input
+        matInput
+        formControlName="email"
+        autocomplete="email"
+        placeholder="ex. attendmanager@gmail.com"
+        type="email"
+        required
+      />
+    </mat-form-field>
 
-      <mat-form-field class="email-field" appearance="outline">
-        <mat-label>Enter your Email address</mat-label>
-        <input matInput formControlName="email" autocomplete="email" placeholder="ex. attendmanager@gmail.com" type="email" required>
-      </mat-form-field>
+    <mat-form-field class="password-field" appearance="outline">
+      <mat-label>Enter your password</mat-label>
+      <input
+        matInput
+        formControlName="password"
+        [type]="hide ? 'password' : 'text'"
+        required
+      />
+      <button
+        mat-icon-button
+        type="button"
+        matSuffix
+        (click)="hide = !hide"
+        [attr.aria-label]="'Hide password'"
+        [attr.aria-pressed]="hide"
+      >
+        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
 
-      <mat-form-field class="password-field" appearance="outline">
-        <mat-label>Enter your password</mat-label>
-        <input matInput formControlName="password" [type]="hide ? 'password' : 'text'" required>
-        <button mat-icon-button type="button" matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
-        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
-      </mat-form-field>
+    <button
+      mat-raised-button
+      class="submit-button"
+      (click)="openSnackBar()"
+      [disabled]="form.invalid || form.pristine"
+      color="primary"
+    >
+      GO!!
+    </button>
+  </form>
 
-      <button mat-raised-button class="submit-button" (click)="openSnackBar()" [disabled]="form.invalid || form.pristine" color = "primary">GO!!</button>
+  <h5>or</h5>
 
-    </form>
+  <p>
+    If you already have an account, sign in!
+    <a [routerLink]="'/welcome'">Click here.</a>
+  </p>
 </div>
