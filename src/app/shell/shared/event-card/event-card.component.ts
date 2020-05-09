@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Event } from 'src/app/interfaces/event';
 
 @Component({
   selector: 'app-event-card',
@@ -6,12 +7,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./event-card.component.scss'],
 })
 export class EventCardComponent implements OnInit {
-  title = 'Picnic';
-  creater = 'John Marqury';
-  description =
-    'Description: We will go for a walk this weekend. Attend or text in the chat if interested.';
+  @Input() event: Event;
+
+  attended = false;
 
   constructor() {}
 
   ngOnInit(): void {}
+
+  switchStatus() {
+    this.attended = !this.attended;
+  }
 }
