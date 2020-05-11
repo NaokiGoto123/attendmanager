@@ -1,30 +1,35 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
-import {MatSnackBar} from '@angular/material/snack-bar';
+import {
+  FormGroup,
+  FormControl,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
-  styleUrls: ['./welcome.component.scss']
+  styleUrls: ['./welcome.component.scss'],
 })
 export class WelcomeComponent implements OnInit {
-
   hide = true;
 
   form = this.fb.group({
     email: ['', [Validators.required]],
-    password: ['', [Validators.required]]
+    password: ['', [Validators.required]],
   });
 
   constructor(
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
-  ) { }
+    private snackBar: MatSnackBar,
+    public auth: AuthService
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  submit(){
+  submit() {
     console.log(this.form.value);
   }
 
@@ -33,5 +38,4 @@ export class WelcomeComponent implements OnInit {
       duration: 3000,
     });
   }
-
 }
