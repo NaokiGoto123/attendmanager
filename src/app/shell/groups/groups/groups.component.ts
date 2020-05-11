@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./groups.component.scss'],
 })
 export class GroupsComponent implements OnInit {
+  value = 'Look for what you want';
+
   constructor() {}
 
   ngOnInit(): void {}
