@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "attendmanager-c8784"
+  },
+  "targets": {
+    "attendmanager-c8784": {
+      "hosting": {
+        "attendmanager": [
+          "attendmanager-c8784"
+        ]
+      }
+    }
+  }
+}

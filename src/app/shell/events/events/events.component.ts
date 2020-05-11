@@ -19,6 +19,8 @@ export class EventsComponent implements OnInit {
     grouppicture: '/assets/images/example.jpg',
   };
 
+  value = 'Look for what you want';
+
   constructor() {}
 
   ngOnInit(): void {}
