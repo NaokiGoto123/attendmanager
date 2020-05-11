@@ -8,5 +8,5 @@ export interface Event {
   date: string; // イベント日付
   time: string; // イベント時間
   location: string; // イベント場所
-  groupid: Group; // イベントが作られたグループ
+  group: Group; // イベントが作られたグループ
 }
