@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./events.component.scss'],
 })
 export class EventsComponent implements OnInit {
+  value = 'Look for what you want';
+
   constructor() {}
 
   ngOnInit(): void {}
