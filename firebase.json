@@ -11,16 +11,6 @@
   },
   "hosting": [
     {
-      "public": "public",
-      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-      "rewrites": [
-        {
-          "source": "**",
-          "destination": "/index.html"
-        }
-      ]
-    },
-    {
       "target": "attendmanager",
       "public": "dist/attendmanager",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
