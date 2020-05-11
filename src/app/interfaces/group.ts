@@ -1,5 +1,3 @@
-import { Event } from './event';
-
 export interface Group {
   groupid: string; // グループID
   name: string; // グループ名
@@ -8,5 +6,5 @@ export interface Group {
   creater: string; // グループ作成者
   admin: string[]; // グループ管理者（達）
   members: string[]; // グループメンバー（達）
-  events: Event[]; // グループ内で作成されたイベント（達）
+  eventIDs: string[]; // グループ内で作成されたイベントID　（複数）
 }
