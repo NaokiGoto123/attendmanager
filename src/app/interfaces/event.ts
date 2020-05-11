@@ -6,5 +6,6 @@ export interface Event {
   date: string; // イベント日付
   time: string; // イベント時間
   location: string; // イベント場所
-  group: string; // イベントが作られたグループID
+  groupid: string; // イベントが作られたグループID
+  grouppicture: string; // イベントが作られたグループ写真
 }
