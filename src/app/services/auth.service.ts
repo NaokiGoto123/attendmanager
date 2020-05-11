@@ -52,7 +52,7 @@ export class AuthService {
 
     const data = {
       uid: user.uid,
-      displayname: user.displayname,
+      displayName: user.displayName,
       email: user.email,
       groups: user.groups,
       events: user.events,
