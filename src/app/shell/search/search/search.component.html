@@ -1,17 +1,19 @@
-<mat-form-field class="search-field">
-  <mat-label>Search bar</mat-label>
-  <input matInput type="text" [(ngModel)]="value" />
-  <button
-    mat-button
-    *ngIf="value"
-    matSuffix
-    mat-icon-button
-    aria-label="Clear"
-    (click)="value = ''"
-  >
-    <mat-icon>close</mat-icon>
-  </button>
-</mat-form-field>
+<div class="search-field-container">
+  <mat-form-field class="search-field">
+    <mat-label>Search bar</mat-label>
+    <input matInput type="text" [(ngModel)]="value" />
+    <button
+      mat-button
+      *ngIf="value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      (click)="value = ''"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</div>
 
 <app-event-card [event]="event"></app-event-card>
 <app-event-card [event]="event"></app-event-card>

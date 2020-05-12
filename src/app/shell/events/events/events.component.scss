@@ -1,11 +1,11 @@
-.search-filed-container {
+.search-field-container {
+  text-align: center;
   display: block;
-  background-color: white;
+  background-color: #fafafa;
   position: sticky;
   position: -webkit-sticky; // For macOS/iOS Safari */
   top: 0px; // Sets the sticky toolbar to be on top */
   z-index: 1000;
-  text-align: center;
 }
 
 .search-field {
