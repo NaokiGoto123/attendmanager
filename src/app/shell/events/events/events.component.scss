@@ -1,15 +1,14 @@
 .search-filed-container {
   display: block;
-  background-color: red;
+  background-color: white;
   position: sticky;
-  position: -webkit-sticky; /* For macOS/iOS Safari */
-  top: 0px; /* Sets the sticky toolbar to be on top */
-  z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+  position: -webkit-sticky; // For macOS/iOS Safari */
+  top: 0px; // Sets the sticky toolbar to be on top */
+  z-index: 1000;
+  text-align: center;
 }
 
 .search-field {
   width: 40%;
   padding-top: 40px;
-  // margin: 40px auto 0;
-  // background-color: red;
 }
