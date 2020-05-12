@@ -61,6 +61,8 @@ export class AuthService {
       `users/${uid}`
     );
 
+    console.log(uid);
+
     const data = {
       uid,
       displayName,

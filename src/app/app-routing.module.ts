@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -18,12 +19,9 @@ const routes: Routes = [
     path: '',
     loadChildren: () =>
       import('./shell/shell.module').then((m) => m.ShellModule),
+    canLoad: [AuthGuard],
+    canActivate: [AuthGuard],
   },
-  // {
-  //   path: '**', // this path should be the last.
-  //   pathMatch: 'full',
-  //   component: NotfoundComponent,
-  // },
 ];
 
 @NgModule({
