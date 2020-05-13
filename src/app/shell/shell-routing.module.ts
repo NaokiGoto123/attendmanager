@@ -7,9 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: ShellComponent,
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
     children: [
       {
-        path: 'events',
+        path: '',
+        pathMatch: 'full',
         loadChildren: () =>
           import('./events/events.module').then((m) => m.EventsModule),
       },
