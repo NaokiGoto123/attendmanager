@@ -28,11 +28,11 @@ export class AuthGuard implements CanActivate, CanLoad {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
+    console.log('canActivate worked');
     return this.auth.user$.pipe(
       map((user) => !!user),
       tap((isLoggedin) => {
         if (!isLoggedin) {
-          console.log('access denied');
           this.router.navigateByUrl('/welcome');
         }
       })
@@ -43,15 +43,14 @@ export class AuthGuard implements CanActivate, CanLoad {
     route: Route,
     segments: UrlSegment[]
   ): Observable<boolean> | Promise<boolean> | boolean {
-    console.log('access denied');
+    console.log('canLoadworked');
     return this.auth.user$.pipe(
       map((user) => !!user),
       tap((isLoggedin) => {
         if (!isLoggedin) {
           this.router.navigateByUrl('/welcome');
         }
-      }),
-      take(1)
+      })
     );
   }
 }
