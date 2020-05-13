@@ -12,6 +12,8 @@ import {
 import { Observable, of, merge } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -21,7 +23,8 @@ export class AuthService {
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore,
-    private router: Router
+    private router: Router,
+    private snackbar: MatSnackBar
   ) {
     this.user$ = this.afAuth.authState.pipe(
       switchMap((user) => {
@@ -72,6 +75,8 @@ export class AuthService {
       events,
     };
 
-    return userRef.set(data, { merge: true }), this.router.navigateByUrl('/');
+    return userRef
+      .set(data, { merge: true })
+      .then(() => this.router.navigateByUrl(''));
   }
 }

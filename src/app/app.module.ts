@@ -19,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [AppComponent],
@@ -38,6 +39,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatButtonModule,
     MatIconModule,
     MatBadgeModule,
+    MatSnackBarModule,
   ],
   providers: [{ provide: REGION, useValue: 'asia-northeast1' }],
   bootstrap: [AppComponent],
