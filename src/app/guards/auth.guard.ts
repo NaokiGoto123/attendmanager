@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate, CanLoad {
       tap((isLoggedin) => {
         if (!isLoggedin) {
           console.log('access denied');
-          this.router.navigateByUrl('/welcome');
+          this.router.navigate(['/welcome']);
         }
       })
     );
