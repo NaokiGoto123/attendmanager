@@ -72,6 +72,6 @@ export class AuthService {
       events,
     };
 
-    return userRef.set(data, { merge: true });
+    return userRef.set(data, { merge: true }), this.router.navigateByUrl('/');
   }
 }
