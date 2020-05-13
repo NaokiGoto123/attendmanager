@@ -18,6 +18,8 @@ const routes: Routes = [
     pathMatch: 'full',
     loadChildren: () =>
       import('./shell/shell.module').then((m) => m.ShellModule),
+    canActivate: [AuthGuard],
+    canLoad: [AuthGuard],
   },
 ];
 
