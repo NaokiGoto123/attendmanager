@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Group } from 'src/app/interfaces/group';
-import { AngularFirestore } from '@angular/fire/firestore/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-create-group',
@@ -35,12 +35,12 @@ export class CreateGroupComponent implements OnInit {
   submit() {
     console.log(this.form.value);
     this.groupSerive.createGroup({
-      groupid: this.db.createId.toString(),
+      groupid: this.db.createId(),
       name: this.form.value.name,
       description: this.form.value.description,
       grouppicture: '',
-      creater: this.authSerive.uid$,
-      admin: [this.authSerive.uid$],
+      creater: this.authSerive.uid,
+      admin: [this.authSerive.uid],
       members: [],
       eventIDs: [],
     });

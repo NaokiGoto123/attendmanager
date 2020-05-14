@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Group } from '../interfaces/group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
