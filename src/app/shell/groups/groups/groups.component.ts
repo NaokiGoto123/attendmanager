@@ -7,7 +7,6 @@ import { Event } from 'src/app/interfaces/event';
   styleUrls: ['./groups.component.scss'],
 })
 export class GroupsComponent implements OnInit {
-  
   event: Event = {
     eventid: '1',
     title: 'Picnic',
@@ -17,7 +16,7 @@ export class GroupsComponent implements OnInit {
     time: '12:00',
     location: 'Mountian',
     groupid: 'abc123',
-    grouppicture: '/assets/images/example.jpg',
+    grouppicture: '/assets/background/16.jpg',
   };
 
   value = 'Look for what you want';
