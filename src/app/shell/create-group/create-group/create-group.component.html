@@ -1,6 +1,14 @@
 <div class="container">
   <h1>Create your group</h1>
 
+  <div>
+    <swiper [config]="config" [(index)]="selectedImageId">
+      <div *ngFor="let imageId of imageIds">
+        <img alt="group image" src="src/assets/background/{{ imageId }}.jpg" />
+      </div>
+    </swiper>
+  </div>
+
   <form class="create-group-form" [formGroup]="form" (ngSubmit)="submit()">
     <mat-form-field class="create-group-field" appearance="outline">
       <mat-label>Name your group</mat-label>

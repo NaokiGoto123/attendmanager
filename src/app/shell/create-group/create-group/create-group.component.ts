@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 
 @Component({
   selector: 'app-create-group',
@@ -14,6 +15,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./create-group.component.scss'],
 })
 export class CreateGroupComponent implements OnInit {
+  imageIds = [...Array(17)];
+
+  config: SwiperConfigInterface = {
+    loop: true,
+    navigation: true,
+    pagination: true,
+    centeredSlides: true,
+    slidesPerView: 3,
+  };
+
+  selectedImageId = 0;
+
   form = this.fb.group({
     name: ['', [Validators.required]],
     description: [''],
