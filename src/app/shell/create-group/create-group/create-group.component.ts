@@ -11,6 +11,8 @@ import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Group } from 'src/app/interfaces/group';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
+import { VirtualTimeScheduler } from 'rxjs';
 
 @Component({
   selector: 'app-create-group',
@@ -27,22 +29,25 @@ export class CreateGroupComponent implements OnInit {
     private fb: FormBuilder,
     private db: AngularFirestore,
     private authSerive: AuthService,
-    private groupSerive: GroupService
+    private groupSerive: GroupService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {}
 
   submit() {
-    console.log(this.form.value);
-    this.groupSerive.createGroup({
-      groupid: this.db.createId(),
-      name: this.form.value.name,
-      description: this.form.value.description,
-      grouppicture: '',
-      creater: this.authSerive.uid,
-      admin: [this.authSerive.uid],
-      members: [],
-      eventIDs: [],
-    });
+    this.groupSerive
+      .createGroup({
+        groupid: this.db.createId(),
+        name: this.form.value.name,
+        description: this.form.value.description,
+        grouppicture: '',
+        creater: this.authSerive.uid,
+        admin: [this.authSerive.uid],
+        members: [],
+        eventIDs: [],
+      })
+      .then(() => (this.form = null))
+      .then(() => this.router.navigateByUrl('groups'));
   }
 }
