@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SwiperModule } from 'ngx-swiper-wrapper';
 
 @NgModule({
   declarations: [CreateGroupComponent],
@@ -22,6 +23,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule,
+    SwiperModule,
   ],
 })
 export class CreateGroupModule {}

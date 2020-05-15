@@ -13,6 +13,7 @@ import { Group } from 'src/app/interfaces/group';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { VirtualTimeScheduler } from 'rxjs';
+import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 
 @Component({
   selector: 'app-create-group',
@@ -20,6 +21,18 @@ import { VirtualTimeScheduler } from 'rxjs';
   styleUrls: ['./create-group.component.scss'],
 })
 export class CreateGroupComponent implements OnInit {
+  imageIds = [...Array(17)];
+
+  config: SwiperConfigInterface = {
+    loop: true,
+    navigation: true,
+    pagination: true,
+    centeredSlides: true,
+    slidesPerView: 3,
+  };
+
+  selectedImageId = 0;
+
   form = this.fb.group({
     name: ['', [Validators.required]],
     description: [''],
