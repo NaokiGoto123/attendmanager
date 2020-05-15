@@ -19,6 +19,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AuthService {
   user$: Observable<User>;
+  uid: string;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -35,6 +36,13 @@ export class AuthService {
         }
       })
     );
+    this.afAuth.authState.subscribe((user) => {
+      if (user) {
+        this.uid = user.uid;
+      } else {
+        this.uid = null;
+      }
+    });
   }
 
   async googleSignin() {
