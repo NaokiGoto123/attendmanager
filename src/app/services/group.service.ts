@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Group } from '../interfaces/group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
@@ -22,6 +23,15 @@ export class GroupService {
       .collection<Group>('organization', (ref) =>
         ref.where('members', 'array-contains', 'uid')
       )
-      .valueChanges();
+      .valueChanges()
+      .pipe(
+        map((groups) => {
+          if (groups) {
+            return groups;
+          } else {
+            return null;
+          }
+        })
+      );
   }
 }
