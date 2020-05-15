@@ -4,12 +4,9 @@
   </a>
   <mat-chip-list aria-label="gruops">
     <!-- chage the color to primary when selected -->
-    <mat-chip>Science class</mat-chip>
-    <mat-chip>English class</mat-chip>
-    <mat-chip>Picnic group</mat-chip>
-    <mat-chip>Fishers group</mat-chip>
-    <mat-chip>Angular study group</mat-chip>
-    <mat-chip>Flutter study group</mat-chip>
+    <div *ngFor="let group of groups | async">
+      <mat-chip>{{ group }}</mat-chip>
+    </div>
   </mat-chip-list>
 </mat-toolbar>
 
