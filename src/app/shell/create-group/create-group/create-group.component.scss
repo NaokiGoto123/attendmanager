@@ -8,6 +8,28 @@ h1 {
   margin-bottom: 80px;
 }
 
+h3 {
+  text-align: center;
+}
+
+.swiper {
+  margin-bottom: 40px;
+}
+
+.swiper-slide {
+  opacity: 0.3;
+}
+
+.swiper-slide-active {
+  opacity: 1;
+}
+
+.background-image {
+  width: 90%;
+  height: 150px;
+  margin-right: 10px;
+}
+
 .create-group-form {
   width: 500px;
   height: 800px;

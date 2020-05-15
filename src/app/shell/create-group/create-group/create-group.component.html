@@ -1,12 +1,19 @@
 <div class="container">
   <h1>Create your group</h1>
 
-  <div>
+  <h3>Choose an image for your group</h3>
+
+  <div class="swiper">
     <swiper [config]="config" [(index)]="selectedImageId">
       <div *ngFor="let imageId of imageIds">
-        <img alt="group image" src="src/assets/background/{{ imageId }}.jpg" />
+        <img
+          class="background-image"
+          alt="group image"
+          src="/assets/background/{{ imageId }}.jpg"
+        />
       </div>
     </swiper>
+    <div class="pager"></div>
   </div>
 
   <form class="create-group-form" [formGroup]="form" (ngSubmit)="submit()">

@@ -21,17 +21,20 @@ import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
   styleUrls: ['./create-group.component.scss'],
 })
 export class CreateGroupComponent implements OnInit {
-  imageIds = [...Array(17)];
+  imageIds = [...Array(22)].map((_, index) => index);
 
   config: SwiperConfigInterface = {
     loop: true,
     navigation: true,
-    pagination: true,
+    pagination: {
+      el: '.pager',
+      clickable: true,
+    },
     centeredSlides: true,
     slidesPerView: 3,
   };
 
-  selectedImageId = 0;
+  selectedImageId = 1;
 
   form = this.fb.group({
     name: ['', [Validators.required]],
@@ -41,7 +44,7 @@ export class CreateGroupComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private db: AngularFirestore,
-    private authSerive: AuthService,
+    private authService: AuthService,
     private groupSerive: GroupService,
     private router: Router
   ) {}
@@ -54,10 +57,11 @@ export class CreateGroupComponent implements OnInit {
         groupid: this.db.createId(),
         name: this.form.value.name,
         description: this.form.value.description,
-        grouppicture: '',
-        creater: this.authSerive.uid,
-        admin: [this.authSerive.uid],
-        members: [],
+        grouppicture: this.selectedImageId,
+        createddate: new Date(),
+        creater: this.authService.uid,
+        admin: [this.authService.uid],
+        members: [this.authService.uid],
         eventIDs: [],
       })
       .then(() => (this.form = null))
