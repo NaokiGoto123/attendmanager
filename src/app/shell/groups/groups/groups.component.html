@@ -4,7 +4,7 @@
   </a>
   <mat-chip-list aria-label="gruops">
     <!-- chage the color to primary when selected -->
-    <div *ngFor="let group of groups | async">
+    <div *ngFor="let group of groups$ | async">
       <mat-chip>{{ group }}</mat-chip>
     </div>
   </mat-chip-list>

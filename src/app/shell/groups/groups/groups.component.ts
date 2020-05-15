@@ -25,7 +25,7 @@ export class GroupsComponent implements OnInit {
 
   value = 'Look for what you want';
 
-  groups: Observable<Group[]> = this.groupService.getGroup(
+  groups$: Observable<Group[]> = this.groupService.getGroup(
     this.authService.uid
   );
 
@@ -35,6 +35,8 @@ export class GroupsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log(this.groups);
+    console.log(this.groups$[0]);
+    console.log(this.groups$[1]);
+    console.log(this.groups$);
   }
 }
