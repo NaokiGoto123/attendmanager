@@ -34,5 +34,7 @@ export class GroupsComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(this.groups);
+  }
 }
