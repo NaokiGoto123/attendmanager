@@ -5,6 +5,14 @@
   z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
 }
 
+.add-button {
+  margin-right: 20px;
+}
+
+.spacer {
+  width: 12px;
+}
+
 .search-field-container {
   text-align: center;
   display: block;
@@ -18,8 +26,4 @@
 .search-field {
   width: 40%;
   padding-top: 40px;
-}
-
-.add-button {
-  margin-right: 20px;
 }

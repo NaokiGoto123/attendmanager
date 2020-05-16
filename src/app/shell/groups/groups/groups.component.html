@@ -2,12 +2,13 @@
   <a class="add-button" [routerLink]="'create-group'">
     <mat-icon> add </mat-icon>
   </a>
-  <mat-chip-list aria-label="gruops">
-    <!-- chage the color to primary when selected -->
-    <div *ngFor="let group of groups$ | async">
-      <mat-chip>{{ group }}</mat-chip>
-    </div>
-  </mat-chip-list>
+  <!-- chage the color to primary when selected -->
+  <div *ngFor="let group of groups$ | async">
+    <mat-chip-list selectable="true">
+      <mat-chip>{{ group.name }}</mat-chip>
+      <div class="spacer"></div>
+    </mat-chip-list>
+  </div>
 </mat-toolbar>
 
 <div class="search-field-container">
