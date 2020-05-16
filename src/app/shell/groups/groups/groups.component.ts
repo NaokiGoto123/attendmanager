@@ -4,6 +4,7 @@ import { GroupService } from 'src/app/services/group.service';
 import { Group } from 'src/app/interfaces/group';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable } from 'rxjs';
+import { map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-groups',
@@ -34,9 +35,5 @@ export class GroupsComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-  ngOnInit(): void {
-    console.log(this.groups$[0]);
-    console.log(this.groups$[1]);
-    console.log(this.groups$);
-  }
+  ngOnInit(): void {}
 }
