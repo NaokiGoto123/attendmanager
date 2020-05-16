@@ -1,5 +1,4 @@
-.search-field-container {
-  text-align: center;
+.header-container {
   display: block;
   background-color: #fafafa;
   position: sticky;
@@ -8,7 +7,20 @@
   z-index: 1000;
 }
 
+.child-header-container {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
 .search-field {
+  margin: 15px 0 0 0;
   width: 40%;
-  padding-top: 40px;
+}
+
+.add-button {
+  position: absolute;
+  box-shadow: none !important;
+  left: 0;
+  margin: 10px 0 0 10px;
 }
