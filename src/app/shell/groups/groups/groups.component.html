@@ -1,14 +1,16 @@
 <mat-toolbar class="toolbar">
   <a class="add-button" [routerLink]="'create-group'">
-    <mat-icon> add </mat-icon>
+    <button mat-icon-button color="primary"><mat-icon> add </mat-icon></button>
   </a>
+  <button mat-button color="primary">SELECT ALL</button>
   <!-- chage the color to primary when selected -->
-  <div *ngFor="let group of groups$ | async">
-    <mat-chip-list selectable="true">
+  <mat-chip-list selectable="true">
+    <div class="spacer"></div>
+    <div *ngFor="let group of groups$ | async">
       <mat-chip>{{ group.name }}</mat-chip>
       <div class="spacer"></div>
-    </mat-chip-list>
-  </div>
+    </div>
+  </mat-chip-list>
 </mat-toolbar>
 
 <div class="search-field-container">
