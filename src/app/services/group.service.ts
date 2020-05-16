@@ -20,18 +20,9 @@ export class GroupService {
 
   getGroup(uid: string): Observable<Group[]> {
     return this.db
-      .collection<Group>('organization', (ref) =>
-        ref.where('members', 'array-contains', 'uid')
+      .collection<Group>(`organizations`, (ref) =>
+        ref.where(`members`, 'array-contains', uid)
       )
-      .valueChanges()
-      .pipe(
-        map((groups) => {
-          if (groups) {
-            return groups;
-          } else {
-            return null;
-          }
-        })
-      );
+      .valueChanges();
   }
 }
