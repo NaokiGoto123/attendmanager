@@ -1,0 +1,29 @@
+.account-header {
+  display: table;
+  margin: 30px 0 30px 50px;
+}
+
+.account-photo {
+  display: inline-block;
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  margin-right: 30px;
+}
+
+.account-name-account-email {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.account-name {
+  margin: 0;
+}
+
+.account-email {
+  margin: 0;
+}
+
+.tab-icon {
+  margin-right: 8px;
+}

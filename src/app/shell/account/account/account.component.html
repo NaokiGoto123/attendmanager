@@ -1,3 +1,51 @@
-<p>account works!</p>
+<div class="account-header">
+  <img class="account-photo" alt="account photo" src="{{ this.photoURL }}" />
+  <div class="account-name-account-email">
+    <h1 class="account-name">{{ this.displayName }}</h1>
+    <h3 class="account-email">{{ this.email }}</h3>
+  </div>
+</div>
 
-<button (click)="auth.signOut()">sign out</button>
+<mat-tab-group>
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">person</mat-icon>
+      Account info
+    </ng-template>
+    <button mat-flat-button color="warn" (click)="authService.signOut()">
+      sign out
+    </button>
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">pan_tool</mat-icon>
+      Privacy
+    </ng-template>
+    Content 3
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">group</mat-icon>
+      My Groups
+    </ng-template>
+    Content 1
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">event</mat-icon>
+      Attending Events
+    </ng-template>
+    Content 2
+  </mat-tab>
+
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="tab-icon">done</mat-icon>
+      Attended Events
+    </ng-template>
+    Content 3
+  </mat-tab>
+</mat-tab-group>

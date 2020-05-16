@@ -7,7 +7,11 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent implements OnInit {
-  constructor(public auth: AuthService) {}
+  constructor(public authService: AuthService) {}
+
+  displayName = this.authService.displayName;
+  photoURL = this.authService.photoURL;
+  email = this.authService.email;
 
   ngOnInit(): void {}
 }
