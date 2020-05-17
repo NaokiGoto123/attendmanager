@@ -12,13 +12,13 @@ export class SearchComponent implements OnInit {
   event: Event = {
     eventid: '1',
     title: 'Picnic',
-    desription: 'You wanna go for a walk this weekend? Join us asap!!',
-    limit: 9,
+    description: 'You wanna go for a walk this weekend? Join us asap!!',
+    memberlimit: 9,
     date: '12/03/2020',
     time: '12:00',
     location: 'Mountian',
     groupid: 'abc123',
-    grouppicture: '/assets/images/example.jpg',
+    grouppicture: 3,
   };
 
   constructor() {}

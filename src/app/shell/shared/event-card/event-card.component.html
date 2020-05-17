@@ -1,9 +1,12 @@
 <div class="event-card">
-  <img class="group-picture" src="{{ event.grouppicture }}" />
+  <img
+    class="group-picture"
+    src="/assets/background/{{ event.grouppicture }}.jpg"
+  />
   <div class="card-content">
     <h2>{{ event.title }}</h2>
     <p>Created by: {{ event.title }}</p>
-    <p>Description: {{ event.desription }}</p>
+    <p>Description: {{ event.description }}</p>
     <div [ngSwitch]="attended">
       <button
         class="submit-button"
