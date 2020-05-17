@@ -3,6 +3,18 @@
 
   <form class="create-event-form" [formGroup]="form" (ngSubmit)="submit()">
     <mat-form-field class="create-event-field" appearance="outline">
+      <mat-label>Which group</mat-label>
+      <mat-select formControlName="groupid" required>
+        <mat-option
+          *ngFor="let group of originalgroups$ | async"
+          [value]="group.groupid"
+        >
+          {{ group.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="create-event-field" appearance="outline">
       <mat-label>What is the event title?</mat-label>
       <input matInput formControlName="title" type="text" required />
     </mat-form-field>
@@ -42,7 +54,6 @@
     <button
       mat-raised-button
       class="create-button"
-      (click)="openSnackBar()"
       [disabled]="form.invalid || form.pristine"
       color="primary"
     >
