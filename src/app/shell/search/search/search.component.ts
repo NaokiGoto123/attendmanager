@@ -14,6 +14,7 @@ export class SearchComponent implements OnInit {
     title: 'Picnic',
     description: 'You wanna go for a walk this weekend? Join us asap!!',
     memberlimit: 9,
+    attendingmembers: [],
     date: '12/03/2020',
     time: '12:00',
     location: 'Mountian',
