@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Event } from 'src/app/interfaces/event';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-event-card',

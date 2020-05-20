@@ -1,15 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { GroupService } from 'src/app/services/group.service';
 import { EventService } from 'src/app/services/event.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable } from 'rxjs';
 import { Group } from 'src/app/interfaces/group';
-import { map, tap } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Title } from '@angular/platform-browser';
-
 @Component({
   selector: 'app-create-event',
   templateUrl: './create-event.component.html',
@@ -42,13 +38,12 @@ export class CreateEventComponent implements OnInit {
   ngOnInit(): void {}
 
   submit() {
-    // tslint:disable-next-line: max-line-length
-    // const grouppicturenumber: number = this.groupService.getGroupinfo(this.form.value.groupid).pipe(map(group => group.grouppicture = grouppicturenumber));
     this.eventService.createEvent({
       eventid: this.db.createId(),
       title: this.form.value.title,
       description: this.form.value.description,
       memberlimit: this.form.value.memberlimit,
+      attendingmembers: [],
       date: this.form.value.date,
       time: this.form.value.time,
       location: this.form.value.location,
