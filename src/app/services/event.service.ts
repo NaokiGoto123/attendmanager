@@ -4,9 +4,10 @@ import { Event } from '../interfaces/event';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { GroupService } from './group.service';
-import { AuthService } from './auth.service';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { firestore } from 'firebase';
+import { Group } from '../interfaces/group';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +16,6 @@ export class EventService {
   constructor(
     private db: AngularFirestore,
     private groupService: GroupService,
-    private authService: AuthService,
     private router: Router,
     private snackbar: MatSnackBar
   ) {}
@@ -25,11 +25,10 @@ export class EventService {
     await this.db
       .doc(`events/${id}`)
       .set(event)
-      // eventIDsにeventidを追加したい
       .then(() =>
         this.db
           .doc(`organizations/${event.groupid}`)
-          .update({ eventIDs: event.eventid })
+          .update({ eventIDs: firestore.FieldValue.arrayUnion(event.eventid) })
       )
       .then(() =>
         this.snackbar.open('Successfully created the event', null, {
@@ -39,12 +38,34 @@ export class EventService {
       .then(() => this.router.navigateByUrl(''));
   }
 
-  // getEvent(uid: string) {
-  //   const myeventids: Observable<string[]> = this.groupService.getMyGroup(this.authService.uid)
-  //   .pipe(
-  //     map(
-  //       (groups) => this.db.doc(`events/${groups[0].eventIDs[0]}`)
-  //     )
-  //   );
+  getEvents(uid: string): Observable<Event[]> {
+    const groups$: Observable<Group[]> = this.groupService.getMyGroup(uid);
+    return groups$.pipe(
+      switchMap((groups: Group[]) => {
+        const eventIdsList: string[][] = groups.map((group) => group.eventIDs);
+        const eventListObs$: Observable<Event[]>[] = eventIdsList.map(
+          (eventIds: string[]) => {
+            return combineLatest(
+              eventIds.map((eventId) =>
+                this.db.doc<Event>(`events/${eventId}`).valueChanges()
+              )
+            );
+          }
+        );
+        return combineLatest(eventListObs$);
+      }),
+      map((eventsList: Event[][]) => {
+        const results = [];
+        eventsList.forEach((events) => results.push(events));
+        // debug
+        console.log(results);
+        return results;
+      })
+    );
+  }
+
+  // attendEvent(uid: string, eventid: string) {
+  //   this.db.doc<Event>(`events/${eventid}`)
+  //   .update({attendingmembers: firestore.FieldValue.arrayUnion(uid)});
   // }
 }
