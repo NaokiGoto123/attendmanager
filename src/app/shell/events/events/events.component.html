@@ -23,13 +23,6 @@
   </div>
 </div>
 
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
+<div *ngFor="let event of events | async">
+  <app-event-card [event]="event"></app-event-card>
+</div>
