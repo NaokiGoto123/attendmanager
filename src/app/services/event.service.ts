@@ -8,7 +8,6 @@ import { map, switchMap } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 import { firestore } from 'firebase';
 import { Group } from '../interfaces/group';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -39,24 +38,32 @@ export class EventService {
   }
 
   getEvents(uid: string): Observable<Event[]> {
+    // GroupリストのObservable
     const groups$: Observable<Group[]> = this.groupService.getMyGroup(uid);
     return groups$.pipe(
+      // Groupリストを元に別のObservableを返却する
       switchMap((groups: Group[]) => {
+        // Groupリストの中のGroupをイベントIDリストに差し替えている。よってイベントIDリストのリストが生まれている
         const eventIdsList: string[][] = groups.map((group) => group.eventIDs);
         const eventListObs$: Observable<Event[]>[] = eventIdsList.map(
           (eventIds: string[]) => {
-            return combineLatest(
-              eventIds.map((eventId) =>
-                this.db.doc<Event>(`events/${eventId}`).valueChanges()
-              )
+            // イベントIDリストをイベントのObservableリストに差し替えている
+            const events$: Observable<
+              Event
+            >[] = eventIds.map((eventId: string) =>
+              this.db.doc<Event>(`events/${eventId}`).valueChanges()
             );
+            // イベントのObservableリストをcombinaLatestで中身を取り出している
+            return combineLatest(events$); // これはイベントIDリストを含むObservableである
           }
         );
+        // eventListObs$はObservabeのリストなのでcombineLatestで解決する
         return combineLatest(eventListObs$);
       }),
+      // 二次元配列をフラットな配列にして返却
       map((eventsList: Event[][]) => {
-        const results = [];
-        eventsList.forEach((events) => results.push(events));
+        const results = [].concat(...eventsList);
+        // eventsList.forEach((events) => results.push(...events));
         // debug
         console.log(results);
         return results;
@@ -64,8 +71,7 @@ export class EventService {
     );
   }
 
-  // attendEvent(uid: string, eventid: string) {
-  //   this.db.doc<Event>(`events/${eventid}`)
-  //   .update({attendingmembers: firestore.FieldValue.arrayUnion(uid)});
+  // async attendEvent(uid: string, eventid: string) {
+  //   await this.db.doc<Event>(`events/${eventid}`).update({ attendingmembers: firestore.FieldValue.arrayUnion(uid) });
   // }
 }
