@@ -23,10 +23,11 @@ export class EventsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.events == null) {
+    if (this.events === null) {
       this.nodata = true;
     } else {
       this.nodata = false;
     }
+    console.log(this.nodata);
   }
 }
