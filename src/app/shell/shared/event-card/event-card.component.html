@@ -1,15 +1,19 @@
 <div class="event-card">
-  <img class="group-picture" src="/assets/background/17.jpg" />
+  <img
+    class="group-picture"
+    src="/assets/background/{{ grouppicture | async }}.jpg"
+  />
   <div class="card-content">
     <h2>{{ event.title }}</h2>
     <p>Description: {{ event.description }}</p>
+    <p>{{ grouppicture | async }}</p>
     <div [ngSwitch]="attended">
       <button
         class="submit-button"
         *ngSwitchCase="false"
         mat-raised-button
         color="primary"
-        (click)="switchStatus()"
+        (click)="attendEvent()"
       >
         ATTEND
       </button>
@@ -18,7 +22,7 @@
         *ngSwitchCase="true"
         mat-raised-button
         color="warn"
-        (click)="switchStatus()"
+        (click)="leaveEvent()"
       >
         ATTENDED
       </button>

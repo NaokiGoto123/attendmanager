@@ -29,13 +29,15 @@
   </mat-form-field>
 </div>
 
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
+<div *ngIf="nodata; else elseText">
+  <div class="nodata-container">
+    <mat-icon class="nodata-icon" [inline]="true">cloud_queue</mat-icon>
+    <h1 class="nodata-text">There is currently no events.</h1>
+  </div>
+</div>
+
+<ng-template #elseText>
+  <div *ngFor="let event of events | async">
+    <app-event-card [event]="event"></app-event-card>
+  </div>
+</ng-template>
