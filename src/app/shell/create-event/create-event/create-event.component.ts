@@ -48,7 +48,6 @@ export class CreateEventComponent implements OnInit {
       time: this.form.value.time,
       location: this.form.value.location,
       groupid: this.form.value.groupid,
-      grouppicture: null,
     });
   }
 }
