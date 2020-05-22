@@ -71,7 +71,15 @@ export class EventService {
     );
   }
 
-  // async attendEvent(uid: string, eventid: string) {
-  //   await this.db.doc<Event>(`events/${eventid}`).update({ attendingmembers: firestore.FieldValue.arrayUnion(uid) });
-  // }
+  async attendEvent(uid: string, eventid: string) {
+    await this.db
+      .doc(`events/${eventid}`)
+      .update({ attendingmembers: firestore.FieldValue.arrayUnion(uid) });
+  }
+
+  async leaveEvent(uid: string, eventid: string) {
+    await this.db
+      .doc(`events/${eventid}`)
+      .update({ attendingmembers: firestore.FieldValue.arrayRemove(uid) });
+  }
 }
