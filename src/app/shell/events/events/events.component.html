@@ -31,7 +31,8 @@
 </div>
 
 <ng-template #elseText>
-  <div *ngFor="let event of events | async">
+  <div class="event-cards" *ngFor="let event of events | async">
     <app-event-card [event]="event"></app-event-card>
   </div>
+  <div class="event-card-details"></div>
 </ng-template>
