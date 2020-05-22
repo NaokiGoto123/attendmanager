@@ -42,7 +42,7 @@
     </mat-form-field>
 
     <mat-form-field class="create-event-field" appearance="outline">
-      <mat-label>What time is it happening?</mat-label>
+      <mat-label>What time is it happening? (hh:mm)</mat-label>
       <input matInput formControlName="time" type="text" required />
     </mat-form-field>
 
@@ -57,7 +57,7 @@
       [disabled]="form.invalid || form.pristine"
       color="primary"
     >
-      Create!!
+      Create
     </button>
   </form>
 </div>

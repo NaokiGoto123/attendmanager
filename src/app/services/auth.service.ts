@@ -20,6 +20,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class AuthService {
   user$: Observable<User>;
   uid: string;
+  photoURL: string;
+  displayName: string;
+  email: string;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -39,8 +42,14 @@ export class AuthService {
     this.afAuth.authState.subscribe((user) => {
       if (user) {
         this.uid = user.uid;
+        this.photoURL = user.photoURL;
+        this.displayName = user.displayName;
+        this.email = user.email;
       } else {
         this.uid = null;
+        this.photoURL = null;
+        this.displayName = null;
+        this.email = null;
       }
     });
   }
@@ -85,6 +94,7 @@ export class AuthService {
 
     return userRef
       .set(data, { merge: true })
-      .then(() => this.router.navigateByUrl(''));
+      .then(() => this.router.navigateByUrl(''))
+      .then(() => this.snackbar.open('signed in', null, { duration: 2000 }));
   }
 }
