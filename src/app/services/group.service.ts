@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Group } from '../interfaces/group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
@@ -39,5 +40,16 @@ export class GroupService {
 
   getGroupinfo(groupid: string) {
     return this.db.doc<Group>(`organizations/${groupid}`).valueChanges();
+  }
+
+  getGrouppicture(groupid: string): Observable<number> {
+    return this.db
+      .doc<Group>(`organizations/${groupid}`)
+      .valueChanges()
+      .pipe(
+        map((group: Group) => {
+          return group.grouppicture;
+        })
+      );
   }
 }
