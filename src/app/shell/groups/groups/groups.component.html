@@ -2,15 +2,15 @@
   <a class="add-button" [routerLink]="'create-group'">
     <button mat-icon-button color="primary"><mat-icon> add </mat-icon></button>
   </a>
-  <button mat-flat-button color="primary">SELECT ALL</button>
-  <!-- chage the color to primary when selected -->
-  <mat-chip-list selectable="true">
-    <div class="spacer"></div>
-    <div *ngFor="let group of groups$ | async">
-      <mat-chip>{{ group.name }}</mat-chip>
-      <div class="spacer"></div>
-    </div>
-  </mat-chip-list>
+
+  <button class="select-all-button" mat-flat-button color="primary">
+    SELECT ALL
+  </button>
+
+  <div *ngFor="let group of groups$ | async">
+    <mat-checkbox class="checkbox">{{ group.name }}</mat-checkbox>
+  </div>
+
 </mat-toolbar>
 
 <div class="search-field-container">
@@ -30,13 +30,15 @@
   </mat-form-field>
 </div>
 
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
-<app-event-card [event]="event"></app-event-card>
+<div *ngIf="nodata; else elseText">
+  <div class="nodata-container">
+    <mat-icon class="nodata-icon" [inline]="true">cloud_queue</mat-icon>
+    <h1 class="nodata-text">There is currently no events.</h1>
+  </div>
+</div>
+
+<ng-template #elseText>
+  <div *ngFor="let event of events | async">
+    <app-event-card [event]="event"></app-event-card>
+  </div>
+</ng-template>

@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from 'src/app/interfaces/event';
+import { AuthService } from 'src/app/services/auth.service';
+import { EventService } from 'src/app/services/event.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -9,19 +12,23 @@ import { Event } from 'src/app/interfaces/event';
 export class SearchComponent implements OnInit {
   value = 'Look for what you want';
 
-  event: Event = {
-    eventid: '1',
-    title: 'Picnic',
-    desription: 'You wanna go for a walk this weekend? Join us asap!!',
-    limit: 9,
-    date: '12/03/2020',
-    time: '12:00',
-    location: 'Mountian',
-    groupid: 'abc123',
-    grouppicture: '/assets/images/example.jpg',
-  };
+  nodata: boolean;
 
-  constructor() {}
+  events: Observable<Event[]> = this.eventService.getEvents(
+    this.authService.uid
+  );
 
-  ngOnInit(): void {}
+  constructor(
+    private authService: AuthService,
+    private eventService: EventService
+  ) {}
+
+  ngOnInit(): void {
+    if (this.events === null) {
+      this.nodata = true;
+    } else {
+      this.nodata = false;
+    }
+    console.log(this.nodata);
+  }
 }
