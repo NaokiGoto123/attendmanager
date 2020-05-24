@@ -1,9 +1,20 @@
+.toolbar {
+  position: sticky;
+  position: -webkit-sticky; /* For macOS/iOS Safari */
+  top: 0; /* Sets the sticky toolbar to be on top */
+  z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+}
+
+.checkbox {
+  margin-right: 14px;
+}
+
 .header-container {
   display: block;
   background-color: #fafafa;
   position: sticky;
   position: -webkit-sticky; // For macOS/iOS Safari */
-  top: 0px; // Sets the sticky toolbar to be on top */
+  top: 64px; // Sets the sticky toolbar to be on top */
   z-index: 1000;
 }
 
@@ -34,15 +45,20 @@
   font-size: 120px;
 }
 
-.event-cards {
+.event-cards-container-container {
   width: 65%;
   z-index: 1;
   top: 144.5px;
   left: 0;
 }
 
+.event-cards-container {
+  width: 80%;
+  margin: 40px auto 0 auto;
+}
+
 .event-card-details {
-  background: red;
+  background: grey;
   height: 100%;
   width: 35%;
   position: fixed;

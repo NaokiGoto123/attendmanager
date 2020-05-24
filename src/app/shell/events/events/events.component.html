@@ -1,3 +1,9 @@
+<mat-toolbar class="toolbar">
+  <div *ngFor="let group of groups$ | async">
+    <mat-checkbox class="checkbox">{{ group.name }}</mat-checkbox>
+  </div>
+</mat-toolbar>
+
 <div class="header-container">
   <div class="child-header-container">
     <a [routerLink]="'create-event'"
@@ -31,8 +37,12 @@
 </div>
 
 <ng-template #elseText>
-  <div class="event-cards" *ngFor="let event of events | async">
-    <app-event-card [event]="event"></app-event-card>
+  <div class="event-cards-container-container">
+    <div class="event-cards-container">
+      <div *ngFor="let event of events | async">
+        <app-event-card [event]="event"></app-event-card>
+      </div>
+    </div>
   </div>
   <div class="event-card-details"></div>
 </ng-template>
