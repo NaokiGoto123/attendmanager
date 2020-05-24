@@ -15,10 +15,6 @@ import { EventService } from 'src/app/services/event.service';
 export class GroupsComponent implements OnInit {
   value = 'Look for what you want';
 
-  groups$: Observable<Group[]> = this.groupService.getMyGroup(
-    this.authService.uid
-  );
-
   nodata: boolean;
 
   events: Observable<Event[]> = this.eventService.getEvents(
