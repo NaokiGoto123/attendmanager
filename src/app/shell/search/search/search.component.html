@@ -23,7 +23,9 @@
 </div>
 
 <ng-template #elseText>
-  <div *ngFor="let event of events | async">
-    <app-event-card [event]="event"></app-event-card>
+  <div class="event-cards-container">
+    <div *ngFor="let event of events | async">
+      <app-event-card [event]="event"></app-event-card>
+    </div>
   </div>
 </ng-template>

@@ -6,7 +6,6 @@
   <div class="card-content">
     <h2>{{ event.title }}</h2>
     <p>Description: {{ event.description }}</p>
-    <p>{{ grouppicture | async }}</p>
     <div [ngSwitch]="attended">
       <button
         class="submit-button"
