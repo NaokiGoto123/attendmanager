@@ -29,11 +29,16 @@ const routes: Routes = [
           import('./groups/groups.module').then((m) => m.GroupsModule),
       },
       {
-        path: 'groups/create-group',
+        path: 'create-group',
         loadChildren: () =>
           import('./create-group/create-group.module').then(
             (m) => m.CreateGroupModule
           ),
+      },
+      {
+        path: 'create',
+        loadChildren: () =>
+          import('./create/create.module').then((m) => m.CreateModule),
       },
       {
         path: 'search',
