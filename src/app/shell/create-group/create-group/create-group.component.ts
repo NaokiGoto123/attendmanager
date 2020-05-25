@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 import {
   FormGroup,
@@ -21,6 +21,8 @@ import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
   styleUrls: ['./create-group.component.scss'],
 })
 export class CreateGroupComponent implements OnInit {
+  isComplete = false;
+
   imageIds = [...Array(22)].map((_, index) => index);
 
   config: SwiperConfigInterface = {
@@ -51,6 +53,14 @@ export class CreateGroupComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.form.dirty) {
+      $event.preventDefault();
+      $event.returnValue = '';
+    }
+  }
+
   submit() {
     this.groupSerive
       .createGroup({
@@ -65,6 +75,7 @@ export class CreateGroupComponent implements OnInit {
         eventIDs: [],
       })
       .then(() => (this.form = null))
+      .then(() => (this.isComplete = true))
       .then(() => this.router.navigateByUrl('groups'));
   }
 }

@@ -6,16 +6,16 @@ import {
   UrlTree,
 } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { CreateEventComponent } from '../shell/create-event/create-event/create-event.component';
+import { CreateGroupComponent } from '../shell/create-group/create-group/create-group.component';
 
 @Injectable({
   providedIn: 'root',
 })
-export class FormGuard implements CanDeactivate<CreateEventComponent> {
+export class FormGuard implements CanDeactivate<CreateGroupComponent> {
   canDeactivate(
-    component: CreateEventComponent
+    component: CreateGroupComponent
   ): Observable<boolean> | boolean {
-    if (component.form.pristine) {
+    if (component.form.pristine && component.isComplete) {
       return true;
     }
 
