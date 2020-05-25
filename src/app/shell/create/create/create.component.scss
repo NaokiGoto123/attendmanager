@@ -1,0 +1,46 @@
+.create-container {
+  height: calc(100%-64px);
+  width: calc(100%-259px);
+  bottom: 0;
+  right: 0;
+}
+
+.event {
+  color: white;
+  background-color: #ff3f82;
+  height: 100%;
+  width: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+}
+
+.event :hover {
+  filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.6));
+}
+
+.event-picture {
+  width: 500px;
+  height: 500px;
+}
+
+.group {
+  color: white;
+  background-color: #9c27b0;
+  height: 100%;
+  width: 50%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  text-align: center;
+}
+
+.group :hover {
+  filter: drop-shadow(10px 10px 10px rgba(0, 0, 0, 0.6));
+}
+
+.group-picture {
+  width: 500px;
+  height: 500px;
+}
