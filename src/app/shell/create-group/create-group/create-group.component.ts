@@ -1,18 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
-import {
-  FormGroup,
-  FormControl,
-  FormBuilder,
-  Validators,
-} from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormBuilder, Validators } from '@angular/forms';
 import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Group } from 'src/app/interfaces/group';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
-import { VirtualTimeScheduler } from 'rxjs';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 
 @Component({
@@ -21,6 +14,8 @@ import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
   styleUrls: ['./create-group.component.scss'],
 })
 export class CreateGroupComponent implements OnInit {
+  isComplete = false;
+
   imageIds = [...Array(22)].map((_, index) => index);
 
   config: SwiperConfigInterface = {
@@ -51,6 +46,14 @@ export class CreateGroupComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.form.dirty) {
+      $event.preventDefault();
+      $event.returnValue = 'Your work will be lost. Is it okay?';
+    }
+  }
+
   submit() {
     this.groupSerive
       .createGroup({
@@ -65,6 +68,7 @@ export class CreateGroupComponent implements OnInit {
         eventIDs: [],
       })
       .then(() => (this.form = null))
+      .then(() => (this.isComplete = true))
       .then(() => this.router.navigateByUrl('groups'));
   }
 }

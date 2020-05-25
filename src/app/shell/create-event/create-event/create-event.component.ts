@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { GroupService } from 'src/app/services/group.service';
 import { EventService } from 'src/app/services/event.service';
@@ -12,6 +12,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
   styleUrls: ['./create-event.component.scss'],
 })
 export class CreateEventComponent implements OnInit {
+  isComplete = false;
+
   form = this.fb.group({
     groupid: ['', [Validators.required]],
     title: ['', [Validators.required]],
@@ -37,17 +39,27 @@ export class CreateEventComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.form.dirty) {
+      $event.preventDefault();
+      $event.returnValue = 'Your work will be lost. Is it okay?';
+    }
+  }
+
   submit() {
-    this.eventService.createEvent({
-      eventid: this.db.createId(),
-      title: this.form.value.title,
-      description: this.form.value.description,
-      memberlimit: this.form.value.memberlimit,
-      attendingmembers: [],
-      date: this.form.value.date,
-      time: this.form.value.time,
-      location: this.form.value.location,
-      groupid: this.form.value.groupid,
-    });
+    this.eventService
+      .createEvent({
+        eventid: this.db.createId(),
+        title: this.form.value.title,
+        description: this.form.value.description,
+        memberlimit: this.form.value.memberlimit,
+        attendingmembers: [],
+        date: this.form.value.date,
+        time: this.form.value.time,
+        location: this.form.value.location,
+        groupid: this.form.value.groupid,
+      })
+      .then(() => (this.isComplete = true));
   }
 }
