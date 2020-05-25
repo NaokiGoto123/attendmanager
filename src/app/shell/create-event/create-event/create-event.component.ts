@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { GroupService } from 'src/app/services/group.service';
 import { EventService } from 'src/app/services/event.service';
@@ -38,6 +38,14 @@ export class CreateEventComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {}
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+    if (this.form.dirty) {
+      $event.preventDefault();
+      $event.returnValue = 'Your work will be lost. Is it okay?';
+    }
+  }
 
   submit() {
     this.eventService

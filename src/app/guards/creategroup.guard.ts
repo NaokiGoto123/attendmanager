@@ -19,9 +19,7 @@ export class CreateGroupGuard implements CanDeactivate<CreateGroupComponent> {
       return true;
     }
 
-    const confirmation = window.confirm(
-      '作業中の内容が失われますがよろしいですか？'
-    );
+    const confirmation = window.confirm('Your work will be lost. Is it okay?');
 
     return of(confirmation);
   }

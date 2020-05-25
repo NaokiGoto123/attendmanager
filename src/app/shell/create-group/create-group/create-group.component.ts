@@ -50,7 +50,7 @@ export class CreateGroupComponent implements OnInit {
   unloadNotification($event: any) {
     if (this.form.dirty) {
       $event.preventDefault();
-      $event.returnValue = '';
+      $event.returnValue = 'Your work will be lost. Is it okay?';
     }
   }
 
