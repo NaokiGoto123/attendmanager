@@ -11,7 +11,7 @@ import { CreateGroupComponent } from '../shell/create-group/create-group/create-
 @Injectable({
   providedIn: 'root',
 })
-export class FormGuard implements CanDeactivate<CreateGroupComponent> {
+export class CreateGroupGuard implements CanDeactivate<CreateGroupComponent> {
   canDeactivate(
     component: CreateGroupComponent
   ): Observable<boolean> | boolean {
