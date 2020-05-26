@@ -1,10 +1,15 @@
 <div class="create-container">
-  <div class="event" (click)="navigateToCreateEvent()">
-    <img class="event-picture" src="/assets/images/havingfun.svg" />
-    <h1 class="event-text">Create event</h1>
+  <div class="event">
+    <a routerLink="/create-event">
+      <img class="event-picture" src="/assets/images/havingfun.svg" />
+      <h1 class="event-text">Create event</h1>
+    </a>
   </div>
-  <div class="group" (click)="navigateToCreateGruop()">
-    <img class="group-picture" src="/assets/images/community.svg" />
-    <h1 class="group-text">Create group</h1>
+
+  <div class="group">
+    <a routerLink="/create-group">
+      <img class="group-picture" src="/assets/images/community.svg" />
+      <h1 class="group-text">Create group</h1>
+    </a>
   </div>
 </div>

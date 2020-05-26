@@ -39,8 +39,4 @@ export class EventsComponent implements OnInit {
     }
     console.log(this.nodata);
   }
-
-  navigateToCreateEvent() {
-    this.router.navigateByUrl('create-event');
-  }
 }

@@ -7,15 +7,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./create.component.scss'],
 })
 export class CreateComponent implements OnInit {
-  constructor(private router: Router) {}
+  constructor() {}
 
   ngOnInit(): void {}
-
-  navigateToCreateEvent() {
-    this.router.navigateByUrl('create-event');
-  }
-
-  navigateToCreateGruop() {
-    this.router.navigateByUrl('create-group');
-  }
 }

@@ -1,12 +1,9 @@
 <mat-toolbar class="toolbar">
-  <button
-    class="add-button"
-    mat-icon-button
-    color="primary"
-    (click)="navigate()"
-  >
-    <mat-icon> add </mat-icon>
-  </button>
+  <a routerLink="/create-group">
+    <button class="add-button" mat-icon-button color="primary">
+      <mat-icon> add </mat-icon>
+    </button>
+  </a>
 </mat-toolbar>
 
 <div class="search-field-container">

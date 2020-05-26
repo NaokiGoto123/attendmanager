@@ -37,8 +37,4 @@ export class GroupsComponent implements OnInit {
     }
     console.log(this.nodata);
   }
-
-  navigate() {
-    this.router.navigateByUrl('create-group');
-  }
 }
