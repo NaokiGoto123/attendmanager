@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { EventService } from 'src/app/services/event.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-groups',
@@ -22,6 +23,7 @@ export class GroupsComponent implements OnInit {
   );
 
   constructor(
+    private router: Router,
     private groupService: GroupService,
     private authService: AuthService,
     private eventService: EventService

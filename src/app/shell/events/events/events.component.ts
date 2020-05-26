@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { Group } from 'src/app/interfaces/group';
 import { GroupService } from 'src/app/services/group.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
@@ -24,6 +25,7 @@ export class EventsComponent implements OnInit {
   );
 
   constructor(
+    private router: Router,
     private authService: AuthService,
     private eventService: EventService,
     private groupService: GroupService
