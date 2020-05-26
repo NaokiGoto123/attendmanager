@@ -12,6 +12,8 @@ import { EventService } from 'src/app/services/event.service';
 export class EventCardComponent implements OnInit {
   @Input() event: Event;
 
+  ifadmin: Observable<boolean>; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
+
   attended = false;
 
   eventid: string;
@@ -28,6 +30,11 @@ export class EventCardComponent implements OnInit {
     this.eventid = this.event.eventid;
 
     this.grouppicture = this.groupService.getGrouppicture(this.event.groupid);
+
+    this.ifadmin = this.groupService.checkIfAdmin(
+      this.authService.uid,
+      this.event.groupid
+    );
 
     if (this.event.attendingmembers.includes(this.authService.uid)) {
       this.attended = true;

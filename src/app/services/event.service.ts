@@ -71,6 +71,29 @@ export class EventService {
     );
   }
 
+  async updateEvent(uid: string, event: Event) {
+    await this.db
+      .doc(`events/${event.eventid}`)
+      .set(event, { merge: true })
+      .then(() =>
+        this.snackbar.open('Successfully updated the event', null, {
+          duration: 2000,
+        })
+      )
+      .then(() => this.router.navigateByUrl(''));
+  }
+
+  async deleteEvent(eventid: string) {
+    await this.db
+      .doc(`events/${eventid}`)
+      .delete()
+      .then(() =>
+        this.snackbar.open('Successfully updated the event', null, {
+          duration: 2000,
+        })
+      );
+  }
+
   async attendEvent(uid: string, eventid: string) {
     await this.db
       .doc(`events/${eventid}`)

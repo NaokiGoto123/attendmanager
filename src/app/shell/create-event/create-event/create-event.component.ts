@@ -18,9 +18,9 @@ export class CreateEventComponent implements OnInit {
     groupid: ['', [Validators.required]],
     title: ['', [Validators.required]],
     description: [''],
-    memberlimit: [0],
+    memberlimit: [null, [Validators.required]],
     date: ['', [Validators.required]],
-    time: ['00:00', [Validators.required]],
+    time: ['', [Validators.required]],
     location: ['', [Validators.required]],
   });
   // tslint:disable-next-line: max-line-length

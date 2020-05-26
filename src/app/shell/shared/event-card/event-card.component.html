@@ -5,7 +5,9 @@
   />
   <div class="card-content">
     <h2>{{ event.title }}</h2>
+
     <p>Description: {{ event.description }}</p>
+
     <div [ngSwitch]="attended">
       <button
         class="submit-button"
@@ -25,6 +27,14 @@
       >
         ATTENDED
       </button>
+    </div>
+
+    <div *ngIf="ifadmin | async">
+      <a routerLink="/create-event">
+        <button class="edit-button" mat-raised-button>
+          Edit
+        </button>
+      </a>
     </div>
   </div>
 </div>

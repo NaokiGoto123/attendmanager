@@ -3,7 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Group } from '../interfaces/group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
@@ -40,6 +40,21 @@ export class GroupService {
 
   getGroupinfo(groupid: string) {
     return this.db.doc<Group>(`organizations/${groupid}`).valueChanges();
+  }
+
+  checkIfAdmin(uid: string, groupid: string): Observable<boolean> {
+    return this.db
+      .doc<Group>(`organizations/${groupid}`)
+      .valueChanges()
+      .pipe(
+        map((group: Group) => {
+          if (group.admin.includes(uid)) {
+            return true;
+          } else {
+            return false;
+          }
+        })
+      );
   }
 
   getGrouppicture(groupid: string): Observable<number> {
