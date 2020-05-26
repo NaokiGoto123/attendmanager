@@ -1,21 +1,10 @@
-.toolbar {
-  position: sticky;
-  position: -webkit-sticky; /* For macOS/iOS Safari */
-  top: 0; /* Sets the sticky toolbar to be on top */
-  z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
-}
-
-.add-button {
-  margin-right: 20px;
-}
-
 .search-field-container {
   text-align: center;
   display: block;
   background-color: #fafafa;
   position: sticky;
   position: -webkit-sticky; // For macOS/iOS Safari */
-  top: 64px; // Sets the sticky toolbar to be on top */
+  top: 0; // Sets the sticky toolbar to be on top */
   z-index: 1000;
 }
 

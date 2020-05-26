@@ -46,7 +46,9 @@
 }
 
 .event-cards-container-container {
+  height: 100%;
   width: 65%;
+  position: absolute;
   z-index: 1;
   top: 144.5px;
   left: 0;
@@ -61,9 +63,9 @@
   background: grey;
   height: 100%;
   width: 35%;
-  position: fixed;
+  position: sticky;
   z-index: 1;
   top: 144.5px;
   overflow-x: hidden;
-  right: 0;
+  left: 65%;
 }
