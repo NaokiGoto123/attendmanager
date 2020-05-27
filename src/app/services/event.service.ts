@@ -37,6 +37,10 @@ export class EventService {
       .then(() => this.router.navigateByUrl(''));
   }
 
+  getEvent(eventid: string): Observable<Event> {
+    return this.db.doc<Event>(`events/${eventid}`).valueChanges();
+  }
+
   getEvents(uid: string): Observable<Event[]> {
     // GroupリストのObservable
     const groups$: Observable<Group[]> = this.groupService.getMyGroup(uid);

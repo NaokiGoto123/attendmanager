@@ -1,12 +1,12 @@
 <div class="container">
   <h1>Create event</h1>
 
-  <form class="create-event-form" [formGroup]="form" (ngSubmit)="submit()">
+  <form class="create-event-form" [formGroup]="form">
     <mat-form-field class="create-event-field" appearance="outline">
       <mat-label>Which group</mat-label>
       <mat-select formControlName="groupid" required>
         <mat-option
-          *ngFor="let group of originalgroups$ | async"
+          *ngFor="let group of admingroups$ | async"
           [value]="group.groupid"
         >
           {{ group.name }}
@@ -79,13 +79,28 @@
       />
     </mat-form-field>
 
-    <button
-      mat-raised-button
-      class="create-button"
-      [disabled]="form.invalid || form.pristine"
-      color="primary"
-    >
-      Create
-    </button>
+    <div class="buttons" *ngIf="ifTarget; else editing">
+      <button
+        mat-raised-button
+        class="update-button"
+        [disabled]="form.invalid || form.pristine"
+        color="primary"
+        (click)="update()"
+      >
+        Update
+      </button>
+    </div>
+
+    <ng-template #editing>
+      <button
+        mat-raised-button
+        class="create-button"
+        [disabled]="form.invalid || form.pristine"
+        color="primary"
+        (click)="submit()"
+      >
+        Create
+      </button>
+    </ng-template>
   </form>
 </div>
