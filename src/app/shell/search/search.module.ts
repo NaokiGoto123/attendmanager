@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { SharedModule } from '../shared/shared.module';
+import { MatTabsModule } from '@angular/material/tabs';
 
 @NgModule({
   declarations: [SearchComponent],
@@ -21,6 +22,7 @@ import { SharedModule } from '../shared/shared.module';
     MatIconModule,
     MatToolbarModule,
     SharedModule,
+    MatTabsModule,
   ],
 })
 export class SearchModule {}

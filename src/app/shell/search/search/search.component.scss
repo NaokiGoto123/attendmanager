@@ -7,10 +7,15 @@
   top: 0px; // Sets the sticky toolbar to be on top */
   z-index: 1000;
 }
-
 .search-field {
   width: 40%;
   padding-top: 40px;
+}
+
+.mat-tabs-container {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 105.5px;
 }
 
 .event-cards-container {
