@@ -47,9 +47,7 @@ export class EventService {
         const eventIdsList: string[][] = groups.map((group) => group.eventIDs);
         const eventListObs$: Observable<Event[]>[] = eventIdsList.map(
           (eventIds: string[]) => {
-            if (eventIds === []) {
-              return of([]);
-            } else {
+            if (eventIds?.length) {
               // イベントIDリストをイベントのObservableリストに差し替えている
               const events$: Observable<
                 Event
@@ -58,6 +56,8 @@ export class EventService {
               );
               // イベントのObservableリストをcombinaLatestで中身を取り出している
               return combineLatest(events$); // これはイベントIDリストを含むObservableである
+            } else {
+              return of([]);
             }
           }
         );
