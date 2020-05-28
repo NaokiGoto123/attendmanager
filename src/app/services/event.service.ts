@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { GroupService } from './group.service';
 import { map, switchMap } from 'rxjs/operators';
-import { Observable, combineLatest, of } from 'rxjs';
+import { Observable, combineLatest, of, pipe } from 'rxjs';
 import { firestore } from 'firebase';
 import { Group } from '../interfaces/group';
 @Injectable({
@@ -35,6 +35,10 @@ export class EventService {
         })
       )
       .then(() => this.router.navigateByUrl(''));
+  }
+
+  getEvent(eventid: string): Observable<Event> {
+    return this.db.doc<Event>(`events/${eventid}`).valueChanges();
   }
 
   getEvents(uid: string): Observable<Event[]> {
@@ -67,12 +71,44 @@ export class EventService {
       // 二次元配列をフラットな配列にして返却
       map((eventsList: Event[][]) => {
         const results = [].concat(...eventsList);
-        // eventsList.forEach((events) => results.push(...events));
         // debug
         console.log(results);
         return results;
       })
     );
+  }
+
+  async updateEvent(uid: string, event: Event) {
+    await this.db
+      .doc(`events/${event.eventid}`)
+      .set(event, { merge: true })
+      .then(() =>
+        this.snackbar.open('Successfully updated the event', null, {
+          duration: 2000,
+        })
+      )
+      .then(() => this.router.navigateByUrl(''));
+  }
+
+  async deleteEvent(eventid: string, groupid: string) {
+    await this.db
+      .doc(`events/${eventid}`)
+      .delete()
+      //   this.db
+      //     .doc(`organizations/${event.groupid}`)
+      //     .update({ eventIDs: firestore.FieldValue.arrayUnion(event.eventid) })
+      // )
+      .then(() =>
+        this.db
+          .doc(`organizations/${groupid}`)
+          .update({ eventIDs: firestore.FieldValue.arrayRemove(eventid) })
+      )
+      .then(() =>
+        this.snackbar.open('Successfully deleted the event', null, {
+          duration: 2000,
+        })
+      )
+      .then(() => this.router.navigateByUrl(''));
   }
 
   async attendEvent(uid: string, eventid: string) {

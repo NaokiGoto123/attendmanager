@@ -14,11 +14,11 @@ import { Router } from '@angular/router';
 export class EventsComponent implements OnInit {
   value = 'Look for what you want';
 
+  nodata: boolean;
+
   groups$: Observable<Group[]> = this.groupService.getMyGroup(
     this.authService.uid
   );
-
-  nodata: boolean;
 
   events: Observable<Event[]> = this.eventService.getEvents(
     this.authService.uid
