@@ -15,7 +15,7 @@ export class CreateEventGuard implements CanDeactivate<CreateEventComponent> {
   canDeactivate(
     component: CreateEventComponent
   ): Observable<boolean> | boolean {
-    if (component.form.pristine && component.isComplete) {
+    if (component.form.pristine || component.isComplete) {
       return true;
     }
 

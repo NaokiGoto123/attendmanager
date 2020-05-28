@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { GroupService } from './group.service';
 import { map, switchMap } from 'rxjs/operators';
-import { Observable, combineLatest, pipe } from 'rxjs';
+import { Observable, combineLatest, of, pipe } from 'rxjs';
 import { firestore } from 'firebase';
 import { Group } from '../interfaces/group';
 @Injectable({
@@ -51,14 +51,18 @@ export class EventService {
         const eventIdsList: string[][] = groups.map((group) => group.eventIDs);
         const eventListObs$: Observable<Event[]>[] = eventIdsList.map(
           (eventIds: string[]) => {
-            // イベントIDリストをイベントのObservableリストに差し替えている
-            const events$: Observable<
-              Event
-            >[] = eventIds.map((eventId: string) =>
-              this.db.doc<Event>(`events/${eventId}`).valueChanges()
-            );
-            // イベントのObservableリストをcombinaLatestで中身を取り出している
-            return combineLatest(events$); // これはイベントIDリストを含むObservableである
+            if (eventIds?.length) {
+              // イベントIDリストをイベントのObservableリストに差し替えている
+              const events$: Observable<
+                Event
+              >[] = eventIds.map((eventId: string) =>
+                this.db.doc<Event>(`events/${eventId}`).valueChanges()
+              );
+              // イベントのObservableリストをcombinaLatestで中身を取り出している
+              return combineLatest(events$); // これはイベントIDリストを含むObservableである
+            } else {
+              return of([]);
+            }
           }
         );
         // eventListObs$はObservabeのリストなのでcombineLatestで解決する

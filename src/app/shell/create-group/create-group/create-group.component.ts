@@ -67,8 +67,9 @@ export class CreateGroupComponent implements OnInit {
         members: [this.authService.uid],
         eventIDs: [],
       })
-      .then(() => (this.form = null))
-      .then(() => (this.isComplete = true))
-      .then(() => this.router.navigateByUrl('groups'));
+      .then(() => {
+        this.isComplete = true;
+        this.router.navigateByUrl('groups');
+      });
   }
 }

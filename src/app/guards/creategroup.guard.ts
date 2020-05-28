@@ -15,7 +15,7 @@ export class CreateGroupGuard implements CanDeactivate<CreateGroupComponent> {
   canDeactivate(
     component: CreateGroupComponent
   ): Observable<boolean> | boolean {
-    if (component.form.pristine && component.isComplete) {
+    if (component.form.pristine || component.isComplete) {
       return true;
     }
 
