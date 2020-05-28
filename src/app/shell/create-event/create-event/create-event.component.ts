@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Observable } from 'rxjs';
 import { Group } from 'src/app/interfaces/group';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
@@ -39,6 +39,7 @@ export class CreateEventComponent implements OnInit {
   );
 
   constructor(
+    private router: Router,
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private db: AngularFirestore,
@@ -88,7 +89,8 @@ export class CreateEventComponent implements OnInit {
         location: this.form.value.location,
         groupid: this.form.value.groupid,
       })
-      .then(() => (this.isComplete = true));
+      .then(() => (this.isComplete = true))
+      .then(() => this.router.navigateByUrl('/'));
   }
 
   update() {
@@ -104,10 +106,13 @@ export class CreateEventComponent implements OnInit {
         location: this.form.value.location,
         groupid: this.form.value.groupid,
       })
-      .then(() => (this.isComplete = true));
+      .then(() => (this.isComplete = true))
+      .then(() => this.router.navigateByUrl('/'));
   }
 
   delete() {
-    this.eventService.deleteEvent(this.eventid, this.groupid);
+    this.eventService
+      .deleteEvent(this.eventid, this.groupid)
+      .then(() => this.router.navigateByUrl('/'));
   }
 }

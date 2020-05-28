@@ -33,8 +33,7 @@ export class EventService {
         this.snackbar.open('Successfully created the event', null, {
           duration: 2000,
         })
-      )
-      .then(() => this.router.navigateByUrl(''));
+      );
   }
 
   getEvent(eventid: string): Observable<Event> {
@@ -86,8 +85,7 @@ export class EventService {
         this.snackbar.open('Successfully updated the event', null, {
           duration: 2000,
         })
-      )
-      .then(() => this.router.navigateByUrl(''));
+      );
   }
 
   async deleteEvent(eventid: string, groupid: string) {
@@ -107,8 +105,7 @@ export class EventService {
         this.snackbar.open('Successfully deleted the event', null, {
           duration: 2000,
         })
-      )
-      .then(() => this.router.navigateByUrl(''));
+      );
   }
 
   async attendEvent(uid: string, eventid: string) {
