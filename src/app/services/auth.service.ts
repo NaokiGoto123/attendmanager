@@ -10,7 +10,7 @@ import {
 } from '@angular/fire/firestore';
 
 import { Observable, of } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -96,5 +96,16 @@ export class AuthService {
       .set(data, { merge: true })
       .then(() => this.router.navigateByUrl(''))
       .then(() => this.snackbar.open('signed in', null, { duration: 2000 }));
+  }
+
+  public getName(uid: string): Observable<string> {
+    return this.afs
+      .doc<User>(`users/${uid}`)
+      .valueChanges()
+      .pipe(
+        map((user: User) => {
+          return user.displayName;
+        })
+      );
   }
 }
