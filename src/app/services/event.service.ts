@@ -77,7 +77,7 @@ export class EventService {
     );
   }
 
-  async updateEvent(uid: string, event: Event) {
+  async updateEvent(uid: string, event: Omit<Event, 'creater'>) {
     await this.db
       .doc(`events/${event.eventid}`)
       .set(event, { merge: true })

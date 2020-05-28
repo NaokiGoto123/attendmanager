@@ -82,6 +82,7 @@ export class CreateEventComponent implements OnInit {
         eventid: this.db.createId(),
         title: this.form.value.title,
         description: this.form.value.description,
+        creater: this.authService.uid,
         memberlimit: this.form.value.memberlimit,
         attendingmembers: [],
         date: this.form.value.date,
