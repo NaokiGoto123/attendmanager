@@ -8,6 +8,8 @@
 
     <p>Description: {{ event.description }}</p>
 
+    <p>Created by {{ createrName | async }} in {{ groupName | async }}</p>
+
     <div [ngSwitch]="attended">
       <button
         class="submit-button"

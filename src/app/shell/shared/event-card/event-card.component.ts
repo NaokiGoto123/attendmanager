@@ -16,6 +16,10 @@ export class EventCardComponent implements OnInit {
 
   attended = false;
 
+  createrName: Observable<string>;
+
+  groupName: Observable<string>;
+
   eventid: string;
 
   grouppicture: Observable<number>;
@@ -27,6 +31,10 @@ export class EventCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.createrName = this.authService.getName(this.event.creater);
+
+    this.groupName = this.groupService.getGroupName(this.event.groupid);
+
     this.eventid = this.event.eventid;
 
     this.grouppicture = this.groupService.getGrouppicture(this.event.groupid);
