@@ -22,6 +22,17 @@ export class GroupService {
       );
   }
 
+  getGroupName(groupid: string): Observable<string> {
+    return this.db
+      .doc<Group>(`organizations/${groupid}`)
+      .valueChanges()
+      .pipe(
+        map((group: Group) => {
+          return group.name;
+        })
+      );
+  }
+
   getMyGroup(uid: string): Observable<Group[]> {
     return this.db
       .collection<Group>(`organizations`, (ref) =>
