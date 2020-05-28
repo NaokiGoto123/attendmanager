@@ -9,6 +9,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 @Component({
   selector: 'app-create-event',
   templateUrl: './create-event.component.html',
@@ -26,7 +27,7 @@ export class CreateEventComponent implements OnInit {
     title: ['', [Validators.required]],
     description: [''],
     memberlimit: [null, [Validators.required]],
-    date: ['', [Validators.required]],
+    date: [null, [Validators.required]],
     time: ['', [Validators.required]],
     location: ['', [Validators.required]],
   });
@@ -56,7 +57,10 @@ export class CreateEventComponent implements OnInit {
         }
         console.log(event);
         this.eventid = event.eventid;
-        this.form.patchValue(event);
+        this.form.patchValue({
+          ...event,
+          date: event.date.toDate(),
+        });
       });
   }
 

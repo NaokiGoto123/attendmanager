@@ -1,5 +1,10 @@
 <div class="container">
-  <h1>Create event</h1>
+  <div *ngIf="ifTarget; else edit">
+    <h1>Update event</h1>
+  </div>
+  <ng-template #edit>
+    <h1>Create event</h1>
+  </ng-template>
 
   <form class="create-event-form" [formGroup]="form">
     <mat-form-field class="create-event-field" appearance="outline">
