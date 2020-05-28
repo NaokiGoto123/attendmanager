@@ -88,11 +88,15 @@
       <button
         mat-raised-button
         class="update-button"
-        [disabled]="form.invalid || form.pristine"
+        [disabled]="form.invalid"
         color="primary"
         (click)="update()"
       >
         Update
+      </button>
+      <p class="ortext">or</p>
+      <button mat-raised-button color="warn" (click)="delete()">
+        Delete
       </button>
     </div>
 

@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { GroupService } from './group.service';
 import { map, switchMap } from 'rxjs/operators';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, pipe } from 'rxjs';
 import { firestore } from 'firebase';
 import { Group } from '../interfaces/group';
 @Injectable({
@@ -86,15 +86,25 @@ export class EventService {
       .then(() => this.router.navigateByUrl(''));
   }
 
-  async deleteEvent(eventid: string) {
+  async deleteEvent(eventid: string, groupid: string) {
     await this.db
       .doc(`events/${eventid}`)
       .delete()
+      //   this.db
+      //     .doc(`organizations/${event.groupid}`)
+      //     .update({ eventIDs: firestore.FieldValue.arrayUnion(event.eventid) })
+      // )
       .then(() =>
-        this.snackbar.open('Successfully updated the event', null, {
+        this.db
+          .doc(`organizations/${groupid}`)
+          .update({ eventIDs: firestore.FieldValue.arrayRemove(eventid) })
+      )
+      .then(() =>
+        this.snackbar.open('Successfully deleted the event', null, {
           duration: 2000,
         })
-      );
+      )
+      .then(() => this.router.navigateByUrl(''));
   }
 
   async attendEvent(uid: string, eventid: string) {

@@ -22,6 +22,8 @@ export class CreateEventComponent implements OnInit {
 
   eventid: string;
 
+  groupid: string;
+
   form = this.fb.group({
     groupid: ['', [Validators.required]],
     title: ['', [Validators.required]],
@@ -31,12 +33,11 @@ export class CreateEventComponent implements OnInit {
     time: ['', [Validators.required]],
     location: ['', [Validators.required]],
   });
-  // tslint:disable-next-line: max-line-length
+
   admingroups$: Observable<Group[]> = this.groupService.getAdminGroup(
     this.authService.uid
   );
 
-  // tslint:disable-next-line: max-line-length
   constructor(
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
@@ -55,7 +56,7 @@ export class CreateEventComponent implements OnInit {
         if (event) {
           this.ifTarget = true;
         }
-        console.log(event);
+        this.groupid = event.groupid;
         this.eventid = event.eventid;
         this.form.patchValue({
           ...event,
@@ -104,5 +105,9 @@ export class CreateEventComponent implements OnInit {
         groupid: this.form.value.groupid,
       })
       .then(() => (this.isComplete = true));
+  }
+
+  delete() {
+    this.eventService.deleteEvent(this.eventid, this.groupid);
   }
 }
