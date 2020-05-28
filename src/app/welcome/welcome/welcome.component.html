@@ -46,13 +46,13 @@
     </mat-form-field>
 
     <button
-      mat-raised-button
+      mat-fab
       class="submit-button"
       (click)="openSnackBar()"
       [disabled]="form.invalid || form.pristine"
       color="primary"
     >
-      GO!!
+      <mat-icon>done</mat-icon>
     </button>
   </form>
 
@@ -85,6 +85,6 @@
   <h5>or</h5>
 
   <p>
-    Sign up with email and password! <a [routerLink]="'signup'">Click here.</a>
+    Sign up with email and password! <a [routerLink]="'/signup'">Click here.</a>
   </p>
 </div>
