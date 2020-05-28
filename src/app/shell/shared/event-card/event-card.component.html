@@ -10,6 +10,8 @@
 
     <p>Created by {{ createrName | async }} in {{ groupName | async }}</p>
 
+    <p>Date: {{ event.date.toDate() | date: 'yyyy/MM/dd' }}</p>
+
     <div [ngSwitch]="attended">
       <button
         class="submit-button"
