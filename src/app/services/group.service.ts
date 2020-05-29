@@ -4,6 +4,7 @@ import { Group } from '../interfaces/group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { firestore } from 'firebase';
 @Injectable({
   providedIn: 'root',
 })
@@ -49,7 +50,7 @@ export class GroupService {
       .valueChanges();
   }
 
-  getGroupinfo(groupid: string) {
+  getGroupinfo(groupid: string): Observable<Group> {
     return this.db.doc<Group>(`organizations/${groupid}`).valueChanges();
   }
 
@@ -77,5 +78,37 @@ export class GroupService {
           return group.grouppicture;
         })
       );
+  }
+
+  async updateGroup(
+    group: Omit<
+      Group,
+      'createddate' | 'creater' | 'admin' | 'members' | 'eventIDs'
+    >
+  ) {
+    await this.db
+      .doc(`organizations/${group.groupid}`)
+      .set(group, { merge: true });
+  }
+
+  async deleteGroup(groupid: string) {
+    await this.db
+      .doc(`organizations/${groupid}`)
+      .delete()
+      .then(() => {
+        this.db
+          .doc<Group>(`organizaitons/${groupid}`)
+          .valueChanges()
+          .pipe(
+            map((group: Group) => {
+              return group.eventIDs;
+            }),
+            map((eventids: string[]) => {
+              eventids.forEach((eventid) => {
+                this.db.doc(`events/${eventid}`).delete();
+              });
+            })
+          );
+      });
   }
 }
