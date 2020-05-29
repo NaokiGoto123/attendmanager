@@ -9,7 +9,7 @@ const routes: Routes = [
       import('./welcome/welcome.module').then((m) => m.WelcomeModule),
   },
   {
-    path: 'welcome/signup',
+    path: 'signup',
     loadChildren: () =>
       import('./signup/signup.module').then((m) => m.SignupModule),
   },
@@ -17,6 +17,11 @@ const routes: Routes = [
     path: '',
     loadChildren: () =>
       import('./shell/shell.module').then((m) => m.ShellModule),
+  },
+  {
+    path: '**',
+    loadChildren: () =>
+      import('./not-found/not-found.module').then((m) => m.NotFoundModule),
   },
 ];
 
