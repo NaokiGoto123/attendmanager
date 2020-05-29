@@ -16,14 +16,31 @@
 .groups-container {
   display: grid;
   margin: 50px;
-  grid-auto-rows: 300px;
+  grid-auto-rows: 320px;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 20px;
 }
 
+.create-group-grid-container {
+  background-color: #3f51b5;
+  border-radius: 10px;
+  width: 100%;
+  height: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.create-group-grid-container:hover {
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.create-group-grid {
+  margin-top: 20%;
+  text-align: center;
+}
+
 .group {
   background-color: white;
-  text-align: center;
   border-radius: 10px;
   width: 100%;
   height: 100%;
@@ -32,12 +49,23 @@
 }
 
 .group:hover {
-  cursor: pointer;
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
-.grouppicture {
+.group-picture {
   border-radius: 10px 10px 0 0;
-  height: 40%;
+  height: 45%;
   width: 100%;
+}
+
+.group-name {
+  text-align: center;
+}
+
+.group-description {
+  text-align: center;
+}
+
+.group-details-button-container {
+  text-align: end;
 }

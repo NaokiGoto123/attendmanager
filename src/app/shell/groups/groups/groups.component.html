@@ -16,14 +16,34 @@
 </div>
 
 <div class="groups-container">
+  <div class="create-group-grid-container">
+    <div class="create-group-grid">
+      <h1>Create new group</h1>
+      <button mat-fab routerLink="/create-group" color="none">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
   <div *ngFor="let group of groups | async">
     <div class="group">
       <img
-        class="grouppicture"
+        class="group-picture"
         src="/assets/background/{{ group.grouppicture }}.jpg"
       />
-      <h1>{{ group.name }}</h1>
-      <h2>{{ group.description }}</h2>
+      <h1 class="group-name">{{ group.name }}</h1>
+      <h2 class="group-description">{{ group.description }}</h2>
+      <div class="group-details-button-container">
+        <button
+          mat-icon-button
+          color="primary"
+          aria-label="group description"
+          class="group-details-button"
+          [routerLink]="['/group-details']"
+          [queryParams]="{ id: group.groupid }"
+        >
+          <mat-icon>fullscreen</mat-icon>
+        </button>
+      </div>
     </div>
   </div>
 </div>
