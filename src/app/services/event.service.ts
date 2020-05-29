@@ -40,6 +40,28 @@ export class EventService {
     return this.db.doc<Event>(`events/${eventid}`).valueChanges();
   }
 
+  getOneGroupEvents(groupid: string): Observable<Event[]> {
+    return this.db
+      .doc<Group>(`organizations/${groupid}`)
+      .valueChanges()
+      .pipe(
+        map((group: Group) => {
+          return group.eventIDs;
+        }),
+        switchMap(
+          (eventids: string[]): Observable<Event[]> => {
+            const result: Observable<Event>[] = [];
+            eventids.forEach((eventid) => {
+              result.push(
+                this.db.doc<Event>(`events/${eventid}`).valueChanges()
+              );
+            });
+            return combineLatest(result);
+          }
+        )
+      );
+  }
+
   getEvents(uid: string): Observable<Event[]> {
     // GroupリストのObservable
     const groups$: Observable<Group[]> = this.groupService.getMyGroup(uid);
