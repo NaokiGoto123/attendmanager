@@ -1,0 +1,54 @@
+<div class="container">
+  <mat-toolbar class="mat-toolbar">
+    <a routerLink="/groups">
+      <button class="edit-button" mat-icon-button color="primary">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+    </a>
+
+    <div *ngIf="ifadmin | async">
+      <a routerLink="/create-group" [queryParams]="{ id: id }">
+        <button class="edit-button" mat-icon-button color="primary">
+          <mat-icon>edit</mat-icon>
+        </button>
+      </a>
+    </div>
+  </mat-toolbar>
+
+  <img
+    class="group-picture"
+    src="/assets/background/{{ grouppicture | async }}.jpg"
+  />
+
+  <div class="group-details-container">
+    <h1 class="name">{{ name | async }}</h1>
+
+    <h1>{{ description | async }}</h1>
+
+    <h1>Create at {{ createddate | async }}</h1>
+
+    <h1>
+      Created by <span class="creater">{{ creater | async }}</span>
+    </h1>
+
+    <div class="admins" *ngFor="let admin of admins | async">
+      <h1>Admins:</h1>
+      <h1 class="admin">{{ admin }}</h1>
+    </div>
+
+    <div class="members" *ngFor="let member of members | async">
+      <h1>Members:</h1>
+      <h1 class="member">{{ member }}</h1>
+    </div>
+
+    <a routerLink="/"
+      ><span>
+        <h1>Events</h1>
+      </span></a
+    >
+
+    <button mat-fab aria-label="Invite people">
+      <mat-icon>people</mat-icon>
+    </button>
+  </div>
+</div>

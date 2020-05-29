@@ -1,0 +1,38 @@
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+.edit-button {
+  right: 0;
+}
+
+.image-container {
+  position: relative;
+}
+
+.group-picture {
+  width: 100%;
+}
+
+.group-details-container {
+  width: 60%;
+  margin: 0 auto 100px auto;
+}
+
+.name {
+  position: relative;
+  font-size: 60px;
+}
+
+.creater,
+.admin,
+.member {
+  text-decoration: none;
+}
+
+.creater:hover,
+.admin:hover,
+.member:hover {
+  text-decoration: underline;
+}
