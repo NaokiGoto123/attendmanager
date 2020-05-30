@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { firestore } from 'firebase';
+import { Event } from '../interfaces/event';
 @Injectable({
   providedIn: 'root',
 })
@@ -91,21 +92,54 @@ export class GroupService {
       .set(group, { merge: true });
   }
 
+  // async deleteGroup(groupid: string) {
+  //   await this.db
+  //     .doc(`organizations/${groupid}`)
+  //     .delete()
+  //     .then(() => {
+  //       this.db
+  //         .doc<Group>(`organizaitons/${groupid}`)
+  //         .valueChanges()
+  //         .pipe(
+  //           map((group: Group) => {
+  //             console.log('map is working');
+  //             const eventids = group.eventIDs;
+  //             eventids.forEach((eventid) => {
+  //               console.log(eventid);
+  //               return this.db.doc(`events/${eventid}`).delete();
+  //             });
+  //           })
+  //         );
+  //     });
+  // }
+
+  // async deleteGroup(groupid: string) {
+  //   this.db.doc<Group>(`organizaitons/${groupid}`).valueChanges()
+  //     .pipe(
+  //       map((group: Group) => {
+  //         const eventids = group.eventIDs;
+  //         eventids.forEach((eventid) => {
+  //           this.db.doc(`events/${eventid}`).delete();
+  //         });
+  //       })
+  //     ).toPromise()
+  //     .then(() => {
+  //       this.db.doc(`organizations/${groupid}`).delete();
+  //     });
+  // }
+
   async deleteGroup(groupid: string) {
     await this.db
       .doc(`organizations/${groupid}`)
       .delete()
       .then(() => {
         this.db
-          .doc<Group>(`organizaitons/${groupid}`)
+          .collection(`events`, (ref) => ref.where('groupid', '==', groupid))
           .valueChanges()
           .pipe(
-            map((group: Group) => {
-              return group.eventIDs;
-            }),
-            map((eventids: string[]) => {
-              eventids.forEach((eventid) => {
-                this.db.doc(`events/${eventid}`).delete();
+            map((events: Event[]) => {
+              events.forEach((event: Event) => {
+                this.db.doc<Event>(`events/${event.eventid}`).delete();
               });
             })
           );
