@@ -60,9 +60,9 @@ export class CreateGroupComponent implements OnInit {
       .subscribe((group: Group) => {
         if (group) {
           this.ifTarget = true;
+          this.groupid = group.groupid;
+          this.form.patchValue(group);
         }
-        this.groupid = group.groupid;
-        this.form.patchValue(group);
       });
   }
 

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { Group } from 'src/app/interfaces/group';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, map } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 @Component({
@@ -19,6 +19,8 @@ export class CreateEventComponent implements OnInit {
   isComplete = false;
 
   ifTarget = false;
+
+  noGroup = false;
 
   eventid: string;
 
@@ -54,19 +56,32 @@ export class CreateEventComponent implements OnInit {
         })
       )
       .subscribe((event: Event) => {
-        if (event) {
+        if (!event) {
+          return null;
+        } else {
           this.ifTarget = true;
+          this.groupid = event.groupid;
+          this.eventid = event.eventid;
+          this.form.patchValue({
+            ...event,
+            date: event.date.toDate(),
+          });
         }
-        this.groupid = event.groupid;
-        this.eventid = event.eventid;
-        this.form.patchValue({
-          ...event,
-          date: event.date.toDate(),
-        });
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.admingroups$.subscribe((admingroups: Group[]) => {
+      console.log('map working');
+      if (admingroups.length) {
+        this.noGroup = false;
+        console.log('noGroup is false');
+      } else {
+        this.noGroup = true;
+        console.log('noGroup is true');
+      }
+    });
+  }
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
