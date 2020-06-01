@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from 'src/app/interfaces/event';
 import { EventService } from 'src/app/services/event.service';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { Group } from 'src/app/interfaces/group';
 import { GroupService } from 'src/app/services/group.service';
 import { Router } from '@angular/router';
+import { switchMap, map } from 'rxjs/operators';
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
@@ -23,6 +24,34 @@ export class EventsComponent implements OnInit {
   events: Observable<Event[]> = this.eventService.getEvents(
     this.authService.uid
   );
+
+  givenEvent: Event;
+
+  createrName: Observable<string>;
+
+  groupName: Observable<string>;
+
+  attendingmembersNames: Observable<string[]>;
+
+  ifAttendingmembers = false;
+
+  mouseOver() {
+    this.createrName = this.authService.getName(this.givenEvent.creater);
+
+    this.groupName = this.groupService.getGroupName(this.givenEvent.groupid);
+
+    this.givenEvent.attendingmembers.forEach((attndingmember) => {
+      const result: Observable<string>[] = [];
+      result.push(this.authService.getName(attndingmember));
+      this.attendingmembersNames = combineLatest(result);
+    });
+
+    if (this.givenEvent.attendingmembers.length) {
+      this.ifAttendingmembers = true;
+    } else {
+      this.ifAttendingmembers = false;
+    }
+  }
 
   constructor(
     private router: Router,
