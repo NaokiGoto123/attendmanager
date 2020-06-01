@@ -1,5 +1,10 @@
 <div class="container">
-  <h1>Create your group</h1>
+  <div *ngIf="ifTarget; else new">
+    <h1>Update your group</h1>
+  </div>
+  <ng-template #new>
+    <h1>Create your group</h1>
+  </ng-template>
 
   <h3>Choose an image for your group</h3>
 
@@ -16,7 +21,7 @@
     <div class="pager"></div>
   </div>
 
-  <form class="create-group-form" [formGroup]="form" (ngSubmit)="submit()">
+  <form class="create-group-form" [formGroup]="form">
     <mat-form-field class="create-group-field" appearance="outline">
       <mat-label>Name your group</mat-label>
       <input matInput formControlName="name" type="email" required />
@@ -27,13 +32,37 @@
       <input matInput formControlName="description" type="text" />
     </mat-form-field>
 
-    <button
-      mat-raised-button
-      class="create-button"
-      [disabled]="form.invalid || form.pristine"
-      color="primary"
-    >
-      Create
-    </button>
+    <div class="buttons" *ngIf="ifTarget; else create">
+      <button
+        mat-raised-button
+        class="update-button"
+        [disabled]="form.invalid"
+        color="primary"
+        (click)="update()"
+      >
+        Update
+      </button>
+      <button
+        mat-raised-button
+        class="delete-button"
+        [disabled]="form.invalid"
+        color="warn"
+        (click)="delete()"
+      >
+        Delete
+      </button>
+    </div>
+
+    <ng-template #create>
+      <button
+        mat-raised-button
+        class="create-button"
+        [disabled]="form.invalid || form.pristine"
+        color="primary"
+        (click)="submit()"
+      >
+        Create
+      </button>
+    </ng-template>
   </form>
 </div>

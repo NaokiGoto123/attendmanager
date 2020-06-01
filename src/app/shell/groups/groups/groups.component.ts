@@ -6,7 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { EventService } from 'src/app/services/event.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-groups',
@@ -16,25 +16,17 @@ import { Router } from '@angular/router';
 export class GroupsComponent implements OnInit {
   value = 'Look for what you want';
 
-  nodata: boolean;
-
-  events: Observable<Event[]> = this.eventService.getEvents(
+  groups: Observable<Group[]> = this.groupService.getMyGroup(
     this.authService.uid
   );
 
   constructor(
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private groupService: GroupService,
     private authService: AuthService,
     private eventService: EventService
   ) {}
 
-  ngOnInit(): void {
-    if (this.events === null) {
-      this.nodata = true;
-    } else {
-      this.nodata = false;
-    }
-    console.log(this.nodata);
-  }
+  ngOnInit(): void {}
 }

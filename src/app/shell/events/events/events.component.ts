@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class EventsComponent implements OnInit {
   value = 'Look for what you want';
 
-  nodata: boolean;
+  nodata = true;
 
   groups$: Observable<Group[]> = this.groupService.getMyGroup(
     this.authService.uid
@@ -32,11 +32,17 @@ export class EventsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.events === null) {
-      this.nodata = true;
-    } else {
-      this.nodata = false;
-    }
+    console.log('event component');
     console.log(this.nodata);
+    this.events.subscribe((events: Event[]) => {
+      console.log('subscribe working');
+      if (events.length) {
+        this.nodata = false;
+        console.log('there is events');
+      } else {
+        this.nodata = true;
+        console.log('there is no events');
+      }
+    });
   }
 }

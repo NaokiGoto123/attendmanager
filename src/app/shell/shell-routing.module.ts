@@ -29,6 +29,13 @@ const routes: Routes = [
           import('./groups/groups.module').then((m) => m.GroupsModule),
       },
       {
+        path: 'group-details',
+        loadChildren: () =>
+          import('./group-details/group-details.module').then(
+            (m) => m.GroupDetailsModule
+          ),
+      },
+      {
         path: 'create-group',
         loadChildren: () =>
           import('./create-group/create-group.module').then(
