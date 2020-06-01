@@ -32,13 +32,21 @@
     </h1>
 
     <div class="admins" *ngFor="let admin of admins | async">
-      <h1>Admins:</h1>
-      <h1 class="admin">{{ admin }}</h1>
+      <h1>Admins</h1>
+      <ul>
+        <li>
+          <h1 class="admin">{{ admin }}</h1>
+        </li>
+      </ul>
     </div>
 
     <div class="members" *ngFor="let member of members | async">
-      <h1>Members:</h1>
-      <h1 class="member">{{ member }}</h1>
+      <h1>Members</h1>
+      <ul>
+        <li>
+          <h1 class="member">{{ member }}</h1>
+        </li>
+      </ul>
     </div>
 
     <a routerLink="/"
