@@ -41,9 +41,47 @@
   <div class="event-cards-container-container">
     <div class="event-cards-container">
       <div *ngFor="let event of events | async">
-        <app-event-card [event]="event"></app-event-card>
+        <app-event-card
+          [event]="event"
+          (mouseover)="givenEvent = event; mouseOver()"
+        ></app-event-card>
       </div>
     </div>
   </div>
-  <div class="event-card-details"></div>
+  <div class="event-card-details">
+    <div
+      *ngIf="givenEvent; else nogivenEvent"
+      class="event-card-details-container"
+    >
+      <h1>{{ givenEvent.title }}</h1>
+      <h2>{{ givenEvent.description }}</h2>
+      <h2>{{ givenEvent.date.toDate() | date: 'yyyy/MM/dd' }}</h2>
+      <h2>Happening at {{ givenEvent.time }} in {{ givenEvent.location }}</h2>
+      <h2>
+        Created by {{ createrName | async }} in
+        <span
+          ><a
+            [routerLink]="['/group-details']"
+            [queryParams]="{ id: givenEvent.groupid }"
+            >{{ groupName | async }}</a
+          ></span
+        >
+      </h2>
+      <h2>First {{ givenEvent.memberlimit }} people can attend</h2>
+      <div *ngIf="ifAttendingmembers; else noAttendingmembers">
+        <h2>Attending members</h2>
+        <div *ngFor="let attendingmemberName of attendingmembersNames | async">
+          <ul>
+            <li>{{ attendingmemberName }}</li>
+          </ul>
+        </div>
+      </div>
+      <ng-template #noAttendingmembers>
+        <h2>There is no attending member yet.</h2>
+      </ng-template>
+    </div>
+    <ng-template #nogivenEvent>
+      <h1 class="nogivenEventText">No event is selected.</h1>
+    </ng-template>
+  </div>
 </ng-template>

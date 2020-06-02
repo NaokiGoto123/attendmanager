@@ -5,10 +5,9 @@ import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
 import { Observable, combineLatest } from 'rxjs';
 import { Group } from 'src/app/interfaces/group';
-import { firestore } from 'firebase';
 import { map, switchMap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
@@ -29,6 +28,7 @@ export class GroupDetailsComponent implements OnInit {
   events: Observable<Event[]>;
 
   constructor(
+    private location: Location,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private groupService: GroupService,
@@ -90,6 +90,10 @@ export class GroupDetailsComponent implements OnInit {
       );
       this.events = this.eventService.getOneGroupEvents(this.id);
     });
+  }
+
+  navigateBack() {
+    this.location.back();
   }
 
   ngOnInit(): void {}
