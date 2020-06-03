@@ -7,6 +7,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { Event } from 'src/app/interfaces/event';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -30,22 +31,24 @@ export class CalendarComponent implements OnInit {
     this.eventService
       .getEvents(this.authService.uid)
       .subscribe((events: Event[]) => {
+        const result: string[] = [];
         events.forEach((event) => {
-          const result: string[] = [];
           result.push(event.title);
-          console.log(result);
-          this.eventNames$ = result;
         });
+        console.log(result);
+        this.eventNames$ = result;
+        console.log(this.eventNames$);
       });
     this.eventService
       .getEvents(this.authService.uid)
       .subscribe((events: Event[]) => {
+        const result: Date[] = [];
         events.forEach((event) => {
-          const result: Date[] = [];
           result.push(event.date.toDate());
-          console.log(result);
-          this.eventDates$ = result;
         });
+        console.log(result);
+        this.eventDates$ = result;
+        console.log(this.eventDates$);
       });
     console.log(this.eventNames$);
     console.log(this.eventDates$);
