@@ -53,6 +53,11 @@ const routes: Routes = [
           import('./search/search.module').then((m) => m.SearchModule),
       },
       {
+        path: 'chat',
+        loadChildren: () =>
+          import('./chat/chat.module').then((m) => m.ChatModule),
+      },
+      {
         path: 'notifications',
         loadChildren: () =>
           import('./notifications/notifications.module').then(
