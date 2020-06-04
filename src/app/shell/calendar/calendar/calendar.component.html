@@ -3,14 +3,16 @@
     <mat-icon>arrow_back</mat-icon>
   </button>
 </mat-toolbar>
-<div
-  class="calendar-container"
-  *ngFor="let eventName of eventNames$; let eventDate; of: eventDates$"
->
+<div class="calendar-container">
   <full-calendar
     defaultView="dayGridMonth"
     [plugins]="calendarPlugins"
-    [weekends]="false"
-    [events]="[{ title: eventName, date: eventDate | date: 'yyyy-MM-dd' }]"
+    [weekends]="true"
+    [events]="[
+      {
+        title: 'eventsWithNameAndDate.title',
+        date: 'eventsWithNameAndDate.date'
+      }
+    ]"
   ></full-calendar>
 </div>

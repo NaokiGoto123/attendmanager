@@ -16,9 +16,11 @@ import { map } from 'rxjs/operators';
 export class CalendarComponent implements OnInit {
   calendarPlugins = [dayGridPlugin];
 
-  eventNames$: string[];
+  eventNames: string[];
 
-  eventDates$: Date[];
+  eventDates: Date[];
+
+  eventsWithNameAndDate: any;
 
   constructor(
     private authService: AuthService,
@@ -36,8 +38,8 @@ export class CalendarComponent implements OnInit {
           result.push(event.title);
         });
         console.log(result);
-        this.eventNames$ = result;
-        console.log(this.eventNames$);
+        this.eventNames = result;
+        console.log(this.eventNames);
       });
     this.eventService
       .getEvents(this.authService.uid)
@@ -47,11 +49,9 @@ export class CalendarComponent implements OnInit {
           result.push(event.date.toDate());
         });
         console.log(result);
-        this.eventDates$ = result;
-        console.log(this.eventDates$);
+        this.eventDates = result;
+        console.log(this.eventDates);
       });
-    console.log(this.eventNames$);
-    console.log(this.eventDates$);
   }
 
   navigateBack() {
