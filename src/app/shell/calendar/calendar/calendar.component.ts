@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import { EventService } from 'src/app/services/event.service';
-import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { Observable, combineLatest } from 'rxjs';
 import { Event } from 'src/app/interfaces/event';
-import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { map } from 'rxjs/operators';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -16,16 +12,11 @@ import { map } from 'rxjs/operators';
 export class CalendarComponent implements OnInit {
   calendarPlugins = [dayGridPlugin];
 
-  eventNames: string[];
-
-  eventDates: Date[];
-
-  eventsWithNameAndDate: any;
+  eventsWithNameAndDate: { title: string; date: Date }[];
 
   constructor(
     private authService: AuthService,
     private eventService: EventService,
-    private groupService: GroupService,
     private location: Location
   ) {}
 
@@ -33,33 +24,13 @@ export class CalendarComponent implements OnInit {
     this.eventService
       .getEvents(this.authService.uid)
       .subscribe((events: Event[]) => {
-        const result: string[] = [];
+        const result: { title: string; date: Date }[] = [];
         events.forEach((event) => {
-          result.push(event.title);
+          result.push({ title: event.title, date: event.date.toDate() });
         });
-        console.log(result);
-        this.eventNames = result;
-        console.log(this.eventNames);
+        this.eventsWithNameAndDate = result;
+        console.log(this.eventsWithNameAndDate);
       });
-    this.eventService
-      .getEvents(this.authService.uid)
-      .subscribe((events: Event[]) => {
-        const result: Date[] = [];
-        events.forEach((event) => {
-          result.push(event.date.toDate());
-        });
-        console.log(result);
-        this.eventDates = result;
-        console.log(this.eventDates);
-      });
-
-    this.eventsWithNameAndDate = this.eventNames.forEach((eventName, index) => {
-      return {
-        title: eventName,
-        date: this.eventDates[index],
-      };
-    });
-    console.log(this.eventsWithNameAndDate);
   }
 
   navigateBack() {
