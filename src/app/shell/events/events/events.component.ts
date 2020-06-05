@@ -31,8 +31,6 @@ export class EventsComponent implements OnInit {
 
   groupName: string;
 
-  // attendingmembersNames: string[] = [];
-
   attendingmembersNames: Observable<string[]>;
 
   ifAttendingmembers = false;
@@ -55,17 +53,6 @@ export class EventsComponent implements OnInit {
       result.push(this.authService.getName(attndingmember));
       this.attendingmembersNames = combineLatest(result);
     });
-
-    // const attendingmembersNames: string[] = [];
-    // this.givenEvent.attendingmembers
-    //   .forEach((attndingmember) => {
-    //     this.authService.getName(attndingmember)
-    //     .subscribe((attendingmemberName: string) => {
-    //       attendingmembersNames.push(attendingmemberName);
-    //     });
-    //   });
-    // console.log(attendingmembersNames);
-    // this.attendingmembersNames = attendingmembersNames;
 
     if (this.givenEvent.attendingmembers.length) {
       this.ifAttendingmembers = true;
