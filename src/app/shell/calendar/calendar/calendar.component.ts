@@ -52,6 +52,14 @@ export class CalendarComponent implements OnInit {
         this.eventDates = result;
         console.log(this.eventDates);
       });
+
+    this.eventsWithNameAndDate = this.eventNames.forEach((eventName, index) => {
+      return {
+        title: eventName,
+        date: this.eventDates[index],
+      };
+    });
+    console.log(this.eventsWithNameAndDate);
   }
 
   navigateBack() {
