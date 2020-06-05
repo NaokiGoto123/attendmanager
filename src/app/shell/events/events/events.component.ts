@@ -27,21 +27,29 @@ export class EventsComponent implements OnInit {
 
   givenEvent: Event;
 
-  createrName: Observable<string>;
+  createrName: string;
 
-  groupName: Observable<string>;
+  groupName: string;
 
   attendingmembersNames: Observable<string[]>;
 
   ifAttendingmembers = false;
 
   mouseOver() {
-    this.createrName = this.authService.getName(this.givenEvent.creater);
+    this.authService
+      .getName(this.givenEvent.creater)
+      .subscribe((createrName: string) => {
+        this.createrName = createrName;
+      });
 
-    this.groupName = this.groupService.getGroupName(this.givenEvent.groupid);
+    this.groupService
+      .getGroupName(this.givenEvent.groupid)
+      .subscribe((groupName: string) => {
+        this.groupName = groupName;
+      });
 
+    const result: Observable<string>[] = [];
     this.givenEvent.attendingmembers.forEach((attndingmember) => {
-      const result: Observable<string>[] = [];
       result.push(this.authService.getName(attndingmember));
       this.attendingmembersNames = combineLatest(result);
     });
@@ -61,16 +69,11 @@ export class EventsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    console.log('event component');
-    console.log(this.nodata);
     this.events.subscribe((events: Event[]) => {
-      console.log('subscribe working');
       if (events.length) {
         this.nodata = false;
-        console.log('there is events');
       } else {
         this.nodata = true;
-        console.log('there is no events');
       }
     });
   }

@@ -75,6 +75,11 @@ const routes: Routes = [
           import('./settings/settings.module').then((m) => m.SettingsModule),
       },
       {
+        path: 'calendar',
+        loadChildren: () =>
+          import('./calendar/calendar.module').then((m) => m.CalendarModule),
+      },
+      {
         path: 'shared',
         loadChildren: () =>
           import('./shared/shared.module').then((m) => m.SharedModule),

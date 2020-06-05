@@ -12,7 +12,7 @@
       </button>
     </a>
 
-    <a routerLink="/">
+    <a routerLink="/calendar">
       <button class="calendar-button" mat-fab color="accent">
         <mat-icon>calendar_today</mat-icon>
       </button>
@@ -64,12 +64,13 @@
       <h2>{{ givenEvent.date.toDate() | date: 'yyyy/MM/dd' }}</h2>
       <h2>Happening at {{ givenEvent.time }} in {{ givenEvent.location }}</h2>
       <h2>
-        Created by {{ createrName | async }} in
+        <!-- Created by {{ createrName | async }} in -->
+        Created by {{ createrName }} in
         <span
           ><a
             [routerLink]="['/group-details']"
             [queryParams]="{ id: givenEvent.groupid }"
-            >{{ groupName | async }}</a
+            >{{ groupName }}</a
           ></span
         >
       </h2>
