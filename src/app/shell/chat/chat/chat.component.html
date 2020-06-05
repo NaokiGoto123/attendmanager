@@ -23,5 +23,26 @@
       </mat-tab>
     </mat-tab-group>
   </div>
-  <div class="content-container"></div>
+  <div class="content-container">
+    <div class="messages">
+      <div class="message">
+        <div class="account"></div>
+
+        <div class="spacer"></div>
+
+        <p class="message-content">this is damy message.</p>
+
+        <div class="flex-spacer"></div>
+      </div>
+    </div>
+
+    <div class="message-field-container">
+      <mat-form-field class="message-field" appearance="standard">
+        <input matInput type="text" [(ngModel)]="message" />
+        <button mat-button matSuffix mat-icon-button (click)="send()">
+          <mat-icon>send</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
 </div>

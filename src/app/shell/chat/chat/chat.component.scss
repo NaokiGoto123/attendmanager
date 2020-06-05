@@ -18,3 +18,54 @@
   overflow-x: hidden;
   right: 0;
 }
+
+.messages {
+  margin: 20px;
+}
+
+.message {
+  display: flex;
+  height: 45px;
+  margin: 0 0 15px 0;
+}
+
+.account {
+  display: inline-block;
+  position: absolute;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: red;
+  margin: 0;
+}
+
+.spacer {
+  width: 10px;
+}
+
+.message-content {
+  display: inline-block;
+  position: absolute;
+  padding: 13px 20px 13px 20px;
+  border-radius: 5px;
+  background-color: #e6e6e6;
+  margin: 0;
+}
+
+.flex-spacer {
+  flex: 1;
+  flex-direction: column;
+}
+
+.message-field-container {
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  text-align: center;
+  background-color: pink;
+}
+
+.message-field {
+  width: 80%;
+}
