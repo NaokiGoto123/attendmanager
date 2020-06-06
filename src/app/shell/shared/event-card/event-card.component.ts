@@ -22,7 +22,7 @@ export class EventCardComponent implements OnInit {
 
   eventid: string;
 
-  grouppicture: Observable<number>;
+  grouppicture: number;
 
   constructor(
     private authService: AuthService,
@@ -37,7 +37,11 @@ export class EventCardComponent implements OnInit {
 
     this.eventid = this.event.eventid;
 
-    this.grouppicture = this.groupService.getGrouppicture(this.event.groupid);
+    this.groupService
+      .getGrouppicture(this.event.groupid)
+      .subscribe((grouppicture: number) => {
+        this.grouppicture = grouppicture;
+      });
 
     this.ifadmin = this.groupService.checkIfAdmin(
       this.authService.uid,
