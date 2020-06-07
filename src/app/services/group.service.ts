@@ -3,8 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Group } from '../interfaces/group';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
-import { firestore } from 'firebase';
+import { map } from 'rxjs/operators';
 import { Event } from '../interfaces/event';
 @Injectable({
   providedIn: 'root',
@@ -15,7 +14,7 @@ export class GroupService {
   async createGroup(group: Group) {
     const id = group.groupid;
     await this.db
-      .doc(`organizations/${id}`)
+      .doc(`groups/${id}`)
       .set(group)
       .then(() =>
         this.snackbar.open('Successfully created the group', null, {
@@ -26,7 +25,7 @@ export class GroupService {
 
   getGroupName(groupid: string): Observable<string> {
     return this.db
-      .doc<Group>(`organizations/${groupid}`)
+      .doc<Group>(`groups/${groupid}`)
       .valueChanges()
       .pipe(
         map((group: Group) => {
@@ -37,7 +36,7 @@ export class GroupService {
 
   getMyGroup(uid: string): Observable<Group[]> {
     return this.db
-      .collection<Group>(`organizations`, (ref) =>
+      .collection<Group>(`groups`, (ref) =>
         ref.where(`members`, 'array-contains', uid)
       )
       .valueChanges();
@@ -45,19 +44,19 @@ export class GroupService {
 
   getAdminGroup(uid: string): Observable<Group[]> {
     return this.db
-      .collection<Group>(`organizations`, (ref) =>
+      .collection<Group>(`groups`, (ref) =>
         ref.where(`admin`, 'array-contains', uid)
       )
       .valueChanges();
   }
 
   getGroupinfo(groupid: string): Observable<Group> {
-    return this.db.doc<Group>(`organizations/${groupid}`).valueChanges();
+    return this.db.doc<Group>(`groups/${groupid}`).valueChanges();
   }
 
   checkIfAdmin(uid: string, groupid: string): Observable<boolean> {
     return this.db
-      .doc<Group>(`organizations/${groupid}`)
+      .doc<Group>(`groups/${groupid}`)
       .valueChanges()
       .pipe(
         map((group: Group) => {
@@ -72,7 +71,7 @@ export class GroupService {
 
   getGrouppicture(groupid: string): Observable<number> {
     return this.db
-      .doc<Group>(`organizations/${groupid}`)
+      .doc<Group>(`groups/${groupid}`)
       .valueChanges()
       .pipe(
         map((group: Group) => {
@@ -87,14 +86,12 @@ export class GroupService {
       'createddate' | 'creater' | 'admin' | 'members' | 'eventIDs'
     >
   ) {
-    await this.db
-      .doc(`organizations/${group.groupid}`)
-      .set(group, { merge: true });
+    await this.db.doc(`groups/${group.groupid}`).set(group, { merge: true });
   }
 
   async deleteGroup(groupid: string) {
     await this.db
-      .doc(`organizations/${groupid}`)
+      .doc(`groups/${groupid}`)
       .delete()
       .then(() => {
         console.log(groupid);
