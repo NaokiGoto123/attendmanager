@@ -95,6 +95,14 @@
         />
       </mat-form-field>
 
+      <mat-slide-toggle class="create-event-field" formControlName="private"
+        >Private: {{ form.value.private }}</mat-slide-toggle
+      >
+
+      <mat-slide-toggle class="create-event-field" formControlName="searchable"
+        >Searchable: {{ form.value.searchable }}</mat-slide-toggle
+      >
+
       <div class="buttons" *ngIf="ifTarget; else editing">
         <button
           mat-raised-button

@@ -26,7 +26,7 @@ export class EventService {
       .set(event)
       .then(() =>
         this.db
-          .doc(`organizations/${event.groupid}`)
+          .doc(`groups/${event.groupid}`)
           .update({ eventIDs: firestore.FieldValue.arrayUnion(event.eventid) })
       )
       .then(() =>
@@ -42,7 +42,7 @@ export class EventService {
 
   getOneGroupEvents(groupid: string): Observable<Event[]> {
     return this.db
-      .doc<Group>(`organizations/${groupid}`)
+      .doc<Group>(`groups/${groupid}`)
       .valueChanges()
       .pipe(
         map((group: Group) => {
@@ -120,7 +120,7 @@ export class EventService {
       // )
       .then(() =>
         this.db
-          .doc(`organizations/${groupid}`)
+          .doc(`groups/${groupid}`)
           .update({ eventIDs: firestore.FieldValue.arrayRemove(eventid) })
       )
       .then(() =>
