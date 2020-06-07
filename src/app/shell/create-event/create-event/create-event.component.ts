@@ -34,6 +34,8 @@ export class CreateEventComponent implements OnInit {
     date: [null, [Validators.required]],
     time: ['', [Validators.required]],
     location: ['', [Validators.required]],
+    private: [false],
+    searchable: [false],
   });
 
   admingroups$: Observable<Group[]> = this.groupService.getAdminGroup(
@@ -104,6 +106,8 @@ export class CreateEventComponent implements OnInit {
         time: this.form.value.time,
         location: this.form.value.location,
         groupid: this.form.value.groupid,
+        private: this.form.value.private,
+        searchable: this.form.value.searchable,
       })
       .then(() => (this.isComplete = true))
       .then(() => this.router.navigateByUrl('/'));
@@ -121,6 +125,8 @@ export class CreateEventComponent implements OnInit {
         time: this.form.value.time,
         location: this.form.value.location,
         groupid: this.form.value.groupid,
+        private: this.form.value.private,
+        searchable: this.form.value.searchable,
       })
       .then(() => (this.isComplete = true))
       .then(() => this.router.navigateByUrl('/'));

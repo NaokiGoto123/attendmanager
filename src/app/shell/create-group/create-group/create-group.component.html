@@ -32,6 +32,14 @@
       <input matInput formControlName="description" type="text" />
     </mat-form-field>
 
+    <mat-slide-toggle class="create-group-field" formControlName="private"
+      >Private: {{ form.value.private }}</mat-slide-toggle
+    >
+
+    <mat-slide-toggle class="create-group-field" formControlName="searchable"
+      >Searchable: {{ form.value.searchable }}</mat-slide-toggle
+    >
+
     <div class="buttons" *ngIf="ifTarget; else create">
       <button
         mat-raised-button

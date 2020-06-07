@@ -23,6 +23,11 @@ const routes: Routes = [
       import('./shell/shell.module').then((m) => m.ShellModule),
   },
   {
+    path: 'about',
+    loadChildren: () =>
+      import('./about/about.module').then((m) => m.AboutModule),
+  },
+  {
     path: '**',
     loadChildren: () =>
       import('./not-found/not-found.module').then((m) => m.NotFoundModule),

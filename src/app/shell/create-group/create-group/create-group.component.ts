@@ -40,6 +40,8 @@ export class CreateGroupComponent implements OnInit {
   form = this.fb.group({
     name: ['', [Validators.required]],
     description: [''],
+    private: [false],
+    searchable: [false],
   });
 
   constructor(
@@ -88,6 +90,8 @@ export class CreateGroupComponent implements OnInit {
         admin: [this.authService.uid],
         members: [this.authService.uid],
         eventIDs: [],
+        private: this.form.value.private,
+        searchable: this.form.value.searchable,
       })
       .then(() => {
         this.isComplete = true;
@@ -102,6 +106,8 @@ export class CreateGroupComponent implements OnInit {
         name: this.form.value.name,
         description: this.form.value.description,
         grouppicture: this.selectedImageId,
+        private: this.form.value.private,
+        searchable: this.form.value.searchable,
       })
       .then(() => (this.isComplete = true))
       .then(() => this.router.navigateByUrl('/groups'))
