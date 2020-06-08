@@ -1,0 +1,40 @@
+<mat-toolbar color="primary">
+  <button mat-button routerLink="/welcome">
+    <mat-icon>arrow_back</mat-icon>
+    Signin
+  </button>
+  <div class="spacer"></div>
+  <button mat-button routerLink="/about">About</button>
+</mat-toolbar>
+
+<div class="content-container">
+  <div class="pricing-header">
+    <h1>Simple pricing</h1>
+    <h2>Choose the best plan for you</h2>
+  </div>
+  <div class="card">
+    <div class="card__standard">
+      <h1 class="plan-name">Standard</h1>
+      <h1 class="plan-price">Free</h1>
+      <p class="plan-detail">3 groups and 5 events at a time</p>
+      <p class="plan-detail">100 messages per month</p>
+      <button mat-raised-button>Subscribing</button>
+    </div>
+    <div class="card__plus">
+      <h1 class="plan-name">Plus</h1>
+      <h1 class="plan-price">$6</h1>
+      <p class="plan-detail">10 groups and 10 events at a time</p>
+      <p class="plan-detail">Unlimited messages</p>
+      <button mat-raised-button color="accent">Subscribe now</button>
+    </div>
+    <div class="card__premium">
+      <h1 class="plan-name">Premium</h1>
+      <h1 class="plan-price">$11</h1>
+      <p class="plan-detail">Unlimited groups and events</p>
+      <p class="plan-detail">Unlimited messages</p>
+      <button mat-raised-button color="primary">Subscribe now</button>
+    </div>
+  </div>
+
+  <p class="learn-more">Learn more</p>
+</div>
