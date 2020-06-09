@@ -1,22 +1,36 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
-import { AngularFirestore } from '@angular/fire/firestore/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { ChatRoom } from '../interfaces/chat-room';
 import { Group } from '../interfaces/group';
 import { Observable, combineLatest } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Message } from '../interfaces/message';
 import { firestore } from 'firebase';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  constructor(private db: AngularFirestore, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private db: AngularFirestore,
+    private authService: AuthService
+  ) {}
 
-  createChatRoom(uid: string, chatRoom: ChatRoom) {
+  createChatRoom(chatRoom: ChatRoom) {
     const id = chatRoom.id;
-    this.db.doc(`chatRooms/${id}`).set(chatRoom);
+    this.db
+      .doc(`chatRooms/${id}`)
+      .set(chatRoom)
+      .then(() =>
+        this.db
+          .doc(`groups/${chatRoom.groupid}`)
+          .update({ chatRoomId: chatRoom.id })
+      )
+      .then(() => this.router.navigateByUrl('/chat'));
+    console.log('Successfully created a chatRoom');
   }
 
   getMyChatRoommIds(uid: string): Observable<string[]> {

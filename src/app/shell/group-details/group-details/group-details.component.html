@@ -66,8 +66,15 @@
       <mat-icon>calendar_today</mat-icon>
     </button>
 
-    <button mat-fab aria-label="Chat">
-      <mat-icon>chat</mat-icon>
-    </button>
+    <div *ngIf="!ifChatRoom">
+      <button mat-raised-button (click)="createChatRoom()">
+        Create chatroom
+      </button>
+    </div>
+    <div *ngIf="ifChatRoom">
+      <button mat-raised-button routerLink="/chat">
+        Go to chatroom
+      </button>
+    </div>
   </div>
 </div>

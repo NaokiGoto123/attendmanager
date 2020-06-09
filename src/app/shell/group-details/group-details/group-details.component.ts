@@ -8,6 +8,8 @@ import { Group } from 'src/app/interfaces/group';
 import { map, switchMap } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 import { Location } from '@angular/common';
+import { ChatService } from 'src/app/services/chat.service';
+import { AngularFirestore } from '@angular/fire/firestore';
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
@@ -17,6 +19,8 @@ export class GroupDetailsComponent implements OnInit {
   id: string;
 
   ifadmin: Observable<boolean>; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
+
+  ifChatRoom: boolean; // チャットルームが作成済かどうか
 
   name: Observable<string>;
   description: Observable<string>;
@@ -29,11 +33,12 @@ export class GroupDetailsComponent implements OnInit {
 
   constructor(
     private location: Location,
-    private router: Router,
     private activatedRoute: ActivatedRoute,
+    private db: AngularFirestore,
     private groupService: GroupService,
     private authService: AuthService,
-    private eventService: EventService
+    private eventService: EventService,
+    private chatService: ChatService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       this.id = params.get('id');
@@ -41,6 +46,14 @@ export class GroupDetailsComponent implements OnInit {
         this.authService.uid,
         this.id
       );
+      this.groupService.getGroupinfo(this.id).subscribe((group) => {
+        if (group.chatRoomId) {
+          console.log(group.chatRoomId);
+          this.ifChatRoom = true;
+        } else {
+          this.ifChatRoom = false;
+        }
+      });
       this.name = this.groupService
         .getGroupinfo(this.id)
         .pipe(map((group) => group.name));
@@ -94,6 +107,16 @@ export class GroupDetailsComponent implements OnInit {
 
   navigateBack() {
     this.location.back();
+  }
+
+  createChatRoom() {
+    const chatRoomId = this.db.createId();
+    this.chatService.createChatRoom({
+      id: chatRoomId,
+      groupid: this.id,
+      members: [this.authService.uid],
+      messages: null,
+    });
   }
 
   ngOnInit(): void {}
