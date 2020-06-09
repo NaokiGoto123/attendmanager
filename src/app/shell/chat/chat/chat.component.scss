@@ -21,40 +21,64 @@
 
 .messages {
   margin: 20px;
-}
 
-.message {
-  display: flex;
-  height: 45px;
-  margin: 0 0 15px 0;
-}
+  .my-message {
+    text-align: left;
 
-.account {
-  display: inline-block;
-  position: absolute;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background-color: red;
-  margin: 0;
-}
+    .message {
+      display: inline-block;
+      height: 45px;
+      margin: 0 0 15px 0;
+    }
 
-.spacer {
-  width: 10px;
-}
+    .account-picture {
+      display: inline-block;
+      position: relative;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background-color: red;
+      margin: 0 10px 0 0;
+    }
 
-.message-content {
-  display: inline-block;
-  position: absolute;
-  padding: 13px 20px 13px 20px;
-  border-radius: 5px;
-  background-color: #e6e6e6;
-  margin: 0;
-}
+    .message-content {
+      display: inline-block;
+      position: absolute;
+      padding: 13px 15px 13px 15px;
+      border-radius: 5px;
+      background-color: #e6e6e6;
+      margin: 0;
+    }
+  }
 
-.flex-spacer {
-  flex: 1;
-  flex-direction: column;
+  .other-message {
+    text-align: right;
+
+    .message1 {
+      display: inline-block;
+      height: 45px;
+      margin: 0 0 15px 0;
+    }
+
+    .account-picture1 {
+      display: inline-block;
+      position: relative;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background-color: red;
+      margin: 0 0 0 0;
+    }
+
+    .message-content1 {
+      display: inline-block;
+      position: relative;
+      padding: 13px 15px 13px 15px;
+      border-radius: 5px;
+      background-color: #e6e6e6;
+      margin: 0 10px 0 0;
+    }
+  }
 }
 
 .message-field-container {
