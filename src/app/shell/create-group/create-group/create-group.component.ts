@@ -90,6 +90,7 @@ export class CreateGroupComponent implements OnInit {
         admin: [this.authService.uid],
         members: [this.authService.uid],
         eventIDs: [],
+        chatRoomId: null,
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })
@@ -106,6 +107,7 @@ export class CreateGroupComponent implements OnInit {
         name: this.form.value.name,
         description: this.form.value.description,
         grouppicture: this.selectedImageId,
+        chatRoomId: null,
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })

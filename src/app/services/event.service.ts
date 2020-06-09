@@ -91,7 +91,7 @@ export class EventService {
       }),
       // 二次元配列をフラットな配列にして返却
       map((eventsList: Event[][]) => {
-        const results = [].concat(...eventsList);
+        const results: Event[] = [].concat(...eventsList);
         // debug
         console.log(results);
         return results;
