@@ -22,14 +22,15 @@ export class GroupDetailsComponent implements OnInit {
 
   ifChatRoom: boolean; // チャットルームが作成済かどうか
 
-  name: Observable<string>;
+  name: string;
   description: Observable<string>;
   grouppicture: Observable<number>;
-  createddate: Observable<Date>;
+  createddate: Date;
   creater: Observable<string>;
   admins: Observable<string[]>;
   members: Observable<string[]>;
   events: Observable<Event[]>;
+  chatRoomId: string;
 
   constructor(
     private location: Location,
@@ -54,18 +55,21 @@ export class GroupDetailsComponent implements OnInit {
           this.ifChatRoom = false;
         }
       });
-      this.name = this.groupService
-        .getGroupinfo(this.id)
-        .pipe(map((group) => group.name));
+      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
+        this.name = group.name;
+      });
       this.description = this.groupService
         .getGroupinfo(this.id)
         .pipe(map((group) => group.description));
       this.grouppicture = this.groupService
         .getGroupinfo(this.id)
         .pipe(map((group) => group.grouppicture));
-      this.createddate = this.groupService
-        .getGroupinfo(this.id)
-        .pipe(map((group) => group.createddate.toDate()));
+      this.groupService.getGroupinfo(this.id).subscribe((group) => {
+        this.createddate = group.createddate.toDate();
+      });
+      this.groupService.getGroupinfo(this.id).subscribe((group) => {
+        this.chatRoomId = group.chatRoomId;
+      });
       this.creater = this.groupService.getGroupinfo(this.id).pipe(
         switchMap(
           (group: Group): Observable<string> => {
@@ -113,6 +117,7 @@ export class GroupDetailsComponent implements OnInit {
     const chatRoomId = this.db.createId();
     this.chatService.createChatRoom({
       id: chatRoomId,
+      name: this.name,
       groupid: this.id,
       members: [this.authService.uid],
       messages: null,

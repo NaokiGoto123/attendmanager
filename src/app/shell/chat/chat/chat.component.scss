@@ -1,99 +1,19 @@
-.list-container {
-  height: 100%;
-  width: 40%;
+.sidenav-container {
   position: absolute;
-  z-index: 1;
   top: 0;
-  overflow-x: hidden;
-  left: 0;
-  border-right: solid 0.3px rgba(0, 0, 0, 0.5);
-}
-
-.content-container {
-  height: 100%;
-  width: 60%;
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  overflow-x: hidden;
-  right: 0;
-}
-
-.messages {
-  margin: 20px;
-}
-
-.my-message {
-  display: flex;
-  justify-content: flex-start;
-}
-
-.message {
-  display: flex;
-  align-items: center;
-  height: 45px;
-  margin: 0 0 15px 0;
-}
-
-.account-picture {
-  display: inline-block;
-  position: relative;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background-color: red;
-  margin: 0 10px 0 0;
-}
-
-.message-content {
-  display: inline-block;
-  position: relative;
-  padding: 13px 15px 13px 15px;
-  border-radius: 5px;
-  background-color: #e6e6e6;
-  margin: 0;
-}
-
-.other-message {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.message1 {
-  display: flex;
-  align-items: center;
-  height: 45px;
-  margin: 0 0 15px 0;
-}
-
-.account-picture1 {
-  display: inline-block;
-  position: relative;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background-color: red;
-  margin: 0 0 0 0;
-}
-
-.message-content1 {
-  display: inline-block;
-  position: relative;
-  padding: 13px 15px 13px 15px;
-  border-radius: 5px;
-  background-color: #e6e6e6;
-  margin: 0 10px 0 0;
-}
-
-.message-field-container {
-  width: 100%;
-  position: absolute;
-  z-index: 1;
   bottom: 0;
-  text-align: center;
-  background-color: pink;
-}
+  left: 0;
+  right: 0;
 
-.message-field {
-  width: 80%;
+  mat-nav-list {
+    padding: 0;
+  }
+
+  .sidenav-item {
+    height: 64px;
+  }
+
+  .side-menu {
+    width: 450px;
+  }
 }

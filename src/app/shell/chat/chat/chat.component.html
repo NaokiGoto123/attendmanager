@@ -1,52 +1,21 @@
 <div class="chat-container">
-  <div class="list-container">
-    <mat-tab-group mat-align-tabs="start">
-      <mat-tab label="People">
-        <mat-list role="list">
-          <mat-list-item role="listitem">Bob</mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">Peter</mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">Jonathan</mat-list-item>
-          <mat-divider></mat-divider>
-        </mat-list>
-      </mat-tab>
-      <mat-tab label="Events">
-        <mat-list role="list">
-          <mat-list-item role="listitem">Camping</mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">Fishing</mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">Driving</mat-list-item>
-          <mat-divider></mat-divider>
-        </mat-list>
-      </mat-tab>
-    </mat-tab-group>
-  </div>
-  <div class="content-container">
-    <div class="messages">
-      <div class="my-message">
-        <div class="message">
-          <div class="account-picture"></div>
-          <p class="message-content">this is damy message.</p>
+  <mat-sidenav-container class="sidenav-container">
+    <mat-sidenav mode="side" class="side-menu" opened>
+      <mat-nav-list>
+        <div *ngFor="let chatRoom of chatRooms | async">
+          <mat-list-item
+            class="sidenav-item"
+            routerLink="chat-detail"
+            [queryParams]="{ id: chatRoom.id }"
+          >
+            {{ chatRoom.name }}
+          </mat-list-item>
         </div>
-      </div>
-
-      <div class="other-message">
-        <div class="message1">
-          <p class="message-content1">this is damy message.</p>
-          <div class="account-picture1"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="message-field-container">
-      <mat-form-field class="message-field" appearance="standard">
-        <input matInput type="text" [(ngModel)]="message" />
-        <button mat-button matSuffix mat-icon-button (click)="send()">
-          <mat-icon>send</mat-icon>
-        </button>
-      </mat-form-field>
-    </div>
-  </div>
+        <mat-divider></mat-divider>
+      </mat-nav-list>
+    </mat-sidenav>
+    <mat-sidenav-content>
+      <router-outlet></router-outlet>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

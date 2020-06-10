@@ -2,16 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { ChatService } from 'src/app/services/chat.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatRoom } from 'src/app/interfaces/chat-room';
-
+import { map, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable, of } from 'rxjs';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
-  message: string;
-
-  chatRooms: ChatRoom[];
+  chatRooms: Observable<ChatRoom[]>;
 
   constructor(
     private authService: AuthService,
@@ -19,15 +18,19 @@ export class ChatComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.chatService
-      .getMyChatRooms(this.authService.uid)
-      .subscribe((chatRooms: ChatRoom[]) => {
-        this.chatRooms = chatRooms;
-        console.log(chatRooms);
-      });
-  }
-
-  send() {
-    console.log(this.message);
+    this.chatRooms = this.chatService
+      .getMyChatRoommIds(this.authService.uid)
+      .pipe(
+        switchMap(
+          (chatRoomIds: string[]): Observable<ChatRoom[]> => {
+            const ChatRooms: Observable<ChatRoom>[] = chatRoomIds.map(
+              (chatRoomId: string) => {
+                return this.chatService.getChatRoom(chatRoomId);
+              }
+            );
+            return combineLatest(ChatRooms);
+          }
+        )
+      );
   }
 }

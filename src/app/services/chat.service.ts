@@ -42,8 +42,10 @@ export class ChatService {
       .pipe(
         map((myGroups: Group[]) => {
           const chatRoomIds: string[] = [];
-          myGroups.forEach((myGroup) => {
-            chatRoomIds.push(myGroup.chatRoomId);
+          myGroups.forEach((myGroup: Group) => {
+            if (myGroup.chatRoomId) {
+              chatRoomIds.push(myGroup.chatRoomId);
+            }
           });
           console.log(chatRoomIds);
           return chatRoomIds;
@@ -53,39 +55,6 @@ export class ChatService {
 
   getChatRoom(chatRoomId: string): Observable<ChatRoom> {
     return this.db.doc<ChatRoom>(`chatRooms/${chatRoomId}`).valueChanges();
-  }
-
-  getMyChatRooms(uid: string): Observable<ChatRoom[]> {
-    return this.db
-      .collection<Group>(`groups`, (ref) =>
-        ref.where(`members`, 'array-contains', uid)
-      )
-      .valueChanges()
-      .pipe(
-        map((myGroups: Group[]) => {
-          const chatRoomIds: string[] = [];
-          myGroups.forEach((myGroup) => {
-            chatRoomIds.push(myGroup.chatRoomId);
-          });
-          console.log(chatRoomIds);
-          return chatRoomIds;
-        }),
-        switchMap((chatRoomIds: string[]) => {
-          const chatRooms: ChatRoom[] = [];
-          chatRoomIds.forEach((chatRoomId) => {
-            let chatRoom: ChatRoom;
-            this.db
-              .doc<ChatRoom>(`charRooms/${chatRoomId}`)
-              .valueChanges()
-              .subscribe((ChatRoom: ChatRoom) => {
-                chatRoom = ChatRoom;
-              });
-            chatRooms.push(chatRoom);
-          });
-          console.log(chatRooms);
-          return combineLatest(chatRooms);
-        })
-      );
   }
 
   sendMessage(message: Message, chatRoomId: string) {
