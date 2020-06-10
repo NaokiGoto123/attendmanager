@@ -42,7 +42,7 @@
       </ul>
     </div>
 
-    <div class="members" *ngFor="let member of members | async">
+    <div class="members" *ngFor="let member of memberNames | async">
       <h1>Members</h1>
       <ul>
         <li>
@@ -65,26 +65,28 @@
         Check events
       </button>
 
-      <div *ngIf="!ifChatRoom">
-        <button
-          mat-raised-button
-          class="chat-button"
-          (click)="createChatRoom()"
-          color="primary"
-        >
-          Create chat room
-        </button>
-      </div>
-      <div *ngIf="ifChatRoom">
-        <button
-          mat-raised-button
-          class="chat-button"
-          routerLink="/chat/chat-detail"
-          [queryParams]="{ id: chatRoomId }"
-          color="primary"
-        >
-          Go to chat room
-        </button>
+      <div *ngIf="memberIds.includes(uid)">
+        <div *ngIf="!ifChatRoom">
+          <button
+            mat-raised-button
+            class="chat-button"
+            (click)="createChatRoom()"
+            color="primary"
+          >
+            Create chat room
+          </button>
+        </div>
+        <div *ngIf="ifChatRoom">
+          <button
+            mat-raised-button
+            class="chat-button"
+            routerLink="/chat/chat-detail"
+            [queryParams]="{ id: chatRoomId }"
+            color="primary"
+          >
+            Go to chat room
+          </button>
+        </div>
       </div>
     </div>
   </div>

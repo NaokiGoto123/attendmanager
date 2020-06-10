@@ -16,7 +16,7 @@
 .groups-container {
   display: grid;
   margin: 50px;
-  grid-auto-rows: 320px;
+  grid-auto-rows: 385px;
   grid-template-columns: 1fr 1fr 1fr;
   grid-gap: 20px;
 }
@@ -35,7 +35,7 @@
 }
 
 .create-group-grid {
-  margin-top: 20%;
+  margin-top: 25%;
   text-align: center;
 }
 
@@ -63,6 +63,10 @@
 }
 
 .group-description {
+  text-align: center;
+}
+
+.join-button-container {
   text-align: center;
 }
 

@@ -16,6 +16,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class GroupsComponent implements OnInit {
   value = 'Look for what you want';
 
+  uid: string;
+
   groups: Observable<Group[]> = this.groupService.getMyGroup(
     this.authService.uid
   );
@@ -28,5 +30,7 @@ export class GroupsComponent implements OnInit {
     private eventService: EventService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.uid = this.authService.uid;
+  }
 }

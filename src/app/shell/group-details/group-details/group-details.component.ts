@@ -18,6 +18,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class GroupDetailsComponent implements OnInit {
   id: string;
 
+  uid: string;
+
   ifadmin: Observable<boolean>; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
 
   ifChatRoom: boolean; // チャットルームが作成済かどうか
@@ -28,7 +30,8 @@ export class GroupDetailsComponent implements OnInit {
   createddate: Date;
   creater: Observable<string>;
   admins: Observable<string[]>;
-  members: Observable<string[]>;
+  memberIds: string[];
+  memberNames: Observable<string[]>;
   events: Observable<Event[]>;
   chatRoomId: string;
 
@@ -43,10 +46,8 @@ export class GroupDetailsComponent implements OnInit {
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       this.id = params.get('id');
-      this.ifadmin = this.groupService.checkIfAdmin(
-        this.authService.uid,
-        this.id
-      );
+      this.uid = this.authService.uid;
+      this.ifadmin = this.groupService.checkIfAdmin(this.uid, this.id);
       this.groupService.getGroupinfo(this.id).subscribe((group) => {
         if (group.chatRoomId) {
           console.log(group.chatRoomId);
@@ -91,7 +92,10 @@ export class GroupDetailsComponent implements OnInit {
           }
         )
       );
-      this.members = this.groupService.getGroupinfo(this.id).pipe(
+      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
+        this.memberIds = group.members;
+      });
+      this.memberNames = this.groupService.getGroupinfo(this.id).pipe(
         map((group: Group) => {
           return group.members;
         }),

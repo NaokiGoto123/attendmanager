@@ -32,9 +32,62 @@
         </div>
       </ng-template>
     </mat-tab>
+
     <mat-tab label="Groups">
-      Projects
+      <div class="groups-container">
+        <div class="create-group-grid-container">
+          <div class="create-group-grid">
+            <h1>Create new group</h1>
+            <button mat-fab routerLink="/create-group" color="none">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div *ngFor="let publicGroup of publicGroups">
+          <div class="group">
+            <img
+              class="group-picture"
+              src="/assets/background/{{ publicGroup.grouppicture }}.jpg"
+            />
+            <h1 class="group-name">{{ publicGroup.name }}</h1>
+            <h2 class="group-description">{{ publicGroup.description }}</h2>
+            <div class="join-button-container">
+              <div *ngIf="publicGroup.members.includes(uid)">
+                <button
+                  mat-raised-button
+                  color="accent"
+                  (click)="leaveGroup(publicGroup)"
+                >
+                  Joining
+                </button>
+              </div>
+              <div *ngIf="!publicGroup.members.includes(uid)">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="joinGroup(publicGroup)"
+                >
+                  Join
+                </button>
+              </div>
+            </div>
+            <div class="group-details-button-container">
+              <button
+                mat-icon-button
+                color="primary"
+                aria-label="group description"
+                class="group-details-button"
+                [routerLink]="['/group-details']"
+                [queryParams]="{ id: publicGroup.groupid }"
+              >
+                <mat-icon>fullscreen</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </mat-tab>
+
     <mat-tab label="Accounts">
       Accounts
     </mat-tab>
