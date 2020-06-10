@@ -48,10 +48,11 @@ export class ChatDetailComponent implements OnInit {
         .subscribe((ChatRoom: ChatRoom) => {
           this.name = ChatRoom.name;
           this.groupid = ChatRoom.groupid;
-          this.messages = ChatRoom.messages;
-          if (this.messages.length) {
+          if (ChatRoom.messages.length) {
+            this.messages = ChatRoom.messages;
             this.noMessage = false;
           } else {
+            this.messages = null;
             this.noMessage = true;
           }
         });

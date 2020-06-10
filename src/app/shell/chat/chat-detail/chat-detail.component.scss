@@ -1,10 +1,9 @@
 .content-container {
   height: 100%;
   width: 100%;
-  position: absolute;
+  position: relative;
   z-index: 1;
   top: 0;
-  overflow-x: hidden;
   right: 0;
 }
 
@@ -12,11 +11,19 @@ mat-spinner {
   margin: 35% auto auto auto;
 }
 
+mat-toolbar {
+  width: 100%;
+  position: sticky;
+  z-index: 1000;
+  top: 0;
+}
+
 .spacer {
   flex: 1 1 auto;
 }
 
 .messages {
+  position: relative;
   margin: 30px;
 }
 
@@ -89,11 +96,12 @@ mat-spinner {
 
 .message-field-container {
   width: 100%;
-  position: absolute;
-  z-index: 1;
+  position: sticky;
+  z-index: 1000;
   bottom: 0;
   text-align: center;
   border-top: solid 0.3px rgba(0, 0, 0, 0.25);
+  background-color: white;
 }
 
 .message-field {

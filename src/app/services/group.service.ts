@@ -12,16 +12,11 @@ import { firestore } from 'firebase';
 export class GroupService {
   constructor(private db: AngularFirestore, private snackbar: MatSnackBar) {}
 
-  async createGroup(uid: string, group: Group) {
+  async createGroup(group: Group) {
     const id = group.groupid;
     await this.db
       .doc(`groups/${id}`)
       .set(group)
-      .then(() => {
-        this.db
-          .doc(`users/${uid}`)
-          .update({ groups: firestore.FieldValue.arrayUnion(group.groupid) });
-      })
       .then(() =>
         this.snackbar.open('Successfully created the group', null, {
           duration: 2000,
