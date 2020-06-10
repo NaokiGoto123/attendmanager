@@ -21,64 +21,68 @@
 
 .messages {
   margin: 20px;
+}
 
-  .my-message {
-    text-align: left;
+.my-message {
+  display: flex;
+  justify-content: flex-start;
+}
 
-    .message {
-      display: inline-block;
-      height: 45px;
-      margin: 0 0 15px 0;
-    }
+.message {
+  display: flex;
+  align-items: center;
+  height: 45px;
+  margin: 0 0 15px 0;
+}
 
-    .account-picture {
-      display: inline-block;
-      position: relative;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background-color: red;
-      margin: 0 10px 0 0;
-    }
+.account-picture {
+  display: inline-block;
+  position: relative;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: red;
+  margin: 0 10px 0 0;
+}
 
-    .message-content {
-      display: inline-block;
-      position: absolute;
-      padding: 13px 15px 13px 15px;
-      border-radius: 5px;
-      background-color: #e6e6e6;
-      margin: 0;
-    }
-  }
+.message-content {
+  display: inline-block;
+  position: relative;
+  padding: 13px 15px 13px 15px;
+  border-radius: 5px;
+  background-color: #e6e6e6;
+  margin: 0;
+}
 
-  .other-message {
-    text-align: right;
+.other-message {
+  display: flex;
+  justify-content: flex-end;
+}
 
-    .message1 {
-      display: inline-block;
-      height: 45px;
-      margin: 0 0 15px 0;
-    }
+.message1 {
+  display: flex;
+  align-items: center;
+  height: 45px;
+  margin: 0 0 15px 0;
+}
 
-    .account-picture1 {
-      display: inline-block;
-      position: relative;
-      width: 45px;
-      height: 45px;
-      border-radius: 50%;
-      background-color: red;
-      margin: 0 0 0 0;
-    }
+.account-picture1 {
+  display: inline-block;
+  position: relative;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: red;
+  margin: 0 0 0 0;
+}
 
-    .message-content1 {
-      display: inline-block;
-      position: relative;
-      padding: 13px 15px 13px 15px;
-      border-radius: 5px;
-      background-color: #e6e6e6;
-      margin: 0 10px 0 0;
-    }
-  }
+.message-content1 {
+  display: inline-block;
+  position: relative;
+  padding: 13px 15px 13px 15px;
+  border-radius: 5px;
+  background-color: #e6e6e6;
+  margin: 0 10px 0 0;
 }
 
 .message-field-container {

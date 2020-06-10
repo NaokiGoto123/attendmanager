@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ChatService } from 'src/app/services/chat.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { ChatRoom } from 'src/app/interfaces/chat-room';
 
 @Component({
   selector: 'app-chat',
@@ -8,9 +11,21 @@ import { Component, OnInit } from '@angular/core';
 export class ChatComponent implements OnInit {
   message: string;
 
-  constructor() {}
+  chatRooms: ChatRoom[];
 
-  ngOnInit(): void {}
+  constructor(
+    private authService: AuthService,
+    private chatService: ChatService
+  ) {}
+
+  ngOnInit(): void {
+    this.chatService
+      .getMyChatRooms(this.authService.uid)
+      .subscribe((chatRooms: ChatRoom[]) => {
+        this.chatRooms = chatRooms;
+        console.log(chatRooms);
+      });
+  }
 
   send() {
     console.log(this.message);
