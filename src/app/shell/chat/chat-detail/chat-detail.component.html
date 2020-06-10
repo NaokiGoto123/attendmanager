@@ -35,7 +35,10 @@
           <div *ngIf="message.ownerId !== uid">
             <div class="other-message">
               <div class="message1">
-                <div class="account-picture1"></div>
+                <img
+                  class="account-picture1"
+                  src="{{ message.ownerPhotoURL }}"
+                />
                 <p class="message-content1">{{ message.content }}</p>
               </div>
             </div>

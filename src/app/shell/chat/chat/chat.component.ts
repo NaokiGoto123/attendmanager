@@ -10,6 +10,8 @@ import { combineLatest, Observable, of } from 'rxjs';
   styleUrls: ['./chat.component.scss'],
 })
 export class ChatComponent implements OnInit {
+  noChatRooms: boolean;
+
   chatRooms: Observable<ChatRoom[]>;
 
   constructor(
@@ -23,12 +25,19 @@ export class ChatComponent implements OnInit {
       .pipe(
         switchMap(
           (chatRoomIds: string[]): Observable<ChatRoom[]> => {
-            const ChatRooms: Observable<ChatRoom>[] = chatRoomIds.map(
-              (chatRoomId: string) => {
-                return this.chatService.getChatRoom(chatRoomId);
-              }
-            );
-            return combineLatest(ChatRooms);
+            if (chatRoomIds.length) {
+              const ChatRooms: Observable<ChatRoom>[] = chatRoomIds.map(
+                (chatRoomId: string) => {
+                  return this.chatService.getChatRoom(chatRoomId);
+                }
+              );
+              this.noChatRooms = false;
+              return combineLatest(ChatRooms);
+            } else {
+              this.noChatRooms = true;
+              console.log(this.noChatRooms);
+              return of(null);
+            }
           }
         )
       );

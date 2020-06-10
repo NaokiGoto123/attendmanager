@@ -141,4 +141,10 @@ export class EventService {
       .doc(`events/${eventid}`)
       .update({ attendingmembers: firestore.FieldValue.arrayRemove(uid) });
   }
+
+  getPublicEvents(): Observable<Event[]> {
+    return this.db
+      .collection<Event>(`events`, (ref) => ref.where('private', '==', false))
+      .valueChanges();
+  }
 }

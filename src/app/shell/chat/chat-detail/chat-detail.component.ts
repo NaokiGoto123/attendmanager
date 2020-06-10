@@ -63,6 +63,7 @@ export class ChatDetailComponent implements OnInit {
     this.chatService.sendMessage(
       {
         ownerId: this.uid,
+        ownerPhotoURL: this.photoURL,
         content: this.message,
         sentAt: firestore.Timestamp.now(),
       },
