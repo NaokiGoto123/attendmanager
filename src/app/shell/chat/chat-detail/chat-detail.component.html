@@ -1,0 +1,66 @@
+<div class="content-container">
+  <div *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <mat-toolbar>
+    <a routerLink="/group-details" [queryParams]="{ id: groupid }">
+      {{ name }}
+    </a>
+    <div class="spacer"></div>
+    <button mat-icon-button class="mat-menu" [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" xPosition="before">
+      <button mat-menu-item>
+        <mat-icon>dialpad</mat-icon>
+        <span>Redial</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+
+  <div *ngIf="!loading">
+    <div class="messages">
+      <div *ngIf="!noMessage">
+        <div *ngFor="let message of messages">
+          <div *ngIf="message.ownerId === uid">
+            <div class="my-message">
+              <div class="message">
+                <p class="message-content">{{ message.content }}</p>
+                <img class="account-picture" src="{{ this.photoURL }}" />
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="message.ownerId !== uid">
+            <div class="other-message">
+              <div class="message1">
+                <div class="account-picture1"></div>
+                <p class="message-content1">{{ message.content }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="noMessage">
+        <h1 class="no-message-text">No message is send yet.</h1>
+      </div>
+    </div>
+
+    <div class="message-field-container">
+      <mat-form-field class="message-field" appearance="standard">
+        <input matInput type="text" [(ngModel)]="message" />
+        <button
+          mat-button
+          matSuffix
+          mat-icon-button
+          [disabled]="message === '' || message === null"
+          (click)="send()"
+        >
+          <mat-icon>send</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,101 @@
+.content-container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  right: 0;
+}
+
+mat-spinner {
+  margin: 35% auto auto auto;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.messages {
+  margin: 30px;
+}
+
+.other-message {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.message1 {
+  display: flex;
+  align-items: center;
+  height: 45px;
+  margin: 0 0 15px 0;
+}
+
+.account-picture1 {
+  display: inline-block;
+  position: relative;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: red;
+  margin: 0 10px 0 0;
+}
+
+.message-content1 {
+  display: inline-block;
+  position: relative;
+  padding: 13px 15px 13px 15px;
+  border-radius: 5px;
+  background-color: #e6e6e6;
+  margin: 0;
+}
+
+.my-message {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  height: 45px;
+  margin: 0 0 20px 0;
+}
+
+.account-picture {
+  display: inline-block;
+  position: relative;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: red;
+  margin: 0 0 0 0;
+}
+
+.message-content {
+  display: inline-block;
+  position: relative;
+  padding: 13px 22px 13px 22px;
+  border-radius: 5px;
+  background-color: #e6e6e6;
+  margin: 0 10px 0 0;
+}
+
+.no-message-text {
+  text-align: center;
+  margin: 35% 0 0 0;
+}
+
+.message-field-container {
+  width: 100%;
+  position: absolute;
+  z-index: 1;
+  bottom: 0;
+  text-align: center;
+  border-top: solid 0.3px rgba(0, 0, 0, 0.25);
+}
+
+.message-field {
+  width: 80%;
+}
