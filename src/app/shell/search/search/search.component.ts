@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Event } from 'src/app/interfaces/event';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { Group } from 'src/app/interfaces/group';
 import { GroupService } from 'src/app/services/group.service';
 

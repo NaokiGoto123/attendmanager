@@ -16,22 +16,7 @@
 </div>
 <div class="mat-tabs-container">
   <mat-tab-group mat-align-tabs="start">
-    <mat-tab label="Events">
-      <div *ngIf="nodata; else elseText">
-        <div class="nodata-container">
-          <mat-icon class="nodata-icon" [inline]="true">cloud_queue</mat-icon>
-          <h1 class="nodata-text">There is currently no events.</h1>
-        </div>
-      </div>
-
-      <ng-template #elseText>
-        <div class="event-cards-container">
-          <div *ngFor="let event of events | async">
-            <app-event-card [event]="event"></app-event-card>
-          </div>
-        </div>
-      </ng-template>
-    </mat-tab>
+    <mat-tab label="Events"> </mat-tab>
 
     <mat-tab label="Groups">
       <div class="groups-container">
