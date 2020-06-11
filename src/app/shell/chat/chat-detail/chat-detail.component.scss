@@ -95,8 +95,8 @@ mat-toolbar {
 }
 
 .message-field-container {
-  width: 100%;
-  position: sticky;
+  width: calc(100% - 708px);
+  position: fixed;
   z-index: 1000;
   bottom: 0;
   text-align: center;
