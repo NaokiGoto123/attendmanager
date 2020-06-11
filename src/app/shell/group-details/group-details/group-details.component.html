@@ -37,9 +37,24 @@
       <h1>Admins</h1>
       <ul>
         <div *ngFor="let admin of admins | async">
-          <li>
-            <h1 class="admin">{{ admin }}</h1>
-          </li>
+          <div *ngIf="admin.uid === uid">
+            <li>
+              <h1 class="member" routerLink="/account">
+                {{ admin.displayName }}
+              </h1>
+            </li>
+          </div>
+          <div *ngIf="admin.uid !== uid">
+            <li>
+              <h1
+                class="member"
+                [routerLink]="['/account']"
+                [queryParams]="{ id: admin.uid }"
+              >
+                {{ admin.displayName }}
+              </h1>
+            </li>
+          </div>
         </div>
       </ul>
     </div>
@@ -47,10 +62,25 @@
     <div class="members">
       <h1>Members</h1>
       <ul>
-        <div *ngFor="let member of memberNames | async">
-          <li>
-            <h1 class="member">{{ member }}</h1>
-          </li>
+        <div *ngFor="let member of members | async">
+          <div *ngIf="member.uid === uid">
+            <li>
+              <h1 class="member" routerLink="/account">
+                {{ member.displayName }}
+              </h1>
+            </li>
+          </div>
+          <div *ngIf="member.uid !== uid">
+            <li>
+              <h1
+                class="member"
+                [routerLink]="['/account']"
+                [queryParams]="{ id: member.uid }"
+              >
+                {{ member.displayName }}
+              </h1>
+            </li>
+          </div>
         </div>
       </ul>
     </div>

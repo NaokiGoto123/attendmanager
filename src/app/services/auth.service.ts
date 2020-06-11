@@ -85,7 +85,7 @@ export class AuthService {
       .then(() => this.snackbar.open('signed in', null, { duration: 2000 }));
   }
 
-  public getName(uid: string): Observable<string> {
+  getName(uid: string): Observable<string> {
     return this.afs
       .doc<User>(`users/${uid}`)
       .valueChanges()
@@ -94,5 +94,9 @@ export class AuthService {
           return user.displayName;
         })
       );
+  }
+
+  getUser(uid: string): Observable<User> {
+    return this.afs.doc<User>(`users/${uid}`).valueChanges();
   }
 }

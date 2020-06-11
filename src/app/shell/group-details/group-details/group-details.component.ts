@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { EventService } from 'src/app/services/event.service';
@@ -10,6 +10,7 @@ import { Event } from 'src/app/interfaces/event';
 import { Location } from '@angular/common';
 import { ChatService } from 'src/app/services/chat.service';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { User } from 'src/app/interfaces/user';
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
@@ -31,10 +32,8 @@ export class GroupDetailsComponent implements OnInit {
   grouppicture: Observable<number>;
   createddate: Date;
   creater: Observable<string>;
-  admins: Observable<string[]>;
-  memberIds: string[];
-  memberNames: Observable<string[]>;
-  events: Observable<Event[]>;
+  admins: Observable<User[]>;
+  members: Observable<User[]>;
   chatRoomId: string;
 
   constructor(
@@ -94,56 +93,35 @@ export class GroupDetailsComponent implements OnInit {
         )
       );
 
-      this.admins = this.groupService.getGroupinfo(this.id).pipe(
-        map((group: Group) => {
-          return group.admin;
-        }),
-        switchMap(
-          (adminIds: string[]): Observable<string[]> => {
-            const result: Observable<string>[] = [];
-            adminIds.forEach((admin: string) => {
-              result.push(this.authService.getName(admin));
-            });
-            return combineLatest(result);
-          }
-        )
-      );
-
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        if (group.members.length) {
-          console.log(group.members);
-          this.memberIds = group.members;
-          if (group.members.includes(this.uid)) {
-            this.ifmember = true;
-            console.log('member');
-          } else {
-            this.ifmember = false;
-            console.log('no member');
-          }
-          console.log(this.ifmember);
-        } else {
-          this.ifmember = false;
-          console.log(this.ifmember);
-          this.memberIds = null;
+        if (group.admin.length) {
+          this.admins = combineLatest(
+            group.admin.map((admin: string) => {
+              const user: Observable<User> = this.authService.getUser(admin);
+              return user;
+            })
+          );
         }
       });
 
-      this.memberNames = this.groupService.getGroupinfo(this.id).pipe(
-        map((group: Group) => {
-          return group.members;
-        }),
-        switchMap(
-          (memberIds: string[]): Observable<string[]> => {
-            const result: Observable<string>[] = [];
-            memberIds.forEach((member: string) => {
-              result.push(this.authService.getName(member));
-            });
-            return combineLatest(result);
-          }
-        )
-      );
+      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
+        if (group.members.length) {
+          this.members = combineLatest(
+            group.members.map((memberId: string) => {
+              const user: Observable<User> = this.authService.getUser(memberId);
+              return user;
+            })
+          );
 
-      this.events = this.eventService.getOneGroupEvents(this.id);
+          if (group.members.includes(this.uid)) {
+            this.ifmember = true;
+          } else {
+            this.ifmember = false;
+          }
+        } else {
+          this.ifmember = false;
+        }
+      });
     });
   }
 

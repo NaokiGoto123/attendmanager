@@ -1,46 +1,129 @@
-<div class="account-header">
-  <img class="account-photo" alt="account photo" src="{{ this.photoURL }}" />
-  <div class="account-name-account-email">
-    <h1 class="account-name">{{ this.displayName }}</h1>
-    <h3 class="account-email">{{ this.email }}</h3>
+<div *ngIf="!ifTarget">
+  <div class="account-header">
+    <img class="account-photo" alt="account photo" src="{{ myPhotoURL }}" />
+    <div class="account-name-account-email">
+      <h1 class="account-name">{{ myDisplayName }}</h1>
+      <h3 class="account-email">{{ myEmail }}</h3>
+    </div>
   </div>
+
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">person</mat-icon>
+        Account info
+      </ng-template>
+      <button mat-flat-button color="warn" (click)="signOut()">
+        Sign out
+      </button>
+      <button mat-flat-button color="warn">
+        Delete account
+      </button>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">group</mat-icon>
+        My Groups
+      </ng-template>
+      Content 1
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">event</mat-icon>
+        Attending Events
+      </ng-template>
+      Content 2
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon class="tab-icon">done</mat-icon>
+        Attended Events
+      </ng-template>
+      Content 3
+    </mat-tab>
+  </mat-tab-group>
 </div>
 
-<mat-tab-group>
-  <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon class="tab-icon">person</mat-icon>
-      Account info
-    </ng-template>
-    <button mat-flat-button color="warn" (click)="authService.signOut()">
-      Sign out
-    </button>
-    <button mat-flat-button color="warn">
-      Delete account
-    </button>
-  </mat-tab>
+<div>
+  <div *ngIf="ifTarget">
+    <div class="account-header">
+      <img class="account-photo" src="{{ targetPhotoURL }}" />
+      <div class="account-name-account-email">
+        <h1 class="account-name">{{ targetDisplayName }}</h1>
+        <h3 class="account-email">{{ targetEmail }}</h3>
+      </div>
+    </div>
+    <mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">group</mat-icon>
+          Groups
+        </ng-template>
+        <!-- content -->
+        <div class="groups-container">
+          <div *ngFor="let group of targetGroups">
+            <div class="group">
+              <img
+                class="group-picture"
+                src="/assets/background/{{ group.grouppicture }}.jpg"
+              />
+              <h1 class="group-name">{{ group.name }}</h1>
+              <h2 class="group-description">{{ group.description }}</h2>
+              <div class="join-button-container">
+                <div *ngIf="group.members.includes(myUid)">
+                  <button
+                    mat-raised-button
+                    color="accent"
+                    (click)="leaveGroup(group)"
+                  >
+                    Joining
+                  </button>
+                </div>
+                <div *ngIf="!group.members.includes(myUid)">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="joinGroup(group)"
+                  >
+                    Join
+                  </button>
+                </div>
+              </div>
+              <div class="group-details-button-container">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  aria-label="group description"
+                  class="group-details-button"
+                  [routerLink]="['/group-details']"
+                  [queryParams]="{ id: group.groupid }"
+                >
+                  <mat-icon>fullscreen</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
 
-  <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon class="tab-icon">group</mat-icon>
-      My Groups
-    </ng-template>
-    Content 1
-  </mat-tab>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">event</mat-icon>
+          Attending Events
+        </ng-template>
+        Content 2
+      </mat-tab>
 
-  <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon class="tab-icon">event</mat-icon>
-      Attending Events
-    </ng-template>
-    Content 2
-  </mat-tab>
-
-  <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon class="tab-icon">done</mat-icon>
-      Attended Events
-    </ng-template>
-    Content 3
-  </mat-tab>
-</mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">done</mat-icon>
+          Attended Events
+        </ng-template>
+        Content 3
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

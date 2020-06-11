@@ -105,7 +105,7 @@ export class GroupService {
             })
           )
           .subscribe((chatRoomId: string) => {
-            this.db.doc(`groups/${chatRoomId}`).delete();
+            this.db.doc(`chatRooms/${chatRoomId}`).delete();
           });
       })
       .then(() => {

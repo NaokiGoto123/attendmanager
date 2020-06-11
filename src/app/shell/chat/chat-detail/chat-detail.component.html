@@ -24,7 +24,7 @@
       <div *ngIf="!noMessage">
         <div
           *ngFor="let message of messages"
-          [class.my-item]="message.ownerId === uid"
+          [class.item]="message.ownerId === uid"
         >
           <div *ngIf="message.ownerId === uid">
             <div class="my-message">
@@ -44,6 +44,8 @@
                 <img
                   class="account-picture1"
                   src="{{ message.ownerPhotoURL }}"
+                  routerLink="/account"
+                  [queryParams]="{ id: message.ownerId }"
                 />
                 <p class="message-content1">{{ message.content }}</p>
                 <small class="sendAt1">{{

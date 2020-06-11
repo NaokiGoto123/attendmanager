@@ -118,7 +118,7 @@ mat-toolbar {
   width: 80%;
 }
 
-.my-item {
+.item {
   & + & {
     padding-right: 45px;
     .account-picture {
