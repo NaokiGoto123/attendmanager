@@ -33,4 +33,8 @@ export class GroupsComponent implements OnInit {
   ngOnInit(): void {
     this.uid = this.authService.uid;
   }
+
+  leaveGroup(group: Group) {
+    this.groupService.leaveGroup(this.authService.uid, group);
+  }
 }

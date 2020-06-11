@@ -34,7 +34,7 @@ mat-toolbar {
 
 .message1 {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   height: 45px;
   margin: 0 0 15px 0;
 }
@@ -52,10 +52,15 @@ mat-toolbar {
 .message-content1 {
   display: inline-block;
   position: relative;
-  padding: 13px 15px 13px 15px;
+  padding: 13px 22px 13px 22px;
   border-radius: 5px;
   background-color: #e6e6e6;
   margin: 0;
+}
+
+.sendAt1 {
+  font-size: 10px;
+  margin: 0 0 0 10px;
 }
 
 .my-message {
@@ -65,9 +70,14 @@ mat-toolbar {
 
 .message {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   height: 45px;
   margin: 0 0 20px 0;
+}
+
+.sendAt {
+  font-size: 10px;
+  margin: 0 10px 0 0;
 }
 
 .account-picture {
@@ -106,4 +116,13 @@ mat-toolbar {
 
 .message-field {
   width: 80%;
+}
+
+.my-item {
+  & + & {
+    padding-right: 45px;
+    .account-picture {
+      display: none;
+    }
+  }
 }

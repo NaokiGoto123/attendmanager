@@ -22,10 +22,16 @@
   <div *ngIf="!loading">
     <div class="messages">
       <div *ngIf="!noMessage">
-        <div *ngFor="let message of messages">
+        <div
+          *ngFor="let message of messages"
+          [class.my-item]="message.ownerId === uid"
+        >
           <div *ngIf="message.ownerId === uid">
             <div class="my-message">
               <div class="message">
+                <small class="sendAt">{{
+                  message.sentAt.toMillis() | date: 'MM/dd HH:mm:ss'
+                }}</small>
                 <p class="message-content">{{ message.content }}</p>
                 <img class="account-picture" src="{{ this.photoURL }}" />
               </div>
@@ -40,6 +46,9 @@
                   src="{{ message.ownerPhotoURL }}"
                 />
                 <p class="message-content1">{{ message.content }}</p>
+                <small class="sendAt1">{{
+                  message.sentAt.toMillis() | date: 'MM/dd HH:mm:ss'
+                }}</small>
               </div>
             </div>
           </div>

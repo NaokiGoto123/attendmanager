@@ -34,7 +34,7 @@
       <h2 class="group-description">{{ group.description }}</h2>
       <div class="join-button-container">
         <div *ngIf="group.members.includes(uid)">
-          <button mat-raised-button color="accent">
+          <button mat-raised-button color="accent" (click)="leaveGroup(group)">
             Joining
           </button>
         </div>
