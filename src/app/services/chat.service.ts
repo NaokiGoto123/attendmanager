@@ -29,7 +29,11 @@ export class ChatService {
           .doc(`groups/${chatRoom.groupid}`)
           .update({ chatRoomId: chatRoom.id })
       )
-      .then(() => this.router.navigateByUrl('/chat'));
+      .then(() =>
+        this.router.navigate(['/chat/chat-detail'], {
+          queryParams: { id: chatRoom.id },
+        })
+      );
     console.log('Successfully created a chatRoom');
   }
 

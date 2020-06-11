@@ -131,17 +131,18 @@ export class GroupService {
     this.db
       .doc(`groups/${group.groupid}`)
       .update({ members: firestore.FieldValue.arrayUnion(uid) });
-    // .then(() => {
-    //   this.db.doc(`users/${uid}`).update({groups: firestore.FieldValue.arrayUnion(group.groupid)});
-    // });
   }
 
   leaveGroup(uid: string, group: Group) {
     this.db
       .doc(`groups/${group.groupid}`)
-      .update({ members: firestore.FieldValue.arrayRemove(uid) });
-    // .then(() => {
-    //   this.db.doc(`users/${uid}`).update({groups: firestore.FieldValue.arrayRemove(group.groupid)});
-    // });
+      .update({ members: firestore.FieldValue.arrayRemove(uid) })
+      .then(() => {
+        if (group.admin.includes(uid)) {
+          this.db
+            .doc(`groups/${group.groupid}`)
+            .update({ admin: firestore.FieldValue.arrayRemove(uid) });
+        }
+      });
   }
 }

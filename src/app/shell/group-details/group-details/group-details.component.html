@@ -9,7 +9,7 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
 
-    <div *ngIf="ifadmin | async">
+    <div *ngIf="ifadmin">
       <a routerLink="/create-group" [queryParams]="{ id: id }">
         <button class="edit-button" mat-icon-button color="primary">
           <mat-icon>edit</mat-icon>
@@ -33,21 +33,25 @@
       {{ createddate | date: 'yyyy/MM/dd' }}
     </h1>
 
-    <div class="admins" *ngFor="let admin of admins | async">
+    <div class="admins">
       <h1>Admins</h1>
       <ul>
-        <li>
-          <h1 class="admin">{{ admin }}</h1>
-        </li>
+        <div *ngFor="let admin of admins | async">
+          <li>
+            <h1 class="admin">{{ admin }}</h1>
+          </li>
+        </div>
       </ul>
     </div>
 
-    <div class="members" *ngFor="let member of memberNames | async">
+    <div class="members">
       <h1>Members</h1>
       <ul>
-        <li>
-          <h1 class="member">{{ member }}</h1>
-        </li>
+        <div *ngFor="let member of memberNames | async">
+          <li>
+            <h1 class="member">{{ member }}</h1>
+          </li>
+        </div>
       </ul>
     </div>
 
@@ -65,8 +69,8 @@
         Check events
       </button>
 
-      <div *ngIf="memberIds.includes(uid)">
-        <div *ngIf="!ifChatRoom">
+      <div *ngIf="ifmember">
+        <div *ngIf="!ifChatRoom && ifadmin">
           <button
             mat-raised-button
             class="chat-button"

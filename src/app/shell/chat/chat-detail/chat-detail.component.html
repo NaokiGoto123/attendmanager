@@ -53,7 +53,12 @@
 
     <div class="message-field-container">
       <mat-form-field class="message-field" appearance="standard">
-        <input matInput type="text" [(ngModel)]="message" />
+        <input
+          matInput
+          type="text"
+          [(ngModel)]="message"
+          (keydown.enter)="send()"
+        />
         <button
           mat-button
           matSuffix

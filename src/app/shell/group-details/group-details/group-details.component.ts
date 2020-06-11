@@ -20,7 +20,9 @@ export class GroupDetailsComponent implements OnInit {
 
   uid: string;
 
-  ifadmin: Observable<boolean>; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
+  ifadmin: boolean; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
+
+  ifmember: boolean;
 
   ifChatRoom: boolean; // チャットルームが作成済かどうか
 
@@ -46,8 +48,15 @@ export class GroupDetailsComponent implements OnInit {
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       this.id = params.get('id');
+
       this.uid = this.authService.uid;
-      this.ifadmin = this.groupService.checkIfAdmin(this.uid, this.id);
+
+      this.groupService
+        .checkIfAdmin(this.uid, this.id)
+        .subscribe((ifAdmin: boolean) => {
+          this.ifadmin = ifAdmin;
+        });
+
       this.groupService.getGroupinfo(this.id).subscribe((group) => {
         if (group.chatRoomId) {
           console.log(group.chatRoomId);
@@ -56,21 +65,27 @@ export class GroupDetailsComponent implements OnInit {
           this.ifChatRoom = false;
         }
       });
+
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
         this.name = group.name;
       });
+
       this.description = this.groupService
         .getGroupinfo(this.id)
         .pipe(map((group) => group.description));
+
       this.grouppicture = this.groupService
         .getGroupinfo(this.id)
         .pipe(map((group) => group.grouppicture));
+
       this.groupService.getGroupinfo(this.id).subscribe((group) => {
         this.createddate = group.createddate.toDate();
       });
+
       this.groupService.getGroupinfo(this.id).subscribe((group) => {
         this.chatRoomId = group.chatRoomId;
       });
+
       this.creater = this.groupService.getGroupinfo(this.id).pipe(
         switchMap(
           (group: Group): Observable<string> => {
@@ -78,6 +93,7 @@ export class GroupDetailsComponent implements OnInit {
           }
         )
       );
+
       this.admins = this.groupService.getGroupinfo(this.id).pipe(
         map((group: Group) => {
           return group.admin;
@@ -92,9 +108,26 @@ export class GroupDetailsComponent implements OnInit {
           }
         )
       );
+
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        this.memberIds = group.members;
+        if (group.members.length) {
+          console.log(group.members);
+          this.memberIds = group.members;
+          if (group.members.includes(this.uid)) {
+            this.ifmember = true;
+            console.log('member');
+          } else {
+            this.ifmember = false;
+            console.log('no member');
+          }
+          console.log(this.ifmember);
+        } else {
+          this.ifmember = false;
+          console.log(this.ifmember);
+          this.memberIds = null;
+        }
       });
+
       this.memberNames = this.groupService.getGroupinfo(this.id).pipe(
         map((group: Group) => {
           return group.members;
@@ -109,6 +142,7 @@ export class GroupDetailsComponent implements OnInit {
           }
         )
       );
+
       this.events = this.eventService.getOneGroupEvents(this.id);
     });
   }
