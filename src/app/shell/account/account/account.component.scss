@@ -1,5 +1,5 @@
 .account-header {
-  display: table;
+  display: flex;
   margin: 30px 0 30px 50px;
 }
 
@@ -12,8 +12,9 @@
 }
 
 .account-name-account-email {
-  display: table-cell;
-  vertical-align: middle;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .account-name {
@@ -24,8 +25,17 @@
   margin: 0;
 }
 
+.account-description {
+  margin: 0 0 30px 50px;
+}
+
 .tab-icon {
   margin-right: 8px;
+}
+
+.noGroupText {
+  text-align: center;
+  margin: 15% 0 0 0;
 }
 
 .groups-container {

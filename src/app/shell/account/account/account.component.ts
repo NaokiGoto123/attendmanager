@@ -16,7 +16,14 @@ export class AccountComponent implements OnInit {
   myDisplayName: string;
   myPhotoURL: string;
   myEmail: string;
+  myDescription: string;
   myGroups: Group[];
+  myGroupsEmpty: boolean;
+  myAttendingEvents: Event[];
+  myAttendedEvents: Event[];
+  myShowGroups: boolean;
+  myShowAttendingEvents: boolean;
+  myShowAttendedEvents: boolean;
 
   ifTarget: boolean;
 
@@ -24,7 +31,14 @@ export class AccountComponent implements OnInit {
   targetDisplayName: string;
   targetPhotoURL: string;
   targetEmail: string;
+  targetDescription: string;
   targetGroups: Group[];
+  targetGroupsEmpty: boolean;
+  targetAttendingEvents: Event[];
+  targetAttendedEvents: Event[];
+  targetShowGroups: boolean;
+  targetShowAttendingEvents: boolean;
+  targetShowAttendedEvents: boolean;
 
   constructor(
     private authService: AuthService,
@@ -43,8 +57,20 @@ export class AccountComponent implements OnInit {
         this.groupService
           .getMyGroup(this.myUid)
           .subscribe((groups: Group[]) => {
-            this.myGroups = groups;
+            if (groups.length) {
+              this.myGroupsEmpty = false;
+              this.myGroups = groups;
+            } else {
+              this.myGroupsEmpty = true;
+              this.myGroups = [];
+            }
           });
+        this.authService.getUser(this.myUid).subscribe((user: User) => {
+          this.myDescription = user.description;
+          this.myShowGroups = user.showGroups;
+          this.myShowAttendingEvents = user.showAttendingEvents;
+          this.myShowAttendedEvents = user.showAttendedEvents;
+        });
       } else {
         this.ifTarget = true;
         this.authService.getUser(uid).subscribe((user: User) => {
@@ -54,8 +80,22 @@ export class AccountComponent implements OnInit {
           this.targetPhotoURL = user.photoURL;
           this.targetEmail = user.email;
           this.groupService.getMyGroup(uid).subscribe((groups: Group[]) => {
-            this.targetGroups = groups;
+            if (groups.length) {
+              this.targetGroupsEmpty = false;
+              this.targetGroups = groups;
+            } else {
+              this.targetGroupsEmpty = true;
+              this.targetGroups = [];
+            }
           });
+          this.authService
+            .getUser(this.targetUser.uid)
+            .subscribe((user: User) => {
+              this.targetDescription = user.description;
+              this.targetShowGroups = user.showGroups;
+              this.targetShowAttendingEvents = user.showAttendingEvents;
+              this.targetShowAttendedEvents = user.showAttendedEvents;
+            });
         });
       }
     });
@@ -68,6 +108,7 @@ export class AccountComponent implements OnInit {
   }
 
   joinGroup(group: Group) {
+    console.log(group);
     this.groupService.joinGroup(this.myUid, group);
   }
 

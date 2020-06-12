@@ -23,6 +23,10 @@ export class AuthService {
   photoURL: string;
   displayName: string;
   email: string;
+  // description: string;
+  // showGroups: boolean;
+  // showAttendingEvents: boolean;
+  // showAttendedEvents: boolean;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -50,6 +54,10 @@ export class AuthService {
         this.photoURL = null;
         this.displayName = null;
         this.email = null;
+        // this.description = null;
+        // this.showGroups = null;
+        // this.showAttendingEvents = null;
+        // this.showAttendedEvents = null;
       }
     });
   }
@@ -57,7 +65,13 @@ export class AuthService {
   async googleSignin() {
     const provider = new auth.GoogleAuthProvider();
     const credential = await this.afAuth.signInWithPopup(provider);
-    return this.updateUserData(credential.user);
+    return this.updateUserData({
+      ...credential.user,
+      description: '',
+      showGroups: true,
+      showAttendingEvents: true,
+      showAttendedEvents: true,
+    });
   }
 
   async signOut() {
@@ -65,18 +79,29 @@ export class AuthService {
     return this.router.navigate(['/welcome']);
   }
 
-  private updateUserData({ uid, displayName, email, photoURL }: User) {
+  private updateUserData({
+    uid,
+    displayName,
+    email,
+    photoURL,
+    description,
+    showGroups,
+    showAttendingEvents,
+    showAttendedEvents,
+  }: User) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
       `users/${uid}`
     );
-
-    console.log(uid);
 
     const data = {
       uid,
       displayName,
       email,
       photoURL,
+      description,
+      showGroups,
+      showAttendingEvents,
+      showAttendedEvents,
     };
 
     return userRef
