@@ -5,6 +5,7 @@ import { ChatRoom } from 'src/app/interfaces/chat-room';
 import { Message } from 'src/app/interfaces/message';
 import { AuthService } from 'src/app/services/auth.service';
 import { firestore } from 'firebase';
+import { FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-chat-detail',
@@ -22,7 +23,9 @@ export class ChatDetailComponent implements OnInit {
 
   photoURL: string;
 
-  message = '';
+  form = this.fb.group({
+    message: [''],
+  });
 
   name: string;
 
@@ -33,7 +36,8 @@ export class ChatDetailComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private chatService: ChatService,
-    private authService: AuthService
+    private authService: AuthService,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
@@ -70,11 +74,11 @@ export class ChatDetailComponent implements OnInit {
       {
         ownerId: this.uid,
         ownerPhotoURL: this.photoURL,
-        content: this.message,
+        content: this.form.value.message,
         sentAt: firestore.Timestamp.now(),
       },
       this.chatRoomId
     );
-    this.message = null;
+    this.form.reset();
   }
 }

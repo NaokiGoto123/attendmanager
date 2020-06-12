@@ -63,23 +63,22 @@
     </div>
 
     <div class="message-field-container">
-      <mat-form-field class="message-field" appearance="standard">
-        <input
-          matInput
-          type="text"
-          [(ngModel)]="message"
-          (keydown.enter)="send()"
-        />
-        <button
-          mat-button
-          matSuffix
-          mat-icon-button
-          [disabled]="message === '' || message === null"
-          (click)="send()"
-        >
-          <mat-icon>send</mat-icon>
-        </button>
-      </mat-form-field>
+      <form [formGroup]="form" (ngSubmit)="send()">
+        <mat-form-field class="message-field" appearance="standard">
+          <input matInput type="text" formControlName="message" />
+          <button
+            mat-button
+            matSuffix
+            mat-icon-button
+            [disabled]="
+              form.value.message === '' || form.value.message === null
+            "
+            (click)="send()"
+          >
+            <mat-icon>send</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
     </div>
   </div>
 </div>
