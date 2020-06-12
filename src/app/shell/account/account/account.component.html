@@ -26,7 +26,52 @@
         <mat-icon class="tab-icon">group</mat-icon>
         My Groups
       </ng-template>
-      Content 1
+      <!-- content -->
+      <div class="groups-container">
+        <div *ngFor="let myGroup of myGroups">
+          <div class="group">
+            <img
+              class="group-picture"
+              src="/assets/background/{{ myGroup.grouppicture }}.jpg"
+            />
+            <h1 class="group-name">{{ myGroup.name }}</h1>
+            <h2 class="group-description">{{ myGroup.description }}</h2>
+            <div class="join-button-container">
+              <div *ngIf="myGroup.members.includes(myUid)">
+                <button
+                  mat-raised-button
+                  color="accent"
+                  (click)="leaveGroup(myGroup)"
+                >
+                  Joining
+                </button>
+              </div>
+              <div *ngIf="!myGroup.members.includes(myUid)">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="joinGroup(myGroup)"
+                >
+                  Join
+                </button>
+              </div>
+            </div>
+            <div class="group-details-button-container">
+              <button
+                mat-icon-button
+                color="primary"
+                aria-label="group description"
+                class="group-details-button"
+                [routerLink]="['/group-details']"
+                [queryParams]="{ id: myGroup.groupid }"
+              >
+                <mat-icon>fullscreen</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- content end -->
     </mat-tab>
 
     <mat-tab>
@@ -107,6 +152,7 @@
             </div>
           </div>
         </div>
+        <!-- content end -->
       </mat-tab>
 
       <mat-tab>

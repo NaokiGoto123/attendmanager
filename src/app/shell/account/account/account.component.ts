@@ -12,10 +12,11 @@ import { Group } from 'src/app/interfaces/group';
   styleUrls: ['./account.component.scss'],
 })
 export class AccountComponent implements OnInit {
-  myUid = this.authService.uid;
-  myDisplayName = this.authService.displayName;
-  myPhotoURL = this.authService.photoURL;
-  myEmail = this.authService.email;
+  myUid: string;
+  myDisplayName: string;
+  myPhotoURL: string;
+  myEmail: string;
+  myGroups: Group[];
 
   ifTarget: boolean;
 
@@ -35,6 +36,15 @@ export class AccountComponent implements OnInit {
       console.log(uid);
       if (uid === null) {
         this.ifTarget = false;
+        this.myUid = this.authService.uid;
+        this.myDisplayName = this.authService.displayName;
+        this.myPhotoURL = this.authService.photoURL;
+        this.myEmail = this.authService.email;
+        this.groupService
+          .getMyGroup(this.myUid)
+          .subscribe((groups: Group[]) => {
+            this.myGroups = groups;
+          });
       } else {
         this.ifTarget = true;
         this.authService.getUser(uid).subscribe((user: User) => {
