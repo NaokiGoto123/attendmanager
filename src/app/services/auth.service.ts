@@ -23,10 +23,6 @@ export class AuthService {
   photoURL: string;
   displayName: string;
   email: string;
-  // description: string;
-  // showGroups: boolean;
-  // showAttendingEvents: boolean;
-  // showAttendedEvents: boolean;
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -54,10 +50,6 @@ export class AuthService {
         this.photoURL = null;
         this.displayName = null;
         this.email = null;
-        // this.description = null;
-        // this.showGroups = null;
-        // this.showAttendingEvents = null;
-        // this.showAttendedEvents = null;
       }
     });
   }
@@ -124,4 +116,19 @@ export class AuthService {
   getUser(uid: string): Observable<User> {
     return this.afs.doc<User>(`users/${uid}`).valueChanges();
   }
+
+  updateUser(user: User) {
+    this.afs
+      .doc<User>(`users/${user.uid}`)
+      .set(user, { merge: true })
+      .then(() =>
+        this.snackbar.open('Successfully updated settings', null, {
+          duration: 2000,
+        })
+      );
+  }
+
+  // deleteUser(uid: string) {
+
+  // }
 }

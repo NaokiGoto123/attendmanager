@@ -33,6 +33,42 @@
   margin-right: 8px;
 }
 
+.update-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  min-width: 500px;
+  margin: 50px auto 200px auto;
+}
+
+.update-picture-container {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 50px 0;
+}
+
+.update-toggles {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 50px 0;
+}
+
+.update-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.other-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin: 0 0 300px 0;
+}
+
+.signout-button {
+  margin: 0 10px 0 0;
+}
+
 .noGroupText {
   text-align: center;
   margin: 15% 0 0 0;
@@ -79,4 +115,9 @@
 
 .group-details-button-container {
   text-align: end;
+}
+
+.no-tabs-text {
+  text-align: center;
+  margin: 15% 0 0 0;
 }

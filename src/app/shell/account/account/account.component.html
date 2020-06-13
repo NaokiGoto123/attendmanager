@@ -16,12 +16,89 @@
         <mat-icon class="tab-icon">person</mat-icon>
         Account settings
       </ng-template>
-      <button mat-flat-button color="warn" (click)="signOut()">
-        Sign out
-      </button>
-      <button mat-flat-button color="warn">
-        Delete account
-      </button>
+
+      <!-- update form -->
+      <form class="update-form" [formGroup]="form">
+        <div class="update-picture-container">
+          <img
+            class="account-photo"
+            alt="account photo"
+            src="{{ myPhotoURL }}"
+          />
+        </div>
+
+        <mat-form-field class="update-name" appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="displayName" type="text" />
+        </mat-form-field>
+
+        <mat-form-field class="update-description" appearance="outline">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description" type="text" />
+        </mat-form-field>
+
+        <div class="update-toggles">
+          <mat-slide-toggle
+            class="update-showGroup"
+            formControlName="showGroups"
+          >
+            <div *ngIf="form.value.showGroups">
+              Show my groups
+            </div>
+            <div *ngIf="!form.value.showGroups">
+              Do not show my groups
+            </div>
+          </mat-slide-toggle>
+
+          <mat-slide-toggle
+            class="update-showAttendingEvents"
+            formControlName="showAttendingEvents"
+          >
+            <div *ngIf="form.value.showAttendingEvents">
+              Show my attending events
+            </div>
+            <div *ngIf="!form.value.showAttendingEvents">
+              Do not show my attending events
+            </div>
+          </mat-slide-toggle>
+
+          <mat-slide-toggle
+            class="update-showAttendedEvents"
+            formControlName="showAttendedEvents"
+          >
+            <div *ngIf="form.value.showAttendedEvents">
+              Show my attended events
+            </div>
+            <div *ngIf="!form.value.showAttendedEvents">
+              Do not show my attended events
+            </div>
+          </mat-slide-toggle>
+        </div>
+        <div class="update-button-container">
+          <button
+            mat-raised-button
+            class="update-button"
+            color="primary"
+            (click)="updateUser()"
+          >
+            Update
+          </button>
+        </div>
+      </form>
+      <!-- update form -->
+      <div class="other-actions">
+        <button
+          mat-flat-button
+          class="signout-button"
+          color="warn"
+          (click)="signOut()"
+        >
+          Sign out
+        </button>
+        <button mat-flat-button color="warn">
+          Delete account
+        </button>
+      </div>
     </mat-tab>
 
     <mat-tab>
@@ -114,80 +191,87 @@
       <p class="account-description">{{ targetDescription }}</p>
     </div>
 
-    <mat-tab-group>
-      <mat-tab *ngIf="targetShowGroups">
-        <ng-template mat-tab-label>
-          <mat-icon class="tab-icon">group</mat-icon>
-          Groups
-        </ng-template>
-        <!-- content -->
-        <div *ngIf="targetGroupsEmpty">
-          <h1 class="noGroupText">This user does not belong to any groups</h1>
-        </div>
-        <div *ngIf="!targetGroupsEmpty">
-          <div class="groups-container">
-            <div *ngFor="let targetGroup of targetGroups">
-              <div class="group">
-                <img
-                  class="group-picture"
-                  src="/assets/background/{{ targetGroup.grouppicture }}.jpg"
-                />
-                <h1 class="group-name">{{ targetGroup.name }}</h1>
-                <h2 class="group-description">{{ targetGroup.description }}</h2>
-                <div class="join-button-container">
-                  <div *ngIf="targetGroup.members.includes(myUid)">
-                    <button
-                      mat-raised-button
-                      color="accent"
-                      (click)="leaveGroup(targetGroup)"
-                    >
-                      Joining
-                    </button>
+    <div *ngIf="noTabs">
+      <h1 class="no-tabs-text">There is nothing to show.</h1>
+    </div>
+    <div *ngIf="!noTabs">
+      <mat-tab-group>
+        <mat-tab *ngIf="targetShowGroups">
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">group</mat-icon>
+            Groups
+          </ng-template>
+          <!-- content -->
+          <div *ngIf="targetGroupsEmpty">
+            <h1 class="noGroupText">This user does not belong to any groups</h1>
+          </div>
+          <div *ngIf="!targetGroupsEmpty">
+            <div class="groups-container">
+              <div *ngFor="let targetGroup of targetGroups">
+                <div class="group">
+                  <img
+                    class="group-picture"
+                    src="/assets/background/{{ targetGroup.grouppicture }}.jpg"
+                  />
+                  <h1 class="group-name">{{ targetGroup.name }}</h1>
+                  <h2 class="group-description">
+                    {{ targetGroup.description }}
+                  </h2>
+                  <div class="join-button-container">
+                    <div *ngIf="targetGroup.members.includes(myUid)">
+                      <button
+                        mat-raised-button
+                        color="accent"
+                        (click)="leaveGroup(targetGroup)"
+                      >
+                        Joining
+                      </button>
+                    </div>
+                    <div *ngIf="!targetGroup.members.includes(myUid)">
+                      <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="joinGroup(targetGroup)"
+                      >
+                        Join
+                      </button>
+                    </div>
                   </div>
-                  <div *ngIf="!targetGroup.members.includes(myUid)">
+                  <div class="group-details-button-container">
                     <button
-                      mat-raised-button
+                      mat-icon-button
                       color="primary"
-                      (click)="joinGroup(targetGroup)"
+                      aria-label="group description"
+                      class="group-details-button"
+                      [routerLink]="['/group-details']"
+                      [queryParams]="{ id: targetGroup.groupid }"
                     >
-                      Join
+                      <mat-icon>fullscreen</mat-icon>
                     </button>
                   </div>
-                </div>
-                <div class="group-details-button-container">
-                  <button
-                    mat-icon-button
-                    color="primary"
-                    aria-label="group description"
-                    class="group-details-button"
-                    [routerLink]="['/group-details']"
-                    [queryParams]="{ id: targetGroup.groupid }"
-                  >
-                    <mat-icon>fullscreen</mat-icon>
-                  </button>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <!-- content end -->
-      </mat-tab>
+          <!-- content end -->
+        </mat-tab>
 
-      <mat-tab *ngIf="targetShowAttendingEvents">
-        <ng-template mat-tab-label>
-          <mat-icon class="tab-icon">event</mat-icon>
-          Attending Events
-        </ng-template>
-        Content 2
-      </mat-tab>
+        <mat-tab *ngIf="targetShowAttendingEvents">
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">event</mat-icon>
+            Attending Events
+          </ng-template>
+          Content 2
+        </mat-tab>
 
-      <mat-tab *ngIf="targetShowAttendingEvents">
-        <ng-template mat-tab-label>
-          <mat-icon class="tab-icon">done</mat-icon>
-          Attended Events
-        </ng-template>
-        Content 3
-      </mat-tab>
-    </mat-tab-group>
+        <mat-tab *ngIf="targetShowAttendingEvents">
+          <ng-template mat-tab-label>
+            <mat-icon class="tab-icon">done</mat-icon>
+            Attended Events
+          </ng-template>
+          Content 3
+        </mat-tab>
+      </mat-tab-group>
+    </div>
   </div>
 </div>
