@@ -9,25 +9,33 @@
 
     <p>Date: {{ event.date.toDate() | date: 'yyyy/MM/dd' }}</p>
 
-    <div [ngSwitch]="attended">
-      <button
-        class="submit-button"
-        *ngSwitchCase="false"
-        mat-raised-button
-        color="primary"
-        (click)="attendEvent()"
-      >
-        ATTEND
+    <div *ngIf="ifPast">
+      <button class="submit-button" mat-raised-button>
+        Passed
       </button>
-      <button
-        class="submit-button"
-        *ngSwitchCase="true"
-        mat-raised-button
-        color="warn"
-        (click)="leaveEvent()"
-      >
-        ATTENDED
-      </button>
+    </div>
+
+    <div *ngIf="!ifPast">
+      <div [ngSwitch]="attended">
+        <button
+          class="submit-button"
+          *ngSwitchCase="false"
+          mat-raised-button
+          color="primary"
+          (click)="attendEvent()"
+        >
+          ATTEND
+        </button>
+        <button
+          class="submit-button"
+          *ngSwitchCase="true"
+          mat-raised-button
+          color="warn"
+          (click)="leaveEvent()"
+        >
+          ATTENDED
+        </button>
+      </div>
     </div>
 
     <div *ngIf="ifadmin | async">

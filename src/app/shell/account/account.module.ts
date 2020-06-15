@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
-
+import { SharedModule } from '../shared/shared.module';
 @NgModule({
   declarations: [AccountComponent],
   imports: [
@@ -26,6 +26,7 @@ import { MatRadioModule } from '@angular/material/radio';
     MatFormFieldModule,
     MatSlideToggleModule,
     MatRadioModule,
+    SharedModule,
   ],
 })
 export class AccountModule {}

@@ -24,7 +24,8 @@ mat-toolbar {
 
 .messages {
   position: relative;
-  margin: 30px;
+  margin: 30px 30px 100px 30px;
+  overflow: auto;
 }
 
 .other-message {

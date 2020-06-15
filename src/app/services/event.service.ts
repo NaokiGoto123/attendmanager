@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { GroupService } from './group.service';
 import { map, switchMap } from 'rxjs/operators';
-import { Observable, combineLatest, of, pipe } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { firestore } from 'firebase';
 import { Group } from '../interfaces/group';
 @Injectable({
@@ -145,6 +145,14 @@ export class EventService {
   getPublicEvents(): Observable<Event[]> {
     return this.db
       .collection<Event>(`events`, (ref) => ref.where('private', '==', false))
+      .valueChanges();
+  }
+
+  getAttendingEvents(uid: string): Observable<Event[]> {
+    return this.db
+      .collection<Event>(`events`, (ref) =>
+        ref.where('attendingmembers', 'array-contains', uid)
+      )
       .valueChanges();
   }
 }

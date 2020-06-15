@@ -5,7 +5,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/interfaces/user';
 import { Group } from 'src/app/interfaces/group';
+import { Event } from 'src/app/interfaces/event';
 import { FormBuilder } from '@angular/forms';
+import { EventService } from 'src/app/services/event.service';
 
 @Component({
   selector: 'app-account',
@@ -20,8 +22,10 @@ export class AccountComponent implements OnInit {
   myDescription: string;
   myGroups: Group[];
   myGroupsEmpty: boolean;
-  myAttendingEvents: Event[];
-  myAttendedEvents: Event[];
+  myAttendingEvents: Event[]; // work
+  myNoAttendingEvents: boolean;
+  myAttendedEvents: Event[]; // work
+  myNoAttendedEvents: boolean;
   myShowGroups: boolean;
   myShowAttendingEvents: boolean;
   myShowAttendedEvents: boolean;
@@ -44,24 +48,39 @@ export class AccountComponent implements OnInit {
   targetDescription: string;
   targetGroups: Group[];
   targetGroupsEmpty: boolean;
-  targetAttendingEvents: Event[];
-  targetAttendedEvents: Event[];
+  targetAttendingEvents: Event[]; // work
+  targetNoAttendingEvents: boolean;
+  targetAttendedEvents: Event[]; // work
+  targetNoAttendedEvents: boolean;
   targetShowGroups: boolean;
   targetShowAttendingEvents: boolean;
   targetShowAttendedEvents: boolean;
 
   noTabs: boolean;
 
+  givenAttendingEvent: Event;
+  AttendingCreaterName: string;
+  AttendingGroupName: string;
+  AttendingAttendingmembersNames: string[];
+  AttendingIfAttendingmembers: boolean;
+
+  givenAttendedEvent: Event;
+  AttendedCreaterName: string;
+  AttendedGroupName: string;
+  AttendedAttendingmembersNames: string[];
+  AttendedIfAttendingmembers: boolean;
+
   constructor(
     private authService: AuthService,
     private groupService: GroupService,
     private activatedRoute: ActivatedRoute,
+    private eventService: EventService,
     private fb: FormBuilder
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const uid = params.get('id');
-      console.log(uid);
       if (uid === null) {
+        // 自分の処理
         this.ifTarget = false;
         this.myUid = this.authService.uid;
         this.myDisplayName = this.authService.displayName;
@@ -78,6 +97,35 @@ export class AccountComponent implements OnInit {
               this.myGroups = [];
             }
           });
+        console.log('start');
+        this.eventService
+          .getAttendingEvents(this.authService.uid)
+          .subscribe((events: Event[]) => {
+            console.log(events);
+            const now = new Date();
+            const attendingEvents: Event[] = [];
+            const attendedEvents: Event[] = [];
+            events.map((event: Event) => {
+              if (event.date.toDate() > now) {
+                attendingEvents.push(event);
+              } else {
+                attendedEvents.push(event);
+              }
+            });
+            if (attendingEvents.length) {
+              this.myNoAttendingEvents = false;
+            } else {
+              this.myNoAttendingEvents = true;
+            }
+            if (attendedEvents.length) {
+              this.myNoAttendedEvents = false;
+            } else {
+              this.myNoAttendedEvents = true;
+            }
+            this.myAttendingEvents = attendingEvents;
+            this.myAttendedEvents = attendedEvents;
+          });
+        console.log('end');
         this.authService.getUser(this.myUid).subscribe((user: User) => {
           this.myDescription = user.description;
           this.myShowGroups = user.showGroups;
@@ -87,6 +135,7 @@ export class AccountComponent implements OnInit {
         });
       } else {
         if (uid === this.authService.uid) {
+          // 自分の処理
           this.ifTarget = false;
           this.myUid = this.authService.uid;
           this.myDisplayName = this.authService.displayName;
@@ -103,6 +152,33 @@ export class AccountComponent implements OnInit {
                 this.myGroups = [];
               }
             });
+          this.eventService
+            .getAttendingEvents(this.authService.uid)
+            .subscribe((events: Event[]) => {
+              const now = new Date();
+              const attendingEvents: Event[] = [];
+              const attendedEvents: Event[] = [];
+              events.map((event: Event) => {
+                console.log(event);
+                if (event.date.toDate() > now) {
+                  attendingEvents.push(event);
+                } else {
+                  attendedEvents.push(event);
+                }
+              });
+              if (attendingEvents.length) {
+                this.myNoAttendingEvents = false;
+              } else {
+                this.myNoAttendingEvents = true;
+              }
+              if (attendedEvents.length) {
+                this.myNoAttendedEvents = false;
+              } else {
+                this.myNoAttendedEvents = true;
+              }
+              this.myAttendingEvents = attendingEvents;
+              this.myAttendedEvents = attendedEvents;
+            });
           this.authService.getUser(this.myUid).subscribe((user: User) => {
             this.myDescription = user.description;
             this.myShowGroups = user.showGroups;
@@ -111,11 +187,12 @@ export class AccountComponent implements OnInit {
             this.form.patchValue(user);
           });
         } else {
+          // 自分以外のユーザーの処理
           this.ifTarget = true;
           this.authService.getUser(uid).subscribe((user: User) => {
             console.log(user);
             this.targetUser = user;
-            this.targetUid = user.uid;
+            this.targetUid = uid;
             this.targetDisplayName = user.displayName;
             this.targetPhotoURL = user.photoURL;
             this.targetEmail = user.email;
@@ -128,6 +205,35 @@ export class AccountComponent implements OnInit {
                 this.targetGroups = [];
               }
             });
+            this.eventService
+              .getAttendingEvents(this.targetUid)
+              .subscribe((events: Event[]) => {
+                console.log(events);
+                const now = new Date();
+                const attendingEvents: Event[] = [];
+                const attendedEvents: Event[] = [];
+                events.map((event: Event) => {
+                  console.log(event);
+                  if (event.date.toDate() > now) {
+                    attendingEvents.push(event);
+                  } else {
+                    console.log('attended events');
+                    attendedEvents.push(event);
+                  }
+                });
+                if (attendingEvents.length) {
+                  this.targetNoAttendingEvents = false;
+                } else {
+                  this.targetNoAttendingEvents = true;
+                }
+                if (attendedEvents.length) {
+                  this.targetNoAttendedEvents = false;
+                } else {
+                  this.targetNoAttendedEvents = true;
+                }
+                this.targetAttendingEvents = attendingEvents;
+                this.targetAttendedEvents = attendedEvents;
+              });
             this.authService
               .getUser(this.targetUser.uid)
               .subscribe((user: User) => {
@@ -177,5 +283,69 @@ export class AccountComponent implements OnInit {
       showAttendingEvents: this.form.value.showAttendingEvents,
       showAttendedEvents: this.form.value.showAttendedEvents,
     });
+  }
+
+  AttendingMouseOver() {
+    this.authService
+      .getName(this.givenAttendingEvent.creater)
+      .subscribe((createrName: string) => {
+        this.AttendingCreaterName = createrName;
+      });
+
+    this.groupService
+      .getGroupName(this.givenAttendingEvent.groupid)
+      .subscribe((groupName: string) => {
+        this.AttendingGroupName = groupName;
+      });
+
+    const AttendingAttendingmembersNames: string[] = [];
+    this.givenAttendingEvent.attendingmembers.map((attendingmemberId) => {
+      let attendingmemberName = '';
+      this.authService
+        .getName(attendingmemberId)
+        .subscribe((originalAttendingmemberName: string) => {
+          attendingmemberName = originalAttendingmemberName;
+          AttendingAttendingmembersNames.push(attendingmemberName);
+        });
+    });
+    this.AttendingAttendingmembersNames = AttendingAttendingmembersNames;
+
+    if (this.givenAttendingEvent.attendingmembers.length) {
+      this.AttendingIfAttendingmembers = true;
+    } else {
+      this.AttendingIfAttendingmembers = false;
+    }
+  }
+
+  AttendedMouseOver() {
+    this.authService
+      .getName(this.givenAttendedEvent.creater)
+      .subscribe((createrName: string) => {
+        this.AttendedCreaterName = createrName;
+      });
+
+    this.groupService
+      .getGroupName(this.givenAttendedEvent.groupid)
+      .subscribe((groupName: string) => {
+        this.AttendedGroupName = groupName;
+      });
+
+    const AttendedAttendingmembersNames: string[] = [];
+    this.givenAttendedEvent.attendingmembers.forEach((attendingmember) => {
+      let attendingmemberName = '';
+      this.authService
+        .getName(attendingmember)
+        .subscribe((originalAttndingmemberName: string) => {
+          attendingmemberName = originalAttndingmemberName;
+          AttendedAttendingmembersNames.push(attendingmemberName);
+        });
+    });
+    this.AttendedAttendingmembersNames = AttendedAttendingmembersNames;
+
+    if (this.givenAttendedEvent.attendingmembers.length) {
+      this.AttendedIfAttendingmembers = true;
+    } else {
+      this.AttendedIfAttendingmembers = false;
+    }
   }
 }

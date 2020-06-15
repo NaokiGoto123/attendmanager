@@ -162,17 +162,151 @@
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon">event</mat-icon>
-        Attending Events
+        My Attending Events
       </ng-template>
-      Content 2
+      <div *ngIf="myNoAttendingEvents">
+        <h1>No attending events yet.</h1>
+      </div>
+      <div *ngIf="!myNoAttendingEvents">
+        <div class="attending-evnets">
+          <div class="attending-events-content-container">
+            <div class="attending-events-content">
+              <div *ngFor="let myAttendingEvent of myAttendingEvents">
+                <app-event-card
+                  [event]="myAttendingEvent"
+                  (mouseover)="
+                    givenAttendingEvent = myAttendingEvent; AttendingMouseOver()
+                  "
+                ></app-event-card>
+              </div>
+            </div>
+          </div>
+          <div class="attending-events-detail-container">
+            <div *ngIf="givenAttendingEvent">
+              <div class="attending-events-detail">
+                <h1>{{ givenAttendingEvent.title }}</h1>
+                <h2>{{ givenAttendingEvent.description }}</h2>
+                <h2>
+                  {{ givenAttendingEvent.date.toDate() | date: 'yyyy/MM/dd' }}
+                </h2>
+                <h2>
+                  Happening at {{ givenAttendingEvent.time }} in
+                  {{ givenAttendingEvent.location }}
+                </h2>
+                <h2>
+                  Created by {{ AttendingCreaterName }} in
+                  <span
+                    ><a
+                      [routerLink]="['/group-details']"
+                      [queryParams]="{ id: givenAttendingEvent.groupid }"
+                    >
+                      {{ AttendingGroupName }}
+                    </a></span
+                  >
+                </h2>
+                <h2>
+                  First {{ givenAttendingEvent.memberlimit }} people can attend
+                </h2>
+                <div *ngIf="AttendingIfAttendingmembers">
+                  <h2>Attending members</h2>
+                  <div
+                    *ngFor="
+                      let AttendingAttendingmembersName of AttendingAttendingmembersNames
+                    "
+                  >
+                    <ul>
+                      <li>{{ AttendingAttendingmembersName }}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div *ngIf="!AttendingIfAttendingmembers">
+                  <h2>There is no attending member yet.</h2>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="!givenAttendingEvent">
+              <div class="attending-events-detail">
+                <h1>No event is selected</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </mat-tab>
 
     <mat-tab>
       <ng-template mat-tab-label>
         <mat-icon class="tab-icon">done</mat-icon>
-        Attended Events
+        My Attended Events
       </ng-template>
-      Content 3
+      <div *ngIf="myNoAttendedEvents">
+        <h1>No attended events yet.</h1>
+      </div>
+      <div *ngIf="!myNoAttendedEvents">
+        <div class="attended-events">
+          <div class="attended-events-content-container">
+            <div class="attended-events-content">
+              <div *ngFor="let myAttendedEvent of myAttendedEvents">
+                <app-event-card
+                  [event]="myAttendedEvent"
+                  (mouseover)="
+                    givenAttendedEvent = myAttendedEvent; AttendedMouseOver()
+                  "
+                ></app-event-card>
+              </div>
+            </div>
+          </div>
+          <div class="attended-events-detail-container">
+            <div *ngIf="givenAttendedEvent">
+              <div class="attended-events-detail">
+                <h1>{{ givenAttendedEvent.title }}</h1>
+                <h2>{{ givenAttendedEvent.description }}</h2>
+                <h2>
+                  {{ givenAttendedEvent.date.toDate() | date: 'yyyy/MM/dd' }}
+                </h2>
+                <h2>
+                  Happening at {{ givenAttendedEvent.time }} in
+                  {{ givenAttendedEvent.location }}
+                </h2>
+                <h2>
+                  Created by {{ AttendedCreaterName }} in
+                  <span
+                    ><a
+                      [routerLink]="['/group-details']"
+                      [queryParams]="{ id: givenAttendedEvent.groupid }"
+                    >
+                      {{ AttendedGroupName }}
+                    </a></span
+                  >
+                </h2>
+                <h2>
+                  First {{ givenAttendedEvent.memberlimit }} people can attend
+                </h2>
+                <div *ngIf="AttendedIfAttendingmembers">
+                  <h2>Attended members</h2>
+                  <div
+                    *ngFor="
+                      let AttendedAttendingmembersName of AttendedAttendingmembersNames
+                    "
+                  >
+                    <ul>
+                      <li>{{ AttendedAttendingmembersName }}</li>
+                    </ul>
+                  </div>
+                </div>
+                <div *ngIf="!AttendedIfAttendingmembers">
+                  <h2>There is no attending member yet.</h2>
+                </div>
+              </div>
+            </div>
+            <div *ngIf="!givenAttendedEvent">
+              <div class="attended-events-detail">
+                <h1>No event is selected</h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </mat-tab>
   </mat-tab-group>
 </div>
@@ -201,7 +335,7 @@
             <mat-icon class="tab-icon">group</mat-icon>
             Groups
           </ng-template>
-          <!-- content -->
+          <!-- group content -->
           <div *ngIf="targetGroupsEmpty">
             <h1 class="noGroupText">This user does not belong to any groups</h1>
           </div>
@@ -253,15 +387,89 @@
               </div>
             </div>
           </div>
-          <!-- content end -->
+          <!-- group content end -->
         </mat-tab>
 
+        <!-- events -->
         <mat-tab *ngIf="targetShowAttendingEvents">
           <ng-template mat-tab-label>
             <mat-icon class="tab-icon">event</mat-icon>
             Attending Events
           </ng-template>
-          Content 2
+          <div *ngIf="targetNoAttendingEvents">
+            <h1>No attending events yet.</h1>
+          </div>
+          <div *ngIf="!targetNoAttendingEvents">
+            <div class="attending-evnets">
+              <div class="attending-events-content-container">
+                <div class="attending-events-content">
+                  <div
+                    *ngFor="let targetAttendingEvent of targetAttendingEvents"
+                  >
+                    <app-event-card
+                      [event]="targetAttendingEvent"
+                      (mouseover)="
+                        givenAttendingEvent = targetAttendingEvent;
+                        AttendingMouseOver()
+                      "
+                    ></app-event-card>
+                  </div>
+                </div>
+              </div>
+              <div class="attending-events-detail-container">
+                <div *ngIf="givenAttendingEvent">
+                  <div class="attending-events-detail">
+                    <h1>{{ givenAttendingEvent.title }}</h1>
+                    <h2>{{ givenAttendingEvent.description }}</h2>
+                    <h2>
+                      {{
+                        givenAttendingEvent.date.toDate() | date: 'yyyy/MM/dd'
+                      }}
+                    </h2>
+                    <h2>
+                      Happening at {{ givenAttendingEvent.time }} in
+                      {{ givenAttendingEvent.location }}
+                    </h2>
+                    <h2>
+                      Created by {{ AttendingCreaterName }} in
+                      <span
+                        ><a
+                          [routerLink]="['/group-details']"
+                          [queryParams]="{ id: givenAttendingEvent.groupid }"
+                        >
+                          {{ AttendingGroupName }}
+                        </a></span
+                      >
+                    </h2>
+                    <h2>
+                      First {{ givenAttendingEvent.memberlimit }} people can
+                      attend
+                    </h2>
+                    <div *ngIf="AttendingIfAttendingmembers">
+                      <h2>Attending members</h2>
+                      <div
+                        *ngFor="
+                          let AttendingAttendingmembersName of AttendingAttendingmembersNames
+                        "
+                      >
+                        <ul>
+                          <li>{{ AttendingAttendingmembersName }}</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div *ngIf="!AttendingIfAttendingmembers">
+                      <h2>There is no attending member yet.</h2>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="!givenAttendingEvent">
+                  <div class="attending-events-detail">
+                    <h1>No event is selected</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </mat-tab>
 
         <mat-tab *ngIf="targetShowAttendingEvents">
@@ -269,7 +477,78 @@
             <mat-icon class="tab-icon">done</mat-icon>
             Attended Events
           </ng-template>
-          Content 3
+          <div *ngIf="targetNoAttendedEvents">
+            <h1>No attended events yet.</h1>
+          </div>
+          <div *ngIf="!targetNoAttendedEvents">
+            <div class="attended-events">
+              <div class="attended-events-content-container">
+                <div class="attended-events-content">
+                  <div *ngFor="let targetAttendedEvent of targetAttendedEvents">
+                    <app-event-card
+                      [event]="targetAttendedEvent"
+                      (mouseover)="
+                        givenAttendedEvent = targetAttendedEvent;
+                        AttendedMouseOver()
+                      "
+                    ></app-event-card>
+                  </div>
+                </div>
+              </div>
+              <div class="attended-events-detail-container">
+                <div *ngIf="givenAttendingEvent">
+                  <div class="attended-events-detail">
+                    <h1>{{ givenAttendedEvent.title }}</h1>
+                    <h2>{{ givenAttendedEvent.description }}</h2>
+                    <h2>
+                      {{
+                        givenAttendedEvent.date.toDate() | date: 'yyyy/MM/dd'
+                      }}
+                    </h2>
+                    <h2>
+                      Happening at {{ givenAttendedEvent.time }} in
+                      {{ givenAttendedEvent.location }}
+                    </h2>
+                    <h2>
+                      Created by {{ AttendedCreaterName }} in
+                      <span
+                        ><a
+                          [routerLink]="['/group-details']"
+                          [queryParams]="{ id: givenAttendedEvent.groupid }"
+                        >
+                          {{ AttendedGroupName }}
+                        </a></span
+                      >
+                    </h2>
+                    <h2>
+                      First {{ givenAttendingEvent.memberlimit }} people can
+                      attend
+                    </h2>
+                    <div *ngIf="AttendedIfAttendingmembers">
+                      <h2>Attended members</h2>
+                      <div
+                        *ngFor="
+                          let AttendedAttendingmembersName of AttendedAttendingmembersNames
+                        "
+                      >
+                        <ul>
+                          <li>{{ AttendedAttendingmembersName }}</li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div *ngIf="!AttendedIfAttendingmembers">
+                      <h2>There is no attending member yet.</h2>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="!givenAttendingEvent">
+                  <div class="attended-events-detail">
+                    <h1>No event is selected</h1>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </mat-tab>
       </mat-tab-group>
     </div>
