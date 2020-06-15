@@ -83,7 +83,11 @@ export class AccountComponent implements OnInit {
         // 自分の処理
         this.ifTarget = false;
         this.myUid = this.authService.uid;
-        this.myDisplayName = this.authService.displayName;
+        this.authService
+          .getName(this.myUid)
+          .subscribe((displayName: string) => {
+            this.myDisplayName = displayName;
+          });
         this.myPhotoURL = this.authService.photoURL;
         this.myEmail = this.authService.email;
         this.groupService
