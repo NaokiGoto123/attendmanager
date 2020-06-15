@@ -194,7 +194,13 @@
                   {{ givenAttendingEvent.location }}
                 </h2>
                 <h2>
-                  Created by {{ AttendingCreaterName }} in
+                  Created by
+                  <a
+                    [routerLink]="['/account']"
+                    [queryParams]="{ id: AttendingCreater.uid }"
+                    >{{ AttendingCreater.displayName }}</a
+                  >
+                  in
                   <span
                     ><a
                       [routerLink]="['/group-details']"
@@ -269,7 +275,13 @@
                   {{ givenAttendedEvent.location }}
                 </h2>
                 <h2>
-                  Created by {{ AttendedCreaterName }} in
+                  Created by
+                  <a
+                    [routerLink]="['/account']"
+                    [queryParams]="{ id: AttendedCreater.uid }"
+                    >{{ AttendedCreater.displayName }}</a
+                  >
+                  in
                   <span
                     ><a
                       [routerLink]="['/group-details']"
@@ -431,7 +443,13 @@
                       {{ givenAttendingEvent.location }}
                     </h2>
                     <h2>
-                      Created by {{ AttendingCreaterName }} in
+                      Created by
+                      <a
+                        [routerLink]="['/account']"
+                        [queryParams]="{ id: AttendingCreater.uid }"
+                        >{{ AttendingCreater.displayName }}</a
+                      >
+                      in
                       <span
                         ><a
                           [routerLink]="['/group-details']"
@@ -510,7 +528,13 @@
                       {{ givenAttendedEvent.location }}
                     </h2>
                     <h2>
-                      Created by {{ AttendedCreaterName }} in
+                      Created by
+                      <a
+                        [routerLink]="['/account']"
+                        [queryParams]="{ id: AttendedCreater.uid }"
+                        >{{ AttendedCreater.displayName }}</a
+                      >
+                      in
                       <span
                         ><a
                           [routerLink]="['/group-details']"

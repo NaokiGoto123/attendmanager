@@ -64,7 +64,11 @@
       <h2>{{ givenEvent.date.toDate() | date: 'yyyy/MM/dd' }}</h2>
       <h2>Happening at {{ givenEvent.time }} in {{ givenEvent.location }}</h2>
       <h2>
-        Created by {{ createrName }} in
+        Created by
+        <a [routerLink]="['/account']" [queryParams]="{ id: creater.uid }">{{
+          creater.displayName
+        }}</a>
+        in
         <span
           ><a
             [routerLink]="['/group-details']"

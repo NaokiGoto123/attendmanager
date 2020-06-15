@@ -22,10 +22,7 @@
   <div *ngIf="!loading">
     <div class="messages">
       <div *ngIf="!noMessage">
-        <div
-          *ngFor="let message of messages"
-          [class.item]="message.ownerId === uid"
-        >
+        <div *ngFor="let message of messages" class="item">
           <div *ngIf="message.ownerId === uid">
             <div class="my-message">
               <div class="message">

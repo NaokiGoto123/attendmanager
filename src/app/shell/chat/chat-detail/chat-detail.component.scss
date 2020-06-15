@@ -118,12 +118,3 @@ mat-toolbar {
 .message-field {
   width: 80%;
 }
-
-.item {
-  & + & {
-    padding-right: 45px;
-    .account-picture {
-      display: none;
-    }
-  }
-}

@@ -59,13 +59,13 @@ export class AccountComponent implements OnInit {
   noTabs: boolean;
 
   givenAttendingEvent: Event;
-  AttendingCreaterName: string;
+  AttendingCreater: User;
   AttendingGroupName: string;
   AttendingAttendingmembersNames: string[];
   AttendingIfAttendingmembers: boolean;
 
   givenAttendedEvent: Event;
-  AttendedCreaterName: string;
+  AttendedCreater: User;
   AttendedGroupName: string;
   AttendedAttendingmembersNames: string[];
   AttendedIfAttendingmembers: boolean;
@@ -291,9 +291,9 @@ export class AccountComponent implements OnInit {
 
   AttendingMouseOver() {
     this.authService
-      .getName(this.givenAttendingEvent.creater)
-      .subscribe((createrName: string) => {
-        this.AttendingCreaterName = createrName;
+      .getUser(this.givenAttendingEvent.creater)
+      .subscribe((creater: User) => {
+        this.AttendingCreater = creater;
       });
 
     this.groupService
@@ -323,9 +323,10 @@ export class AccountComponent implements OnInit {
 
   AttendedMouseOver() {
     this.authService
-      .getName(this.givenAttendedEvent.creater)
-      .subscribe((createrName: string) => {
-        this.AttendedCreaterName = createrName;
+      .getUser(this.givenAttendedEvent.creater)
+      .subscribe((creater: User) => {
+        this.AttendedCreater = creater;
+        console.log(creater);
       });
 
     this.groupService
