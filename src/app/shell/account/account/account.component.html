@@ -210,6 +210,7 @@
                     </a></span
                   >
                 </h2>
+                <h2>Price: {{ givenAttendingEvent.price }}</h2>
                 <h2>
                   First {{ givenAttendingEvent.memberlimit }} people can attend
                 </h2>
@@ -291,6 +292,7 @@
                     </a></span
                   >
                 </h2>
+                <h2>Price: {{ givenAttendedEvent.price }}</h2>
                 <h2>
                   First {{ givenAttendedEvent.memberlimit }} people can attend
                 </h2>
@@ -459,6 +461,7 @@
                         </a></span
                       >
                     </h2>
+                    <h2>Price: {{ givenAttendingEvent.price }}</h2>
                     <h2>
                       First {{ givenAttendingEvent.memberlimit }} people can
                       attend
@@ -544,8 +547,9 @@
                         </a></span
                       >
                     </h2>
+                    <h2>Price: {{ givenAttendedEvent.price }}</h2>
                     <h2>
-                      First {{ givenAttendingEvent.memberlimit }} people can
+                      First {{ givenAttendedEvent.memberlimit }} people can
                       attend
                     </h2>
                     <div *ngIf="AttendedIfAttendingmembers">

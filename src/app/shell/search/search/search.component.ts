@@ -22,9 +22,9 @@ export class SearchComponent implements OnInit {
     this.authService.uid
   );
 
-  publicGroups: Group[];
+  searchableGroups: Group[];
 
-  publicEvents: Event[];
+  searchableEvents: Event[];
 
   constructor(
     private authService: AuthService,
@@ -39,12 +39,11 @@ export class SearchComponent implements OnInit {
     } else {
       this.nodata = false;
     }
-    console.log(this.nodata);
-    this.groupService.getPublicGroups().subscribe((groups) => {
-      this.publicGroups = groups;
+    this.groupService.getSearchableGroups().subscribe((groups) => {
+      this.searchableGroups = groups;
     });
-    this.eventService.getPublicEvents().subscribe((events) => {
-      this.publicEvents = events;
+    this.eventService.getSearchableEvents().subscribe((events) => {
+      this.searchableEvents = events;
     });
   }
 

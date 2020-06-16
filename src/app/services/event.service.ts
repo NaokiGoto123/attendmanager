@@ -135,6 +135,12 @@ export class EventService {
       .valueChanges();
   }
 
+  getSearchableEvents(): Observable<Event[]> {
+    return this.db
+      .collection<Event>(`events`, (ref) => ref.where('searchable', '==', true))
+      .valueChanges();
+  }
+
   getAttendingEvents(uid: string): Observable<Event[]> {
     return this.db
       .collection<Event>(`events`, (ref) =>

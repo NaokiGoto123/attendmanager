@@ -77,6 +77,7 @@
           ></span
         >
       </h2>
+      <h2>Price: {{ givenEvent.price }}</h2>
       <h2>First {{ givenEvent.memberlimit }} people can attend</h2>
       <div *ngIf="ifAttendingmembers; else noAttendingmembers">
         <h2>Attending members</h2>

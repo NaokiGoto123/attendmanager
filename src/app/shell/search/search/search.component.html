@@ -28,29 +28,29 @@
             </button>
           </div>
         </div>
-        <div *ngFor="let publicGroup of publicGroups">
+        <div *ngFor="let searchableGroup of searchableGroups">
           <div class="group">
             <img
               class="group-picture"
-              src="/assets/background/{{ publicGroup.grouppicture }}.jpg"
+              src="/assets/background/{{ searchableGroup.grouppicture }}.jpg"
             />
-            <h1 class="group-name">{{ publicGroup.name }}</h1>
-            <h2 class="group-description">{{ publicGroup.description }}</h2>
+            <h1 class="group-name">{{ searchableGroup.name }}</h1>
+            <h2 class="group-description">{{ searchableGroup.description }}</h2>
             <div class="join-button-container">
-              <div *ngIf="publicGroup.memberIds.includes(uid)">
+              <div *ngIf="searchableGroup.memberIds.includes(uid)">
                 <button
                   mat-raised-button
                   color="accent"
-                  (click)="leaveGroup(publicGroup)"
+                  (click)="leaveGroup(searchableGroup)"
                 >
                   Joining
                 </button>
               </div>
-              <div *ngIf="!publicGroup.memberIds.includes(uid)">
+              <div *ngIf="!searchableGroup.memberIds.includes(uid)">
                 <button
                   mat-raised-button
                   color="primary"
-                  (click)="joinGroup(publicGroup)"
+                  (click)="joinGroup(searchableGroup)"
                 >
                   Join
                 </button>
@@ -63,7 +63,7 @@
                 aria-label="group description"
                 class="group-details-button"
                 [routerLink]="['/group-details']"
-                [queryParams]="{ id: publicGroup.groupid }"
+                [queryParams]="{ id: searchableGroup.groupid }"
               >
                 <mat-icon>fullscreen</mat-icon>
               </button>

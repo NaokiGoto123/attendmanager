@@ -127,6 +127,12 @@ export class GroupService {
       .valueChanges();
   }
 
+  getSearchableGroups(): Observable<Group[]> {
+    return this.db
+      .collection<Group>(`groups`, (ref) => ref.where('searchable', '==', true))
+      .valueChanges();
+  }
+
   joinGroup(uid: string, group: Group) {
     this.db
       .doc(`groups/${group.groupid}`)
