@@ -28,6 +28,16 @@ const routes: Routes = [
       import('./about/about.module').then((m) => m.AboutModule),
   },
   {
+    path: 'tos',
+    loadChildren: () =>
+      import('./policy/policy.module').then((m) => m.PolicyModule),
+  },
+  {
+    path: 'legal',
+    loadChildren: () =>
+      import('./legal/legal.module').then((m) => m.LegalModule),
+  },
+  {
     path: '**',
     loadChildren: () =>
       import('./not-found/not-found.module').then((m) => m.NotFoundModule),
