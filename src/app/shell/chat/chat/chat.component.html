@@ -1,27 +1,26 @@
 <div class="chat-container">
-  <div class="list-container">
-    <mat-tab-group mat-align-tabs="start">
-      <mat-tab label="People">
-        <mat-list role="list">
-          <mat-list-item role="listitem">Bob</mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">Peter</mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">Jonathan</mat-list-item>
-          <mat-divider></mat-divider>
-        </mat-list>
-      </mat-tab>
-      <mat-tab label="Events">
-        <mat-list role="list">
-          <mat-list-item role="listitem">Camping</mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">Fishing</mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item role="listitem">Driving</mat-list-item>
-          <mat-divider></mat-divider>
-        </mat-list>
-      </mat-tab>
-    </mat-tab-group>
+  <div *ngIf="noChatRooms">
+    <h1 class="no-chatrooms">You do not have any chat rooms yet.</h1>
   </div>
-  <div class="content-container"></div>
+  <div *ngIf="!noChatRooms">
+    <mat-sidenav-container class="sidenav-container">
+      <mat-sidenav mode="side" class="side-menu" opened>
+        <mat-nav-list>
+          <div *ngFor="let chatRoom of chatRooms | async">
+            <mat-list-item
+              class="sidenav-item"
+              routerLink="chat-detail"
+              [queryParams]="{ id: chatRoom.id }"
+            >
+              {{ chatRoom.name }}
+            </mat-list-item>
+            <mat-divider></mat-divider>
+          </div>
+        </mat-nav-list>
+      </mat-sidenav>
+      <mat-sidenav-content>
+        <router-outlet></router-outlet>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
 </div>

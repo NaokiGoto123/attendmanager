@@ -9,7 +9,7 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
 
-    <div *ngIf="ifadmin | async">
+    <div *ngIf="ifadmin">
       <a routerLink="/create-group" [queryParams]="{ id: id }">
         <button class="edit-button" mat-icon-button color="primary">
           <mat-icon>edit</mat-icon>
@@ -24,50 +24,104 @@
   />
 
   <div class="group-details-container">
-    <h1 class="name">{{ name | async }}</h1>
+    <h1 class="name">{{ name }}</h1>
 
     <h1>{{ description | async }}</h1>
 
-    <h1>Created at {{ createddate | async }}</h1>
-
     <h1>
-      Created by <span class="creater">{{ creater | async }}</span>
+      Created by <span class="creater">{{ creater | async }}</span> on
+      {{ createddate | date: 'yyyy/MM/dd' }}
     </h1>
 
-    <div class="admins" *ngFor="let admin of admins | async">
+    <div class="admins">
       <h1>Admins</h1>
       <ul>
-        <li>
-          <h1 class="admin">{{ admin }}</h1>
-        </li>
+        <div *ngFor="let admin of admins | async">
+          <div *ngIf="admin.uid === uid">
+            <li>
+              <h1 class="member" routerLink="/account">
+                {{ admin.displayName }}
+              </h1>
+            </li>
+          </div>
+          <div *ngIf="admin.uid !== uid">
+            <li>
+              <h1
+                class="member"
+                [routerLink]="['/account']"
+                [queryParams]="{ id: admin.uid }"
+              >
+                {{ admin.displayName }}
+              </h1>
+            </li>
+          </div>
+        </div>
       </ul>
     </div>
 
-    <div class="members" *ngFor="let member of members | async">
+    <div class="members">
       <h1>Members</h1>
       <ul>
-        <li>
-          <h1 class="member">{{ member }}</h1>
-        </li>
+        <div *ngFor="let member of members | async">
+          <div *ngIf="member.uid === uid">
+            <li>
+              <h1 class="member" routerLink="/account">
+                {{ member.displayName }}
+              </h1>
+            </li>
+          </div>
+          <div *ngIf="member.uid !== uid">
+            <li>
+              <h1
+                class="member"
+                [routerLink]="['/account']"
+                [queryParams]="{ id: member.uid }"
+              >
+                {{ member.displayName }}
+              </h1>
+            </li>
+          </div>
+        </div>
       </ul>
     </div>
 
-    <a routerLink="/"
-      ><span>
-        <h1>Events</h1>
-      </span></a
-    >
+    <div class="buttons">
+      <button mat-raised-button class="invite-button" color="primary">
+        Invite people
+      </button>
 
-    <button mat-fab aria-label="Invite people">
-      <mat-icon>people</mat-icon>
-    </button>
+      <button
+        mat-raised-button
+        class="calendar-button"
+        routerLink="/"
+        color="primary"
+      >
+        Check events
+      </button>
 
-    <button mat-fab aria-label="See events">
-      <mat-icon>calendar_today</mat-icon>
-    </button>
-
-    <button mat-fab aria-label="Chat">
-      <mat-icon>chat</mat-icon>
-    </button>
+      <div *ngIf="ifmember">
+        <div *ngIf="!ifChatRoom && ifadmin">
+          <button
+            mat-raised-button
+            class="chat-button"
+            (click)="createChatRoom()"
+            color="primary"
+          >
+            Create chat room
+          </button>
+        </div>
+        <div *ngIf="ifChatRoom">
+          <button
+            mat-raised-button
+            class="chat-button"
+            routerLink="/chat/chat-detail"
+            [queryParams]="{ id: chatRoomId }"
+            color="primary"
+          >
+            Go to chat room
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Event } from '../interfaces/event';
+import { firestore } from 'firebase';
 @Injectable({
   providedIn: 'root',
 })
@@ -89,10 +90,24 @@ export class GroupService {
     await this.db.doc(`groups/${group.groupid}`).set(group, { merge: true });
   }
 
+  // delete chatroom at the same time
   async deleteGroup(groupid: string) {
     await this.db
       .doc(`groups/${groupid}`)
       .delete()
+      .then(() => {
+        this.db
+          .doc(`groups/${groupid}`)
+          .valueChanges()
+          .pipe(
+            map((group: Group) => {
+              return group.chatRoomId;
+            })
+          )
+          .subscribe((chatRoomId: string) => {
+            this.db.doc(`chatRooms/${chatRoomId}`).delete();
+          });
+      })
       .then(() => {
         console.log(groupid);
         this.db
@@ -103,6 +118,31 @@ export class GroupService {
               this.db.doc<Event>(`events/${event.eventid}`).delete();
             });
           });
+      });
+  }
+
+  getPublicGroups(): Observable<Group[]> {
+    return this.db
+      .collection<Group>(`groups`, (ref) => ref.where('private', '==', false))
+      .valueChanges();
+  }
+
+  joinGroup(uid: string, group: Group) {
+    this.db
+      .doc(`groups/${group.groupid}`)
+      .update({ members: firestore.FieldValue.arrayUnion(uid) });
+  }
+
+  leaveGroup(uid: string, group: Group) {
+    this.db
+      .doc(`groups/${group.groupid}`)
+      .update({ members: firestore.FieldValue.arrayRemove(uid) })
+      .then(() => {
+        if (group.admin.includes(uid)) {
+          this.db
+            .doc(`groups/${group.groupid}`)
+            .update({ admin: firestore.FieldValue.arrayRemove(uid) });
+        }
       });
   }
 }

@@ -10,6 +10,7 @@ export interface Group {
   admin: string[]; // グループ管理者（達）
   members: string[]; // グループメンバー（達）
   eventIDs: string[]; // グループ内で作成されたイベントID　（複数）
+  chatRoomId: string; // チャットルームID
   private: boolean;
   searchable: boolean;
 }

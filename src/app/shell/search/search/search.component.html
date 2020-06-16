@@ -16,25 +16,63 @@
 </div>
 <div class="mat-tabs-container">
   <mat-tab-group mat-align-tabs="start">
-    <mat-tab label="Events">
-      <div *ngIf="nodata; else elseText">
-        <div class="nodata-container">
-          <mat-icon class="nodata-icon" [inline]="true">cloud_queue</mat-icon>
-          <h1 class="nodata-text">There is currently no events.</h1>
-        </div>
-      </div>
+    <mat-tab label="Events"> </mat-tab>
 
-      <ng-template #elseText>
-        <div class="event-cards-container">
-          <div *ngFor="let event of events | async">
-            <app-event-card [event]="event"></app-event-card>
+    <mat-tab label="Groups">
+      <div class="groups-container">
+        <div class="create-group-grid-container">
+          <div class="create-group-grid">
+            <h1>Create new group</h1>
+            <button mat-fab routerLink="/create-group" color="none">
+              <mat-icon>add</mat-icon>
+            </button>
           </div>
         </div>
-      </ng-template>
+        <div *ngFor="let publicGroup of publicGroups">
+          <div class="group">
+            <img
+              class="group-picture"
+              src="/assets/background/{{ publicGroup.grouppicture }}.jpg"
+            />
+            <h1 class="group-name">{{ publicGroup.name }}</h1>
+            <h2 class="group-description">{{ publicGroup.description }}</h2>
+            <div class="join-button-container">
+              <div *ngIf="publicGroup.members.includes(uid)">
+                <button
+                  mat-raised-button
+                  color="accent"
+                  (click)="leaveGroup(publicGroup)"
+                >
+                  Joining
+                </button>
+              </div>
+              <div *ngIf="!publicGroup.members.includes(uid)">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="joinGroup(publicGroup)"
+                >
+                  Join
+                </button>
+              </div>
+            </div>
+            <div class="group-details-button-container">
+              <button
+                mat-icon-button
+                color="primary"
+                aria-label="group description"
+                class="group-details-button"
+                [routerLink]="['/group-details']"
+                [queryParams]="{ id: publicGroup.groupid }"
+              >
+                <mat-icon>fullscreen</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </mat-tab>
-    <mat-tab label="Groups">
-      Projects
-    </mat-tab>
+
     <mat-tab label="Accounts">
       Accounts
     </mat-tab>

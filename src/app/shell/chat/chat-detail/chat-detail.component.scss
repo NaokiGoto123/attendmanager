@@ -1,0 +1,138 @@
+.content-container {
+  height: 100%;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+  top: 0;
+  right: 0;
+}
+
+mat-spinner {
+  margin: 35% auto auto auto;
+}
+
+mat-toolbar {
+  width: 100%;
+  position: sticky;
+  z-index: 1000;
+  top: 0;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.messages {
+  position: relative;
+  margin: 30px 30px 100px 30px;
+  overflow: auto;
+}
+
+// messages start
+.message {
+  .message-content {
+    display: flex;
+    align-items: flex-end;
+    height: 45px;
+    margin: 0 0 20px 0;
+  }
+
+  .account-picture {
+    display: inline-block;
+    position: relative;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: red;
+  }
+
+  .texts {
+    display: inline-block;
+    position: relative;
+    padding: 13px 22px 13px 22px;
+    border-radius: 5px;
+    background-color: #e6e6e6;
+  }
+
+  .sendAt {
+    font-size: 10px;
+  }
+}
+
+.other-message {
+  display: flex;
+  justify-content: flex-start;
+
+  .account-picture {
+    margin: 0 10px 0 0;
+    order: 0;
+  }
+
+  .texts {
+    margin: 0 10px 0 0;
+    order: 1;
+  }
+
+  .sendAt {
+    margin: 0 0 0 0;
+    order: 2;
+  }
+}
+
+.my-message {
+  display: flex;
+  justify-content: flex-end;
+
+  .account-picture {
+    margin: 0 0 0 0;
+    order: 2;
+  }
+
+  .texts {
+    margin: 0 10px 0 0;
+    order: 1;
+  }
+
+  .sendAt {
+    margin: 0 10px 0 0;
+    order: 0;
+  }
+}
+
+.my-message + .my-message {
+  .account-picture {
+    display: none;
+  }
+  .texts {
+    margin: 0 55px 0 0;
+  }
+}
+
+.other-message + .other-message {
+  .account-picture {
+    display: none;
+  }
+  .texts {
+    margin: 0 10px 0 55px;
+  }
+}
+// messages end
+
+.no-message-text {
+  text-align: center;
+  margin: 35% 0 0 0;
+}
+
+.message-field-container {
+  width: calc(100% - 708px);
+  position: fixed;
+  z-index: 1000;
+  bottom: 0;
+  text-align: center;
+  border-top: solid 0.3px rgba(0, 0, 0, 0.25);
+  background-color: white;
+}
+
+.message-field {
+  width: 80%;
+}

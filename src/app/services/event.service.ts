@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { GroupService } from './group.service';
 import { map, switchMap } from 'rxjs/operators';
-import { Observable, combineLatest, of, pipe } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { firestore } from 'firebase';
 import { Group } from '../interfaces/group';
 @Injectable({
@@ -91,7 +91,7 @@ export class EventService {
       }),
       // 二次元配列をフラットな配列にして返却
       map((eventsList: Event[][]) => {
-        const results = [].concat(...eventsList);
+        const results: Event[] = [].concat(...eventsList);
         // debug
         console.log(results);
         return results;
@@ -140,5 +140,19 @@ export class EventService {
     await this.db
       .doc(`events/${eventid}`)
       .update({ attendingmembers: firestore.FieldValue.arrayRemove(uid) });
+  }
+
+  getPublicEvents(): Observable<Event[]> {
+    return this.db
+      .collection<Event>(`events`, (ref) => ref.where('private', '==', false))
+      .valueChanges();
+  }
+
+  getAttendingEvents(uid: string): Observable<Event[]> {
+    return this.db
+      .collection<Event>(`events`, (ref) =>
+        ref.where('attendingmembers', 'array-contains', uid)
+      )
+      .valueChanges();
   }
 }

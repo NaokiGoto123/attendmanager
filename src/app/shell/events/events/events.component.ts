@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from 'src/app/interfaces/event';
+import { User } from 'src/app/interfaces/user';
 import { EventService } from 'src/app/services/event.service';
 import { Observable, combineLatest } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
@@ -27,7 +28,7 @@ export class EventsComponent implements OnInit {
 
   givenEvent: Event;
 
-  createrName: string;
+  creater: User;
 
   groupName: string;
 
@@ -37,9 +38,9 @@ export class EventsComponent implements OnInit {
 
   mouseOver() {
     this.authService
-      .getName(this.givenEvent.creater)
-      .subscribe((createrName: string) => {
-        this.createrName = createrName;
+      .getUser(this.givenEvent.creater)
+      .subscribe((creater: User) => {
+        this.creater = creater;
       });
 
     this.groupService

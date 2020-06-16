@@ -1,20 +1,24 @@
-.list-container {
-  height: 100%;
-  width: 40%;
-  position: absolute;
-  z-index: 1;
-  top: 0;
-  overflow-x: hidden;
-  left: 0;
-  border-right: solid 0.3px rgba(0, 0, 0, 0.5);
+.no-chatrooms {
+  text-align: center;
+  margin: 20% 0 0 0;
 }
 
-.content-container {
-  height: 100%;
-  width: 60%;
+.sidenav-container {
   position: absolute;
-  z-index: 1;
   top: 0;
-  overflow-x: hidden;
+  bottom: 0;
+  left: 0;
   right: 0;
+
+  mat-nav-list {
+    padding: 0;
+  }
+
+  .sidenav-item {
+    height: 64px;
+  }
+
+  .side-menu {
+    width: 450px;
+  }
 }

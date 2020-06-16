@@ -24,6 +24,10 @@ export class EventCardComponent implements OnInit {
 
   grouppicture: number;
 
+  date: Date;
+
+  ifPast: boolean;
+
   constructor(
     private authService: AuthService,
     private groupService: GroupService,
@@ -36,6 +40,16 @@ export class EventCardComponent implements OnInit {
     this.groupName = this.groupService.getGroupName(this.event.groupid);
 
     this.eventid = this.event.eventid;
+
+    this.date = this.event.date.toDate();
+
+    const now = new Date();
+
+    if (this.date > now) {
+      this.ifPast = false;
+    } else {
+      this.ifPast = true;
+    }
 
     this.groupService
       .getGrouppicture(this.event.groupid)

@@ -59,8 +59,10 @@ export class AuthService {
     const credential = await this.afAuth.signInWithPopup(provider);
     return this.updateUserData({
       ...credential.user,
-      groups: [],
-      events: [],
+      description: '',
+      showGroups: true,
+      showAttendingEvents: true,
+      showAttendedEvents: true,
     });
   }
 
@@ -74,22 +76,24 @@ export class AuthService {
     displayName,
     email,
     photoURL,
-    groups,
-    events,
+    description,
+    showGroups,
+    showAttendingEvents,
+    showAttendedEvents,
   }: User) {
     const userRef: AngularFirestoreDocument<User> = this.afs.doc(
       `users/${uid}`
     );
-
-    console.log(uid);
 
     const data = {
       uid,
       displayName,
       email,
       photoURL,
-      groups,
-      events,
+      description,
+      showGroups,
+      showAttendingEvents,
+      showAttendedEvents,
     };
 
     return userRef
@@ -98,7 +102,7 @@ export class AuthService {
       .then(() => this.snackbar.open('signed in', null, { duration: 2000 }));
   }
 
-  public getName(uid: string): Observable<string> {
+  getName(uid: string): Observable<string> {
     return this.afs
       .doc<User>(`users/${uid}`)
       .valueChanges()
@@ -108,4 +112,23 @@ export class AuthService {
         })
       );
   }
+
+  getUser(uid: string): Observable<User> {
+    return this.afs.doc<User>(`users/${uid}`).valueChanges();
+  }
+
+  updateUser(user: User) {
+    this.afs
+      .doc<User>(`users/${user.uid}`)
+      .set(user, { merge: true })
+      .then(() =>
+        this.snackbar.open('Successfully updated settings', null, {
+          duration: 2000,
+        })
+      );
+  }
+
+  // deleteUser(uid: string) {
+
+  // }
 }

@@ -9,7 +9,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap, map } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 @Component({
   selector: 'app-create-event',
   templateUrl: './create-event.component.html',
@@ -25,6 +24,8 @@ export class CreateEventComponent implements OnInit {
   eventid: string;
 
   groupid: string;
+
+  attendingmembers: string[];
 
   form = this.fb.group({
     groupid: ['', [Validators.required]],
@@ -64,6 +65,7 @@ export class CreateEventComponent implements OnInit {
           this.ifTarget = true;
           this.groupid = event.groupid;
           this.eventid = event.eventid;
+          this.attendingmembers = event.attendingmembers;
           this.form.patchValue({
             ...event,
             date: event.date.toDate(),
@@ -120,7 +122,7 @@ export class CreateEventComponent implements OnInit {
         title: this.form.value.title,
         description: this.form.value.description,
         memberlimit: this.form.value.memberlimit,
-        attendingmembers: [],
+        attendingmembers: this.attendingmembers,
         date: this.form.value.date,
         time: this.form.value.time,
         location: this.form.value.location,
