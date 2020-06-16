@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   declarations: [CreateEventComponent],
@@ -30,6 +31,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatNativeDateModule,
     MatSelectModule,
     MatSlideToggleModule,
+    MatSliderModule,
   ],
 })
 export class CreateEventModule {}

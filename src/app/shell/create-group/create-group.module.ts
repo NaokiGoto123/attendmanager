@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SwiperModule } from 'ngx-swiper-wrapper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
 
 @NgModule({
   declarations: [CreateGroupComponent],
@@ -26,6 +27,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatSnackBarModule,
     SwiperModule,
     MatSlideToggleModule,
+    MatSliderModule,
   ],
 })
 export class CreateGroupModule {}

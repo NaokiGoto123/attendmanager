@@ -121,7 +121,7 @@
               <h1 class="group-name">{{ myGroup.name }}</h1>
               <h2 class="group-description">{{ myGroup.description }}</h2>
               <div class="join-button-container">
-                <div *ngIf="myGroup.members.includes(myUid)">
+                <div *ngIf="myGroup.memberIds.includes(myUid)">
                   <button
                     mat-raised-button
                     color="accent"
@@ -130,7 +130,7 @@
                     Joining
                   </button>
                 </div>
-                <div *ngIf="!myGroup.members.includes(myUid)">
+                <div *ngIf="!myGroup.memberIds.includes(myUid)">
                   <button
                     mat-raised-button
                     color="primary"
@@ -364,7 +364,7 @@
                     {{ targetGroup.description }}
                   </h2>
                   <div class="join-button-container">
-                    <div *ngIf="targetGroup.members.includes(myUid)">
+                    <div *ngIf="targetGroup.memberIds.includes(myUid)">
                       <button
                         mat-raised-button
                         color="accent"
@@ -373,7 +373,7 @@
                         Joining
                       </button>
                     </div>
-                    <div *ngIf="!targetGroup.members.includes(myUid)">
+                    <div *ngIf="!targetGroup.memberIds.includes(myUid)">
                       <button
                         mat-raised-button
                         color="primary"

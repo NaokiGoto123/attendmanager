@@ -27,6 +27,10 @@ export class CreateEventComponent implements OnInit {
 
   attendingmembers: string[];
 
+  admingroups$: Observable<Group[]> = this.groupService.getAdminGroup(
+    this.authService.uid
+  );
+
   form = this.fb.group({
     groupid: ['', [Validators.required]],
     title: ['', [Validators.required]],
@@ -35,13 +39,17 @@ export class CreateEventComponent implements OnInit {
     date: [null, [Validators.required]],
     time: ['', [Validators.required]],
     location: ['', [Validators.required]],
+    price: [0],
     private: [false],
     searchable: [false],
   });
 
-  admingroups$: Observable<Group[]> = this.groupService.getAdminGroup(
-    this.authService.uid
-  );
+  formatLabel(value: number) {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+    return value;
+  }
 
   constructor(
     private router: Router,
@@ -65,7 +73,7 @@ export class CreateEventComponent implements OnInit {
           this.ifTarget = true;
           this.groupid = event.groupid;
           this.eventid = event.eventid;
-          this.attendingmembers = event.attendingmembers;
+          this.attendingmembers = event.attendingMemberIds;
           this.form.patchValue({
             ...event,
             date: event.date.toDate(),
@@ -101,13 +109,14 @@ export class CreateEventComponent implements OnInit {
         eventid: this.db.createId(),
         title: this.form.value.title,
         description: this.form.value.description,
-        creater: this.authService.uid,
+        createrId: this.authService.uid,
         memberlimit: this.form.value.memberlimit,
-        attendingmembers: [],
+        attendingMemberIds: [],
         date: this.form.value.date,
         time: this.form.value.time,
         location: this.form.value.location,
         groupid: this.form.value.groupid,
+        price: this.form.value.price,
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })
@@ -122,11 +131,12 @@ export class CreateEventComponent implements OnInit {
         title: this.form.value.title,
         description: this.form.value.description,
         memberlimit: this.form.value.memberlimit,
-        attendingmembers: this.attendingmembers,
+        attendingMemberIds: this.attendingmembers,
         date: this.form.value.date,
         time: this.form.value.time,
         location: this.form.value.location,
         groupid: this.form.value.groupid,
+        price: this.form.value.price,
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })

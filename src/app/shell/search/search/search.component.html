@@ -37,7 +37,7 @@
             <h1 class="group-name">{{ publicGroup.name }}</h1>
             <h2 class="group-description">{{ publicGroup.description }}</h2>
             <div class="join-button-container">
-              <div *ngIf="publicGroup.members.includes(uid)">
+              <div *ngIf="publicGroup.memberIds.includes(uid)">
                 <button
                   mat-raised-button
                   color="accent"
@@ -46,7 +46,7 @@
                   Joining
                 </button>
               </div>
-              <div *ngIf="!publicGroup.members.includes(uid)">
+              <div *ngIf="!publicGroup.memberIds.includes(uid)">
                 <button
                   mat-raised-button
                   color="primary"

@@ -32,6 +32,18 @@
       <input matInput formControlName="description" type="text" />
     </mat-form-field>
 
+    <mat-slider
+      class="create-group-field"
+      thumbLabel
+      [displayWith]="formatLabel"
+      tickInterval="1000"
+      step="1000"
+      formControlName="price"
+      min="0"
+      max="50000"
+    >
+    </mat-slider>
+
     <mat-slide-toggle class="create-group-field" formControlName="private"
       >Private: {{ form.value.private }}</mat-slide-toggle
     >

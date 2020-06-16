@@ -95,6 +95,18 @@
         />
       </mat-form-field>
 
+      <mat-slider
+        class="create-event-field"
+        thumbLabel
+        [displayWith]="formatLabel"
+        tickInterval="1000"
+        step="1000"
+        formControlName="price"
+        min="0"
+        max="50000"
+      >
+      </mat-slider>
+
       <mat-slide-toggle class="create-event-field" formControlName="private"
         >Private: {{ form.value.private }}</mat-slide-toggle
       >

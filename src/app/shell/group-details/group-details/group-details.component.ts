@@ -2,11 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { EventService } from 'src/app/services/event.service';
 import { Observable, combineLatest } from 'rxjs';
 import { Group } from 'src/app/interfaces/group';
 import { map, switchMap } from 'rxjs/operators';
-import { Event } from 'src/app/interfaces/event';
 import { Location } from '@angular/common';
 import { ChatService } from 'src/app/services/chat.service';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -32,6 +30,7 @@ export class GroupDetailsComponent implements OnInit {
   grouppicture: Observable<number>;
   createddate: Date;
   creater: Observable<string>;
+  price: number;
   admins: Observable<User[]>;
   members: Observable<User[]>;
   chatRoomId: string;
@@ -42,7 +41,6 @@ export class GroupDetailsComponent implements OnInit {
     private db: AngularFirestore,
     private groupService: GroupService,
     private authService: AuthService,
-    private eventService: EventService,
     private chatService: ChatService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
@@ -88,16 +86,20 @@ export class GroupDetailsComponent implements OnInit {
       this.creater = this.groupService.getGroupinfo(this.id).pipe(
         switchMap(
           (group: Group): Observable<string> => {
-            return this.authService.getName(group.creater);
+            return this.authService.getName(group.createrId);
           }
         )
       );
 
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        if (group.admin.length) {
+        this.price = group.price;
+      });
+
+      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
+        if (group.adminIds.length) {
           this.admins = combineLatest(
-            group.admin.map((admin: string) => {
-              const user: Observable<User> = this.authService.getUser(admin);
+            group.adminIds.map((adminId: string) => {
+              const user: Observable<User> = this.authService.getUser(adminId);
               return user;
             })
           );
@@ -105,15 +107,15 @@ export class GroupDetailsComponent implements OnInit {
       });
 
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        if (group.members.length) {
+        if (group.memberIds.length) {
           this.members = combineLatest(
-            group.members.map((memberId: string) => {
+            group.memberIds.map((memberId: string) => {
               const user: Observable<User> = this.authService.getUser(memberId);
               return user;
             })
           );
 
-          if (group.members.includes(this.uid)) {
+          if (group.memberIds.includes(this.uid)) {
             this.ifmember = true;
           } else {
             this.ifmember = false;

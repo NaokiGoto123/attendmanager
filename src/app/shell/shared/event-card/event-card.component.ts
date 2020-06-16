@@ -24,6 +24,10 @@ export class EventCardComponent implements OnInit {
 
   grouppicture: number;
 
+  price: number;
+
+  ifFree: boolean;
+
   date: Date;
 
   ifPast: boolean;
@@ -35,13 +39,21 @@ export class EventCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.createrName = this.authService.getName(this.event.creater);
+    this.createrName = this.authService.getName(this.event.createrId);
 
     this.groupName = this.groupService.getGroupName(this.event.groupid);
 
     this.eventid = this.event.eventid;
 
     this.date = this.event.date.toDate();
+
+    this.price = this.event.price;
+
+    if (this.price > 0) {
+      this.ifFree = false;
+    } else {
+      this.ifFree = true;
+    }
 
     const now = new Date();
 
@@ -62,7 +74,7 @@ export class EventCardComponent implements OnInit {
       this.event.groupid
     );
 
-    if (this.event.attendingmembers.includes(this.authService.uid)) {
+    if (this.event.attendingMemberIds.includes(this.authService.uid)) {
       this.attended = true;
     } else {
       this.attended = false;

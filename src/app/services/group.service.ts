@@ -38,7 +38,7 @@ export class GroupService {
   getMyGroup(uid: string): Observable<Group[]> {
     return this.db
       .collection<Group>(`groups`, (ref) =>
-        ref.where(`members`, 'array-contains', uid)
+        ref.where(`memberIds`, 'array-contains', uid)
       )
       .valueChanges();
   }
@@ -46,7 +46,7 @@ export class GroupService {
   getAdminGroup(uid: string): Observable<Group[]> {
     return this.db
       .collection<Group>(`groups`, (ref) =>
-        ref.where(`admin`, 'array-contains', uid)
+        ref.where(`adminIds`, 'array-contains', uid)
       )
       .valueChanges();
   }
@@ -61,7 +61,7 @@ export class GroupService {
       .valueChanges()
       .pipe(
         map((group: Group) => {
-          if (group.admin.includes(uid)) {
+          if (group.adminIds.includes(uid)) {
             return true;
           } else {
             return false;
@@ -84,7 +84,7 @@ export class GroupService {
   async updateGroup(
     group: Omit<
       Group,
-      'createddate' | 'creater' | 'admin' | 'members' | 'eventIDs'
+      'createddate' | 'createrId' | 'adminIds' | 'memberIds' | 'eventIds'
     >
   ) {
     await this.db.doc(`groups/${group.groupid}`).set(group, { merge: true });
@@ -138,7 +138,7 @@ export class GroupService {
       .doc(`groups/${group.groupid}`)
       .update({ members: firestore.FieldValue.arrayRemove(uid) })
       .then(() => {
-        if (group.admin.includes(uid)) {
+        if (group.adminIds.includes(uid)) {
           this.db
             .doc(`groups/${group.groupid}`)
             .update({ admin: firestore.FieldValue.arrayRemove(uid) });

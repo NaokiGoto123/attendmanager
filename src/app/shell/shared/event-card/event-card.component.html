@@ -16,19 +16,31 @@
     </div>
 
     <div *ngIf="!ifPast">
-      <div [ngSwitch]="attended">
+      <div *ngIf="!attended">
+        <div *ngIf="ifFree">
+          <button
+            class="submit-button"
+            mat-raised-button
+            color="primary"
+            (click)="attendEvent()"
+          >
+            ATTEND
+          </button>
+        </div>
+        <div *ngIf="!ifFree">
+          <button
+            class="submit-button"
+            mat-raised-button
+            color="primary"
+            (click)="attendEvent()"
+          >
+            Pay {{ price }} to attend
+          </button>
+        </div>
+      </div>
+      <div *ngIf="attended">
         <button
           class="submit-button"
-          *ngSwitchCase="false"
-          mat-raised-button
-          color="primary"
-          (click)="attendEvent()"
-        >
-          ATTEND
-        </button>
-        <button
-          class="submit-button"
-          *ngSwitchCase="true"
           mat-raised-button
           color="warn"
           (click)="leaveEvent()"

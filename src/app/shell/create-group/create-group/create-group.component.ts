@@ -22,6 +22,8 @@ export class CreateGroupComponent implements OnInit {
 
   groupid: string;
 
+  waitingMemberIds: string[];
+
   imageIds = [...Array(22)].map((_, index) => index);
 
   config: SwiperConfigInterface = {
@@ -40,9 +42,21 @@ export class CreateGroupComponent implements OnInit {
   form = this.fb.group({
     name: ['', [Validators.required]],
     description: [''],
+    price: [0],
     private: [false],
     searchable: [false],
   });
+
+  formatLabel(value: number) {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+    return value;
+  }
+
+  show() {
+    console.log(this.form.value);
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -63,6 +77,7 @@ export class CreateGroupComponent implements OnInit {
         if (group) {
           this.ifTarget = true;
           this.groupid = group.groupid;
+          this.waitingMemberIds = group.waitingMemberIds;
           this.form.patchValue(group);
         }
       });
@@ -86,11 +101,13 @@ export class CreateGroupComponent implements OnInit {
         description: this.form.value.description,
         grouppicture: this.selectedImageId,
         createddate: firestore.Timestamp.now(),
-        creater: this.authService.uid,
-        admin: [this.authService.uid],
-        members: [this.authService.uid],
-        eventIDs: [],
+        createrId: this.authService.uid,
+        adminIds: [this.authService.uid],
+        memberIds: [this.authService.uid],
+        eventIds: [],
         chatRoomId: null,
+        price: this.form.value.price,
+        waitingMemberIds: [],
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })
@@ -108,6 +125,8 @@ export class CreateGroupComponent implements OnInit {
         description: this.form.value.description,
         grouppicture: this.selectedImageId,
         chatRoomId: null,
+        price: this.form.value.price,
+        waitingMemberIds: this.waitingMemberIds,
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })

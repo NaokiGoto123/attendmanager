@@ -7,7 +7,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { Group } from 'src/app/interfaces/group';
 import { GroupService } from 'src/app/services/group.service';
 import { Router } from '@angular/router';
-import { switchMap, map } from 'rxjs/operators';
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
@@ -38,7 +37,7 @@ export class EventsComponent implements OnInit {
 
   mouseOver() {
     this.authService
-      .getUser(this.givenEvent.creater)
+      .getUser(this.givenEvent.createrId)
       .subscribe((creater: User) => {
         this.creater = creater;
       });
@@ -50,12 +49,12 @@ export class EventsComponent implements OnInit {
       });
 
     const result: Observable<string>[] = [];
-    this.givenEvent.attendingmembers.forEach((attndingmember) => {
-      result.push(this.authService.getName(attndingmember));
+    this.givenEvent.attendingMemberIds.forEach((attndingmemberId) => {
+      result.push(this.authService.getName(attndingmemberId));
       this.attendingmembersNames = combineLatest(result);
     });
 
-    if (this.givenEvent.attendingmembers.length) {
+    if (this.givenEvent.attendingMemberIds.length) {
       this.ifAttendingmembers = true;
     } else {
       this.ifAttendingmembers = false;

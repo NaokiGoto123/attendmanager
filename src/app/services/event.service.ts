@@ -15,7 +15,6 @@ export class EventService {
   constructor(
     private db: AngularFirestore,
     private groupService: GroupService,
-    private router: Router,
     private snackbar: MatSnackBar
   ) {}
 
@@ -27,7 +26,7 @@ export class EventService {
       .then(() =>
         this.db
           .doc(`groups/${event.groupid}`)
-          .update({ eventIDs: firestore.FieldValue.arrayUnion(event.eventid) })
+          .update({ eventIds: firestore.FieldValue.arrayUnion(event.eventid) })
       )
       .then(() =>
         this.snackbar.open('Successfully created the event', null, {
@@ -46,7 +45,7 @@ export class EventService {
       .valueChanges()
       .pipe(
         map((group: Group) => {
-          return group.eventIDs;
+          return group.eventIds;
         }),
         switchMap(
           (eventids: string[]): Observable<Event[]> => {
@@ -63,43 +62,35 @@ export class EventService {
   }
 
   getEvents(uid: string): Observable<Event[]> {
-    // GroupリストのObservable
     const groups$: Observable<Group[]> = this.groupService.getMyGroup(uid);
     return groups$.pipe(
-      // Groupリストを元に別のObservableを返却する
       switchMap((groups: Group[]) => {
-        // Groupリストの中のGroupをイベントIDリストに差し替えている。よってイベントIDリストのリストが生まれている
-        const eventIdsList: string[][] = groups.map((group) => group.eventIDs);
+        const eventIdsList: string[][] = groups.map((group) => group.eventIds);
         const eventListObs$: Observable<Event[]>[] = eventIdsList.map(
           (eventIds: string[]) => {
             if (eventIds?.length) {
-              // イベントIDリストをイベントのObservableリストに差し替えている
               const events$: Observable<
                 Event
               >[] = eventIds.map((eventId: string) =>
                 this.db.doc<Event>(`events/${eventId}`).valueChanges()
               );
-              // イベントのObservableリストをcombinaLatestで中身を取り出している
-              return combineLatest(events$); // これはイベントIDリストを含むObservableである
+              return combineLatest(events$);
             } else {
               return of([]);
             }
           }
         );
-        // eventListObs$はObservabeのリストなのでcombineLatestで解決する
         return combineLatest(eventListObs$);
       }),
-      // 二次元配列をフラットな配列にして返却
       map((eventsList: Event[][]) => {
         const results: Event[] = [].concat(...eventsList);
-        // debug
         console.log(results);
         return results;
       })
     );
   }
 
-  async updateEvent(uid: string, event: Omit<Event, 'creater'>) {
+  async updateEvent(uid: string, event: Omit<Event, 'createrId'>) {
     await this.db
       .doc(`events/${event.eventid}`)
       .set(event, { merge: true })
@@ -114,14 +105,10 @@ export class EventService {
     await this.db
       .doc(`events/${eventid}`)
       .delete()
-      //   this.db
-      //     .doc(`organizations/${event.groupid}`)
-      //     .update({ eventIDs: firestore.FieldValue.arrayUnion(event.eventid) })
-      // )
       .then(() =>
         this.db
           .doc(`groups/${groupid}`)
-          .update({ eventIDs: firestore.FieldValue.arrayRemove(eventid) })
+          .update({ eventIds: firestore.FieldValue.arrayRemove(eventid) })
       )
       .then(() =>
         this.snackbar.open('Successfully deleted the event', null, {
@@ -133,13 +120,13 @@ export class EventService {
   async attendEvent(uid: string, eventid: string) {
     await this.db
       .doc(`events/${eventid}`)
-      .update({ attendingmembers: firestore.FieldValue.arrayUnion(uid) });
+      .update({ attendingMemberIds: firestore.FieldValue.arrayUnion(uid) });
   }
 
   async leaveEvent(uid: string, eventid: string) {
     await this.db
       .doc(`events/${eventid}`)
-      .update({ attendingmembers: firestore.FieldValue.arrayRemove(uid) });
+      .update({ attendingMemberIds: firestore.FieldValue.arrayRemove(uid) });
   }
 
   getPublicEvents(): Observable<Event[]> {
@@ -151,7 +138,7 @@ export class EventService {
   getAttendingEvents(uid: string): Observable<Event[]> {
     return this.db
       .collection<Event>(`events`, (ref) =>
-        ref.where('attendingmembers', 'array-contains', uid)
+        ref.where('attendingMemberIds', 'array-contains', uid)
       )
       .valueChanges();
   }

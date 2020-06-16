@@ -291,7 +291,7 @@ export class AccountComponent implements OnInit {
 
   AttendingMouseOver() {
     this.authService
-      .getUser(this.givenAttendingEvent.creater)
+      .getUser(this.givenAttendingEvent.createrId)
       .subscribe((creater: User) => {
         this.AttendingCreater = creater;
       });
@@ -303,7 +303,7 @@ export class AccountComponent implements OnInit {
       });
 
     const AttendingAttendingmembersNames: string[] = [];
-    this.givenAttendingEvent.attendingmembers.map((attendingmemberId) => {
+    this.givenAttendingEvent.attendingMemberIds.map((attendingmemberId) => {
       let attendingmemberName = '';
       this.authService
         .getName(attendingmemberId)
@@ -314,7 +314,7 @@ export class AccountComponent implements OnInit {
     });
     this.AttendingAttendingmembersNames = AttendingAttendingmembersNames;
 
-    if (this.givenAttendingEvent.attendingmembers.length) {
+    if (this.givenAttendingEvent.attendingMemberIds.length) {
       this.AttendingIfAttendingmembers = true;
     } else {
       this.AttendingIfAttendingmembers = false;
@@ -323,7 +323,7 @@ export class AccountComponent implements OnInit {
 
   AttendedMouseOver() {
     this.authService
-      .getUser(this.givenAttendedEvent.creater)
+      .getUser(this.givenAttendedEvent.createrId)
       .subscribe((creater: User) => {
         this.AttendedCreater = creater;
         console.log(creater);
@@ -336,7 +336,7 @@ export class AccountComponent implements OnInit {
       });
 
     const AttendedAttendingmembersNames: string[] = [];
-    this.givenAttendedEvent.attendingmembers.forEach((attendingmember) => {
+    this.givenAttendedEvent.attendingMemberIds.forEach((attendingmember) => {
       let attendingmemberName = '';
       this.authService
         .getName(attendingmember)
@@ -347,7 +347,7 @@ export class AccountComponent implements OnInit {
     });
     this.AttendedAttendingmembersNames = AttendedAttendingmembersNames;
 
-    if (this.givenAttendedEvent.attendingmembers.length) {
+    if (this.givenAttendedEvent.attendingMemberIds.length) {
       this.AttendedIfAttendingmembers = true;
     } else {
       this.AttendedIfAttendingmembers = false;
