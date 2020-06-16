@@ -13,7 +13,7 @@ export class GroupService {
   constructor(private db: AngularFirestore, private snackbar: MatSnackBar) {}
 
   async createGroup(group: Group) {
-    const id = group.groupid;
+    const id = group.id;
     await this.db
       .doc(`groups/${id}`)
       .set(group)
@@ -87,7 +87,7 @@ export class GroupService {
       'createddate' | 'createrId' | 'adminIds' | 'memberIds' | 'eventIds'
     >
   ) {
-    await this.db.doc(`groups/${group.groupid}`).set(group, { merge: true });
+    await this.db.doc(`groups/${group.id}`).set(group, { merge: true });
   }
 
   // delete chatroom at the same time
@@ -115,7 +115,7 @@ export class GroupService {
           .valueChanges()
           .subscribe((events: Event[]) => {
             events.forEach((event) => {
-              this.db.doc<Event>(`events/${event.eventid}`).delete();
+              this.db.doc<Event>(`events/${event.id}`).delete();
             });
           });
       });
@@ -135,20 +135,67 @@ export class GroupService {
 
   joinGroup(uid: string, group: Group) {
     this.db
-      .doc(`groups/${group.groupid}`)
-      .update({ members: firestore.FieldValue.arrayUnion(uid) });
+      .doc(`groups/${group.id}`)
+      .update({ memberIds: firestore.FieldValue.arrayUnion(uid) });
   }
 
   leaveGroup(uid: string, group: Group) {
-    this.db
-      .doc(`groups/${group.groupid}`)
-      .update({ members: firestore.FieldValue.arrayRemove(uid) })
-      .then(() => {
-        if (group.adminIds.includes(uid)) {
-          this.db
-            .doc(`groups/${group.groupid}`)
-            .update({ admin: firestore.FieldValue.arrayRemove(uid) });
-        }
-      });
+    if (group.adminIds.includes(uid) && group.adminIds.length === 1) {
+      this.deleteGroup(group.id);
+    } else if (
+      !group.adminIds.includes(uid) &&
+      group.memberIds.length === 1 &&
+      group.adminIds.length === 0
+    ) {
+      this.deleteGroup(group.id);
+    } else {
+      this.db
+        .doc(`groups/${group.id}`)
+        .update({ memberIds: firestore.FieldValue.arrayRemove(uid) })
+        .then(() => {
+          if (group.adminIds.includes(uid)) {
+            this.db
+              .doc(`groups/${group.id}`)
+              .update({ adminIds: firestore.FieldValue.arrayRemove(uid) });
+          }
+        });
+    }
+  }
+
+  async removeMember(uid: string, groupId: string) {
+    await this.db
+      .doc(`groups/${groupId}`)
+      .update({ memberIds: firestore.FieldValue.arrayRemove(uid) });
+  }
+
+  // for a user who wants to join
+  async joinWaitingList(uid: string, groupId: string) {
+    await this.db
+      .doc(`groups/${groupId}`)
+      .update({ waitingMemberIds: firestore.FieldValue.arrayUnion(uid) });
+  }
+
+  // for a user who wants to join
+  async leaveWaitingList(uid: string, groupId: string) {
+    await this.db
+      .doc(`groups/${groupId}`)
+      .update({ waitingMemberIds: firestore.FieldValue.arrayRemove(uid) });
+  }
+
+  // for an admin to use
+  async removeWaitingMember(uid: string, groupId: string) {
+    await this.db
+      .doc(`groups/${groupId}`)
+      .update({ waitingMemberIds: firestore.FieldValue.arrayRemove(uid) });
+  }
+
+  // for an admin to use
+  async allowWaitingMember(uid: string, groupId: string) {
+    await this.db
+      .doc(`groups/${groupId}`)
+      .update({ waitingMemberIds: firestore.FieldValue.arrayRemove(uid) });
+    await this.db
+      .doc(`groups/${groupId}`)
+      .update({ memberIds: firestore.FieldValue.arrayUnion(uid) });
   }
 }

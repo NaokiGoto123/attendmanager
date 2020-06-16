@@ -76,7 +76,7 @@ export class CreateGroupComponent implements OnInit {
       .subscribe((group: Group) => {
         if (group) {
           this.ifTarget = true;
-          this.groupid = group.groupid;
+          this.groupid = group.id;
           this.waitingMemberIds = group.waitingMemberIds;
           this.form.patchValue(group);
         }
@@ -96,7 +96,7 @@ export class CreateGroupComponent implements OnInit {
   submit() {
     this.groupSerive
       .createGroup({
-        groupid: this.db.createId(),
+        id: this.db.createId(),
         name: this.form.value.name,
         description: this.form.value.description,
         grouppicture: this.selectedImageId,
@@ -120,7 +120,7 @@ export class CreateGroupComponent implements OnInit {
   update() {
     this.groupSerive
       .updateGroup({
-        groupid: this.groupid,
+        id: this.groupid,
         name: this.form.value.name,
         description: this.form.value.description,
         grouppicture: this.selectedImageId,

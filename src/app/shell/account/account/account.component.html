@@ -147,7 +147,7 @@
                   aria-label="group description"
                   class="group-details-button"
                   [routerLink]="['/group-details']"
-                  [queryParams]="{ id: myGroup.groupid }"
+                  [queryParams]="{ id: myGroup.id }"
                 >
                   <mat-icon>fullscreen</mat-icon>
                 </button>
@@ -365,6 +365,7 @@
                   <h2 class="group-description">
                     {{ targetGroup.description }}
                   </h2>
+
                   <div class="join-button-container">
                     <div *ngIf="targetGroup.memberIds.includes(myUid)">
                       <button
@@ -376,15 +377,40 @@
                       </button>
                     </div>
                     <div *ngIf="!targetGroup.memberIds.includes(myUid)">
-                      <button
-                        mat-raised-button
-                        color="primary"
-                        (click)="joinGroup(targetGroup)"
+                      <div *ngIf="targetGroup.waitingMemberIds.includes(myUid)">
+                        <button
+                          mat-raised-button
+                          color="primary"
+                          (click)="leaveWaitingList(targetGroup)"
+                        >
+                          Leave waiting list
+                        </button>
+                      </div>
+                      <div
+                        *ngIf="!targetGroup.waitingMemberIds.includes(myUid)"
                       >
-                        Join
-                      </button>
+                        <div *ngIf="targetGroup.private">
+                          <button
+                            mat-raised-button
+                            color="primary"
+                            (click)="joinWaitingList(targetGroup)"
+                          >
+                            Join waiting list
+                          </button>
+                        </div>
+                        <div *ngIf="!targetGroup.private">
+                          <button
+                            mat-raised-button
+                            color="primary"
+                            (click)="joinGroup(targetGroup)"
+                          >
+                            Join
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
                   <div class="group-details-button-container">
                     <button
                       mat-icon-button
@@ -392,7 +418,7 @@
                       aria-label="group description"
                       class="group-details-button"
                       [routerLink]="['/group-details']"
-                      [queryParams]="{ id: targetGroup.groupid }"
+                      [queryParams]="{ id: targetGroup.id }"
                     >
                       <mat-icon>fullscreen</mat-icon>
                     </button>

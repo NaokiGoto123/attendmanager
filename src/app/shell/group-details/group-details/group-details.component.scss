@@ -29,14 +29,36 @@
 
 .creater,
 .admin,
-.member {
+.member,
+.waitingMember {
   text-decoration: none;
 }
 
 .creater:hover,
 .admin:hover,
-.member:hover {
+.member:hover,
+.waitingMember:hover {
   text-decoration: underline;
+}
+
+.waitingMember {
+  margin: 0 0 21.44px 0;
+}
+
+.waitingMember-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.waiting-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.allow-button,
+.remove-button {
+  margin: 0 0 0 20px;
 }
 
 .buttons {

@@ -80,7 +80,7 @@ export class AccountComponent implements OnInit {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const uid = params.get('id');
       if (uid === null) {
-        // 自分の処理
+        // 自分のページだった場合の処理
         this.ifTarget = false;
         this.myUid = this.authService.uid;
         this.authService
@@ -139,7 +139,7 @@ export class AccountComponent implements OnInit {
         });
       } else {
         if (uid === this.authService.uid) {
-          // 自分の処理
+          // 自分のページだった場合の処理
           this.ifTarget = false;
           this.myUid = this.authService.uid;
           this.myDisplayName = this.authService.displayName;
@@ -191,10 +191,10 @@ export class AccountComponent implements OnInit {
             this.form.patchValue(user);
           });
         } else {
-          // 自分以外のユーザーの処理
+          // 自分以外のユーザーのページを見るときの処理
+          this.myUid = this.authService.uid;
           this.ifTarget = true;
           this.authService.getUser(uid).subscribe((user: User) => {
-            console.log(user);
             this.targetUser = user;
             this.targetUid = uid;
             this.targetDisplayName = user.displayName;
@@ -212,7 +212,6 @@ export class AccountComponent implements OnInit {
             this.eventService
               .getAttendingEvents(this.targetUid)
               .subscribe((events: Event[]) => {
-                console.log(events);
                 const now = new Date();
                 const attendingEvents: Event[] = [];
                 const attendedEvents: Event[] = [];
@@ -268,12 +267,19 @@ export class AccountComponent implements OnInit {
   }
 
   joinGroup(group: Group) {
-    console.log(group);
-    this.groupService.joinGroup(this.myUid, group);
+    this.groupService.joinGroup(this.authService.uid, group);
   }
 
   leaveGroup(group: Group) {
-    this.groupService.leaveGroup(this.myUid, group);
+    this.groupService.leaveGroup(this.authService.uid, group);
+  }
+
+  joinWaitingList(group: Group) {
+    this.groupService.joinWaitingList(this.authService.uid, group.id);
+  }
+
+  leaveWaitingList(group: Group) {
+    this.groupService.leaveWaitingList(this.authService.uid, group.id);
   }
 
   updateUser() {

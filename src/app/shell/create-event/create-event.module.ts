@@ -14,6 +14,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 @NgModule({
   declarations: [CreateEventComponent],
@@ -32,6 +33,7 @@ import { MatSliderModule } from '@angular/material/slider';
     MatSelectModule,
     MatSlideToggleModule,
     MatSliderModule,
+    NgxMaterialTimepickerModule,
   ],
 })
 export class CreateEventModule {}

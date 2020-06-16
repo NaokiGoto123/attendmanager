@@ -51,7 +51,7 @@
     </div>
 
     <div *ngIf="ifadmin | async">
-      <a routerLink="/create-event" [queryParams]="{ id: event.eventid }">
+      <a routerLink="/create-event" [queryParams]="{ id: event.id }">
         <button class="edit-button" mat-raised-button>
           Edit
         </button>

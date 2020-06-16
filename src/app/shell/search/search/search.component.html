@@ -47,13 +47,35 @@
                 </button>
               </div>
               <div *ngIf="!searchableGroup.memberIds.includes(uid)">
-                <button
-                  mat-raised-button
-                  color="primary"
-                  (click)="joinGroup(searchableGroup)"
-                >
-                  Join
-                </button>
+                <div *ngIf="searchableGroup.waitingMemberIds.includes(uid)">
+                  <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="leaveWaitingList(searchableGroup)"
+                  >
+                    Leave waiting list
+                  </button>
+                </div>
+                <div *ngIf="!searchableGroup.waitingMemberIds.includes(uid)">
+                  <div *ngIf="searchableGroup.private">
+                    <button
+                      mat-raised-button
+                      color="primary"
+                      (click)="joinWaitingList(searchableGroup)"
+                    >
+                      Join waiting list
+                    </button>
+                  </div>
+                  <div *ngIf="!searchableGroup.private">
+                    <button
+                      mat-raised-button
+                      color="primary"
+                      (click)="joinGroup(searchableGroup)"
+                    >
+                      Join
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="group-details-button-container">
@@ -63,7 +85,7 @@
                 aria-label="group description"
                 class="group-details-button"
                 [routerLink]="['/group-details']"
-                [queryParams]="{ id: searchableGroup.groupid }"
+                [queryParams]="{ id: searchableGroup.id }"
               >
                 <mat-icon>fullscreen</mat-icon>
               </button>

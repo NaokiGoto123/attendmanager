@@ -18,15 +18,12 @@
     </div>
   </mat-toolbar>
 
-  <img
-    class="group-picture"
-    src="/assets/background/{{ grouppicture | async }}.jpg"
-  />
+  <img class="group-picture" src="/assets/background/{{ grouppicture }}.jpg" />
 
   <div class="group-details-container">
     <h1 class="name">{{ name }}</h1>
 
-    <h1>{{ description | async }}</h1>
+    <h1>{{ description }}</h1>
 
     <h1>
       Created by <span class="creater">{{ creater | async }}</span> on
@@ -35,7 +32,7 @@
 
     <h1>Price: {{ price }}</h1>
 
-    <div class="admins">
+    <div *ngIf="ifAdmins">
       <h1>Admins</h1>
       <ul>
         <div *ngFor="let admin of admins | async">
@@ -61,7 +58,7 @@
       </ul>
     </div>
 
-    <div class="members">
+    <div *ngIf="ifMembers">
       <h1>Members</h1>
       <ul>
         <div *ngFor="let member of members | async">
@@ -85,6 +82,51 @@
           </div>
         </div>
       </ul>
+    </div>
+
+    <div *ngIf="!ifMembers">
+      <h1>There is no members.</h1>
+    </div>
+
+    <div *ngIf="ifWaitingMembers">
+      <h1>Waiting users</h1>
+      <ul>
+        <div *ngFor="let waitingMember of waitingMembers | async">
+          <li class="waitingMember-container">
+            <h1
+              class="waitingMember"
+              [routerLink]="['/account']"
+              [queryParams]="{ id: waitingMember.uid }"
+            >
+              {{ waitingMember.displayName }}
+            </h1>
+            <div class="waiting-buttons" *ngIf="ifadmin">
+              <div class="allow-button">
+                <button
+                  mat-mini-fab
+                  color="primary"
+                  (click)="allowWaitingMember(waitingMember.uid)"
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+              <div class="remove-button">
+                <button
+                  mat-mini-fab
+                  color="warn"
+                  (click)="removeWaitingMember(waitingMember.uid)"
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div>
+          </li>
+        </div>
+      </ul>
+    </div>
+
+    <div *ngIf="!ifWaitingMembers">
+      <h1>There is no waiting member.</h1>
     </div>
 
     <div class="buttons">

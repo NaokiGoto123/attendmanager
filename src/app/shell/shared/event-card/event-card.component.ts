@@ -43,7 +43,7 @@ export class EventCardComponent implements OnInit {
 
     this.groupName = this.groupService.getGroupName(this.event.groupid);
 
-    this.eventid = this.event.eventid;
+    this.eventid = this.event.id;
 
     this.date = this.event.date.toDate();
 

@@ -23,7 +23,7 @@
         <mat-select formControlName="groupid" required>
           <mat-option
             *ngFor="let group of admingroups$ | async"
-            [value]="group.groupid"
+            [value]="group.id"
           >
             {{ group.name }}
           </mat-option>
@@ -74,14 +74,16 @@
       </mat-form-field>
 
       <mat-form-field class="create-event-field" appearance="outline">
-        <mat-label>What time is it happening? (hh:mm)</mat-label>
+        <mat-label>What time is it happening?</mat-label>
         <input
           matInput
+          aria-label="default time"
+          [ngxTimepicker]="defaultValue"
           formControlName="time"
-          type="text"
-          placeholder="E.g. 00:00"
+          readonly
           required
         />
+        <ngx-material-timepicker #defaultValue></ngx-material-timepicker>
       </mat-form-field>
 
       <mat-form-field class="create-event-field" appearance="outline">

@@ -1,7 +1,7 @@
 import { firestore } from 'firebase';
 
 export interface Event {
-  eventid: string; // イベントID
+  id: string; // イベントID
   title: string; // イベントタイトル
   description: string; // イベント詳細
   createrId: string; // イベント作った人
@@ -12,6 +12,7 @@ export interface Event {
   location: string; // イベント場所
   groupid: string; // イベントが作られたグループID
   price: number; // 参加費
+  waitingMemberIds: string[];
   private: boolean;
   searchable: boolean;
 }

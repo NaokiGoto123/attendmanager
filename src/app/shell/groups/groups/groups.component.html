@@ -39,9 +39,16 @@
           </button>
         </div>
         <div *ngIf="!group.memberIds.includes(uid)">
-          <button mat-raised-button color="primary">
-            Join
-          </button>
+          <div *ngIf="!group.private">
+            <button mat-raised-button color="primary">
+              Join
+            </button>
+          </div>
+          <div *ngIf="group.private">
+            <button mat-raised-button color="primary">
+              Join waiting list
+            </button>
+          </div>
         </div>
       </div>
       <div class="group-details-button-container">
@@ -51,7 +58,7 @@
           aria-label="group description"
           class="group-details-button"
           [routerLink]="['/group-details']"
-          [queryParams]="{ id: group.groupid }"
+          [queryParams]="{ id: group.id }"
         >
           <mat-icon>fullscreen</mat-icon>
         </button>

@@ -54,4 +54,12 @@ export class SearchComponent implements OnInit {
   leaveGroup(group: Group) {
     this.groupService.leaveGroup(this.uid, group);
   }
+
+  joinWaitingList(group: Group) {
+    this.groupService.joinWaitingList(this.uid, group.id);
+  }
+
+  leaveWaitingList(group: Group) {
+    this.groupService.leaveWaitingList(this.uid, group.id);
+  }
 }

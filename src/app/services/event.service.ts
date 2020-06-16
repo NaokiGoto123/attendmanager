@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Event } from '../interfaces/event';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { GroupService } from './group.service';
 import { map, switchMap } from 'rxjs/operators';
 import { Observable, combineLatest, of } from 'rxjs';
@@ -19,14 +18,14 @@ export class EventService {
   ) {}
 
   async createEvent(event: Event) {
-    const id = event.eventid;
+    const id = event.id;
     await this.db
       .doc(`events/${id}`)
       .set(event)
       .then(() =>
         this.db
           .doc(`groups/${event.groupid}`)
-          .update({ eventIds: firestore.FieldValue.arrayUnion(event.eventid) })
+          .update({ eventIds: firestore.FieldValue.arrayUnion(event.id) })
       )
       .then(() =>
         this.snackbar.open('Successfully created the event', null, {
@@ -92,7 +91,7 @@ export class EventService {
 
   async updateEvent(uid: string, event: Omit<Event, 'createrId'>) {
     await this.db
-      .doc(`events/${event.eventid}`)
+      .doc(`events/${event.id}`)
       .set(event, { merge: true })
       .then(() =>
         this.snackbar.open('Successfully updated the event', null, {
@@ -147,5 +146,26 @@ export class EventService {
         ref.where('attendingMemberIds', 'array-contains', uid)
       )
       .valueChanges();
+  }
+
+  async joinWaitingList(uid: string, eventId: string) {
+    await this.db
+      .doc(`events/${eventId}`)
+      .update({ waitingMemberIds: firestore.FieldValue.arrayUnion(uid) });
+  }
+
+  async removeWaitingMember(uid: string, eventId: string) {
+    await this.db
+      .doc(`events/${eventId}`)
+      .update({ waitingMemberIds: firestore.FieldValue.arrayRemove(uid) });
+  }
+
+  async allowWaitingMember(uid: string, eventId: string) {
+    await this.db
+      .doc(`events/${eventId}`)
+      .update({ waitingMemberIds: firestore.FieldValue.arrayRemove(uid) });
+    await this.db
+      .doc(`events/${eventId}`)
+      .update({ attendingMemberIds: firestore.FieldValue.arrayUnion(uid) });
   }
 }

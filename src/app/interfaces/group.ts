@@ -1,7 +1,7 @@
 import { firestore } from 'firebase';
 
 export interface Group {
-  groupid: string; // グループID
+  id: string; // グループID
   name: string; // グループ名
   description: string; // グループ詳細
   grouppicture: number; // グループ画像
