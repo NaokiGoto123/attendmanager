@@ -12,7 +12,8 @@ export interface Event {
   location: string; // イベント場所
   groupid: string; // イベントが作られたグループID
   price: number; // 参加費
-  waitingMemberIds: string[];
+  waitingJoinningMemberIds: string[];
+  waitingPayingMemberIds: string[];
   private: boolean;
   searchable: boolean;
 }
