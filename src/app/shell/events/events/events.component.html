@@ -61,6 +61,12 @@
     >
       <h1>{{ givenEvent.title }}</h1>
       <h2>{{ givenEvent.description }}</h2>
+      <div *ngIf="!givenEvent.private">
+        <h2>Public event</h2>
+      </div>
+      <div *ngIf="givenEvent.private">
+        <h2>Private event</h2>
+      </div>
       <h2>{{ givenEvent.date.toDate() | date: 'yyyy/MM/dd' }}</h2>
       <h2>Happening at {{ givenEvent.time }} in {{ givenEvent.location }}</h2>
       <h2>
@@ -81,15 +87,84 @@
       <h2>First {{ givenEvent.memberlimit }} people can attend</h2>
       <div *ngIf="ifAttendingmembers; else noAttendingmembers">
         <h2>Attending members</h2>
-        <div *ngFor="let attendingmemberName of attendingmembersNames | async">
+        <div *ngFor="let attendingmember of attendingMembers | async">
           <ul>
-            <li>{{ attendingmemberName }}</li>
+            <li>{{ attendingmember.displayName }}</li>
           </ul>
         </div>
       </div>
       <ng-template #noAttendingmembers>
         <h2>There is no attending member yet.</h2>
       </ng-template>
+      <div *ngIf="ifWaitingJoinningMembers">
+        <h2>Waiting list</h2>
+        <div
+          *ngFor="let waitingJoinningMember of waitingJoinningMembers | async"
+        >
+          <ul>
+            <li class="waitingJoinningMember">
+              {{ waitingJoinningMember.displayName }}
+              <div *ngIf="givenEvent.price === 0">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="
+                    waitingJoinningMemberToAttendingMember(
+                      waitingJoinningMember.uid,
+                      givenEvent.id
+                    )
+                  "
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="
+                    removeWaitingJoinningMember(
+                      waitingJoinningMember.uid,
+                      givenEvent.id
+                    )
+                  "
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+              <div *ngIf="givenEvent.price !== 0">
+                <button
+                  mat-icon-button
+                  color="primary"
+                  (click)="
+                    joinWaitingPayingList(
+                      waitingJoinningMember.uid,
+                      givenEvent.id
+                    )
+                  "
+                >
+                  <mat-icon>add</mat-icon>
+                </button>
+
+                <button
+                  mat-icon-button
+                  color="warn"
+                  (click)="
+                    removeWaitingJoinningMember(
+                      waitingJoinningMember.uid,
+                      givenEvent.id
+                    )
+                  "
+                >
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div *ngIf="!ifWaitingJoinningMembers">
+        <h2>There are no waiting users.</h2>
+      </div>
     </div>
     <ng-template #nogivenEvent>
       <h1 class="nogivenEventText">No event is selected.</h1>

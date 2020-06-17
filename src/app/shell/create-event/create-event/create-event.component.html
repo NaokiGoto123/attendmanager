@@ -1,7 +1,9 @@
 <div *ngIf="noGroup; else yesGroup">
   <div class="noGroup-container">
     <mat-icon class="noGroup-icon" [inline]="true">group_add</mat-icon>
-    <h1>You do not belong to any group yet.</h1>
+    <h1>
+      You do not belong to any group or you are not an admin of any group.
+    </h1>
     <h1>You can <a routerLink="/search">search</a> for groups</h1>
     <h1>or</h1>
     <h1>You can <a routerLink="/create-group">create</a> one</h1>

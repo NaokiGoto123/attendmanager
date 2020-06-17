@@ -27,7 +27,9 @@ export class CreateEventComponent implements OnInit {
 
   attendingmembers: string[];
 
-  waitingMemberIds: string[];
+  waitingJoinningMemberIds: string[];
+
+  waitingPayingMemberIds: string[];
 
   admingroups$: Observable<Group[]> = this.groupService.getAdminGroup(
     this.authService.uid
@@ -76,7 +78,8 @@ export class CreateEventComponent implements OnInit {
           this.groupid = event.groupid;
           this.eventid = event.id;
           this.attendingmembers = event.attendingMemberIds;
-          this.waitingMemberIds = event.waitingMemberIds;
+          this.waitingJoinningMemberIds = event.waitingJoinningMemberIds;
+          this.waitingPayingMemberIds = event.waitingPayingMemberIds;
           this.form.patchValue({
             ...event,
             date: event.date.toDate(),
@@ -120,7 +123,8 @@ export class CreateEventComponent implements OnInit {
         location: this.form.value.location,
         groupid: this.form.value.groupid,
         price: this.form.value.price,
-        waitingMemberIds: [],
+        waitingJoinningMemberIds: [],
+        waitingPayingMemberIds: [],
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })
@@ -141,7 +145,8 @@ export class CreateEventComponent implements OnInit {
         location: this.form.value.location,
         groupid: this.form.value.groupid,
         price: this.form.value.price,
-        waitingMemberIds: this.waitingMemberIds,
+        waitingJoinningMemberIds: this.waitingJoinningMemberIds,
+        waitingPayingMemberIds: this.waitingPayingMemberIds,
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })

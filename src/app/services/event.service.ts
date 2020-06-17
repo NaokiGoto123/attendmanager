@@ -116,18 +116,6 @@ export class EventService {
       );
   }
 
-  async attendEvent(uid: string, eventid: string) {
-    await this.db
-      .doc(`events/${eventid}`)
-      .update({ attendingMemberIds: firestore.FieldValue.arrayUnion(uid) });
-  }
-
-  async leaveEvent(uid: string, eventid: string) {
-    await this.db
-      .doc(`events/${eventid}`)
-      .update({ attendingMemberIds: firestore.FieldValue.arrayRemove(uid) });
-  }
-
   getPublicEvents(): Observable<Event[]> {
     return this.db
       .collection<Event>(`events`, (ref) => ref.where('private', '==', false))
@@ -148,24 +136,88 @@ export class EventService {
       .valueChanges();
   }
 
-  async joinWaitingList(uid: string, eventId: string) {
+  // nothing to attending (pay+public, pay+private, free+public, free+private)
+  async attendEvent(uid: string, eventid: string) {
     await this.db
-      .doc(`events/${eventId}`)
-      .update({ waitingMemberIds: firestore.FieldValue.arrayUnion(uid) });
-  }
-
-  async removeWaitingMember(uid: string, eventId: string) {
-    await this.db
-      .doc(`events/${eventId}`)
-      .update({ waitingMemberIds: firestore.FieldValue.arrayRemove(uid) });
-  }
-
-  async allowWaitingMember(uid: string, eventId: string) {
-    await this.db
-      .doc(`events/${eventId}`)
-      .update({ waitingMemberIds: firestore.FieldValue.arrayRemove(uid) });
-    await this.db
-      .doc(`events/${eventId}`)
+      .doc(`events/${eventid}`)
       .update({ attendingMemberIds: firestore.FieldValue.arrayUnion(uid) });
+  }
+
+  // waitingPayinglist to attending (pay+public, pay+private, free+public, free+private)
+  async payToAttendEvent(uid: string, eventid: string) {
+    await this.db
+      .doc(`events/${eventid}`)
+      .update({ attendingMemberIds: firestore.FieldValue.arrayUnion(uid) })
+      .then(() => {
+        this.db
+          .doc(`events/${eventid}`)
+          .update({
+            waitingPayingMemberIds: firestore.FieldValue.arrayRemove(uid),
+          });
+      });
+  }
+
+  // attending to nothing (pay+public, pay+private, free+public, free+private)
+  async leaveEvent(uid: string, eventid: string) {
+    await this.db
+      .doc(`events/${eventid}`)
+      .update({ attendingMemberIds: firestore.FieldValue.arrayRemove(uid) });
+  }
+
+  // nothing to waitingJoinning (pay+private, free+private)
+  async joinWaitingJoinningList(uid: string, eventId: string) {
+    await this.db
+      .doc(`events/${eventId}`)
+      .update({
+        waitingJoinningMemberIds: firestore.FieldValue.arrayUnion(uid),
+      });
+  }
+
+  // waitingJoinning to waitingPaying (pay+private)
+  async joinWaitingPayingList(uid: string, eventId: string) {
+    await this.db
+      .doc(`events/${eventId}`)
+      .update({
+        waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
+      })
+      .then(() => {
+        this.db
+          .doc(`events/${eventId}`)
+          .update({
+            waitingPayingMemberIds: firestore.FieldValue.arrayUnion(uid),
+          });
+      });
+  }
+
+  // waitingJoinning to nothing (pay+private, free+private)
+  async removeWaitingJoinningMember(uid: string, eventId: string) {
+    await this.db
+      .doc(`events/${eventId}`)
+      .update({
+        waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
+      });
+  }
+
+  // waitingPaying to nothing (pay+private)
+  async removeWaitingPayingMember(uid: string, eventId: string) {
+    await this.db
+      .doc(`events/${eventId}`)
+      .update({
+        waitingPayingMemberIds: firestore.FieldValue.arrayRemove(uid),
+      });
+  }
+
+  // waitingJoinning to attending (free+private)
+  async waitingJoinningMemberToAttendingMember(uid: string, eventId: string) {
+    await this.db
+      .doc(`events/${eventId}`)
+      .update({
+        waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
+      })
+      .then(() => {
+        this.db
+          .doc(`events/${eventId}`)
+          .update({ attendingMemberIds: firestore.FieldValue.arrayUnion(uid) });
+      });
   }
 }

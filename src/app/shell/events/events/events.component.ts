@@ -31,9 +31,13 @@ export class EventsComponent implements OnInit {
 
   groupName: string;
 
-  attendingmembersNames: Observable<string[]>;
+  attendingMembers: Observable<User[]>;
 
   ifAttendingmembers = false;
+
+  waitingJoinningMembers: Observable<User[]>;
+
+  ifWaitingJoinningMembers = false;
 
   mouseOver() {
     this.authService
@@ -48,17 +52,44 @@ export class EventsComponent implements OnInit {
         this.groupName = groupName;
       });
 
-    const result: Observable<string>[] = [];
-    this.givenEvent.attendingMemberIds.forEach((attndingmemberId) => {
-      result.push(this.authService.getName(attndingmemberId));
-      this.attendingmembersNames = combineLatest(result);
-    });
-
     if (this.givenEvent.attendingMemberIds.length) {
       this.ifAttendingmembers = true;
+      const result: Observable<User>[] = [];
+      this.givenEvent.attendingMemberIds.forEach((attndingmemberId) => {
+        result.push(this.authService.getUser(attndingmemberId));
+        this.attendingMembers = combineLatest(result);
+      });
     } else {
       this.ifAttendingmembers = false;
     }
+
+    if (this.givenEvent.waitingJoinningMemberIds.length) {
+      this.ifWaitingJoinningMembers = true;
+      this.waitingJoinningMembers = combineLatest(
+        this.givenEvent.waitingJoinningMemberIds.map(
+          (waitingJoinningMemberId) => {
+            return this.authService.getUser(waitingJoinningMemberId);
+          }
+        )
+      );
+    } else {
+      this.ifWaitingJoinningMembers = false;
+    }
+  }
+
+  // waitingJoinning to attending (free+private)
+  waitingJoinningMemberToAttendingMember(uid: string, eventId: string) {
+    this.eventService.waitingJoinningMemberToAttendingMember(uid, eventId);
+  }
+
+  // waitingJoinning to nothing (pay+private, free+private)
+  removeWaitingJoinningMember(uid: string, eventId: string) {
+    this.eventService.removeWaitingJoinningMember(uid, eventId);
+  }
+
+  // waitingJoinning to waitingPaying (pay+private)
+  joinWaitingPayingList(uid: string, eventId: string) {
+    this.eventService.joinWaitingPayingList(uid, eventId);
   }
 
   constructor(

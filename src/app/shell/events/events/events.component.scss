@@ -74,12 +74,17 @@
   position: sticky;
   z-index: 1;
   top: 144.5px;
-  overflow-x: hidden;
   left: 65%;
 }
 
 .event-card-details-container {
   padding: 20px;
+}
+
+.waitingJoinningMember {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .nogivenEventText {

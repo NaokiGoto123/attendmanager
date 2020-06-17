@@ -1,61 +1,118 @@
-<div class="event-card">
-  <img class="group-picture" src="/assets/background/{{ grouppicture }}.jpg" />
-  <div class="card-content">
-    <h2>{{ event.title }}</h2>
+<div *ngIf="ifEvent">
+  <div class="event-card">
+    <img
+      class="group-picture"
+      src="/assets/background/{{ grouppicture }}.jpg"
+    />
+    <div class="card-content">
+      <h2>{{ event.title }}</h2>
 
-    <p>Description: {{ event.description }}</p>
+      <p>Description: {{ event.description }}</p>
 
-    <p>Created by {{ createrName | async }} in {{ groupName | async }}</p>
+      <p>
+        Created by {{ createrDisplayname | async }} in {{ groupName | async }}
+      </p>
 
-    <p>Date: {{ event.date.toDate() | date: 'yyyy/MM/dd' }}</p>
+      <p>Date: {{ event.date.toDate() | date: 'yyyy/MM/dd' }}</p>
 
-    <div *ngIf="ifPast">
-      <button class="submit-button" mat-raised-button>
-        Passed
-      </button>
-    </div>
+      <div *ngIf="ifPast">
+        <button class="submit-button" mat-raised-button>
+          Passed
+        </button>
+      </div>
 
-    <div *ngIf="!ifPast">
-      <div *ngIf="!attended">
-        <div *ngIf="ifFree">
+      <div *ngIf="!ifPast">
+        <div *ngIf="!attended">
+          <div *ngIf="ifPrivate">
+            <div *ngIf="ifWaitingJoinningMember">
+              <button
+                class="submit-button"
+                mat-raised-button
+                color="primary"
+                (click)="removeWaitingJoinningMember()"
+              >
+                Leave waiting list
+              </button>
+            </div>
+
+            <div *ngIf="!ifWaitingJoinningMember">
+              <div *ngIf="ifWaitingPayingMember">
+                <button
+                  class="submit-button"
+                  mat-raised-button
+                  color="primary"
+                  (click)="payToAttendEvent()"
+                >
+                  Pay {{ price }} to attend
+                </button>
+
+                <button
+                  class="submit-button"
+                  mat-raised-button
+                  color="primary"
+                  (click)="removeWaitingPayingMember()"
+                >
+                  Cancel paying
+                </button>
+              </div>
+
+              <div *ngIf="!ifWaitingPayingMember">
+                <button
+                  class="submit-button"
+                  mat-raised-button
+                  color="primary"
+                  (click)="joinWaitingJoinningList()"
+                >
+                  Join waiting list
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="!ifPrivate">
+            <div *ngIf="ifFree">
+              <button
+                class="submit-button"
+                mat-raised-button
+                color="primary"
+                (click)="attendEvent()"
+              >
+                ATTEND
+              </button>
+            </div>
+
+            <div *ngIf="!ifFree">
+              <button
+                class="submit-button"
+                mat-raised-button
+                color="primary"
+                (click)="attendEvent()"
+              >
+                Pay {{ price }} to attend
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="attended">
           <button
             class="submit-button"
             mat-raised-button
-            color="primary"
-            (click)="attendEvent()"
+            color="warn"
+            (click)="leaveEvent()"
           >
-            ATTEND
-          </button>
-        </div>
-        <div *ngIf="!ifFree">
-          <button
-            class="submit-button"
-            mat-raised-button
-            color="primary"
-            (click)="attendEvent()"
-          >
-            Pay {{ price }} to attend
+            ATTENDING
           </button>
         </div>
       </div>
-      <div *ngIf="attended">
-        <button
-          class="submit-button"
-          mat-raised-button
-          color="warn"
-          (click)="leaveEvent()"
-        >
-          ATTENDING
-        </button>
-      </div>
-    </div>
 
-    <div *ngIf="ifadmin | async">
-      <a routerLink="/create-event" [queryParams]="{ id: event.id }">
-        <button class="edit-button" mat-raised-button>
-          Edit
-        </button>
-      </a>
+      <div *ngIf="ifadmin | async">
+        <a routerLink="/create-event" [queryParams]="{ id: event.id }">
+          <button class="edit-button" mat-raised-button>
+            Edit
+          </button>
+        </a>
+      </div>
     </div>
   </div>
 </div>

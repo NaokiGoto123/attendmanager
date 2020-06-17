@@ -239,6 +239,7 @@ export class AccountComponent implements OnInit {
               });
             this.authService
               .getUser(this.targetUser.uid)
+              // tslint:disable-next-line: no-shadowed-variable
               .subscribe((user: User) => {
                 this.targetDescription = user.description;
                 this.targetShowGroups = user.showGroups;
@@ -280,6 +281,21 @@ export class AccountComponent implements OnInit {
 
   leaveWaitingList(group: Group) {
     this.groupService.leaveWaitingList(this.authService.uid, group.id);
+  }
+
+  // waitingJoinning to attending (free+private)
+  waitingJoinningMemberToAttendingMember(uid: string, eventId: string) {
+    this.eventService.waitingJoinningMemberToAttendingMember(uid, eventId);
+  }
+
+  // waitingJoinning to nothing (pay+private, free+private)
+  removeWaitingJoinningMember(uid: string, eventId: string) {
+    this.eventService.removeWaitingJoinningMember(uid, eventId);
+  }
+
+  // waitingJoinning to waitingPaying (pay+private)
+  joinWaitingPayingList(uid: string, eventId: string) {
+    this.eventService.joinWaitingPayingList(uid, eventId);
   }
 
   updateUser() {
