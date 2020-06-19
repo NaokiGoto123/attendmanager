@@ -49,7 +49,7 @@
       <div *ngFor="let event of events | async">
         <app-event-card
           [event]="event"
-          (mouseover)="givenEvent = event; mouseOver()"
+          (mouseenter)="givenEvent = event; mouseEnter()"
         ></app-event-card>
       </div>
     </div>

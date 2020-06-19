@@ -1,0 +1,73 @@
+<form class="update-form" [formGroup]="form">
+  <img class="account-photo" src="{{ photoURL }}" />
+
+  <div class="update-fields">
+    <mat-form-field class="update-name" appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="displayName" type="text" />
+    </mat-form-field>
+
+    <mat-form-field class="update-description" appearance="outline">
+      <mat-label>Description</mat-label>
+      <input matInput formControlName="description" type="text" />
+    </mat-form-field>
+  </div>
+
+  <div class="update-toggles">
+    <mat-slide-toggle class="update-showGroup" formControlName="showGroups">
+      <div *ngIf="form.value.showGroups">
+        Show my groups
+      </div>
+      <div *ngIf="!form.value.showGroups">
+        Do not show my groups
+      </div>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendingEvents"
+      formControlName="showAttendingEvents"
+    >
+      <div *ngIf="form.value.showAttendingEvents">
+        Show my attending events
+      </div>
+      <div *ngIf="!form.value.showAttendingEvents">
+        Do not show my attending events
+      </div>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="showAttendedEvents"
+    >
+      <div *ngIf="form.value.showAttendedEvents">
+        Show my attended events
+      </div>
+      <div *ngIf="!form.value.showAttendedEvents">
+        Do not show my attended events
+      </div>
+    </mat-slide-toggle>
+  </div>
+  <div class="update-button-container">
+    <button
+      mat-raised-button
+      class="update-button"
+      color="primary"
+      (click)="updateUser()"
+    >
+      Update
+    </button>
+  </div>
+  <div class="other-actions">
+    <button
+      mat-flat-button
+      class="signout-button"
+      color="warn"
+      (click)="signOut()"
+    >
+      Sign out
+    </button>
+    <button mat-flat-button color="warn">
+      Delete account
+    </button>
+  </div>
+</form>

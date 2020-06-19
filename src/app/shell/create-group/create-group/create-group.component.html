@@ -37,12 +37,21 @@
       thumbLabel
       [displayWith]="formatLabel"
       tickInterval="1000"
-      step="1000"
+      step="500"
       formControlName="price"
       min="0"
       max="50000"
     >
     </mat-slider>
+
+    <mat-form-field>
+      <mat-label>Choose currency</mat-label>
+      <mat-select formControlName="currency">
+        <div *ngFor="let currency of currencies">
+          <mat-option value="currency">{{ currency }}</mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
 
     <mat-slide-toggle class="create-group-field" formControlName="private"
       >Private: {{ form.value.private }}</mat-slide-toggle

@@ -11,8 +11,10 @@ export interface Group {
   memberIds: string[]; // グループメンバー（達）
   eventIds: string[]; // グループ内で作成されたイベントID　（複数）
   chatRoomId: string; // チャットルームID
-  waitingMemberIds: string[];
+  waitingJoinningMemberIds: string[];
+  waitingPayingMemberIds: string[];
   price: number; // 入会金
+  currency: string;
   private: boolean;
   searchable: boolean;
 }

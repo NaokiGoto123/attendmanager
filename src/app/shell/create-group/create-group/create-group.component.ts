@@ -22,7 +22,7 @@ export class CreateGroupComponent implements OnInit {
 
   groupid: string;
 
-  waitingMemberIds: string[];
+  currencies = ['USD', 'SHP', 'JPY', 'CAD', 'CNY', 'EUR'];
 
   imageIds = [...Array(22)].map((_, index) => index);
 
@@ -43,6 +43,7 @@ export class CreateGroupComponent implements OnInit {
     name: ['', [Validators.required]],
     description: [''],
     price: [0],
+    currency: ['', [Validators.required]],
     private: [false],
     searchable: [false],
   });
@@ -52,10 +53,6 @@ export class CreateGroupComponent implements OnInit {
       return Math.round(value / 1000) + 'k';
     }
     return value;
-  }
-
-  show() {
-    console.log(this.form.value);
   }
 
   constructor(
@@ -77,7 +74,6 @@ export class CreateGroupComponent implements OnInit {
         if (group) {
           this.ifTarget = true;
           this.groupid = group.id;
-          this.waitingMemberIds = group.waitingMemberIds;
           this.form.patchValue(group);
         }
       });
@@ -107,7 +103,9 @@ export class CreateGroupComponent implements OnInit {
         eventIds: [],
         chatRoomId: null,
         price: this.form.value.price,
-        waitingMemberIds: [],
+        currency: this.form.value.currency,
+        waitingJoinningMemberIds: [],
+        waitingPayingMemberIds: [],
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })
@@ -124,9 +122,8 @@ export class CreateGroupComponent implements OnInit {
         name: this.form.value.name,
         description: this.form.value.description,
         grouppicture: this.selectedImageId,
-        chatRoomId: null,
         price: this.form.value.price,
-        waitingMemberIds: this.waitingMemberIds,
+        currency: this.form.value.currency,
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })

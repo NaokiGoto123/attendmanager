@@ -10,9 +10,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { SharedModule } from '../shared/shared.module';
 import { MatTabsModule } from '@angular/material/tabs';
+import { EventsComponent } from './events/events.component';
+import { GroupsComponent } from './groups/groups.component';
 
 @NgModule({
-  declarations: [SearchComponent],
+  declarations: [SearchComponent, EventsComponent, GroupsComponent],
   imports: [
     CommonModule,
     SearchRoutingModule,

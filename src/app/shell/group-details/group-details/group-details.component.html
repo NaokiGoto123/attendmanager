@@ -88,10 +88,10 @@
       <h1>There is no members.</h1>
     </div>
 
-    <div *ngIf="ifWaitingMembers">
+    <div *ngIf="ifWaitingJoinningMembers">
       <h1>Waiting users</h1>
       <ul>
-        <div *ngFor="let waitingMember of waitingMembers | async">
+        <div *ngFor="let waitingMember of waitingJoinningMembers | async">
           <li class="waitingMember-container">
             <h1
               class="waitingMember"
@@ -103,7 +103,7 @@
             <div class="waiting-buttons" *ngIf="ifadmin">
               <div class="allow-button">
                 <button
-                  mat-mini-fab
+                  mat-icon-button
                   color="primary"
                   (click)="allowWaitingMember(waitingMember.uid)"
                 >
@@ -112,9 +112,9 @@
               </div>
               <div class="remove-button">
                 <button
-                  mat-mini-fab
+                  mat-icon-button
                   color="warn"
-                  (click)="removeWaitingMember(waitingMember.uid)"
+                  (click)="leaveWaitingList(waitingMember.uid)"
                 >
                   <mat-icon>remove</mat-icon>
                 </button>
@@ -125,7 +125,7 @@
       </ul>
     </div>
 
-    <div *ngIf="!ifWaitingMembers">
+    <div *ngIf="!ifWaitingJoinningMembers">
       <h1>There is no waiting member.</h1>
     </div>
 

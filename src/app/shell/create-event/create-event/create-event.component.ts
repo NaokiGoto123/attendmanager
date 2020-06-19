@@ -35,6 +35,8 @@ export class CreateEventComponent implements OnInit {
     this.authService.uid
   );
 
+  currencies = ['USD', 'SHP', 'JPY', 'CAD', 'CNY', 'EUR'];
+
   form = this.fb.group({
     groupid: ['', [Validators.required]],
     title: ['', [Validators.required]],
@@ -44,6 +46,7 @@ export class CreateEventComponent implements OnInit {
     time: ['', [Validators.required]],
     location: ['', [Validators.required]],
     price: [0],
+    currency: ['', [Validators.required]],
     private: [false],
     searchable: [false],
   });
@@ -123,6 +126,7 @@ export class CreateEventComponent implements OnInit {
         location: this.form.value.location,
         groupid: this.form.value.groupid,
         price: this.form.value.price,
+        currency: this.form.value.currency,
         waitingJoinningMemberIds: [],
         waitingPayingMemberIds: [],
         private: this.form.value.private,
@@ -145,6 +149,7 @@ export class CreateEventComponent implements OnInit {
         location: this.form.value.location,
         groupid: this.form.value.groupid,
         price: this.form.value.price,
+        currency: this.form.value.currency,
         waitingJoinningMemberIds: this.waitingJoinningMemberIds,
         waitingPayingMemberIds: this.waitingPayingMemberIds,
         private: this.form.value.private,

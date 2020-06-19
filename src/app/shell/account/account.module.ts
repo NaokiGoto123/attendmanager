@@ -12,8 +12,18 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
 import { SharedModule } from '../shared/shared.module';
+import { GroupsComponent } from './groups/groups.component';
+import { AttendingEventsComponent } from './attending-events/attending-events.component';
+import { AttendedEventsComponent } from './attended-events/attended-events.component';
+import { SettingsComponent } from './settings/settings.component';
 @NgModule({
-  declarations: [AccountComponent],
+  declarations: [
+    AccountComponent,
+    GroupsComponent,
+    AttendingEventsComponent,
+    AttendedEventsComponent,
+    SettingsComponent,
+  ],
   imports: [
     CommonModule,
     AccountRoutingModule,

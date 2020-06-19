@@ -1,4 +1,4 @@
-<div *ngIf="noGroup; else yesGroup">
+<div *ngIf="noGroup">
   <div class="noGroup-container">
     <mat-icon class="noGroup-icon" [inline]="true">group_add</mat-icon>
     <h1>
@@ -10,16 +10,16 @@
   </div>
 </div>
 
-<ng-template #yesGroup>
+<div *ngIf="!noGroup">
   <div class="container">
-    <div *ngIf="ifTarget; else edit">
-      <h1>Update event</h1>
-    </div>
-    <ng-template #edit>
-      <h1>Create event</h1>
-    </ng-template>
-
     <form class="create-event-form" [formGroup]="form">
+      <div *ngIf="ifTarget">
+        <h1>Update event</h1>
+      </div>
+      <div *ngIf="!ifTarget">
+        <h1>Create event</h1>
+      </div>
+
       <mat-form-field class="create-event-field" appearance="outline">
         <mat-label>Which group</mat-label>
         <mat-select formControlName="groupid" required>
@@ -104,12 +104,21 @@
         thumbLabel
         [displayWith]="formatLabel"
         tickInterval="1000"
-        step="1000"
+        step="500"
         formControlName="price"
         min="0"
         max="50000"
       >
       </mat-slider>
+
+      <mat-form-field>
+        <mat-label>Choose currency</mat-label>
+        <mat-select formControlName="currency">
+          <div *ngFor="let currency of currencies">
+            <mat-option value="currency">{{ currency }}</mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
 
       <mat-slide-toggle class="create-event-field" formControlName="private"
         >Private: {{ form.value.private }}</mat-slide-toggle
@@ -119,7 +128,7 @@
         >Searchable: {{ form.value.searchable }}</mat-slide-toggle
       >
 
-      <div class="buttons" *ngIf="ifTarget; else editing">
+      <div class="buttons" *ngIf="ifTarget">
         <button
           mat-raised-button
           class="update-button"
@@ -135,7 +144,7 @@
         </button>
       </div>
 
-      <ng-template #editing>
+      <div *ngIf="!ifTarget">
         <button
           mat-raised-button
           class="create-button"
@@ -145,7 +154,7 @@
         >
           Create
         </button>
-      </ng-template>
+      </div>
     </form>
   </div>
-</ng-template>
+</div>

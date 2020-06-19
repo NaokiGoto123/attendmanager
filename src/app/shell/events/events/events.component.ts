@@ -39,7 +39,7 @@ export class EventsComponent implements OnInit {
 
   ifWaitingJoinningMembers = false;
 
-  mouseOver() {
+  mouseEnter() {
     this.authService
       .getUser(this.givenEvent.createrId)
       .subscribe((creater: User) => {

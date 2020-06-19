@@ -1,0 +1,130 @@
+<div *ngIf="ifSearchableEvents">
+  <div class="event-cards-container">
+    <div class="event-cards">
+      <div *ngFor="let attendingEvent of searchableEvents | async">
+        <app-event-card
+          [event]="attendingEvent"
+          (mouseenter)="givenEvent = attendingEvent; mouseEnter()"
+        ></app-event-card>
+      </div>
+    </div>
+  </div>
+  <div class="event-card-detail-container">
+    <div class="event-card-detail">
+      <div *ngIf="givenEvent">
+        <h1>{{ givenEvent.title }}</h1>
+        <h2>{{ givenEvent.description }}</h2>
+        <div *ngIf="!givenEvent.private">
+          <h2>Public event</h2>
+        </div>
+        <div *ngIf="givenEvent.private">
+          <h2>Private event</h2>
+        </div>
+        <h2>{{ givenEvent.date.toDate() | date: 'yyyy/MM/dd' }}</h2>
+        <h2>Happening at {{ givenEvent.time }} in {{ givenEvent.location }}</h2>
+        <h2>
+          Created by
+          <a [routerLink]="['/account']" [queryParams]="{ id: createrId }">{{
+            createrDisplayname
+          }}</a>
+          in
+          <span
+            ><a
+              [routerLink]="['/group-details']"
+              [queryParams]="{ id: givenEvent.groupid }"
+              >{{ groupName }}
+            </a></span
+          >
+        </h2>
+        <h2>Price: {{ givenEvent.price }}</h2>
+        <h2>First {{ givenEvent.memberlimit }} people can attend</h2>
+        <div *ngIf="ifAttendingmembers; else noAttendingmembers">
+          <h2>Attending members</h2>
+          <div *ngFor="let attendingmember of attendingMembers | async">
+            <ul>
+              <li>{{ attendingmember.displayName }}</li>
+            </ul>
+          </div>
+        </div>
+        <ng-template #noAttendingmembers>
+          <h2>There is no attending member yet.</h2>
+        </ng-template>
+        <div *ngIf="ifWaitingJoinningMembers">
+          <h2>Waiting list</h2>
+          <div
+            *ngFor="let waitingJoinningMember of waitingJoinningMembers | async"
+          >
+            <ul>
+              <li class="waitingJoinningMember">
+                {{ waitingJoinningMember.displayName }}
+                <div *ngIf="givenEvent.price === 0">
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    (click)="
+                      waitingJoinningMemberToAttendingMember(
+                        waitingJoinningMember.uid,
+                        givenEvent.id
+                      )
+                    "
+                  >
+                    <mat-icon>add</mat-icon>
+                  </button>
+
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="
+                      removeWaitingJoinningMember(
+                        waitingJoinningMember.uid,
+                        givenEvent.id
+                      )
+                    "
+                  >
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
+                <div *ngIf="givenEvent.price !== 0">
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    (click)="
+                      joinWaitingPayingList(
+                        waitingJoinningMember.uid,
+                        givenEvent.id
+                      )
+                    "
+                  >
+                    <mat-icon>add</mat-icon>
+                  </button>
+
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="
+                      removeWaitingJoinningMember(
+                        waitingJoinningMember.uid,
+                        givenEvent.id
+                      )
+                    "
+                  >
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div *ngIf="!ifWaitingJoinningMembers">
+          <h2>There are no waiting users.</h2>
+        </div>
+      </div>
+      <div *ngIf="!givenEvent">
+        <h1>No event is selected.</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div *ngIf="!ifSearchableEvents">
+  <h1>No events</h1>
+</div>

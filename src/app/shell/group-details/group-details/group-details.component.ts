@@ -36,8 +36,10 @@ export class GroupDetailsComponent implements OnInit {
   ifAdmins: boolean;
   members: Observable<User[]>;
   ifMembers: boolean;
-  waitingMembers: Observable<User[]>;
-  ifWaitingMembers: boolean;
+  waitingJoinningMembers: Observable<User[]>;
+  waitingPayingMembers: Observable<User[]>;
+  ifWaitingJoinningMembers: boolean;
+  ifWaitingPayingMemberId: boolean;
 
   constructor(
     private location: Location,
@@ -118,9 +120,9 @@ export class GroupDetailsComponent implements OnInit {
       });
 
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        if (group.waitingMemberIds.length) {
-          this.waitingMembers = combineLatest(
-            group.waitingMemberIds.map((waitingMemberId) => {
+        if (group.waitingJoinningMemberIds.length) {
+          this.waitingJoinningMembers = combineLatest(
+            group.waitingJoinningMemberIds.map((waitingMemberId) => {
               console.log(waitingMemberId);
               const waitingMember: Observable<User> = this.authService.getUser(
                 waitingMemberId
@@ -128,9 +130,26 @@ export class GroupDetailsComponent implements OnInit {
               return waitingMember;
             })
           );
-          this.ifWaitingMembers = true;
+          this.ifWaitingJoinningMembers = true;
         } else {
-          this.ifWaitingMembers = false;
+          this.ifWaitingJoinningMembers = false;
+        }
+      });
+
+      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
+        if (group.waitingPayingMemberIds.length) {
+          this.waitingPayingMembers = combineLatest(
+            group.waitingPayingMemberIds.map((waitingPayingMemberId) => {
+              console.log(waitingPayingMemberId);
+              const waitingPayingMember: Observable<User> = this.authService.getUser(
+                waitingPayingMemberId
+              );
+              return waitingPayingMember;
+            })
+          );
+          this.ifWaitingPayingMemberId = true;
+        } else {
+          this.ifWaitingPayingMemberId = false;
         }
       });
     });
@@ -151,8 +170,8 @@ export class GroupDetailsComponent implements OnInit {
     });
   }
 
-  removeWaitingMember(waitingMemberId: string) {
-    this.groupService.removeWaitingMember(waitingMemberId, this.id);
+  leaveWaitingList(waitingMemberId: string) {
+    this.groupService.leaveWaitingList(waitingMemberId, this.id);
   }
 
   allowWaitingMember(waitingMemberId: string) {

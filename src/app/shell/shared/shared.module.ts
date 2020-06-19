@@ -6,16 +6,19 @@ import { EventCardComponent } from './event-card/event-card.component';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { GroupComponent } from './group/group.component';
 
 @NgModule({
-  declarations: [EventCardComponent],
+  declarations: [EventCardComponent, GroupComponent],
   imports: [
     CommonModule,
     SharedRoutingModule,
     MatCardModule,
     MatButtonModule,
     FlexLayoutModule,
+    MatIconModule,
   ],
-  exports: [EventCardComponent],
+  exports: [EventCardComponent, GroupComponent],
 })
 export class SharedModule {}

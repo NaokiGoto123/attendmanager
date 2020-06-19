@@ -84,7 +84,14 @@ export class GroupService {
   async updateGroup(
     group: Omit<
       Group,
-      'createddate' | 'createrId' | 'adminIds' | 'memberIds' | 'eventIds'
+      | 'createddate'
+      | 'createrId'
+      | 'adminIds'
+      | 'memberIds'
+      | 'eventIds'
+      | 'chatRoomId'
+      | 'waitingJoinningMemberIds'
+      | 'waitingPayingMemberIds'
     >
   ) {
     await this.db.doc(`groups/${group.id}`).set(group, { merge: true });
@@ -133,12 +140,59 @@ export class GroupService {
       .valueChanges();
   }
 
-  joinGroup(uid: string, group: Group) {
-    this.db
-      .doc(`groups/${group.id}`)
-      .update({ memberIds: firestore.FieldValue.arrayUnion(uid) });
+  // nothing to waitingJoinning (private+pay, private+free)
+  async joinWaitingJoinningList(uid: string, groupId: string) {
+    await this.db.doc(`groups/${groupId}`).update({
+      waitingJoinningMemberIds: firestore.FieldValue.arrayUnion(uid),
+    });
   }
 
+  // waitingJoinning list to nothing (private+pay, private+free)
+  async leaveWaitingList(uid: string, groupId: string) {
+    await this.db
+      .doc(`groups/${groupId}`)
+      .update({
+        waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
+      });
+  }
+
+  // waitingJoinning to waitingPaying (private+pay)
+  async waitingJoinningMemberToWaitingPayingMember(
+    uid: string,
+    groupId: string
+  ) {
+    await this.db
+      .doc(`groups/${groupId}`)
+      .update({
+        waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
+      })
+      .then(() => {
+        this.db.doc(`groups/${groupId}`).update({
+          waitingPayingMemberIds: firestore.FieldValue.arrayUnion(uid),
+        });
+      });
+  }
+
+  // waitingPayinglist to member (private+pay)
+  async waitingPayinglistToMember(uid: string, groupId: string) {
+    await this.db
+      .doc(`groups/${groupId}`)
+      .update({ memberIds: firestore.FieldValue.arrayUnion(uid) })
+      .then(() => {
+        this.db.doc(`groups/${groupId}`).update({
+          waitingPayingMemberIds: firestore.FieldValue.arrayRemove(uid),
+        });
+      });
+  }
+
+  // waitingPaying to nothing (private+pay)
+  async removeWaitingPayingMember(uid: string, groupId: string) {
+    await this.db.doc(`groups/${groupId}`).update({
+      waitingPayingMemberIds: firestore.FieldValue.arrayRemove(uid),
+    });
+  }
+
+  // member to nothing (private+free, private+pay, public+free, public+pay)
   leaveGroup(uid: string, group: Group) {
     if (group.adminIds.includes(uid) && group.adminIds.length === 1) {
       this.deleteGroup(group.id);
@@ -162,38 +216,27 @@ export class GroupService {
     }
   }
 
-  async removeMember(uid: string, groupId: string) {
-    await this.db
+  // nothing to member (public+free)
+  joinGroup(uid: string, groupId: string) {
+    this.db
       .doc(`groups/${groupId}`)
-      .update({ memberIds: firestore.FieldValue.arrayRemove(uid) });
+      .update({ memberIds: firestore.FieldValue.arrayUnion(uid) });
   }
 
-  // for a user who wants to join
-  async joinWaitingList(uid: string, groupId: string) {
-    await this.db
+  // nothing to member (public+pay)
+  patToJoinGroup(uid: string, groupId: string) {
+    this.db
       .doc(`groups/${groupId}`)
-      .update({ waitingMemberIds: firestore.FieldValue.arrayUnion(uid) });
+      .update({ memberIds: firestore.FieldValue.arrayUnion(uid) });
   }
 
-  // for a user who wants to join
-  async leaveWaitingList(uid: string, groupId: string) {
-    await this.db
-      .doc(`groups/${groupId}`)
-      .update({ waitingMemberIds: firestore.FieldValue.arrayRemove(uid) });
-  }
-
-  // for an admin to use
-  async removeWaitingMember(uid: string, groupId: string) {
-    await this.db
-      .doc(`groups/${groupId}`)
-      .update({ waitingMemberIds: firestore.FieldValue.arrayRemove(uid) });
-  }
-
-  // for an admin to use
+  // waitingJoinningMember list to member list (private+free)
   async allowWaitingMember(uid: string, groupId: string) {
     await this.db
       .doc(`groups/${groupId}`)
-      .update({ waitingMemberIds: firestore.FieldValue.arrayRemove(uid) });
+      .update({
+        waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
+      });
     await this.db
       .doc(`groups/${groupId}`)
       .update({ memberIds: firestore.FieldValue.arrayUnion(uid) });

@@ -1,0 +1,34 @@
+.update-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 30px 0 0 0;
+}
+
+.account-photo {
+  border-radius: 50%;
+  height: 150px;
+  width: 150px;
+  margin: 0 0 30px 0;
+}
+
+.update-fields {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+}
+
+.update-toggles {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 20px 0;
+}
+
+.update-button-container {
+  margin: 0 0 20px 0;
+}
+
+.signout-button {
+  margin: 0 20px 0 0;
+}
