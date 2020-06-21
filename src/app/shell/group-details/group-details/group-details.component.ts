@@ -27,10 +27,12 @@ export class GroupDetailsComponent implements OnInit {
 
   name: string;
   description: string;
+  private: boolean;
   grouppicture: number;
   createddate: Date;
   creater: Observable<string>;
   price: number;
+  currency: string;
   chatRoomId: string;
   admins: Observable<User[]>;
   ifAdmins: boolean;
@@ -63,9 +65,15 @@ export class GroupDetailsComponent implements OnInit {
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
         this.name = group.name;
         this.description = group.description;
+        if (group.private) {
+          this.private = true;
+        } else {
+          this.private = false;
+        }
         this.grouppicture = group.grouppicture;
         this.createddate = group.createddate.toDate();
         this.price = group.price;
+        this.currency = group.currency;
         if (group.chatRoomId) {
           this.chatRoomId = group.chatRoomId;
           this.ifChatRoom = true;
@@ -176,6 +184,13 @@ export class GroupDetailsComponent implements OnInit {
 
   allowWaitingMember(waitingMemberId: string) {
     this.groupService.allowWaitingMember(waitingMemberId, this.id);
+  }
+
+  waitingJoinningMemberToWaitingPayingMember(waitingMemberId: string) {
+    this.groupService.waitingJoinningMemberToWaitingPayingMember(
+      waitingMemberId,
+      this.id
+    );
   }
 
   ngOnInit(): void {}

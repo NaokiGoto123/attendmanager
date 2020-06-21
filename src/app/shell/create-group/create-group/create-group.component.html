@@ -48,18 +48,28 @@
       <mat-label>Choose currency</mat-label>
       <mat-select formControlName="currency">
         <div *ngFor="let currency of currencies">
-          <mat-option value="currency">{{ currency }}</mat-option>
+          <mat-option [value]="currency">{{ currency }}</mat-option>
         </div>
       </mat-select>
     </mat-form-field>
 
-    <mat-slide-toggle class="create-group-field" formControlName="private"
-      >Private: {{ form.value.private }}</mat-slide-toggle
-    >
+    <mat-slide-toggle class="create-group-field" formControlName="private">
+      <div *ngIf="form.value.private">
+        Private
+      </div>
+      <div *ngIf="!form.value.private">
+        Public
+      </div>
+    </mat-slide-toggle>
 
-    <mat-slide-toggle class="create-group-field" formControlName="searchable"
-      >Searchable: {{ form.value.searchable }}</mat-slide-toggle
-    >
+    <mat-slide-toggle class="create-group-field" formControlName="searchable">
+      <div *ngIf="form.value.searchable">
+        Searchable
+      </div>
+      <div *ngIf="!form.value.searchable">
+        Unsearchable
+      </div>
+    </mat-slide-toggle>
 
     <div class="buttons" *ngIf="ifTarget; else create">
       <button

@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./events.component.scss'],
 })
 export class EventsComponent implements OnInit {
-  value = 'Look for what you want';
+  value = '';
 
   nodata = true;
 

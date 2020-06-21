@@ -65,6 +65,7 @@ export class AttendedEventsComponent implements OnInit {
   ngOnInit(): void {}
 
   mouseEnter() {
+    console.log(this.givenEvent);
     this.authService
       .getUser(this.givenEvent.createrId)
       .subscribe((creater: User) => {

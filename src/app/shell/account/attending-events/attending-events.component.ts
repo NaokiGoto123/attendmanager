@@ -40,7 +40,6 @@ export class AttendingEventsComponent implements OnInit {
         .getAttendingEvents(id)
         .subscribe((attendingEvents: Event[]) => {
           if (attendingEvents.length) {
-            this.ifAttendingEvents = true;
             const now = new Date();
             const events: Event[] = [];
             attendingEvents.forEach((attendingEvent: Event) => {
@@ -50,6 +49,11 @@ export class AttendingEventsComponent implements OnInit {
             });
             console.log(events);
             this.attendingEvents = events;
+            if (events.length) {
+              this.ifAttendingEvents = true;
+            } else {
+              this.ifAttendingEvents = false;
+            }
           } else {
             this.ifAttendingEvents = false;
           }

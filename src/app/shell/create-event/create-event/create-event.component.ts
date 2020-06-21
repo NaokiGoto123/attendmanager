@@ -48,7 +48,7 @@ export class CreateEventComponent implements OnInit {
     price: [0],
     currency: ['', [Validators.required]],
     private: [false],
-    searchable: [false],
+    searchable: [true],
   });
 
   formatLabel(value: number) {

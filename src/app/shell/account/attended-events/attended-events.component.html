@@ -4,7 +4,7 @@
       <div *ngFor="let attendedEvent of passedEvents">
         <app-event-card
           [event]="attendedEvent"
-          (mousseenter)="givenEvent = attendedEvent; mouseEnter()"
+          (mouseenter)="givenEvent = attendedEvent; mouseEnter()"
         ></app-event-card>
       </div>
     </div>

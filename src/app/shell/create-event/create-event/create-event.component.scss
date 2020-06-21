@@ -30,7 +30,11 @@ h1 {
 .create-event-field {
   display: block;
   width: 80%;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+}
+
+mat-slider {
+  width: 100%;
 }
 
 .create-button {

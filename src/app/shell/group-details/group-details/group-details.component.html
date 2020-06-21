@@ -25,12 +25,24 @@
 
     <h1>{{ description }}</h1>
 
+    <div *ngIf="private">
+      <h1>This is private group</h1>
+    </div>
+    <div *ngIf="!private">
+      <h1>This is public group</h1>
+    </div>
+
     <h1>
       Created by <span class="creater">{{ creater | async }}</span> on
       {{ createddate | date: 'yyyy/MM/dd' }}
     </h1>
 
-    <h1>Price: {{ price }}</h1>
+    <div *ngIf="price === 0">
+      <h1>Price: {{ price }}</h1>
+    </div>
+    <div *ngIf="price !== 0">
+      <h1>Price: {{ price }} {{ currency }}</h1>
+    </div>
 
     <div *ngIf="ifAdmins">
       <h1>Admins</h1>
@@ -101,23 +113,52 @@
               {{ waitingMember.displayName }}
             </h1>
             <div class="waiting-buttons" *ngIf="ifadmin">
-              <div class="allow-button">
-                <button
-                  mat-icon-button
-                  color="primary"
-                  (click)="allowWaitingMember(waitingMember.uid)"
-                >
-                  <mat-icon>add</mat-icon>
-                </button>
+              <!-- 無料グループの場合 -->
+              <div *ngIf="price === 0">
+                <div class="allow-button">
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    (click)="allowWaitingMember(waitingMember.uid)"
+                  >
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                <div class="remove-button">
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="leaveWaitingList(waitingMember.uid)"
+                  >
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
               </div>
-              <div class="remove-button">
-                <button
-                  mat-icon-button
-                  color="warn"
-                  (click)="leaveWaitingList(waitingMember.uid)"
-                >
-                  <mat-icon>remove</mat-icon>
-                </button>
+              <!-- 有料グループの場合 -->
+              <div *ngIf="price !== 0">
+                <div class="allow-button">
+                  <button
+                    mat-icon-button
+                    color="primary"
+                    (click)="
+                      waitingJoinningMemberToWaitingPayingMember(
+                        waitingMember.uid
+                      )
+                    "
+                  >
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+
+                <div class="remove-button">
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    (click)="leaveWaitingList(waitingMember.uid)"
+                  >
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
               </div>
             </div>
           </li>
