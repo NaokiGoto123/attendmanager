@@ -1,3 +1,7 @@
+import { firestore } from 'firebase';
+
 export interface Notification {
-  text: string;
+  personUid: string; // 対象のユーザーID
+  objectId: string; // イベントかグループのIDが入る
+  date: firestore.Timestamp; // 参加した時間
 }

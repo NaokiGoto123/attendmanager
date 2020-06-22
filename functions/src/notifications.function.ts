@@ -5,13 +5,15 @@ const db = admin.firestore();
 
 export const joinGroup = functions
   .region('asia-northeast1')
-  .firestore.document(`groups/{id}`)
+  .firestore.document(`groups/{groupId}/memberIds/{memberId}`)
   .onUpdate(async (change, context) => {
     const data = change.after.data();
 
     if (!data) return;
 
-    console.log(data);
+    const newMemberId: string = context.params.memberId;
+
+    const groupId: string = context.params.groupId;
 
     const adminIds: string[] = data.adminIds;
 
@@ -20,7 +22,9 @@ export const joinGroup = functions
 
     adminIds.forEach((adminId: string) => {
       return db.collection(`users/${adminId}/notifications`).add({
-        text: 'hello this is test',
+        personUid: newMemberId,
+        objectId: groupId,
+        date: new Date(),
       });
     });
   });

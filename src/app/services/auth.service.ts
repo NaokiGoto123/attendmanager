@@ -60,6 +60,8 @@ export class AuthService {
     return this.updateUserData({
       ...credential.user,
       description: '',
+      notifications: [],
+      notificationCount: 0,
       showGroups: true,
       showAttendingEvents: true,
       showAttendedEvents: true,
@@ -77,6 +79,8 @@ export class AuthService {
     email,
     photoURL,
     description,
+    notifications,
+    notificationCount,
     showGroups,
     showAttendingEvents,
     showAttendedEvents,
@@ -91,6 +95,8 @@ export class AuthService {
       email,
       photoURL,
       description,
+      notifications,
+      notificationCount,
       showGroups,
       showAttendingEvents,
       showAttendedEvents,
@@ -117,9 +123,9 @@ export class AuthService {
     return this.afs.doc<User>(`users/${uid}`).valueChanges();
   }
 
-  updateUser(user: User) {
+  updateUser(user: Omit<User, 'notifications' | 'notificationCount'>) {
     this.afs
-      .doc<User>(`users/${user.uid}`)
+      .doc(`users/${user.uid}`)
       .set(user, { merge: true })
       .then(() =>
         this.snackbar.open('Successfully updated settings', null, {
