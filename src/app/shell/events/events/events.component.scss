@@ -44,51 +44,7 @@
   margin: 10px 0 0 10px;
 }
 
-.nodata-container {
-  text-align: center;
-  margin-top: 12%;
-}
-
-.nodata-icon {
-  font-size: 120px;
-}
-
-.event-cards-container-container {
+.container {
+  position: relative;
   height: 100%;
-  width: 65%;
-  position: absolute;
-  z-index: 1;
-  top: 144.5px;
-  left: 0;
-}
-
-.event-cards-container {
-  width: 80%;
-  margin: 40px auto 0 auto;
-}
-
-.event-card-details {
-  border-left: solid 0.3px rgb(224, 224, 224);
-  height: 100%;
-  width: 35%;
-  position: sticky;
-  z-index: 1;
-  top: 144.5px;
-  left: 65%;
-}
-
-.event-card-details-container {
-  padding: 20px;
-}
-
-.waitingJoinningMember {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.nogivenEventText {
-  text-align: center;
-  padding: 50% 0 0 0;
-  margin: 0;
 }

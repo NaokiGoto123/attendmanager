@@ -8,9 +8,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { GroupComponent } from './group/group.component';
+import { EventsAndDetailComponent } from './events-and-detail/events-and-detail.component';
 
 @NgModule({
-  declarations: [EventCardComponent, GroupComponent],
+  declarations: [EventCardComponent, GroupComponent, EventsAndDetailComponent],
   imports: [
     CommonModule,
     SharedRoutingModule,
@@ -19,6 +20,6 @@ import { GroupComponent } from './group/group.component';
     FlexLayoutModule,
     MatIconModule,
   ],
-  exports: [EventCardComponent, GroupComponent],
+  exports: [EventCardComponent, GroupComponent, EventsAndDetailComponent],
 })
 export class SharedModule {}

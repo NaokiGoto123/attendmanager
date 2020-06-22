@@ -33,7 +33,13 @@
     </div>
 
     <h1>
-      Created by <span class="creater">{{ creater | async }}</span> on
+      Created by
+      <span class="creater"
+        ><a routerLink="/account" [queryParams]="{ id: createrId }">{{
+          createrName
+        }}</a></span
+      >
+      on
       {{ createddate | date: 'yyyy/MM/dd' }}
     </h1>
 
@@ -48,24 +54,20 @@
       <h1>Admins</h1>
       <ul>
         <div *ngFor="let admin of admins | async">
-          <div *ngIf="admin.uid === uid">
-            <li>
-              <h1 class="member" routerLink="/account">
-                {{ admin.displayName }}
-              </h1>
-            </li>
-          </div>
-          <div *ngIf="admin.uid !== uid">
-            <li>
-              <h1
-                class="member"
-                [routerLink]="['/account']"
-                [queryParams]="{ id: admin.uid }"
-              >
-                {{ admin.displayName }}
-              </h1>
-            </li>
-          </div>
+          <li class="member-container">
+            <h1
+              class="member"
+              [routerLink]="['/account']"
+              [queryParams]="{ id: admin.uid }"
+            >
+              {{ admin.displayName }}
+            </h1>
+            <div *ngIf="ifadmin">
+              <button mat-button color="warn" (click)="deleteAdmin(admin.uid)">
+                Unauthorize
+              </button>
+            </div>
+          </li>
         </div>
       </ul>
     </div>
@@ -74,24 +76,27 @@
       <h1>Members</h1>
       <ul>
         <div *ngFor="let member of members | async">
-          <div *ngIf="member.uid === uid">
-            <li>
-              <h1 class="member" routerLink="/account">
-                {{ member.displayName }}
-              </h1>
-            </li>
-          </div>
-          <div *ngIf="member.uid !== uid">
-            <li>
-              <h1
-                class="member"
-                [routerLink]="['/account']"
-                [queryParams]="{ id: member.uid }"
+          <li class="member-container">
+            <h1
+              class="member"
+              [routerLink]="['/account']"
+              [queryParams]="{ id: member.uid }"
+            >
+              {{ member.displayName }}
+            </h1>
+            <div *ngIf="ifadmin">
+              <button
+                mat-button
+                color="primary"
+                (click)="makeAdmin(member.uid)"
               >
-                {{ member.displayName }}
-              </h1>
-            </li>
-          </div>
+                Authorize as an admin
+              </button>
+              <button mat-button color="warn" (click)="leaveGroup(member.uid)">
+                Kick out
+              </button>
+            </div>
+          </li>
         </div>
       </ul>
     </div>

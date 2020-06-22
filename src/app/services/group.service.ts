@@ -81,6 +81,36 @@ export class GroupService {
       );
   }
 
+  makeAdmin(uid: string, groupId: string) {
+    this.db
+      .doc<Group>(`groups/${groupId}`)
+      .valueChanges()
+      .subscribe((group: Group) => {
+        if (!group.adminIds.includes(uid)) {
+          this.db
+            .doc(`groups/${groupId}`)
+            .update({ adminIds: firestore.FieldValue.arrayUnion(uid) });
+        } else {
+          return;
+        }
+      });
+  }
+
+  deleteAdmin(uid: string, groupId: string) {
+    this.db
+      .doc<Group>(`groups/${groupId}`)
+      .valueChanges()
+      .subscribe((group: Group) => {
+        if (group.adminIds.includes(uid)) {
+          this.db
+            .doc(`groups/${groupId}`)
+            .update({ adminIds: firestore.FieldValue.arrayRemove(uid) });
+        } else {
+          return;
+        }
+      });
+  }
+
   async updateGroup(
     group: Omit<
       Group,
@@ -149,11 +179,9 @@ export class GroupService {
 
   // waitingJoinning list to nothing (private+pay, private+free)
   async leaveWaitingList(uid: string, groupId: string) {
-    await this.db
-      .doc(`groups/${groupId}`)
-      .update({
-        waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
-      });
+    await this.db.doc(`groups/${groupId}`).update({
+      waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
+    });
   }
 
   // waitingJoinning to waitingPaying (private+pay)
@@ -232,11 +260,9 @@ export class GroupService {
 
   // waitingJoinningMember list to member list (private+free)
   async allowWaitingMember(uid: string, groupId: string) {
-    await this.db
-      .doc(`groups/${groupId}`)
-      .update({
-        waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
-      });
+    await this.db.doc(`groups/${groupId}`).update({
+      waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
+    });
     await this.db
       .doc(`groups/${groupId}`)
       .update({ memberIds: firestore.FieldValue.arrayUnion(uid) });

@@ -25,12 +25,14 @@ export class GroupDetailsComponent implements OnInit {
 
   ifChatRoom: boolean; // チャットルームが作成済かどうか
 
+  group: Group;
   name: string;
   description: string;
   private: boolean;
   grouppicture: number;
   createddate: Date;
-  creater: Observable<string>;
+  createrId: string;
+  createrName: string;
   price: number;
   currency: string;
   chatRoomId: string;
@@ -63,8 +65,13 @@ export class GroupDetailsComponent implements OnInit {
         });
 
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
+        this.group = group;
         this.name = group.name;
         this.description = group.description;
+        this.createrId = group.createrId;
+        this.authService.getUser(this.createrId).subscribe((creater: User) => {
+          this.createrName = creater.displayName;
+        });
         if (group.private) {
           this.private = true;
         } else {
@@ -82,14 +89,6 @@ export class GroupDetailsComponent implements OnInit {
           this.ifChatRoom = false;
         }
       });
-
-      this.creater = this.groupService.getGroupinfo(this.id).pipe(
-        switchMap(
-          (group: Group): Observable<string> => {
-            return this.authService.getName(group.createrId);
-          }
-        )
-      );
 
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
         if (group.adminIds.length) {
@@ -176,6 +175,22 @@ export class GroupDetailsComponent implements OnInit {
       members: [this.authService.uid],
       messages: null,
     });
+  }
+
+  makeAdmin(uid: string) {
+    console.log(this.uid);
+    console.log(this.id);
+    this.groupService.makeAdmin(uid, this.id);
+  }
+
+  deleteAdmin(uid: string) {
+    console.log(this.uid);
+    console.log(this.id);
+    this.groupService.deleteAdmin(uid, this.id);
+  }
+
+  leaveGroup(uid: string) {
+    this.groupService.leaveGroup(uid, this.group);
   }
 
   leaveWaitingList(waitingMemberId: string) {

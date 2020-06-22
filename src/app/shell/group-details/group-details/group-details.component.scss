@@ -41,6 +41,12 @@
   text-decoration: underline;
 }
 
+.member-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 .waitingMember {
   margin: 0 0 21.44px 0;
 }
