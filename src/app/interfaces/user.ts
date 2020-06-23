@@ -6,7 +6,6 @@ export interface User {
   email: string; // メールアドレス
   photoURL: string; // 写真URL
   description: string; // アカウント説明
-  notifications: Notification[];
   notificationCount: number;
   showGroups: boolean;
   showAttendingEvents: boolean;

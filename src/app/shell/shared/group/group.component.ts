@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Group } from 'src/app/interfaces/group';
 import { AuthService } from 'src/app/services/auth.service';
 import { GroupService } from 'src/app/services/group.service';
+import { User } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-group',
@@ -11,13 +12,25 @@ import { GroupService } from 'src/app/services/group.service';
 export class GroupComponent implements OnInit {
   @Input() group: Group;
 
+  memberIds: string[];
+
   uid: string;
+
+  user: User;
 
   constructor(
     private authService: AuthService,
     private groupService: GroupService
   ) {
     this.uid = this.authService.uid;
+    this.authService.getUser(this.uid).subscribe((user: User) => {
+      this.user = user;
+    });
+    this.groupService.getMembers(this.group.id).subscribe((members: User[]) => {
+      members.forEach((member: User) => {
+        this.memberIds.push(member.uid);
+      });
+    });
   }
 
   ngOnInit(): void {}
@@ -42,7 +55,7 @@ export class GroupComponent implements OnInit {
 
   // waitingPayinglist to member (private+pay)
   waitingPayinglistToMember() {
-    this.groupService.waitingPayinglistToMember(this.uid, this.group.id);
+    this.groupService.waitingPayinglistToMember(this.user, this.group.id);
   }
 
   // waitingPaying to nothing (private+pay)
@@ -52,21 +65,21 @@ export class GroupComponent implements OnInit {
 
   // member to nothing (private+free, private+pay, public+free, public+pay)
   leaveGroup() {
-    this.groupService.leaveGroup(this.uid, this.group);
+    this.groupService.leaveGroup(this.user, this.group);
   }
 
   // nothing to member (public+free)
   joinGroup() {
-    this.groupService.joinGroup(this.uid, this.group.id);
+    this.groupService.joinGroup(this.user, this.group.id);
   }
 
   // nothing to member (public+pay)
   patToJoinGroup() {
-    this.groupService.patToJoinGroup(this.uid, this.group.id);
+    this.groupService.patToJoinGroup(this.user, this.group.id);
   }
 
   // waitingJoinningMember list to member list (private+free)
   allowWaitingMember() {
-    this.groupService.allowWaitingMember(this.uid, this.group.id);
+    this.groupService.allowWaitingMember(this.user, this.group.id);
   }
 }

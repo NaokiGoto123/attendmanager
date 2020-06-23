@@ -106,7 +106,7 @@
         </div>
       </div>
 
-      <div *ngIf="ifadmin | async">
+      <div *ngIf="ifadmin">
         <a routerLink="/create-event" [queryParams]="{ id: event.id }">
           <button class="edit-button" mat-raised-button>
             Edit

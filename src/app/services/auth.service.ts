@@ -60,7 +60,6 @@ export class AuthService {
     return this.updateUserData({
       ...credential.user,
       description: '',
-      notifications: [],
       notificationCount: 0,
       showGroups: true,
       showAttendingEvents: true,
@@ -79,7 +78,6 @@ export class AuthService {
     email,
     photoURL,
     description,
-    notifications,
     notificationCount,
     showGroups,
     showAttendingEvents,
@@ -95,7 +93,6 @@ export class AuthService {
       email,
       photoURL,
       description,
-      notifications,
       notificationCount,
       showGroups,
       showAttendingEvents,

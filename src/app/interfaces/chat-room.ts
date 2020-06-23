@@ -5,6 +5,6 @@ export interface ChatRoom {
   name: string;
   groupid: string;
   members: string[];
-  messages: Message[];
+  // messages: Message[]; // サブコレ
   messageCount: number;
 }

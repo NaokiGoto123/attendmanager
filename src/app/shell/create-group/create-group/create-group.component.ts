@@ -4,6 +4,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Group } from 'src/app/interfaces/group';
+import { User } from 'src/app/interfaces/user';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
@@ -16,6 +17,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./create-group.component.scss'],
 })
 export class CreateGroupComponent implements OnInit {
+  user: User;
+
   ifTarget = false;
 
   isComplete = false;
@@ -77,6 +80,9 @@ export class CreateGroupComponent implements OnInit {
           this.form.patchValue(group);
         }
       });
+    this.authService.getUser(this.authService.uid).subscribe((user: User) => {
+      this.user = user;
+    });
   }
 
   ngOnInit(): void {}
@@ -91,15 +97,13 @@ export class CreateGroupComponent implements OnInit {
 
   submit() {
     this.groupSerive
-      .createGroup({
+      .createGroup(this.user, {
         id: this.db.createId(),
         name: this.form.value.name,
         description: this.form.value.description,
         grouppicture: this.selectedImageId,
         createddate: firestore.Timestamp.now(),
         createrId: this.authService.uid,
-        adminIds: [this.authService.uid],
-        memberIds: [this.authService.uid],
         eventIds: [],
         chatRoomId: null,
         price: this.form.value.price,

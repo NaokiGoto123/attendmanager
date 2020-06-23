@@ -19,7 +19,7 @@ export class EventCardComponent implements OnInit {
 
   ifEvent = false;
 
-  ifadmin: Observable<boolean>; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
+  ifadmin: boolean; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
 
   ifFree: boolean;
 
@@ -103,15 +103,16 @@ export class EventCardComponent implements OnInit {
       }
 
       this.groupService
-        .getGrouppicture(this.event.groupid)
-        .subscribe((grouppicture: number) => {
-          this.grouppicture = grouppicture;
+        .getGroupinfo(this.event.groupid)
+        .subscribe((group: Group) => {
+          this.grouppicture = group.grouppicture;
         });
 
-      this.ifadmin = this.groupService.checkIfAdmin(
-        this.authService.uid,
-        this.event.groupid
-      );
+      this.groupService
+        .ifAdmin(this.uid, this.event.groupid)
+        .subscribe((ifAdmin: boolean) => {
+          this.ifadmin = ifAdmin;
+        });
 
       if (this.event.attendingMemberIds.includes(this.authService.uid)) {
         this.attended = true;

@@ -1,67 +1,109 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Group } from '../interfaces/group';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, combineLatest } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { Event } from '../interfaces/event';
 import { firestore } from 'firebase';
+import { User } from '../interfaces/user';
 @Injectable({
   providedIn: 'root',
 })
 export class GroupService {
-  constructor(private db: AngularFirestore, private snackbar: MatSnackBar) {}
+  constructor(private db: AngularFirestore) {}
 
-  async createGroup(group: Group) {
+  async createGroup(user: User, group: Group) {
     const id = group.id;
     await this.db
       .doc(`groups/${id}`)
       .set(group)
-      .then(() =>
-        this.snackbar.open('Successfully created the group', null, {
-          duration: 2000,
-        })
-      );
-  }
-
-  getGroupName(groupid: string): Observable<string> {
-    return this.db
-      .doc<Group>(`groups/${groupid}`)
-      .valueChanges()
-      .pipe(
-        map((group: Group) => {
-          return group.name;
-        })
-      );
+      .then(() => {
+        this.db.doc(`groups/${id}/members/${user.uid}`).set(user);
+      });
   }
 
   getMyGroup(uid: string): Observable<Group[]> {
     return this.db
-      .collection<Group>(`groups`, (ref) =>
-        ref.where(`memberIds`, 'array-contains', uid)
-      )
-      .valueChanges();
+      .collection(`groups`)
+      .valueChanges()
+      .pipe(
+        map((allGroups: Group[]) => {
+          const allGroupIds: string[] = [];
+          allGroups.forEach((group: Group) => {
+            allGroupIds.push(group.id);
+          });
+          console.log(allGroupIds);
+          return allGroupIds;
+        }),
+        map((allGroupIds: string[]) => {
+          console.log(allGroupIds);
+          const myGroupIds: string[] = [];
+          allGroupIds.forEach((groupId: string) => {
+            this.db.collection(`groups/${groupId}/members`).valueChanges();
+          });
+          return myGroupIds;
+        }),
+        switchMap((myGroupIds: string[]) => {
+          const result: Observable<Group>[] = [];
+          myGroupIds.forEach((myGroupId: string) => {
+            result.push(
+              this.db.doc<Group>(`groups/${myGroupId}`).valueChanges()
+            );
+          });
+          console.log(result);
+          return combineLatest(result);
+        })
+      );
   }
 
   getAdminGroup(uid: string): Observable<Group[]> {
-    return this.db
-      .collection<Group>(`groups`, (ref) =>
-        ref.where(`adminIds`, 'array-contains', uid)
-      )
-      .valueChanges();
+    const allGroupIds: string[] = [];
+    const adminGroupIds: string[] = [];
+    const adminGroups: Observable<Group>[] = [];
+    this.db
+      .collection(`groups`)
+      .valueChanges()
+      .subscribe((allGroups: Group[]) => {
+        allGroups.forEach((group: Group) => {
+          allGroupIds.push(group.id);
+        });
+        allGroupIds.forEach((groupId: string) => {
+          this.db
+            .collection(`groups/${groupId}/admins`)
+            .valueChanges()
+            .subscribe((admins: User[]) => {
+              admins.forEach((admin: User) => {
+                if (admin.uid === uid) {
+                  adminGroupIds.push(groupId);
+                }
+              });
+            });
+        });
+      });
+    console.log(adminGroupIds);
+    adminGroupIds.forEach((adminGroupId: string) => {
+      adminGroups.push(
+        this.db.doc<Group>(`groups/${adminGroupId}`).valueChanges()
+      );
+    });
+    return combineLatest(adminGroups);
   }
 
-  getGroupinfo(groupid: string): Observable<Group> {
-    return this.db.doc<Group>(`groups/${groupid}`).valueChanges();
+  getGroupinfo(groupId: string): Observable<Group> {
+    return this.db.doc<Group>(`groups/${groupId}`).valueChanges();
   }
 
-  checkIfAdmin(uid: string, groupid: string): Observable<boolean> {
+  ifAdmin(uid: string, groupId: string): Observable<boolean> {
     return this.db
-      .doc<Group>(`groups/${groupid}`)
+      .collection(`groups/${groupId}/admins`)
       .valueChanges()
       .pipe(
-        map((group: Group) => {
-          if (group.adminIds.includes(uid)) {
+        map((admins: User[]) => {
+          const adminIds: string[] = [];
+          admins.forEach((admin: User) => {
+            adminIds.push(admin.uid);
+          });
+          if (adminIds.includes(uid)) {
             return true;
           } else {
             return false;
@@ -70,48 +112,44 @@ export class GroupService {
       );
   }
 
-  getGrouppicture(groupid: string): Observable<number> {
-    return this.db
-      .doc<Group>(`groups/${groupid}`)
-      .valueChanges()
-      .pipe(
-        map((group: Group) => {
-          return group.grouppicture;
-        })
-      );
+  getMembers(groupId: string): Observable<User[]> {
+    return this.db.collection<User>(`groups/${groupId}/members`).valueChanges();
   }
 
-  makeAdmin(uid: string, groupId: string) {
+  getAdmins(groupId: string): Observable<User[]> {
+    return this.db.collection<User>(`groups/${groupId}/admins`).valueChanges();
+  }
+
+  makeAdmin(user: User, groupId: string) {
     this.db
-      .doc<Group>(`groups/${groupId}`)
+      .collection(`groups/${groupId}/admins`)
       .valueChanges()
-      .subscribe((group: Group) => {
-        if (!group.adminIds.includes(uid)) {
-          this.db
-            .doc(`groups/${groupId}`)
-            .update({ adminIds: firestore.FieldValue.arrayUnion(uid) });
+      .subscribe((admins: User[]) => {
+        const adminIds: string[] = [];
+        admins.forEach((admin: User) => {
+          adminIds.push(admin.uid);
+        });
+        if (!adminIds.includes(user.uid)) {
+          this.db.doc(`groups/${groupId}/${user.uid}`).set(user);
         } else {
           return;
         }
       });
   }
 
-  deleteAdmin(uid: string, groupId: string) {
+  deleteAdmin(user: User, groupId: string) {
     this.db
-      .doc<Group>(`groups/${groupId}`)
+      .collection(`groups/${groupId}/admins`)
       .valueChanges()
-      .subscribe((group: Group) => {
-        if (group.adminIds.length === 1) {
-          console.log('there is only one admin');
-          return;
+      .subscribe((admins: User[]) => {
+        const adminIds: string[] = [];
+        admins.forEach((admin: User) => {
+          adminIds.push(admin.uid);
+        });
+        if (!adminIds.includes(user.uid)) {
+          this.db.doc(`groups/${groupId}/${user.uid}`).delete();
         } else {
-          if (group.adminIds.includes(uid)) {
-            this.db
-              .doc(`groups/${groupId}`)
-              .update({ adminIds: firestore.FieldValue.arrayRemove(uid) });
-          } else {
-            return;
-          }
+          return;
         }
       });
   }
@@ -121,8 +159,6 @@ export class GroupService {
       Group,
       | 'createddate'
       | 'createrId'
-      | 'adminIds'
-      | 'memberIds'
       | 'eventIds'
       | 'chatRoomId'
       | 'waitingJoinningMemberIds'
@@ -151,7 +187,6 @@ export class GroupService {
           });
       })
       .then(() => {
-        console.log(groupid);
         this.db
           .collection(`events`, (ref) => ref.where('groupid', '==', groupid))
           .valueChanges()
@@ -161,12 +196,6 @@ export class GroupService {
             });
           });
       });
-  }
-
-  getPublicGroups(): Observable<Group[]> {
-    return this.db
-      .collection<Group>(`groups`, (ref) => ref.where('private', '==', false))
-      .valueChanges();
   }
 
   getSearchableGroups(): Observable<Group[]> {
@@ -207,13 +236,13 @@ export class GroupService {
   }
 
   // waitingPayinglist to member (private+pay)
-  async waitingPayinglistToMember(uid: string, groupId: string) {
+  async waitingPayinglistToMember(user: User, groupId: string) {
     await this.db
-      .doc(`groups/${groupId}`)
-      .update({ memberIds: firestore.FieldValue.arrayUnion(uid) })
+      .doc(`groups/${groupId}/members`)
+      .set(user)
       .then(() => {
         this.db.doc(`groups/${groupId}`).update({
-          waitingPayingMemberIds: firestore.FieldValue.arrayRemove(uid),
+          waitingPayingMemberIds: firestore.FieldValue.arrayRemove(user.uid),
         });
       });
   }
@@ -226,50 +255,54 @@ export class GroupService {
   }
 
   // member to nothing (private+free, private+pay, public+free, public+pay)
-  leaveGroup(uid: string, group: Group) {
-    if (group.adminIds.includes(uid) && group.adminIds.length === 1) {
+  leaveGroup(user: User, group: Group) {
+    const memberIds: string[] = [];
+    const adminIds: string[] = [];
+    this.getMembers(group.id).subscribe((Members: User[]) => {
+      Members.forEach((Member: User) => {
+        memberIds.push(Member.uid);
+      });
+    });
+    this.getAdmins(group.id).subscribe((Admins: User[]) => {
+      Admins.forEach((Admin: User) => {
+        adminIds.push(Admin.uid);
+      });
+    });
+    if (adminIds.includes(user.uid) && adminIds.length === 1) {
       this.deleteGroup(group.id);
     } else if (
-      !group.adminIds.includes(uid) &&
-      group.memberIds.length === 1 &&
-      group.adminIds.length === 0
+      !adminIds.includes(user.uid) &&
+      memberIds.length === 1 &&
+      adminIds.length === 0
     ) {
       this.deleteGroup(group.id);
     } else {
       this.db
-        .doc(`groups/${group.id}`)
-        .update({ memberIds: firestore.FieldValue.arrayRemove(uid) })
+        .doc(`groups/${group.id}/members/${user.uid}`)
+        .delete()
         .then(() => {
-          if (group.adminIds.includes(uid)) {
-            this.db
-              .doc(`groups/${group.id}`)
-              .update({ adminIds: firestore.FieldValue.arrayRemove(uid) });
+          if (adminIds.includes(user.uid)) {
+            this.db.doc(`groups/${group.id}/admins/${user.uid}`).delete();
           }
         });
     }
   }
 
   // nothing to member (public+free)
-  joinGroup(uid: string, groupId: string) {
-    this.db
-      .doc(`groups/${groupId}`)
-      .update({ memberIds: firestore.FieldValue.arrayUnion(uid) });
+  joinGroup(user: User, groupId: string) {
+    this.db.doc(`groups/${groupId}/members`).set(user);
   }
 
   // waitingPayinglist to member (public+pay)
-  patToJoinGroup(uid: string, groupId: string) {
-    this.db
-      .doc(`groups/${groupId}`)
-      .update({ memberIds: firestore.FieldValue.arrayUnion(uid) });
+  patToJoinGroup(user: User, groupId: string) {
+    this.db.doc(`groups/${groupId}/members`).set(user);
   }
 
   // waitingJoinningMember list to member list (private+free)
-  async allowWaitingMember(uid: string, groupId: string) {
+  async allowWaitingMember(user: User, groupId: string) {
     await this.db.doc(`groups/${groupId}`).update({
-      waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
+      waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(user.uid),
     });
-    await this.db
-      .doc(`groups/${groupId}`)
-      .update({ memberIds: firestore.FieldValue.arrayUnion(uid) });
+    this.db.doc(`groups/${groupId}/members`).set(user);
   }
 }

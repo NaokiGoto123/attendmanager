@@ -53,7 +53,7 @@
     <div *ngIf="ifAdmins">
       <h1>Admins</h1>
       <ul>
-        <div *ngFor="let admin of admins | async">
+        <div *ngFor="let admin of admins">
           <li class="member-container">
             <h1
               class="member"
@@ -75,7 +75,7 @@
     <div *ngIf="ifMembers">
       <h1>Members</h1>
       <ul>
-        <div *ngFor="let member of members | async">
+        <div *ngFor="let member of members">
           <li class="member-container">
             <h1
               class="member"

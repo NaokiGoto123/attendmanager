@@ -60,10 +60,14 @@ export class ChatService {
     return this.db.doc<ChatRoom>(`chatRooms/${chatRoomId}`).valueChanges();
   }
 
+  getMessages(chatRoomId: string) {
+    return this.db
+      .collection(`chatRooms/${chatRoomId}/messages`)
+      .valueChanges();
+  }
+
   sendMessage(message: Message, chatRoomId: string) {
-    this.db
-      .doc(`chatRooms/${chatRoomId}`)
-      .update({ messages: firestore.FieldValue.arrayUnion(message) });
+    this.db.doc(`chatRooms/${chatRoomId}/messages/${message.id}`).set(message);
   }
 
   clearMessageCount() {}

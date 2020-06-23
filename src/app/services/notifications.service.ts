@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map } from 'rxjs/operators';
-import { Notification } from '../interfaces/notification';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,15 +7,8 @@ import { Observable } from 'rxjs';
 export class NotificationsService {
   constructor(private db: AngularFirestore) {}
 
-  getNotifications(uid: string): Observable<Notification[]> {
-    return this.db
-      .doc(`users/${uid}`)
-      .valueChanges()
-      .pipe(
-        map((notifications: Notification[]) => {
-          return notifications;
-        })
-      );
+  getNotifications(uid: string) {
+    return this.db.collection(`users/${uid}/notifications`).valueChanges();
   }
 
   clearNotificationCount(uid: string) {
