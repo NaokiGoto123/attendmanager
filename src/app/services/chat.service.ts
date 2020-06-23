@@ -3,8 +3,8 @@ import { AuthService } from './auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ChatRoom } from '../interfaces/chat-room';
 import { Group } from '../interfaces/group';
-import { Observable, combineLatest } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Message } from '../interfaces/message';
 import { firestore } from 'firebase';
 import { Router } from '@angular/router';
@@ -40,7 +40,7 @@ export class ChatService {
   getMyChatRoommIds(uid: string): Observable<string[]> {
     return this.db
       .collection<Group>(`groups`, (ref) =>
-        ref.where(`members`, 'array-contains', uid)
+        ref.where(`memberIds`, 'array-contains', uid)
       )
       .valueChanges()
       .pipe(
@@ -51,7 +51,6 @@ export class ChatService {
               chatRoomIds.push(myGroup.chatRoomId);
             }
           });
-          console.log(chatRoomIds);
           return chatRoomIds;
         })
       );
@@ -66,4 +65,6 @@ export class ChatService {
       .doc(`chatRooms/${chatRoomId}`)
       .update({ messages: firestore.FieldValue.arrayUnion(message) });
   }
+
+  clearMessageCount() {}
 }

@@ -6,4 +6,5 @@ export interface ChatRoom {
   groupid: string;
   members: string[];
   messages: Message[];
+  messageCount: number;
 }

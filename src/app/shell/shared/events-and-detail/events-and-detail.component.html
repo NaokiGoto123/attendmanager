@@ -67,7 +67,11 @@
           >
             <ul>
               <li class="waitingJoinningMember">
-                {{ waitingJoinningMember.displayName }}
+                <a
+                  routerLink="/account"
+                  [queryParams]="{ id: waitingJoinningMember.uid }"
+                  >{{ waitingJoinningMember.displayName }}</a
+                >
                 <div *ngIf="givenEvent.price === 0">
                   <button
                     mat-icon-button

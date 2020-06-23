@@ -117,33 +117,33 @@
             >
               {{ waitingMember.displayName }}
             </h1>
-            <div class="waiting-buttons" *ngIf="ifadmin">
+            <div *ngIf="ifadmin">
               <!-- 無料グループの場合 -->
-              <div *ngIf="price === 0">
+              <div class="waiting-buttons" *ngIf="price === 0">
                 <div class="allow-button">
                   <button
-                    mat-icon-button
+                    mat-button
                     color="primary"
                     (click)="allowWaitingMember(waitingMember.uid)"
                   >
-                    <mat-icon>add</mat-icon>
+                    Allow
                   </button>
                 </div>
                 <div class="remove-button">
                   <button
-                    mat-icon-button
+                    mat-button
                     color="warn"
                     (click)="leaveWaitingList(waitingMember.uid)"
                   >
-                    <mat-icon>remove</mat-icon>
+                    Remove
                   </button>
                 </div>
               </div>
               <!-- 有料グループの場合 -->
-              <div *ngIf="price !== 0">
+              <div class="waiting-buttons" *ngIf="price !== 0">
                 <div class="allow-button">
                   <button
-                    mat-icon-button
+                    mat-button
                     color="primary"
                     (click)="
                       waitingJoinningMemberToWaitingPayingMember(
@@ -151,17 +151,17 @@
                       )
                     "
                   >
-                    <mat-icon>add</mat-icon>
+                    Allow
                   </button>
                 </div>
 
                 <div class="remove-button">
                   <button
-                    mat-icon-button
+                    mat-button
                     color="warn"
                     (click)="leaveWaitingList(waitingMember.uid)"
                   >
-                    <mat-icon>remove</mat-icon>
+                    Remove
                   </button>
                 </div>
               </div>

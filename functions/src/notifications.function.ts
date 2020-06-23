@@ -17,7 +17,10 @@ export const joinGroup = functions
 
     const adminIds: string[] = data.adminIds;
 
-    //adminIds所在確認済
+    console.log(newMemberId);
+
+    console.log(groupId);
+
     console.log(adminIds);
 
     adminIds.forEach((adminId: string) => {

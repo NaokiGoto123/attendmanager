@@ -101,12 +101,17 @@ export class GroupService {
       .doc<Group>(`groups/${groupId}`)
       .valueChanges()
       .subscribe((group: Group) => {
-        if (group.adminIds.includes(uid)) {
-          this.db
-            .doc(`groups/${groupId}`)
-            .update({ adminIds: firestore.FieldValue.arrayRemove(uid) });
-        } else {
+        if (group.adminIds.length === 1) {
+          console.log('there is only one admin');
           return;
+        } else {
+          if (group.adminIds.includes(uid)) {
+            this.db
+              .doc(`groups/${groupId}`)
+              .update({ adminIds: firestore.FieldValue.arrayRemove(uid) });
+          } else {
+            return;
+          }
         }
       });
   }
@@ -251,7 +256,7 @@ export class GroupService {
       .update({ memberIds: firestore.FieldValue.arrayUnion(uid) });
   }
 
-  // nothing to member (public+pay)
+  // waitingPayinglist to member (public+pay)
   patToJoinGroup(uid: string, groupId: string) {
     this.db
       .doc(`groups/${groupId}`)

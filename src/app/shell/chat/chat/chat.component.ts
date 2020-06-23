@@ -32,10 +32,10 @@ export class ChatComponent implements OnInit {
                 }
               );
               this.noChatRooms = false;
+              console.log(ChatRooms);
               return combineLatest(ChatRooms);
             } else {
               this.noChatRooms = true;
-              console.log(this.noChatRooms);
               return of(null);
             }
           }

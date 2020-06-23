@@ -33,13 +33,13 @@ mat-toolbar {
   .message-content {
     display: flex;
     align-items: flex-end;
-    height: 45px;
     margin: 0 0 20px 0;
   }
 
   .account-picture {
     display: inline-block;
     position: relative;
+    align-self: flex-start;
     width: 45px;
     height: 45px;
     border-radius: 50%;
@@ -49,6 +49,8 @@ mat-toolbar {
   .texts {
     display: inline-block;
     position: relative;
+    max-width: 400px;
+    overflow-wrap: break-word;
     padding: 13px 22px 13px 22px;
     border-radius: 5px;
     background-color: #e6e6e6;
