@@ -72,58 +72,60 @@
                   [queryParams]="{ id: waitingJoinningMember.uid }"
                   >{{ waitingJoinningMember.displayName }}</a
                 >
-                <div *ngIf="givenEvent.price === 0">
-                  <button
-                    mat-icon-button
-                    color="primary"
-                    (click)="
-                      waitingJoinningMemberToAttendingMember(
-                        waitingJoinningMember.uid,
-                        givenEvent.id
-                      )
-                    "
-                  >
-                    <mat-icon>add</mat-icon>
-                  </button>
-                  <button
-                    mat-icon-button
-                    color="warn"
-                    (click)="
-                      removeWaitingJoinningMember(
-                        waitingJoinningMember.uid,
-                        givenEvent.id
-                      )
-                    "
-                  >
-                    <mat-icon>remove</mat-icon>
-                  </button>
-                </div>
+                <div *ngIf="ifAdmin">
+                  <div *ngIf="givenEvent.price === 0">
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (click)="
+                        waitingJoinningMemberToAttendingMember(
+                          waitingJoinningMember.uid,
+                          givenEvent.id
+                        )
+                      "
+                    >
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      (click)="
+                        removeWaitingJoinningMember(
+                          waitingJoinningMember.uid,
+                          givenEvent.id
+                        )
+                      "
+                    >
+                      <mat-icon>remove</mat-icon>
+                    </button>
+                  </div>
 
-                <div *ngIf="givenEvent.price !== 0">
-                  <button
-                    mat-icon-button
-                    color="primary"
-                    (click)="
-                      joinWaitingPayingList(
-                        waitingJoinningMember.uid,
-                        givenEvent.id
-                      )
-                    "
-                  >
-                    <mat-icon>add</mat-icon>
-                  </button>
-                  <button
-                    mat-icon-button
-                    color="warn"
-                    (click)="
-                      removeWaitingJoinningMember(
-                        waitingJoinningMember.uid,
-                        givenEvent.id
-                      )
-                    "
-                  >
-                    <mat-icon>remove</mat-icon>
-                  </button>
+                  <div *ngIf="givenEvent.price !== 0">
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      (click)="
+                        joinWaitingPayingList(
+                          waitingJoinningMember.uid,
+                          givenEvent.id
+                        )
+                      "
+                    >
+                      <mat-icon>add</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      (click)="
+                        removeWaitingJoinningMember(
+                          waitingJoinningMember.uid,
+                          givenEvent.id
+                        )
+                      "
+                    >
+                      <mat-icon>remove</mat-icon>
+                    </button>
+                  </div>
                 </div>
               </li>
             </ul>

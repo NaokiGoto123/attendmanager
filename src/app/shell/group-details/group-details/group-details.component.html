@@ -84,7 +84,7 @@
             >
               {{ member.displayName }}
             </h1>
-            <div *ngIf="ifadmin">
+            <div *ngIf="ifadmin && member.uid !== uid">
               <button
                 mat-button
                 color="primary"

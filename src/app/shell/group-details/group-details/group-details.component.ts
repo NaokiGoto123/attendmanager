@@ -60,12 +60,6 @@ export class GroupDetailsComponent implements OnInit {
 
       this.uid = this.authService.uid;
 
-      this.groupService
-        .ifAdmin(this.uid, this.id)
-        .subscribe((ifAdmin: boolean) => {
-          this.ifadmin = ifAdmin;
-        });
-
       const resultMemberIds: string[] = [];
       this.groupService
         .getMemberIds(this.id)
@@ -110,35 +104,49 @@ export class GroupDetailsComponent implements OnInit {
         }
       });
 
-      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        const adminIds: string[] = [];
-        this.groupService
-          .getAdminIds(group.id)
-          .subscribe((AdminIds: string[]) => {
-            AdminIds.forEach((AdminId: string) => {
-              adminIds.push(AdminId);
-            });
-          });
+      this.groupService.getAdminIds(this.id).subscribe((adminIds: string[]) => {
+        console.log(adminIds);
         if (adminIds.length) {
           this.ifAdmins = true;
+          if (adminIds.includes(this.uid)) {
+            this.ifadmin = true;
+          } else {
+            this.ifadmin = false;
+          }
         } else {
           this.ifAdmins = false;
         }
+        const admins: User[] = [];
+        adminIds.forEach((adminId: string) => {
+          this.authService.getUser(adminId).subscribe((admin: User) => {
+            admins.push(admin);
+          });
+        });
+        this.admins = admins;
       });
 
-      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        if (this.memberIds.length) {
-          this.ifMembers = true;
-          if (this.memberIds.includes(this.uid)) {
-            this.ifmember = true;
+      this.groupService
+        .getMemberIds(this.id)
+        .subscribe((memberIds: string[]) => {
+          console.log(memberIds);
+          if (memberIds.length) {
+            this.ifMembers = true;
+            if (memberIds.includes(this.uid)) {
+              this.ifmember = true;
+            } else {
+              this.ifmember = false;
+            }
           } else {
-            this.ifmember = false;
+            this.ifMembers = false;
           }
-        } else {
-          this.ifMembers = false;
-          this.ifmember = false;
-        }
-      });
+          const members: User[] = [];
+          memberIds.forEach((memberId: string) => {
+            this.authService.getUser(memberId).subscribe((member: User) => {
+              members.push(member);
+            });
+          });
+          this.members = members;
+        });
 
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
         if (group.waitingJoinningMemberIds.length) {

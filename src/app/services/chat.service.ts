@@ -3,11 +3,12 @@ import { AuthService } from './auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ChatRoom } from '../interfaces/chat-room';
 import { Group } from '../interfaces/group';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, combineLatest, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { Message } from '../interfaces/message';
 import { firestore } from 'firebase';
 import { Router } from '@angular/router';
+import { Id } from '../interfaces/id';
 
 @Injectable({
   providedIn: 'root',
@@ -39,19 +40,35 @@ export class ChatService {
 
   getMyChatRoommIds(uid: string): Observable<string[]> {
     return this.db
-      .collection<Group>(`groups`, (ref) =>
-        ref.where(`memberIds`, 'array-contains', uid)
-      )
+      .collection<Id>(`users/${uid}/groupIds`)
       .valueChanges()
       .pipe(
+        switchMap((groupIds: Id[]) => {
+          if (groupIds.length) {
+            const myGroups: Observable<Group>[] = [];
+            groupIds.forEach((groupId: Id) => {
+              console.log(groupId);
+              myGroups.push(
+                this.db.doc<Group>(`groups/${groupId.id}`).valueChanges()
+              );
+            });
+            return combineLatest(myGroups);
+          } else {
+            return of([]);
+          }
+        }),
         map((myGroups: Group[]) => {
-          const chatRoomIds: string[] = [];
-          myGroups.forEach((myGroup: Group) => {
-            if (myGroup.chatRoomId) {
-              chatRoomIds.push(myGroup.chatRoomId);
-            }
-          });
-          return chatRoomIds;
+          if (myGroups.length) {
+            const chatRoomIds: string[] = [];
+            myGroups.forEach((myGroup: Group) => {
+              if (myGroup.chatRoomId) {
+                chatRoomIds.push(myGroup.chatRoomId);
+              }
+            });
+            return chatRoomIds;
+          } else {
+            return [];
+          }
         })
       );
   }
@@ -62,7 +79,9 @@ export class ChatService {
 
   getMessages(chatRoomId: string) {
     return this.db
-      .collection(`chatRooms/${chatRoomId}/messages`)
+      .collection(`chatRooms/${chatRoomId}/messages`, (ref) =>
+        ref.orderBy('sentAt')
+      )
       .valueChanges();
   }
 

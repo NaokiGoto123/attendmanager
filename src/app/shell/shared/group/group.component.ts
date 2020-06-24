@@ -12,28 +12,29 @@ import { User } from 'src/app/interfaces/user';
 export class GroupComponent implements OnInit {
   @Input() group: Group;
 
-  memberIds: string[];
-
   uid: string;
 
-  user: User;
+  memberIds: string[];
+  ifMember: boolean;
 
   constructor(
     private authService: AuthService,
     private groupService: GroupService
-  ) {
+  ) {}
+
+  ngOnInit(): void {
     this.uid = this.authService.uid;
-    this.authService.getUser(this.uid).subscribe((user: User) => {
-      this.user = user;
-    });
     this.groupService
       .getMemberIds(this.group.id)
       .subscribe((memberIds: string[]) => {
         this.memberIds = memberIds;
+        if (memberIds.includes(this.uid)) {
+          this.ifMember = true;
+        } else {
+          this.ifMember = false;
+        }
       });
   }
-
-  ngOnInit(): void {}
 
   // nothing to waitingJoinning (private+pay, private+free)
   joinWaitingJoinningList() {
@@ -75,7 +76,7 @@ export class GroupComponent implements OnInit {
 
   // nothing to member (public+pay)
   patToJoinGroup() {
-    this.groupService.patToJoinGroup(this.uid, this.group.id);
+    this.groupService.payToJoinGroup(this.uid, this.group.id);
   }
 
   // waitingJoinningMember list to member list (private+free)

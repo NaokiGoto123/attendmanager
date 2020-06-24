@@ -24,10 +24,10 @@
         <mat-label>Which group</mat-label>
         <mat-select formControlName="groupid" required>
           <mat-option
-            *ngFor="let group of admingroups$ | async"
-            [value]="group.id"
+            *ngFor="let adminGroups of adminGroups"
+            [value]="adminGroups.id"
           >
-            {{ group.name }}
+            {{ adminGroups.name }}
           </mat-option>
         </mat-select>
       </mat-form-field>

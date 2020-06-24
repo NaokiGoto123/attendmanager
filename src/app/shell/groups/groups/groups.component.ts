@@ -14,16 +14,19 @@ export class GroupsComponent implements OnInit {
 
   uid: string;
 
-  groups: Observable<Group[]> = this.groupService.getMyGroup(
-    this.authService.uid
-  );
+  groups: Group[];
 
   constructor(
     private groupService: GroupService,
     private authService: AuthService
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.uid = this.authService.uid;
+    this.groupService.getMyGroup(this.uid).subscribe((myGroups: Group[]) => {
+      console.log(myGroups);
+      this.groups = myGroups;
+      console.log(this.groups);
+    });
   }
+
+  ngOnInit(): void {}
 }

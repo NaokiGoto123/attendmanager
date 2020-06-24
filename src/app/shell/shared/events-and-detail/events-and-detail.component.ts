@@ -6,6 +6,7 @@ import { User } from 'src/app/interfaces/user';
 import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable, combineLatest } from 'rxjs';
+import { timeStamp } from 'console';
 
 @Component({
   selector: 'app-events-and-detail',
@@ -18,6 +19,8 @@ export class EventsAndDetailComponent implements OnInit {
   @Input() existance: boolean;
 
   givenEvent: Event;
+
+  ifAdmin: boolean;
 
   createrName: string;
   createrId: string;
@@ -52,6 +55,11 @@ export class EventsAndDetailComponent implements OnInit {
       .subscribe((group: Group) => {
         this.groupId = group.id;
         this.groupName = group.name;
+        this.groupService
+          .ifAdmin(this.authService.uid, this.groupId)
+          .subscribe((ifAdmin: boolean) => {
+            this.ifAdmin = ifAdmin;
+          });
       });
 
     if (this.givenEvent.attendingMemberIds.length) {

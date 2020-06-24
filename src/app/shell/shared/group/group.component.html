@@ -1,77 +1,84 @@
-<div class="group">
-  <img
-    class="group-picture"
-    src="/assets/background/{{ group.grouppicture }}.jpg"
-  />
-  <h1 class="group-name">{{ group.name }}</h1>
-  <h2 class="group-description">{{ group.description }}</h2>
-  <div class="join-button-container">
-    <div *ngIf="memberIds.includes(uid)">
-      <button mat-raised-button color="accent" (click)="leaveGroup()">
-        Joinning
+<div *ngIf="group">
+  <div class="group">
+    <img
+      class="group-picture"
+      src="/assets/background/{{ group.grouppicture }}.jpg"
+    />
+    <h1 class="group-name">{{ group.name }}</h1>
+    <h2 class="group-description">{{ group.description }}</h2>
+    <div class="join-button-container">
+      <div *ngIf="ifMember">
+        <button mat-raised-button color="accent" (click)="leaveGroup()">
+          Joinning
+        </button>
+      </div>
+
+      <div *ngIf="!ifMember">
+        <div *ngIf="group.private">
+          <div *ngIf="group.waitingJoinningMemberIds.includes(uid)">
+            <button mat-raised-button color="warn" (click)="leaveWaitingList()">
+              Leave waiting list
+            </button>
+          </div>
+          <div *ngIf="!group.waitingJoinningMemberIds.includes(uid)">
+            <div *ngIf="group.waitingPayingMemberIds.includes(uid)">
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="waitingPayinglistToMember()"
+              >
+                Pay {{ group.price }} to join
+              </button>
+              <button
+                mat-raised-button
+                color="warn"
+                (click)="removeWaitingPayingMember()"
+              >
+                Cancel
+              </button>
+            </div>
+
+            <div *ngIf="!group.waitingPayingMemberIds.includes(uid)">
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="joinWaitingJoinningList()"
+              >
+                Join waiting list
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!group.private">
+          <div *ngIf="group.price === 0">
+            <button mat-raised-button color="primary" (click)="joinGroup()">
+              Join
+            </button>
+          </div>
+          <div *ngIf="group.price !== 0">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="patToJoinGroup()"
+            >
+              Pay {{ group.price }} tp join
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="group-details-button-container">
+      <button
+        mat-icon-button
+        color="primary"
+        aria-label="group description"
+        class="group-details-button"
+        [routerLink]="['/group-details']"
+        [queryParams]="{ id: group.id }"
+      >
+        <mat-icon>fullscreen</mat-icon>
       </button>
     </div>
-    <div *ngIf="!memberIds.includes(uid)">
-      <div *ngIf="group.private">
-        <div *ngIf="group.waitingJoinningMemberIds.includes(uid)">
-          <button mat-raised-button color="warn" (click)="leaveWaitingList()">
-            Leave waiting list
-          </button>
-        </div>
-        <div *ngIf="!group.waitingJoinningMemberIds.includes(uid)">
-          <div *ngIf="group.waitingPayingMemberIds.includes(uid)">
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="waitingPayinglistToMember()"
-            >
-              Pay {{ group.price }} to join
-            </button>
-            <button
-              mat-raised-button
-              color="warn"
-              (click)="removeWaitingPayingMember()"
-            >
-              Cancel
-            </button>
-          </div>
-
-          <div *ngIf="!group.waitingPayingMemberIds.includes(uid)">
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="joinWaitingJoinningList()"
-            >
-              Join waiting list
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div *ngIf="!group.private">
-        <div *ngIf="group.price === 0">
-          <button mat-raised-button color="primary" (click)="joinGroup()">
-            Join
-          </button>
-        </div>
-        <div *ngIf="group.price !== 0">
-          <button mat-raised-button color="primary" (click)="patToJoinGroup()">
-            Pay {{ group.price }} tp join
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="group-details-button-container">
-    <button
-      mat-icon-button
-      color="primary"
-      aria-label="group description"
-      class="group-details-button"
-      [routerLink]="['/group-details']"
-      [queryParams]="{ id: group.id }"
-    >
-      <mat-icon>fullscreen</mat-icon>
-    </button>
   </div>
 </div>

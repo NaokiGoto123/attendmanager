@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+// import * as admin from 'firebase-admin';
 
-const db = admin.firestore();
+// const db = admin.firestore();
 
 export const joinGroup = functions
   .region('asia-northeast1')
@@ -23,13 +23,13 @@ export const joinGroup = functions
 
     console.log(adminIds);
 
-    adminIds.forEach((adminId: string) => {
-      return db.collection(`users/${adminId}/notifications`).add({
-        personUid: newMemberId,
-        objectId: groupId,
-        date: new Date(),
-      });
-    });
+    // adminIds.forEach((adminId: string) => {
+    //   return db.collection(`users/${adminId}/notifications`).add({
+    //     personUid: newMemberId,
+    //     objectId: groupId,
+    //     date: new Date(),
+    //   });
+    // });
   });
 
 // export const joinGroupWaitinglist = functions

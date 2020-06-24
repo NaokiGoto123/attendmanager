@@ -31,9 +31,7 @@ export class CreateEventComponent implements OnInit {
 
   waitingPayingMemberIds: string[];
 
-  admingroups$: Observable<Group[]> = this.groupService.getAdminGroup(
-    this.authService.uid
-  );
+  adminGroups: Group[];
 
   currencies = ['USD', 'SHP', 'JPY', 'CAD', 'CNY', 'EUR'];
 
@@ -67,16 +65,10 @@ export class CreateEventComponent implements OnInit {
     private groupService: GroupService,
     private eventService: EventService
   ) {
-    this.activatedRoute.queryParamMap
-      .pipe(
-        switchMap((params) => {
-          return this.eventService.getEvent(params.get('id'));
-        })
-      )
-      .subscribe((event: Event) => {
-        if (!event) {
-          return null;
-        } else {
+    this.activatedRoute.queryParamMap.subscribe((params) => {
+      const id = params.get('id');
+      this.eventService.getEvent(id).subscribe((event: Event) => {
+        if (event) {
           this.ifTarget = true;
           this.groupid = event.groupid;
           this.eventid = event.id;
@@ -87,22 +79,26 @@ export class CreateEventComponent implements OnInit {
             ...event,
             date: event.date.toDate(),
           });
+        } else {
+          const uid: string = this.authService.uid;
+          console.log(uid);
+          this.groupService
+            .getAdminGroup(uid)
+            .subscribe((adminGroups: Group[]) => {
+              console.log(adminGroups);
+              if (adminGroups.length) {
+                this.noGroup = false;
+                this.adminGroups = adminGroups;
+              } else {
+                this.noGroup = true;
+              }
+            });
         }
       });
-  }
-
-  ngOnInit(): void {
-    this.admingroups$.subscribe((admingroups: Group[]) => {
-      console.log('map working');
-      if (admingroups.length) {
-        this.noGroup = false;
-        console.log('noGroup is false');
-      } else {
-        this.noGroup = true;
-        console.log('noGroup is true');
-      }
     });
   }
+
+  ngOnInit(): void {}
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
