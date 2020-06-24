@@ -19,6 +19,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class CreateGroupComponent implements OnInit {
   user: User;
 
+  uid: string;
+
   ifTarget = false;
 
   isComplete = false;
@@ -82,6 +84,7 @@ export class CreateGroupComponent implements OnInit {
       });
     this.authService.getUser(this.authService.uid).subscribe((user: User) => {
       this.user = user;
+      this.uid = user.uid;
     });
   }
 
@@ -97,7 +100,7 @@ export class CreateGroupComponent implements OnInit {
 
   submit() {
     this.groupSerive
-      .createGroup(this.user, {
+      .createGroup(this.uid, {
         id: this.db.createId(),
         name: this.form.value.name,
         description: this.form.value.description,

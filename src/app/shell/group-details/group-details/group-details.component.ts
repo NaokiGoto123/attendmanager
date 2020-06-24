@@ -66,27 +66,23 @@ export class GroupDetailsComponent implements OnInit {
           this.ifadmin = ifAdmin;
         });
 
-      const resultMembers: User[] = [];
       const resultMemberIds: string[] = [];
-      this.groupService.getMembers(this.id).subscribe((members: User[]) => {
-        members.forEach((member) => {
-          resultMemberIds.push(member.uid);
-          resultMembers.push(member);
+      this.groupService
+        .getMemberIds(this.id)
+        .subscribe((memberIds: string[]) => {
+          memberIds.forEach((memberId: string) => {
+            resultMemberIds.push(memberId);
+          });
         });
-      });
       this.memberIds = resultMemberIds;
-      this.members = resultMembers;
 
-      const resultAdmins: User[] = [];
       const resultAdminIds: string[] = [];
-      this.groupService.getAdmins(this.id).subscribe((admins: User[]) => {
-        admins.forEach((admin) => {
-          resultAdminIds.push(admin.uid);
-          resultAdmins.push(admin);
+      this.groupService.getAdminIds(this.id).subscribe((adminIds: string[]) => {
+        adminIds.forEach((adminId: string) => {
+          resultAdminIds.push(adminId);
         });
       });
       this.adminIds = resultAdminIds;
-      this.admins = resultAdmins;
 
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
         this.group = group;
@@ -116,12 +112,13 @@ export class GroupDetailsComponent implements OnInit {
 
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
         const adminIds: string[] = [];
-        this.groupService.getAdmins(group.id).subscribe((admins: User[]) => {
-          this.admins = admins;
-          admins.forEach((admin: User) => {
-            adminIds.push(admin.uid);
+        this.groupService
+          .getAdminIds(group.id)
+          .subscribe((AdminIds: string[]) => {
+            AdminIds.forEach((AdminId: string) => {
+              adminIds.push(AdminId);
+            });
           });
-        });
         if (adminIds.length) {
           this.ifAdmins = true;
         } else {
@@ -194,28 +191,24 @@ export class GroupDetailsComponent implements OnInit {
     });
   }
 
-  makeAdmin(user: User) {
-    console.log(this.uid);
-    console.log(this.id);
-    this.groupService.makeAdmin(user, this.id);
+  makeAdmin(uid: string) {
+    this.groupService.makeAdmin(uid, this.id);
   }
 
-  deleteAdmin(user: User) {
-    console.log(this.uid);
-    console.log(this.id);
-    this.groupService.deleteAdmin(user, this.id);
+  deleteAdmin(uid: string) {
+    this.groupService.deleteAdmin(uid, this.id);
   }
 
-  leaveGroup(user: User) {
-    this.groupService.leaveGroup(user, this.group);
+  leaveGroup(uid: string) {
+    this.groupService.leaveGroup(uid, this.id);
   }
 
   leaveWaitingList(waitingMemberId: string) {
     this.groupService.leaveWaitingList(waitingMemberId, this.id);
   }
 
-  allowWaitingMember(waitingMember: User) {
-    this.groupService.allowWaitingMember(waitingMember, this.id);
+  allowWaitingMember(waitingMemberId: string) {
+    this.groupService.allowWaitingMember(waitingMemberId, this.id);
   }
 
   waitingJoinningMemberToWaitingPayingMember(waitingMemberId: string) {
