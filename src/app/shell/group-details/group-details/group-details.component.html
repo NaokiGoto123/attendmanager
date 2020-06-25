@@ -34,11 +34,13 @@
 
     <h1>
       Created by
-      <span class="creater"
-        ><a routerLink="/account" [queryParams]="{ id: createrId }">{{
-          createrName
-        }}</a></span
+      <span
+        class="creater"
+        routerLink="/account"
+        [queryParams]="{ id: createrId }"
       >
+        {{ createrName }}
+      </span>
       on
       {{ createddate | date: 'yyyy/MM/dd' }}
     </h1>
@@ -56,7 +58,7 @@
         <div *ngFor="let admin of admins">
           <li class="member-container">
             <h1
-              class="member"
+              class="memberName"
               [routerLink]="['/account']"
               [queryParams]="{ id: admin.uid }"
             >

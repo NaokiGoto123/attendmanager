@@ -34,3 +34,9 @@
   flex-direction: row;
   align-items: center;
 }
+
+.creater-name:hover,
+.group-name:hover,
+.attendingMember-name:hover {
+  text-decoration: underline;
+}

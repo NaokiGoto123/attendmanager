@@ -106,6 +106,7 @@ export class GroupService {
       .valueChanges()
       .pipe(
         map((memberIds: Id[]) => {
+          console.log(memberIds, 'service');
           const MemberIds: string[] = [];
           memberIds.forEach((memberId: Id) => {
             MemberIds.push(memberId.id);
@@ -202,9 +203,11 @@ export class GroupService {
             })
           )
           .subscribe((chatRoomId: string) => {
+            console.log('this is chatroomid', chatRoomId);
             this.db.doc(`chatRooms/${chatRoomId}`).delete();
           });
       })
+      // サブコレ消す処理
       .then(() => {
         this.getMemberIds(groupId).subscribe((memberIds: string[]) => {
           memberIds.forEach((memberId: string) => {
@@ -212,13 +215,16 @@ export class GroupService {
           });
         });
       })
+      // サブコレ消す処理
       .then(() => {
         this.getAdminIds(groupId).subscribe((adminIds: string[]) => {
           adminIds.forEach((adminId: string) => {
+            console.log('this is adminIds', adminIds);
             this.db.doc(`users/${adminId}/adminGroupIds/${groupId}`).delete();
           });
         });
       })
+      // イベント消す処理
       .then(() => {
         this.db
           .collection(`events`, (ref) => ref.where('groupid', '==', groupId))

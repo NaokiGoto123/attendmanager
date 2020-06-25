@@ -1,0 +1,18 @@
+<div *ngIf="notification.type === 'joinGroup'">
+  <mat-list-item
+    ><img
+      routerLink="/account"
+      [queryParams]="{ id: userId }"
+      class="account-picture"
+      src="{{ userPhotoURL }}"
+    /><span routerLink="/account" [queryParams]="{ id: userId }">{{
+      userDisplayname
+    }}</span
+    ><span class="joined">joined</span>
+    <span routerLink="/group-details" [queryParams]="{ id: groupId }">{{
+      groupName
+    }}</span
+    ><span class="on">on</span
+    >{{ date | date: 'yyy/MM/dd HH:mm:ss' }}</mat-list-item
+  >
+</div>

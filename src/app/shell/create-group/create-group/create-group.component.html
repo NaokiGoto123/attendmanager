@@ -32,6 +32,17 @@
       <input matInput formControlName="description" type="text" />
     </mat-form-field>
 
+    <p>{{ form.value.price }} {{ form.value.currency }}</p>
+
+    <mat-form-field>
+      <mat-label>Choose currency</mat-label>
+      <mat-select formControlName="currency">
+        <div *ngFor="let currency of currencies">
+          <mat-option [value]="currency">{{ currency }}</mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+
     <mat-slider
       class="create-group-field"
       thumbLabel
@@ -43,15 +54,6 @@
       max="50000"
     >
     </mat-slider>
-
-    <mat-form-field>
-      <mat-label>Choose currency</mat-label>
-      <mat-select formControlName="currency">
-        <div *ngFor="let currency of currencies">
-          <mat-option [value]="currency">{{ currency }}</mat-option>
-        </div>
-      </mat-select>
-    </mat-form-field>
 
     <mat-slide-toggle class="create-group-field" formControlName="private">
       <div *ngIf="form.value.private">

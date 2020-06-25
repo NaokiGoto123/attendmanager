@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
+import { Notification } from '../interfaces/notification';
 
 @Injectable({
   providedIn: 'root',
@@ -7,8 +9,10 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class NotificationsService {
   constructor(private db: AngularFirestore) {}
 
-  getNotifications(uid: string) {
-    return this.db.collection(`users/${uid}/notifications`).valueChanges();
+  getNotifications(uid: string): Observable<Notification[]> {
+    return this.db
+      .collection<Notification>(`users/${uid}/notifications`)
+      .valueChanges();
   }
 
   clearNotificationCount(uid: string) {

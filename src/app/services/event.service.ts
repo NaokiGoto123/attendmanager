@@ -7,6 +7,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { Observable, combineLatest, of } from 'rxjs';
 import { firestore } from 'firebase';
 import { Group } from '../interfaces/group';
+import { Id } from '../interfaces/id';
 @Injectable({
   providedIn: 'root',
 })
@@ -23,9 +24,7 @@ export class EventService {
       .doc(`events/${id}`)
       .set(event)
       .then(() =>
-        this.db
-          .doc(`groups/${event.groupid}`)
-          .update({ eventIds: firestore.FieldValue.arrayUnion(event.id) })
+        this.db.doc(`groups/${event.groupid}/eventIds`).set({ id: event.id })
       )
       .then(() =>
         this.snackbar.open('Successfully created the event', null, {
@@ -38,33 +37,26 @@ export class EventService {
     return this.db.doc<Event>(`events/${eventid}`).valueChanges();
   }
 
-  getEvents(uid: string): Observable<Event[]> {
-    const groups$: Observable<Group[]> = this.groupService.getMyGroup(uid);
-    return groups$.pipe(
-      switchMap((groups: Group[]) => {
-        const eventIdsList: string[][] = groups.map((group) => group.eventIds);
-        const eventListObs$: Observable<Event[]>[] = eventIdsList.map(
-          (eventIds: string[]) => {
-            if (eventIds?.length) {
-              const events$: Observable<
-                Event
-              >[] = eventIds.map((eventId: string) =>
-                this.db.doc<Event>(`events/${eventId}`).valueChanges()
-              );
-              return combineLatest(events$);
-            } else {
-              return of([]);
-            }
+  getMyEvents(uid: string): Observable<Event[]> {
+    return this.db
+      .collection<Id>(`users/${uid}/eventIds`)
+      .valueChanges()
+      .pipe(
+        map((eventIds: Id[]) => {
+          if (eventIds.length) {
+            const result: Observable<Event>[] = [];
+            eventIds.forEach((eventId: Id) => {
+              const event: Observable<Event> = this.db
+                .doc<Event>(`events/${eventId.id}`)
+                .valueChanges();
+              result.push(event);
+            });
+            return combineLatest(result);
+          } else {
+            return of([]);
           }
-        );
-        return combineLatest(eventListObs$);
-      }),
-      map((eventsList: Event[][]) => {
-        const results: Event[] = [].concat(...eventsList);
-        console.log(results);
-        return results;
-      })
-    );
+        })
+      );
   }
 
   async updateEvent(uid: string, event: Omit<Event, 'createrId'>) {
@@ -78,15 +70,53 @@ export class EventService {
       );
   }
 
-  async deleteEvent(eventid: string, groupid: string) {
+  async deleteEvent(eventId: string, groupId: string) {
     await this.db
-      .doc(`events/${eventid}`)
+      .doc(`events/${eventId}`)
       .delete()
-      .then(() =>
+      .then(() => this.db.doc(`groups/${groupId}/eventIds/${eventId}`).delete())
+      .then(() => {
         this.db
-          .doc(`groups/${groupid}`)
-          .update({ eventIds: firestore.FieldValue.arrayRemove(eventid) })
-      )
+          .collection<Id>(`groups/${groupId}/attendingMemberIds`)
+          .valueChanges()
+          .subscribe((attendingMemberIds: Id[]) => {
+            attendingMemberIds.forEach((attendingMemberId: Id) => {
+              this.db
+                .doc(
+                  `groups/${groupId}/attendingMemberIds/${attendingMemberId.id}`
+                )
+                .delete();
+            });
+          });
+      })
+      .then(() => {
+        this.db
+          .collection(`groups/${groupId}/waitingJoinningMemberIds`)
+          .valueChanges()
+          .subscribe((waitingJoinningMemberIds: Id[]) => {
+            waitingJoinningMemberIds.forEach((waitingJoinningMemberId: Id) => {
+              this.db
+                .doc(
+                  `groups/${groupId}/attendingMemberIds/${waitingJoinningMemberId.id}`
+                )
+                .delete();
+            });
+          });
+      })
+      .then(() => {
+        this.db
+          .collection(`groups/${groupId}/waitingPayingMemberIds`)
+          .valueChanges()
+          .subscribe((waitingPayingMemberIds: Id[]) => {
+            waitingPayingMemberIds.forEach((waitingPayingMemberId: Id) => {
+              this.db
+                .doc(
+                  `groups/${groupId}/attendingMemberIds/${waitingPayingMemberId.id}`
+                )
+                .delete();
+            });
+          });
+      })
       .then(() =>
         this.snackbar.open('Successfully deleted the event', null, {
           duration: 2000,
@@ -100,7 +130,9 @@ export class EventService {
       .valueChanges();
   }
 
+  // need to work
   getAttendingEvents(uid: string): Observable<Event[]> {
+    this.db.collection(`events`);
     return this.db
       .collection<Event>(`events`, (ref) =>
         ref.where('attendingMemberIds', 'array-contains', uid)
@@ -109,21 +141,27 @@ export class EventService {
   }
 
   // nothing to attending (pay+public, pay+private, free+public, free+private)
-  async attendEvent(uid: string, eventid: string) {
+  async attendEvent(uid: string, eventId: string) {
     await this.db
-      .doc(`events/${eventid}`)
-      .update({ attendingMemberIds: firestore.FieldValue.arrayUnion(uid) });
+      .doc(`events/${eventId}/attendingMemberIds/${uid}`)
+      .set({ id: uid })
+      .then(() => {
+        this.db.doc(`users/${uid}/eventIds/${eventId}`).set({ id: eventId });
+      });
   }
 
   // waitingPayinglist to attending (pay+public, pay+private, free+public, free+private)
-  async payToAttendEvent(uid: string, eventid: string) {
+  async payToAttendEvent(uid: string, eventId: string) {
     await this.db
-      .doc(`events/${eventid}`)
-      .update({ attendingMemberIds: firestore.FieldValue.arrayUnion(uid) })
+      .doc(`events/${eventId}/'attendingMemberIds'/${uid}`)
+      .set({ id: uid })
       .then(() => {
-        this.db.doc(`events/${eventid}`).update({
-          waitingPayingMemberIds: firestore.FieldValue.arrayRemove(uid),
-        });
+        this.db
+          .doc(`events/${eventId}/'waitingPayingMemberIds'/${uid}`)
+          .delete();
+      })
+      .then(() => {
+        this.db.doc(`users/${uid}/eventIds/${eventId}`).set({ id: eventId });
       });
   }
 
