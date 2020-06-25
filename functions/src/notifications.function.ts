@@ -5,9 +5,11 @@ import * as functions from 'firebase-functions';
 
 export const joinGroup = functions
   .region('asia-northeast1')
-  .firestore.document(`groups/{groupId}/memberIds/{memberId}`)
-  .onUpdate(async (change, context) => {
-    const data = change.after.data();
+  .firestore.document('groups/{groupId}/memberIds/{memberId}')
+  .onCreate(async (snap, context) => {
+    const data = snap.data();
+
+    console.log(data);
 
     if (!data) return;
 

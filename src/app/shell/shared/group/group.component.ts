@@ -75,7 +75,7 @@ export class GroupComponent implements OnInit {
   }
 
   // nothing to member (public+pay)
-  patToJoinGroup() {
+  payToJoinGroup() {
     this.groupService.payToJoinGroup(this.uid, this.group.id);
   }
 

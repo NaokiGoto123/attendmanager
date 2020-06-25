@@ -78,13 +78,17 @@
         <div *ngFor="let member of members">
           <li class="member-container">
             <h1
-              class="member"
+              class="memberName"
               [routerLink]="['/account']"
               [queryParams]="{ id: member.uid }"
             >
               {{ member.displayName }}
             </h1>
-            <div *ngIf="ifadmin && member.uid !== uid">
+            <div
+              *ngIf="
+                ifadmin && member.uid !== uid && !adminIds.includes(member.uid)
+              "
+            >
               <button
                 mat-button
                 color="primary"

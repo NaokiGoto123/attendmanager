@@ -24,6 +24,7 @@
             <div *ngIf="group.waitingPayingMemberIds.includes(uid)">
               <button
                 mat-raised-button
+                class="pay-button"
                 color="primary"
                 (click)="waitingPayinglistToMember()"
               >
@@ -60,7 +61,7 @@
             <button
               mat-raised-button
               color="primary"
-              (click)="patToJoinGroup()"
+              (click)="payToJoinGroup()"
             >
               Pay {{ group.price }} tp join
             </button>

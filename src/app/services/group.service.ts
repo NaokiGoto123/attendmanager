@@ -135,9 +135,11 @@ export class GroupService {
       if (!adminIds.includes(uid)) {
         this.db
           .doc(`groups/${groupId}/adminIds/${uid}`)
-          .set(uid)
+          .set({ id: uid })
           .then(() => {
-            this.db.doc(`users/${uid}/adminGroupIds/${groupId}`).set(groupId);
+            this.db
+              .doc(`users/${uid}/adminGroupIds/${groupId}`)
+              .set({ id: groupId });
           });
       } else {
         return;
