@@ -10,4 +10,8 @@ export interface User {
   showGroups: boolean;
   showAttendingEvents: boolean;
   showAttendedEvents: boolean;
+
+  // groupIds
+  // adminGroupIds
+  // eventIds
 }

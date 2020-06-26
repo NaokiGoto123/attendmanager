@@ -13,11 +13,11 @@ import { GroupService } from 'src/app/services/group.service';
 export class EventsComponent implements OnInit {
   value = '';
 
-  existance: boolean;
-
   groups: Group[];
+  groupExistance: boolean;
 
   events: Event[];
+  eventsExistance: boolean;
 
   constructor(
     private authService: AuthService,
@@ -25,19 +25,24 @@ export class EventsComponent implements OnInit {
     private groupService: GroupService
   ) {
     this.eventService
-      .getEvents(this.authService.uid)
+      .getMyEvents(this.authService.uid)
       .subscribe((events: Event[]) => {
         this.events = events;
         if (events.length) {
-          this.existance = true;
+          this.eventsExistance = true;
         } else {
-          this.existance = false;
+          this.eventsExistance = false;
         }
       });
     this.groupService
       .getMyGroup(this.authService.uid)
       .subscribe((groups: Group[]) => {
         this.groups = groups;
+        if (groups.length) {
+          this.groupExistance = true;
+        } else {
+          this.groupExistance = false;
+        }
       });
   }
 

@@ -25,12 +25,6 @@ export class CreateEventComponent implements OnInit {
 
   groupid: string;
 
-  attendingmembers: string[];
-
-  waitingJoinningMemberIds: string[];
-
-  waitingPayingMemberIds: string[];
-
   adminGroups: Group[];
 
   currencies = ['USD', 'SHP', 'JPY', 'CAD', 'CNY', 'EUR'];
@@ -72,9 +66,6 @@ export class CreateEventComponent implements OnInit {
           this.ifTarget = true;
           this.groupid = event.groupid;
           this.eventid = event.id;
-          this.attendingmembers = event.attendingMemberIds;
-          this.waitingJoinningMemberIds = event.waitingJoinningMemberIds;
-          this.waitingPayingMemberIds = event.waitingPayingMemberIds;
           this.form.patchValue({
             ...event,
             date: event.date.toDate(),
@@ -116,15 +107,12 @@ export class CreateEventComponent implements OnInit {
         description: this.form.value.description,
         createrId: this.authService.uid,
         memberlimit: this.form.value.memberlimit,
-        attendingMemberIds: [],
         date: this.form.value.date,
         time: this.form.value.time,
         location: this.form.value.location,
         groupid: this.form.value.groupid,
         price: this.form.value.price,
         currency: this.form.value.currency,
-        waitingJoinningMemberIds: [],
-        waitingPayingMemberIds: [],
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })
@@ -139,15 +127,12 @@ export class CreateEventComponent implements OnInit {
         title: this.form.value.title,
         description: this.form.value.description,
         memberlimit: this.form.value.memberlimit,
-        attendingMemberIds: this.attendingmembers,
         date: this.form.value.date,
         time: this.form.value.time,
         location: this.form.value.location,
         groupid: this.form.value.groupid,
         price: this.form.value.price,
         currency: this.form.value.currency,
-        waitingJoinningMemberIds: this.waitingJoinningMemberIds,
-        waitingPayingMemberIds: this.waitingPayingMemberIds,
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })

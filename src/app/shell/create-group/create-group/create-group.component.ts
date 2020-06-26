@@ -107,12 +107,9 @@ export class CreateGroupComponent implements OnInit {
         grouppicture: this.selectedImageId,
         createddate: firestore.Timestamp.now(),
         createrId: this.authService.uid,
-        eventIds: [],
         chatRoomId: null,
         price: this.form.value.price,
         currency: this.form.value.currency,
-        waitingJoinningMemberIds: [],
-        waitingPayingMemberIds: [],
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })

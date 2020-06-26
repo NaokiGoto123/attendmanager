@@ -10,7 +10,11 @@ export const joinGroup = functions
     const data = snap.data();
     if (!data) return;
     const newMemberId: string = context.params.memberId;
+    const newMember = (await db.doc(`users/${newMemberId}`).get()).data();
+    console.log(newMember);
     const groupId: string = context.params.groupId;
+    const group = (await db.doc(`groups/${groupId}`).get()).data();
+    console.log(group);
     const adminIds = (
       await db.collection(`groups/${groupId}/adminIds`).get()
     ).docs.map((doc) => doc.data());
@@ -25,7 +29,9 @@ export const joinGroup = functions
         .set({
           id: Id,
           personUid: newMemberId,
+          personDisplayname: newMember,
           objectId: groupId,
+          objectName: group,
           date: admin.firestore.Timestamp.now(),
           type: 'joinGroup',
         })

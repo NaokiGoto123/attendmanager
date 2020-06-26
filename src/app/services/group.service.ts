@@ -131,6 +131,44 @@ export class GroupService {
       );
   }
 
+  getWaitingPayingMemberIds(groupId: string): Observable<string[]> {
+    return this.db
+      .collection(`groups/${groupId}/waitingPayingMemberIds`)
+      .valueChanges()
+      .pipe(
+        map((waitingPayingMemberIds: Id[]) => {
+          if (waitingPayingMemberIds.length) {
+            const result: string[] = [];
+            waitingPayingMemberIds.map((waitingPayingMemberId: Id) => {
+              result.push(waitingPayingMemberId.id);
+            });
+            return result;
+          } else {
+            return [];
+          }
+        })
+      );
+  }
+
+  getWaitingJoinningMemberIds(groupId: string): Observable<string[]> {
+    return this.db
+      .collection(`groups/${groupId}/waitingJoinningMemberIds`)
+      .valueChanges()
+      .pipe(
+        map((waitingJoinningMemberIds: Id[]) => {
+          if (waitingJoinningMemberIds.length) {
+            const result: string[] = [];
+            waitingJoinningMemberIds.map((waitingJoinningMemberId: Id) => {
+              result.push(waitingJoinningMemberId.id);
+            });
+            return result;
+          } else {
+            return [];
+          }
+        })
+      );
+  }
+
   makeAdmin(uid: string, groupId: string) {
     this.getAdminIds(groupId).subscribe((adminIds: string[]) => {
       if (!adminIds.includes(uid)) {
@@ -245,16 +283,16 @@ export class GroupService {
 
   // nothing to waitingJoinning (private+pay, private+free)
   async joinWaitingJoinningList(uid: string, groupId: string) {
-    await this.db.doc(`groups/${groupId}`).update({
-      waitingJoinningMemberIds: firestore.FieldValue.arrayUnion(uid),
-    });
+    await this.db
+      .doc(`groups/${groupId}/waitingJoinningMemberIds/${uid}`)
+      .set({ id: uid });
   }
 
   // waitingJoinning list to nothing (private+pay, private+free)
   async leaveWaitingList(uid: string, groupId: string) {
-    await this.db.doc(`groups/${groupId}`).update({
-      waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
-    });
+    await this.db
+      .doc(`groups/${groupId}/waitingJoinningMemberIds/${uid}`)
+      .set({ id: uid });
   }
 
   // waitingJoinning to waitingPaying (private+pay)
@@ -263,14 +301,12 @@ export class GroupService {
     groupId: string
   ) {
     await this.db
-      .doc(`groups/${groupId}`)
-      .update({
-        waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
-      })
+      .doc(`groups/${groupId}/waitingJoinningMemberIds/${uid}`)
+      .delete()
       .then(() => {
-        this.db.doc(`groups/${groupId}`).update({
-          waitingPayingMemberIds: firestore.FieldValue.arrayUnion(uid),
-        });
+        this.db
+          .doc(`groups/${groupId}/waitingPayingMemberIds/${uid}`)
+          .set({ id: uid });
       });
   }
 
@@ -284,17 +320,15 @@ export class GroupService {
         this.db.doc(`users/${uid}/groupIds/${groupId}`).set({ id: groupId });
       })
       .then(() => {
-        this.db.doc(`groups/${groupId}`).update({
-          waitingPayingMemberIds: firestore.FieldValue.arrayRemove(uid),
-        });
+        this.db.doc(`groups/${groupId}/waitingPayingMemberIds/${uid}`).delete();
       });
   }
 
   // waitingPaying to nothing (private+pay)
   async removeWaitingPayingMember(uid: string, groupId: string) {
-    await this.db.doc(`groups/${groupId}`).update({
-      waitingPayingMemberIds: firestore.FieldValue.arrayRemove(uid),
-    });
+    await this.db
+      .doc(`groups/${groupId}/waitingPayingMemberIds/${uid}`)
+      .set({ id: uid });
   }
 
   // member to nothing (private+free, private+pay, public+free, public+pay)
@@ -345,9 +379,9 @@ export class GroupService {
 
   // waitingJoinningMember list to member list (private+free)
   async allowWaitingMember(uid: string, groupId: string) {
-    await this.db.doc(`groups/${groupId}`).update({
-      waitingJoinningMemberIds: firestore.FieldValue.arrayRemove(uid),
-    });
+    await this.db
+      .doc(`groups/${groupId}/waitingJoinningMemberIds/${uid}`)
+      .set({ id: uid });
     this.db
       .doc(`groups/${groupId}/memberIds/${uid}`)
       .set({ id: uid })

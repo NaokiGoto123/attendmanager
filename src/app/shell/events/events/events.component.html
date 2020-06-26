@@ -1,43 +1,60 @@
-<mat-toolbar class="toolbar">
-  <div *ngFor="let group of groups">
-    <mat-checkbox class="checkbox">{{ group.name }}</mat-checkbox>
+<div *ngIf="!eventsExistance">
+  <div *ngIf="groupExistance">
+    <h1>You are not attending any events.</h1>
+    <h1 routerLink="/search/events">Search for events</h1>
+    <h1>or</h1>
+    <h1 routerLink="/create-event">Create event</h1>
   </div>
-</mat-toolbar>
-
-<div class="header-container">
-  <div class="child-header-container">
-    <a routerLink="/create-event">
-      <button class="add-button" mat-fab color="primary">
-        <mat-icon>add</mat-icon>
-      </button>
-    </a>
-
-    <a routerLink="/calendar">
-      <button class="calendar-button" mat-fab color="accent">
-        <mat-icon>calendar_today</mat-icon>
-      </button>
-    </a>
-
-    <mat-form-field class="search-field">
-      <mat-label>Search bar</mat-label>
-      <input matInput type="text" [(ngModel)]="value" />
-      <button
-        mat-button
-        *ngIf="value"
-        matSuffix
-        mat-icon-button
-        aria-label="Clear"
-        (click)="value = ''"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
+  <div *ngIf="!groupExistance">
+    <h1>You do not belong to any groups.</h1>
+    <h1 routerLink="/search/groups">Search for groups</h1>
+    <h1>or</h1>
+    <h1 routerLink="/create-group">Create group</h1>
   </div>
 </div>
 
-<div class="container">
-  <app-events-and-detail
-    [events]="events"
-    [existance]="existance"
-  ></app-events-and-detail>
+<div *ngIf="eventsExistance">
+  <mat-toolbar class="toolbar">
+    <div *ngFor="let group of groups">
+      <mat-checkbox class="checkbox">{{ group.name }}</mat-checkbox>
+    </div>
+  </mat-toolbar>
+
+  <div class="header-container">
+    <div class="child-header-container">
+      <a routerLink="/create-event">
+        <button class="add-button" mat-fab color="primary">
+          <mat-icon>add</mat-icon>
+        </button>
+      </a>
+
+      <a routerLink="/calendar">
+        <button class="calendar-button" mat-fab color="accent">
+          <mat-icon>calendar_today</mat-icon>
+        </button>
+      </a>
+
+      <mat-form-field class="search-field">
+        <mat-label>Search bar</mat-label>
+        <input matInput type="text" [(ngModel)]="value" />
+        <button
+          mat-button
+          *ngIf="value"
+          matSuffix
+          mat-icon-button
+          aria-label="Clear"
+          (click)="value = ''"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="container">
+    <app-events-and-detail
+      [events]="events"
+      [existance]="eventsExistance"
+    ></app-events-and-detail>
+  </div>
 </div>

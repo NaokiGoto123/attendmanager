@@ -15,13 +15,13 @@
 
       <div *ngIf="!ifMember">
         <div *ngIf="group.private">
-          <div *ngIf="group.waitingJoinningMemberIds.includes(uid)">
+          <div *ngIf="ifWaitingJoinningMember">
             <button mat-raised-button color="warn" (click)="leaveWaitingList()">
               Leave waiting list
             </button>
           </div>
-          <div *ngIf="!group.waitingJoinningMemberIds.includes(uid)">
-            <div *ngIf="group.waitingPayingMemberIds.includes(uid)">
+          <div *ngIf="!ifWaitingJoinningMember">
+            <div *ngIf="ifWaitingPayingMember">
               <button
                 mat-raised-button
                 class="pay-button"
@@ -39,7 +39,7 @@
               </button>
             </div>
 
-            <div *ngIf="!group.waitingPayingMemberIds.includes(uid)">
+            <div *ngIf="!ifWaitingPayingMember">
               <button
                 mat-raised-button
                 color="primary"

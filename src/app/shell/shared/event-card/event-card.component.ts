@@ -82,17 +82,25 @@ export class EventCardComponent implements OnInit {
         this.ifPrivate = false;
       }
 
-      if (this.event.waitingJoinningMemberIds.includes(this.authService.uid)) {
-        this.ifWaitingJoinningMember = true;
-      } else {
-        this.ifWaitingJoinningMember = false;
-      }
+      this.eventService
+        .getWaitingJoinningMemberIds(this.event.id)
+        .subscribe((waitingJoinningMemberIds: string[]) => {
+          if (waitingJoinningMemberIds.includes(this.authService.uid)) {
+            this.ifWaitingJoinningMember = true;
+          } else {
+            this.ifWaitingJoinningMember = false;
+          }
+        });
 
-      if (this.event.waitingPayingMemberIds.includes(this.authService.uid)) {
-        this.ifWaitingPayingMember = true;
-      } else {
-        this.ifWaitingPayingMember = false;
-      }
+      this.eventService
+        .getWaitingPayingMemberIds(this.event.id)
+        .subscribe((waitingPayingMemberIds: string[]) => {
+          if (waitingPayingMemberIds.includes(this.authService.uid)) {
+            this.ifWaitingPayingMember = true;
+          } else {
+            this.ifWaitingPayingMember = false;
+          }
+        });
 
       const now = new Date();
 
@@ -114,11 +122,15 @@ export class EventCardComponent implements OnInit {
           this.ifadmin = ifAdmin;
         });
 
-      if (this.event.attendingMemberIds.includes(this.authService.uid)) {
-        this.attended = true;
-      } else {
-        this.attended = false;
-      }
+      this.eventService
+        .getAttendingMemberIds(this.event.id)
+        .subscribe((attendingMemberIds: string[]) => {
+          if (attendingMemberIds.includes(this.authService.uid)) {
+            this.attended = true;
+          } else {
+            this.attended = false;
+          }
+        });
 
       this.ifEvent = true;
     } else {

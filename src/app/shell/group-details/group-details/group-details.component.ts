@@ -148,39 +148,43 @@ export class GroupDetailsComponent implements OnInit {
           this.members = members;
         });
 
-      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        if (group.waitingJoinningMemberIds.length) {
-          this.waitingJoinningMembers = combineLatest(
-            group.waitingJoinningMemberIds.map((waitingMemberId) => {
-              console.log(waitingMemberId);
-              const waitingMember: Observable<User> = this.authService.getUser(
-                waitingMemberId
-              );
-              return waitingMember;
-            })
-          );
-          this.ifWaitingJoinningMembers = true;
-        } else {
-          this.ifWaitingJoinningMembers = false;
-        }
-      });
+      this.groupService
+        .getWaitingJoinningMemberIds(this.id)
+        .subscribe((waitingJoinningMemberIds: string[]) => {
+          if (waitingJoinningMemberIds.length) {
+            this.waitingJoinningMembers = combineLatest(
+              waitingJoinningMemberIds.map((waitingMemberId) => {
+                console.log(waitingMemberId);
+                const waitingMember: Observable<User> = this.authService.getUser(
+                  waitingMemberId
+                );
+                return waitingMember;
+              })
+            );
+            this.ifWaitingJoinningMembers = true;
+          } else {
+            this.ifWaitingJoinningMembers = false;
+          }
+        });
 
-      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        if (group.waitingPayingMemberIds.length) {
-          this.waitingPayingMembers = combineLatest(
-            group.waitingPayingMemberIds.map((waitingPayingMemberId) => {
-              console.log(waitingPayingMemberId);
-              const waitingPayingMember: Observable<User> = this.authService.getUser(
-                waitingPayingMemberId
-              );
-              return waitingPayingMember;
-            })
-          );
-          this.ifWaitingPayingMemberId = true;
-        } else {
-          this.ifWaitingPayingMemberId = false;
-        }
-      });
+      this.groupService
+        .getWaitingPayingMemberIds(this.id)
+        .subscribe((waitingPayingMemberIds: string[]) => {
+          if (waitingPayingMemberIds.length) {
+            this.waitingPayingMembers = combineLatest(
+              waitingPayingMemberIds.map((waitingPayingMemberId) => {
+                console.log(waitingPayingMemberId);
+                const waitingPayingMember: Observable<User> = this.authService.getUser(
+                  waitingPayingMemberId
+                );
+                return waitingPayingMember;
+              })
+            );
+            this.ifWaitingPayingMemberId = true;
+          } else {
+            this.ifWaitingPayingMemberId = false;
+          }
+        });
     });
   }
 
@@ -194,7 +198,6 @@ export class GroupDetailsComponent implements OnInit {
       id: chatRoomId,
       name: this.name,
       groupid: this.id,
-      members: [this.authService.uid],
       messageCount: 0,
     });
   }

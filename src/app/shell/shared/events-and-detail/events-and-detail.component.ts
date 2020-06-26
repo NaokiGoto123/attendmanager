@@ -62,29 +62,35 @@ export class EventsAndDetailComponent implements OnInit {
           });
       });
 
-    if (this.givenEvent.attendingMemberIds.length) {
-      this.ifAttendingMembers = true;
-      const result: Observable<User>[] = [];
-      this.givenEvent.attendingMemberIds.forEach((attndingmemberId) => {
-        result.push(this.authService.getUser(attndingmemberId));
-        this.attendingMembers = combineLatest(result);
+    this.eventService
+      .getAttendingMemberIds(this.givenEvent.id)
+      .subscribe((attendingMemberIds: string[]) => {
+        if (attendingMemberIds.length) {
+          this.ifAttendingMembers = true;
+          const result: Observable<User>[] = [];
+          attendingMemberIds.forEach((attndingmemberId) => {
+            result.push(this.authService.getUser(attndingmemberId));
+            this.attendingMembers = combineLatest(result);
+          });
+        } else {
+          this.ifAttendingMembers = false;
+        }
       });
-    } else {
-      this.ifAttendingMembers = false;
-    }
 
-    if (this.givenEvent.waitingJoinningMemberIds.length) {
-      this.ifWaitingJoinningMembers = true;
-      this.waitingJoinningMembers = combineLatest(
-        this.givenEvent.waitingJoinningMemberIds.map(
-          (waitingJoinningMemberId) => {
-            return this.authService.getUser(waitingJoinningMemberId);
-          }
-        )
-      );
-    } else {
-      this.ifWaitingJoinningMembers = false;
-    }
+    this.eventService
+      .getWaitingJoinningMemberIds(this.givenEvent.id)
+      .subscribe((waitingJoinningMemberIds: string[]) => {
+        if (waitingJoinningMemberIds.length) {
+          this.ifWaitingJoinningMembers = true;
+          this.waitingJoinningMembers = combineLatest(
+            waitingJoinningMemberIds.map((waitingJoinningMemberId) => {
+              return this.authService.getUser(waitingJoinningMemberId);
+            })
+          );
+        } else {
+          this.ifWaitingJoinningMembers = false;
+        }
+      });
   }
 
   // waitingJoinning to attending (free+private)

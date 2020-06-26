@@ -16,6 +16,10 @@ export class GroupComponent implements OnInit {
 
   memberIds: string[];
   ifMember: boolean;
+  waitingJoinningMemberIds: string[];
+  ifWaitingJoinningMember: boolean;
+  waitingPayingMemberIds: string[];
+  ifWaitingPayingMember: boolean;
 
   constructor(
     private authService: AuthService,
@@ -24,17 +28,49 @@ export class GroupComponent implements OnInit {
 
   ngOnInit(): void {
     this.uid = this.authService.uid;
-    this.groupService
-      .getMemberIds(this.group.id)
-      .subscribe((memberIds: string[]) => {
-        this.memberIds = memberIds;
-        console.log(memberIds);
-        if (memberIds.includes(this.uid)) {
-          this.ifMember = true;
-        } else {
-          this.ifMember = false;
-        }
-      });
+    if (this.group) {
+      this.groupService
+        .getMemberIds(this.group.id)
+        .subscribe((memberIds: string[]) => {
+          this.memberIds = memberIds;
+          console.log(memberIds);
+          if (memberIds.includes(this.uid)) {
+            this.ifMember = true;
+          } else {
+            this.ifMember = false;
+          }
+        });
+      this.groupService
+        .getWaitingJoinningMemberIds(this.group.id)
+        .subscribe((waitingJoinningMemberIds: string[]) => {
+          if (waitingJoinningMemberIds.length) {
+            this.waitingJoinningMemberIds = waitingJoinningMemberIds;
+            if (waitingJoinningMemberIds.includes(this.uid)) {
+              this.ifWaitingJoinningMember = true;
+            } else {
+              this.ifWaitingJoinningMember = false;
+            }
+          } else {
+            this.waitingJoinningMemberIds = waitingJoinningMemberIds;
+            this.ifWaitingJoinningMember = false;
+          }
+        });
+      this.groupService
+        .getWaitingPayingMemberIds(this.group.id)
+        .subscribe((waitingPayingMemberIds: string[]) => {
+          if (waitingPayingMemberIds.length) {
+            this.waitingPayingMemberIds = waitingPayingMemberIds;
+            if (waitingPayingMemberIds.includes(this.uid)) {
+              this.ifWaitingPayingMember = true;
+            } else {
+              this.ifWaitingPayingMember = false;
+            }
+          } else {
+            this.waitingPayingMemberIds = waitingPayingMemberIds;
+            this.ifWaitingPayingMember = false;
+          }
+        });
+    }
   }
 
   // nothing to waitingJoinning (private+pay, private+free)

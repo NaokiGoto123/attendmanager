@@ -22,7 +22,7 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit(): void {
     this.eventService
-      .getEvents(this.authService.uid)
+      .getMyEvents(this.authService.uid)
       .subscribe((events: Event[]) => {
         const result: { title: string; date: Date }[] = [];
         events.forEach((event) => {

@@ -1,6 +1,12 @@
-<mat-list>
-  <div *ngFor="let notification of notifications">
-    <app-notification [notification]="notification"></app-notification>
-    <mat-divider></mat-divider>
-  </div>
-</mat-list>
+<div *ngIf="existance">
+  <mat-list>
+    <div *ngFor="let notification of notifications">
+      <app-notification [notification]="notification"></app-notification>
+      <mat-divider></mat-divider>
+    </div>
+  </mat-list>
+</div>
+
+<div *ngIf="!existance">
+  <h1>No notifications</h1>
+</div>

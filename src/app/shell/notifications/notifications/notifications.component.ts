@@ -13,6 +13,8 @@ export class NotificationsComponent implements OnInit {
 
   notifications: Notification[];
 
+  existance: boolean;
+
   constructor(
     private authService: AuthService,
     private notificationService: NotificationsService
@@ -22,7 +24,13 @@ export class NotificationsComponent implements OnInit {
       .getNotifications(this.uid)
       .subscribe((notifications: Notification[]) => {
         console.log(notifications);
-        this.notifications = notifications;
+        if (notifications.length) {
+          this.notifications = notifications;
+          this.existance = true;
+        } else {
+          this.notifications = notifications;
+          this.existance = false;
+        }
       });
   }
 

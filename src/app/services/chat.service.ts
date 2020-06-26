@@ -20,7 +20,7 @@ export class ChatService {
     private authService: AuthService
   ) {}
 
-  createChatRoom(chatRoom: ChatRoom) {
+  createChatRoom(uid: string, chatRoom: ChatRoom) {
     const id = chatRoom.id;
     this.db
       .doc(`chatRooms/${id}`)
@@ -30,12 +30,23 @@ export class ChatService {
           .doc(`groups/${chatRoom.groupid}`)
           .update({ chatRoomId: chatRoom.id })
       )
+      .then(() => {
+        this.db.doc(`chatRooms/${id}/memberIds/${uid}`).set({ id: uid });
+      })
       .then(() =>
         this.router.navigate(['/chat/chat-detail'], {
           queryParams: { id: chatRoom.id },
         })
       );
     console.log('Successfully created a chatRoom');
+  }
+
+  joinChatRoom(uid: string, chatRoomId: string) {
+    this.db.doc(`chatRooms/${chatRoomId}/memberIds/${uid}`).set({ id: uid });
+  }
+
+  leaveChatRoom(uid: string, chatRoomId: string) {
+    this.db.doc(`chatRooms/${chatRoomId}/memberIds/${uid}`).delete();
   }
 
   getMyChatRoommIds(uid: string): Observable<string[]> {
@@ -86,8 +97,17 @@ export class ChatService {
   }
 
   sendMessage(message: Message, chatRoomId: string) {
-    this.db.doc(`chatRooms/${chatRoomId}/messages/${message.id}`).set(message);
+    this.db
+      .doc(`chatRooms/${chatRoomId}/messages/${message.id}`)
+      .set(message)
+      .then(() => {
+        this.db
+          .doc(`chatRooms/${chatRoomId}`)
+          .update({ messageCount: firestore.FieldValue.increment(1) });
+      });
   }
 
-  clearMessageCount() {}
+  clearMessageCount(chatRoomId: string) {
+    this.db.doc(`chatRooms/${chatRoomId}`).update({ messageCount: 0 });
+  }
 }
