@@ -7,6 +7,7 @@ import { Event } from '../interfaces/event';
 import { firestore } from 'firebase';
 import { User } from '../interfaces/user';
 import { Id } from '../interfaces/id';
+import { Message } from '../interfaces/message';
 @Injectable({
   providedIn: 'root',
 })
@@ -70,6 +71,52 @@ export class GroupService {
               );
             });
             return combineLatest(myAdminGroups);
+          } else {
+            return of([]);
+          }
+        })
+      );
+  }
+
+  getWaitingJoinningGroups(uid: string): Observable<Group[]> {
+    return this.db
+      .collection<Id>(`users/${uid}/waitingJoinningGroupIds`)
+      .valueChanges()
+      .pipe(
+        switchMap((waitingJoinningGroupIds: Id[]) => {
+          if (waitingJoinningGroupIds.length) {
+            const result: Observable<Group>[] = [];
+            waitingJoinningGroupIds.map((waitingJoinningGroupId: Id) => {
+              result.push(
+                this.db
+                  .doc<Group>(`groups/${waitingJoinningGroupId.id}`)
+                  .valueChanges()
+              );
+            });
+            return combineLatest(result);
+          } else {
+            return of([]);
+          }
+        })
+      );
+  }
+
+  getWaitingPayingGroups(uid: string) {
+    return this.db
+      .collection<Id>(`users/${uid}/waitingPayingGroupIds`)
+      .valueChanges()
+      .pipe(
+        switchMap((waitingPayingGroupIds: Id[]) => {
+          if (waitingPayingGroupIds.length) {
+            const result: Observable<Group>[] = [];
+            waitingPayingGroupIds.map((waitingPayingGroupId: Id) => {
+              result.push(
+                this.db
+                  .doc<Group>(`groups/${waitingPayingGroupId.id}`)
+                  .valueChanges()
+              );
+            });
+            return combineLatest(result);
           } else {
             return of([]);
           }
@@ -189,7 +236,12 @@ export class GroupService {
   deleteAdmin(uid: string, groupId: string) {
     this.getAdminIds(groupId).subscribe((adminIds: string[]) => {
       if (adminIds.includes(uid)) {
-        this.db.doc(`groups/${groupId}/${uid}`).delete();
+        this.db
+          .doc(`groups/${groupId}/adminIds/${uid}`)
+          .delete()
+          .then(() => {
+            this.db.doc(`users/${uid}/adminGroupIds/${groupId}`).delete();
+          });
       } else {
         return;
       }
@@ -233,15 +285,59 @@ export class GroupService {
       })
       .then(() => {
         this.db
+          .collection(`groups/${groupId}/eventIds`)
+          .valueChanges()
+          .subscribe((eventIds: Id[]) => {
+            eventIds.map((eventId: Id) => {
+              this.db.doc(`groups/${groupId}/eventIds/${eventId.id}`).delete();
+            });
+          });
+      })
+      // チャットルームのサブコレ削除
+      .then(() => {
+        this.db
           .doc(`groups/${groupId}`)
           .valueChanges()
-          .pipe(
-            map((group: Group) => {
-              return group.chatRoomId;
-            })
-          )
-          .subscribe((chatRoomId: string) => {
-            console.log('this is chatroomid', chatRoomId);
+          .subscribe((group: Group) => {
+            const chatRoomId: string = group.chatRoomId;
+            this.db
+              .collection<Message>(`chatRooms/${chatRoomId}/messages`)
+              .valueChanges()
+              .subscribe((messages: Message[]) => {
+                messages.map((message: Message) => {
+                  this.db
+                    .doc(`chatRooms/${chatRoomId}/messages/${message.id}`)
+                    .delete();
+                });
+              });
+          });
+      })
+      // チャットルームのサブコレ削除
+      .then(() => {
+        this.db
+          .doc(`groups/${groupId}`)
+          .valueChanges()
+          .subscribe((group: Group) => {
+            const chatRoomId: string = group.chatRoomId;
+            this.db
+              .collection<Id>(`chatRooms/${chatRoomId}/memberIds`)
+              .valueChanges()
+              .subscribe((memberIds: Id[]) => {
+                memberIds.map((memberId: Id) => {
+                  this.db
+                    .doc(`chatRooms/${chatRoomId}/memberIds/${memberId.id}`)
+                    .delete();
+                });
+              });
+          });
+      })
+      // チャットルーム削除
+      .then(() => {
+        this.db
+          .doc(`groups/${groupId}`)
+          .valueChanges()
+          .subscribe((group: Group) => {
+            const chatRoomId: string = group.chatRoomId;
             this.db.doc(`chatRooms/${chatRoomId}`).delete();
           });
       })
@@ -261,6 +357,80 @@ export class GroupService {
             this.db.doc(`users/${adminId}/adminGroupIds/${groupId}`).delete();
           });
         });
+      })
+      // イベントのサブコレ削除
+      .then(() => {
+        this.db
+          .collection<Event>(`events`, (ref) =>
+            ref.where('groupid', '==', groupId)
+          )
+          .valueChanges()
+          .subscribe((events: Event[]) => {
+            events.map((event: Event) => {
+              this.db
+                .collection<Id>(`events/${event.id}/attendingMemberIds`)
+                .valueChanges()
+                .subscribe((attendingMemberIds: Id[]) => {
+                  attendingMemberIds.map((attendingMemberId: Id) => {
+                    this.db
+                      .doc(
+                        `events/${event.id}/attendingMemberIds/${attendingMemberId.id}`
+                      )
+                      .delete();
+                  });
+                });
+            });
+          });
+      })
+      // イベントのサブコレ削除
+      .then(() => {
+        this.db
+          .collection<Event>(`events`, (ref) =>
+            ref.where('groupid', '==', groupId)
+          )
+          .valueChanges()
+          .subscribe((events: Event[]) => {
+            events.map((event: Event) => {
+              this.db
+                .collection<Id>(`events/${event.id}/waitingJoinningMemberIds`)
+                .valueChanges()
+                .subscribe((waitingJoinningMemberIds: Id[]) => {
+                  waitingJoinningMemberIds.map(
+                    (waitingJoinningMemberId: Id) => {
+                      this.db
+                        .doc(
+                          `events/${event.id}/waitingJoinningMemberIds/${waitingJoinningMemberId.id}`
+                        )
+                        .delete();
+                    }
+                  );
+                });
+            });
+          });
+      })
+      // イベントのサブコレ削除
+      .then(() => {
+        this.db
+          .collection<Event>(`events`, (ref) =>
+            ref.where('groupid', '==', groupId)
+          )
+          .valueChanges()
+          .subscribe((events: Event[]) => {
+            events.map((event: Event) => {
+              this.db
+                .collection<Id>(`events/${event.id}/waitingPayingMemberIds`)
+                .valueChanges()
+                .subscribe((waitingPayingMemberIds: Id[]) => {
+                  waitingPayingMemberIds.map((waitingPayingMemberId: Id) => {
+                    this.db
+                      .doc(
+                        `events/${event.id}/waitingPayingMemberIds/${waitingPayingMemberId.id}`
+                      )
+                      .delete();
+                  });
+                });
+            });
+          });
       })
       // イベント消す処理
       .then(() => {
@@ -285,14 +455,22 @@ export class GroupService {
   async joinWaitingJoinningList(uid: string, groupId: string) {
     await this.db
       .doc(`groups/${groupId}/waitingJoinningMemberIds/${uid}`)
-      .set({ id: uid });
+      .set({ id: uid })
+      .then(() => {
+        this.db
+          .doc(`users/${uid}/waitingJoinningGroupIds/${groupId}`)
+          .set({ id: groupId });
+      });
   }
 
   // waitingJoinning list to nothing (private+pay, private+free)
   async leaveWaitingList(uid: string, groupId: string) {
     await this.db
       .doc(`groups/${groupId}/waitingJoinningMemberIds/${uid}`)
-      .set({ id: uid });
+      .delete()
+      .then(() => {
+        this.db.doc(`users/${uid}/waitingJoinningGroupIds/${groupId}`).delete();
+      });
   }
 
   // waitingJoinning to waitingPaying (private+pay)
@@ -304,9 +482,17 @@ export class GroupService {
       .doc(`groups/${groupId}/waitingJoinningMemberIds/${uid}`)
       .delete()
       .then(() => {
+        this.db.doc(`users/${uid}/waitingJoinningGroupIds/${groupId}`).delete();
+      })
+      .then(() => {
         this.db
           .doc(`groups/${groupId}/waitingPayingMemberIds/${uid}`)
           .set({ id: uid });
+      })
+      .then(() => {
+        this.db
+          .doc(`users/${uid}/waitingPayingGroupIds/${groupId}`)
+          .set({ id: groupId });
       });
   }
 
@@ -321,6 +507,9 @@ export class GroupService {
       })
       .then(() => {
         this.db.doc(`groups/${groupId}/waitingPayingMemberIds/${uid}`).delete();
+      })
+      .then(() => {
+        this.db.doc(`users/${uid}/waitingPayingGroupIds/${groupId}`).delete();
       });
   }
 
@@ -328,7 +517,10 @@ export class GroupService {
   async removeWaitingPayingMember(uid: string, groupId: string) {
     await this.db
       .doc(`groups/${groupId}/waitingPayingMemberIds/${uid}`)
-      .set({ id: uid });
+      .delete()
+      .then(() => {
+        this.db.doc(`users/${uid}/waitingPayingGroupIds/${groupId}`).delete();
+      });
   }
 
   // member to nothing (private+free, private+pay, public+free, public+pay)
@@ -367,7 +559,7 @@ export class GroupService {
       });
   }
 
-  // waitingPayinglist to member (public+pay)
+  // nothing to member (public+pay)
   payToJoinGroup(uid: string, groupId: string) {
     this.db
       .doc(`groups/${groupId}/memberIds/${uid}`)
@@ -379,12 +571,15 @@ export class GroupService {
 
   // waitingJoinningMember list to member list (private+free)
   async allowWaitingMember(uid: string, groupId: string) {
-    await this.db
-      .doc(`groups/${groupId}/waitingJoinningMemberIds/${uid}`)
-      .set({ id: uid });
     this.db
-      .doc(`groups/${groupId}/memberIds/${uid}`)
-      .set({ id: uid })
+      .doc(`groups/${groupId}/waitingJoinningMemberIds/${uid}`)
+      .delete()
+      .then(() => {
+        this.db.doc(`users/${uid}/waitingJoinningGroupIds/${groupId}`).delete();
+      })
+      .then(() => {
+        this.db.doc(`groups/${groupId}/memberIds/${uid}`).set({ id: uid });
+      })
       .then(() => {
         this.db.doc(`users/${uid}/groupIds/${groupId}`).set({ id: groupId });
       });

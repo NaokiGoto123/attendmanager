@@ -71,6 +71,52 @@ export class EventService {
       );
   }
 
+  getWaitingJoinningEvents(uid: string): Observable<Event[]> {
+    return this.db
+      .collection<Id>(`users/${uid}/waitingJoinningEventIds`)
+      .valueChanges()
+      .pipe(
+        switchMap((waitingJoinningEventIds: Id[]) => {
+          if (waitingJoinningEventIds.length) {
+            const result: Observable<Event>[] = [];
+            waitingJoinningEventIds.map((waitingJoinningEventId: Id) => {
+              result.push(
+                this.db
+                  .doc<Event>(`events/${waitingJoinningEventId.id}`)
+                  .valueChanges()
+              );
+            });
+            return combineLatest(result);
+          } else {
+            return of([]);
+          }
+        })
+      );
+  }
+
+  getWaitingPayingEvents(uid: string): Observable<Event[]> {
+    return this.db
+      .collection<Id>(`users/${uid}/waitingPayingEventIds`)
+      .valueChanges()
+      .pipe(
+        switchMap((waitingPayingEventIds: Id[]) => {
+          if (waitingPayingEventIds.length) {
+            const result: Observable<Event>[] = [];
+            waitingPayingEventIds.map((waitingPayingEventId: Id) => {
+              result.push(
+                this.db
+                  .doc<Event>(`events/${waitingPayingEventId.id}`)
+                  .valueChanges()
+              );
+            });
+            return combineLatest(result);
+          } else {
+            return of([]);
+          }
+        })
+      );
+  }
+
   async updateEvent(uid: string, event: Omit<Event, 'createrId'>) {
     await this.db.doc(`events/${event.id}`).set(event, { merge: true });
   }
@@ -199,7 +245,6 @@ export class EventService {
       );
   }
 
-  // need to work
   getAttendingEvents(uid: string): Observable<Event[]> {
     return this.db
       .collection(`users/${uid}/eventIds`)
@@ -242,6 +287,9 @@ export class EventService {
       })
       .then(() => {
         this.db.doc(`events/${eventId}/waitingPayingMemberIds/${uid}`).delete();
+      })
+      .then(() => {
+        this.db.doc(`users/${uid}/waitingPayingEventIds/${eventId}`).delete();
       });
   }
 
@@ -259,7 +307,12 @@ export class EventService {
   async joinWaitingJoinningList(uid: string, eventId: string) {
     await this.db
       .doc(`events/${eventId}/waitingJoinningMemberIds/${uid}`)
-      .set({ id: uid });
+      .set({ id: uid })
+      .then(() => {
+        this.db
+          .doc(`users/${uid}/waitingJoinningEventIds/${eventId}`)
+          .set({ id: eventId });
+      });
   }
 
   // waitingJoinning to waitingPaying (pay+private)
@@ -268,9 +321,17 @@ export class EventService {
       .doc(`events/${eventId}/waitingJoinningMemberIds/${uid}`)
       .delete()
       .then(() => {
+        this.db.doc(`users/${uid}/waitingJoinningEventIds/${eventId}`).delete();
+      })
+      .then(() => {
         this.db
           .doc(`events/${eventId}/waitingPayingMemberIds/${uid}`)
           .set({ id: uid });
+      })
+      .then(() => {
+        this.db
+          .doc(`users/${uid}/waitingPayingEventIds/${eventId}`)
+          .set({ id: eventId });
       });
   }
 
@@ -278,14 +339,20 @@ export class EventService {
   async removeWaitingJoinningMember(uid: string, eventId: string) {
     await this.db
       .doc(`events/${eventId}/waitingJoinningMemberIds/${uid}`)
-      .delete();
+      .delete()
+      .then(() => {
+        this.db.doc(`users/${uid}/waitingJoinningEventIds/${eventId}`).delete();
+      });
   }
 
   // waitingPaying to nothing (pay+private)
   async removeWaitingPayingMember(uid: string, eventId: string) {
     await this.db
       .doc(`events/${eventId}/waitingPayingMemberIds/${uid}`)
-      .delete();
+      .delete()
+      .then(() => {
+        this.db.doc(`users/${uid}/waitingPayingEventIds/${eventId}`).delete();
+      });
   }
 
   // waitingJoinning to attending (free+private)
@@ -294,9 +361,15 @@ export class EventService {
       .doc(`events/${eventId}/waitingJoinningMemberIds/${uid}`)
       .delete()
       .then(() => {
+        this.db.doc(`users/${uid}/waitingJoinningEventIds/${eventId}`).delete();
+      })
+      .then(() => {
         this.db
           .doc(`events/${eventId}/attendingMemberIds/${uid}`)
           .set({ id: uid });
+      })
+      .then(() => {
+        this.db.doc(`users/${uid}/eventIds/${eventId}`).set({ id: eventId });
       });
   }
 }

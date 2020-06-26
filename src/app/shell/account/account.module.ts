@@ -16,6 +16,10 @@ import { GroupsComponent } from './groups/groups.component';
 import { AttendingEventsComponent } from './attending-events/attending-events.component';
 import { AttendedEventsComponent } from './attended-events/attended-events.component';
 import { SettingsComponent } from './settings/settings.component';
+import { WaitingJoinningEventsComponent } from './waiting-joinning-events/waiting-joinning-events.component';
+import { WaitingPayingEventsComponent } from './waiting-paying-events/waiting-paying-events.component';
+import { WaitingJoinningGroupsComponent } from './waiting-joinning-groups/waiting-joinning-groups.component';
+import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-paying-groups.component';
 @NgModule({
   declarations: [
     AccountComponent,
@@ -23,6 +27,10 @@ import { SettingsComponent } from './settings/settings.component';
     AttendingEventsComponent,
     AttendedEventsComponent,
     SettingsComponent,
+    WaitingJoinningEventsComponent,
+    WaitingPayingEventsComponent,
+    WaitingJoinningGroupsComponent,
+    WaitingPayingGroupsComponent,
   ],
   imports: [
     CommonModule,

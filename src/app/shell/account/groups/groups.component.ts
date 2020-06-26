@@ -10,8 +10,6 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./groups.component.scss'],
 })
 export class GroupsComponent implements OnInit {
-  uid: string;
-
   groups: Group[];
 
   constructor(
@@ -21,7 +19,6 @@ export class GroupsComponent implements OnInit {
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const id = params.get('id');
-      this.uid = id;
       this.groupService.getMyGroup(id).subscribe((groups: Group[]) => {
         this.groups = groups;
       });

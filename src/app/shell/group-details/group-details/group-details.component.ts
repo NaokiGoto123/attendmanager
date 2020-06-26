@@ -194,7 +194,7 @@ export class GroupDetailsComponent implements OnInit {
 
   createChatRoom() {
     const chatRoomId = this.db.createId();
-    this.chatService.createChatRoom({
+    this.chatService.createChatRoom(this.uid, {
       id: chatRoomId,
       name: this.name,
       groupid: this.id,
