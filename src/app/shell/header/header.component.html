@@ -12,8 +12,12 @@
       routerLink="/account/settings"
       [queryParams]="{ id: uid }"
     >
-      Account
+      <mat-icon>person</mat-icon>
+      <span>Account</span>
     </button>
-    <button mat-menu-item>Sign out</button>
+    <button mat-menu-item>
+      <mat-icon>input</mat-icon>
+      <span>Sign out</span>
+    </button>
   </mat-menu>
 </mat-toolbar>

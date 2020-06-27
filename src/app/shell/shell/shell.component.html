@@ -12,24 +12,37 @@
         <mat-icon class="sidenav-icon">add</mat-icon> Create
       </a>
       <a mat-list-item class="sidenav-item" [routerLink]="'/search'">
-        <mat-icon class="sidenav-icon">youtube_searched_for</mat-icon> Search
+        <mat-icon class="sidenav-icon">search</mat-icon> Search
       </a>
       <a mat-list-item class="sidenav-item" [routerLink]="'/chat'">
         <mat-icon class="sidenav-icon">chat</mat-icon> Chat
       </a>
-      <a mat-list-item class="sidenav-item" [routerLink]="'/notifications'">
-        <mat-icon
-          class="sidenav-icon"
-          matBadge="4"
-          matBadgeOverlap="true"
-          matBadgeColor="warn"
-          >notifications</mat-icon
-        >Notifications
+      <a
+        mat-list-item
+        class="sidenav-item"
+        [routerLink]="'/notifications'"
+        (click)="clearNotificationCount()"
+      >
+        <span *ngIf="notificationCount === 0">
+          <mat-icon class="sidenav-icon"> notifications</mat-icon>Notifications
+        </span>
+        <span *ngIf="notificationCount !== 0">
+          <mat-icon
+            class="sidenav-icon"
+            matBadge="{{ notificationCount }}"
+            matBadgeOverlap="true"
+            matBadgeColor="warn"
+          >
+            notifications</mat-icon
+          >Notifications
+        </span>
       </a>
       <a mat-list-item class="sidenav-item" [routerLink]="'/account'">
         <mat-icon class="sidenav-icon">person</mat-icon> Account
       </a>
     </mat-nav-list>
   </mat-sidenav>
-  <mat-sidenav-content><router-outlet></router-outlet></mat-sidenav-content>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
 </mat-sidenav-container>
