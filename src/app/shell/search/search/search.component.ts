@@ -18,6 +18,10 @@ export class SearchComponent implements OnInit {
       label: 'Groups',
       link: 'groups',
     },
+    {
+      label: 'Accounts',
+      link: 'accounts',
+    },
   ];
 
   constructor() {}

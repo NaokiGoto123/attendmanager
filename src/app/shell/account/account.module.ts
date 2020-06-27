@@ -21,6 +21,8 @@ import { WaitingPayingEventsComponent } from './waiting-paying-events/waiting-pa
 import { WaitingJoinningGroupsComponent } from './waiting-joinning-groups/waiting-joinning-groups.component';
 import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-paying-groups.component';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { InvitedGroupsComponent } from './invited-groups/invited-groups.component';
+import { InvitedEventsComponent } from './invited-events/invited-events.component';
 @NgModule({
   declarations: [
     AccountComponent,
@@ -32,6 +34,8 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     WaitingPayingEventsComponent,
     WaitingJoinningGroupsComponent,
     WaitingPayingGroupsComponent,
+    InvitedGroupsComponent,
+    InvitedEventsComponent,
   ],
   imports: [
     CommonModule,

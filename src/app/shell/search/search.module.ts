@@ -12,9 +12,15 @@ import { SharedModule } from '../shared/shared.module';
 import { MatTabsModule } from '@angular/material/tabs';
 import { EventsComponent } from './events/events.component';
 import { GroupsComponent } from './groups/groups.component';
+import { AccountsComponent } from './accounts/accounts.component';
 
 @NgModule({
-  declarations: [SearchComponent, EventsComponent, GroupsComponent],
+  declarations: [
+    SearchComponent,
+    EventsComponent,
+    GroupsComponent,
+    AccountsComponent,
+  ],
   imports: [
     CommonModule,
     SearchRoutingModule,

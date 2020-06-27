@@ -46,6 +46,8 @@ export class AccountComponent implements OnInit {
             this.showAttendedEvents = user.showAttendedEvents;
             this.routerLinks = [
               { label: 'Settings', link: 'settings' },
+              { label: 'Invited groups', link: 'invited-groups' },
+              { label: 'Invited events', link: 'invited-events' },
               { label: 'Waiting groups', link: 'waiting-groups' },
               { label: 'Paying groups', link: 'paying-groups' },
               { label: 'Waiting events', link: 'waiting-events' },

@@ -9,6 +9,8 @@ import { WaitingJoinningGroupsComponent } from './waiting-joinning-groups/waitin
 import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-paying-groups.component';
 import { WaitingJoinningEventsComponent } from './waiting-joinning-events/waiting-joinning-events.component';
 import { WaitingPayingEventsComponent } from './waiting-paying-events/waiting-paying-events.component';
+import { InvitedGroupsComponent } from './invited-groups/invited-groups.component';
+import { InvitedEventsComponent } from './invited-events/invited-events.component';
 
 const routes: Routes = [
   {
@@ -46,6 +48,14 @@ const routes: Routes = [
       {
         path: 'paying-events',
         component: WaitingPayingEventsComponent,
+      },
+      {
+        path: 'invited-groups',
+        component: InvitedGroupsComponent,
+      },
+      {
+        path: 'invited-events',
+        component: InvitedEventsComponent,
       },
     ],
   },
