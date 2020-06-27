@@ -34,40 +34,41 @@ export class NotificationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if (this.notification) {
-      this.authService
-        .getUser(this.notification.personUid)
-        .subscribe((user: User) => {
-          this.userId = user.uid;
-          this.userDisplayname = user.displayName;
-          this.userPhotoURL = user.photoURL;
-        });
-      // tslint:disable-next-line: max-line-length
-      if (
-        this.notification.type === 'joinGroup' ||
-        this.notification.type === 'makeAdmin' ||
-        this.notification.type === 'makeEvent' ||
-        this.notification.type === 'joinGroupWaitinglist'
-      ) {
-        this.groupService
-          .getGroupinfo(this.notification.objectId)
-          .subscribe((group: Group) => {
-            this.groupId = group.id;
-            this.groupName = group.name;
-          });
-        this.date = this.notification.date.toMillis();
-      } else if (
-        this.notification.type === 'joinEvent' ||
-        this.notification.type === 'joinEventWaitinglist'
-      ) {
-        this.eventService
-          .getEvent(this.notification.objectId)
-          .subscribe((event: Event) => {
-            this.eventId = event.id;
-            this.eventName = event.title;
-          });
-        this.date = this.notification.date.toMillis();
-      }
-    }
+    //   if (this.notification) {
+    //     this.authService
+    //       .getUser(this.notification.personUid)
+    //       .subscribe((user: User) => {
+    //         this.userId = user.uid;
+    //         this.userDisplayname = user.displayName;
+    //         this.userPhotoURL = user.photoURL;
+    //       });
+    //     // tslint:disable-next-line: max-line-length
+    //     if (
+    //       this.notification.type === 'joinGroup' ||
+    //       this.notification.type === 'makeAdmin' ||
+    //       this.notification.type === 'makeEvent' ||
+    //       this.notification.type === 'joinGroupWaitinglist'
+    //     ) {
+    //       this.groupService
+    //         .getGroupinfo(this.notification.objectId)
+    //         .subscribe((group: Group) => {
+    //           this.groupId = group.id;
+    //           this.groupName = group.name;
+    //         });
+    //       this.date = this.notification.date.toMillis();
+    //     } else if (
+    //       this.notification.type === 'joinEvent' ||
+    //       this.notification.type === 'joinEventWaitinglist'
+    //     ) {
+    //       this.eventService
+    //         .getEvent(this.notification.objectId)
+    //         .subscribe((event: Event) => {
+    //           this.eventId = event.id;
+    //           this.eventName = event.title;
+    //         });
+    //       this.date = this.notification.date.toMillis();
+    //     }
+    //   }
+    // }
   }
 }

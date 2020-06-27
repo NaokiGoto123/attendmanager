@@ -8,13 +8,17 @@ export const joinGroup = functions
   .firestore.document('groups/{groupId}/memberIds/{memberId}')
   .onCreate(async (snap, context) => {
     const data = snap.data();
+
     if (!data) return;
+
     const newMemberId: string = context.params.memberId;
+
     const newMember = (await db.doc(`users/${newMemberId}`).get()).data();
-    console.log(newMember);
+
     const groupId: string = context.params.groupId;
+
     const group = (await db.doc(`groups/${groupId}`).get()).data();
-    console.log(group);
+
     const adminIds = (
       await db.collection(`groups/${groupId}/adminIds`).get()
     ).docs.map((doc) => doc.data());
@@ -28,10 +32,9 @@ export const joinGroup = functions
         .doc(`users/${adminId.id}/notifications/${Id}`)
         .set({
           id: Id,
-          personUid: newMemberId,
-          personDisplayname: newMember,
-          objectId: groupId,
-          objectName: group,
+          person: newMember,
+          group: group,
+          event: null,
           date: admin.firestore.Timestamp.now(),
           type: 'joinGroup',
         })
@@ -43,4 +46,21 @@ export const joinGroup = functions
           );
         });
     });
+  });
+
+export const joinEvent = functions
+  .region('asia-northeast1')
+  .firestore.document('events/{eventId}/attendingMemberIds/{attendingMemberId}')
+  .onCreate(async (snap, context) => {
+    const data = snap.data();
+    if (!data) return;
+
+    const eventId: string = context.params.eventId;
+    console.log('this is eventId', eventId);
+
+    const event = (await db.doc(`events/${eventId}`).get()).data();
+    console.log('this is event', event);
+
+    const attendingMemberId: string = context.params.attendingMemberId;
+    console.log(attendingMemberId);
   });
