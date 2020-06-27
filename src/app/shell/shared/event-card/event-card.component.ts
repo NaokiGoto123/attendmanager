@@ -36,7 +36,7 @@ export class EventCardComponent implements OnInit {
   createrDisplayname: Observable<string>;
   groupName: Observable<string>;
   eventid: string;
-  grouppicture: number;
+  grouppicture: string;
   price: number;
   date: Date;
 

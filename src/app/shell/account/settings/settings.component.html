@@ -1,6 +1,24 @@
 <form class="update-form" [formGroup]="form">
   <img class="account-photo" src="{{ photoURL }}" />
 
+  <input class="image-input" type="file" (change)="fileChangeEvent($event)" />
+
+  <div class="cropper-container" *ngIf="imageChangedEvent">
+    <img class="selected-image" [src]="croppedImage" />
+
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="1 / 1"
+      [roundCropper]="true"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded()"
+      (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"
+    ></image-cropper>
+  </div>
+
   <div class="update-fields">
     <mat-form-field class="update-name" appearance="outline">
       <mat-label>Name</mat-label>

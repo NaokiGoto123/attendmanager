@@ -1,5 +1,12 @@
 .container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.switchUseMyOwnImage-button-container {
+  text-align: center;
+  margin: 0 0 20px 0;
 }
 
 h1 {
@@ -28,6 +35,28 @@ h3 {
   width: 90%;
   height: 150px;
   margin-right: 10px;
+}
+
+.select-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.image-input {
+  margin: 0 0 20px 0;
+}
+
+.cropper-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 50%;
+}
+
+.selected-image {
+  margin: 0 0 20px 0;
+  width: 100%;
 }
 
 .create-group-form {

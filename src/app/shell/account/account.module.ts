@@ -20,6 +20,7 @@ import { WaitingJoinningEventsComponent } from './waiting-joinning-events/waitin
 import { WaitingPayingEventsComponent } from './waiting-paying-events/waiting-paying-events.component';
 import { WaitingJoinningGroupsComponent } from './waiting-joinning-groups/waiting-joinning-groups.component';
 import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-paying-groups.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
 @NgModule({
   declarations: [
     AccountComponent,
@@ -45,6 +46,7 @@ import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-pa
     MatSlideToggleModule,
     MatRadioModule,
     SharedModule,
+    ImageCropperModule,
   ],
 })
 export class AccountModule {}

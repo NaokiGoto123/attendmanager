@@ -15,13 +15,16 @@ import { Group } from 'src/app/interfaces/group';
 export class NotificationComponent implements OnInit {
   @Input() notification: Notification;
 
-  userId: string;
-  userDisplayname: string;
-  userPhotoURL: string;
+  personId: string;
+  personDisplayname: string;
+  personPhotoURL: string;
 
+  group: Group;
   groupId: string;
   groupName: string;
+  groupPicture: string;
 
+  event: Event;
   eventId: string;
   eventName: string;
 
@@ -34,41 +37,43 @@ export class NotificationComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //   if (this.notification) {
-    //     this.authService
-    //       .getUser(this.notification.personUid)
-    //       .subscribe((user: User) => {
-    //         this.userId = user.uid;
-    //         this.userDisplayname = user.displayName;
-    //         this.userPhotoURL = user.photoURL;
-    //       });
-    //     // tslint:disable-next-line: max-line-length
-    //     if (
-    //       this.notification.type === 'joinGroup' ||
-    //       this.notification.type === 'makeAdmin' ||
-    //       this.notification.type === 'makeEvent' ||
-    //       this.notification.type === 'joinGroupWaitinglist'
-    //     ) {
-    //       this.groupService
-    //         .getGroupinfo(this.notification.objectId)
-    //         .subscribe((group: Group) => {
-    //           this.groupId = group.id;
-    //           this.groupName = group.name;
-    //         });
-    //       this.date = this.notification.date.toMillis();
-    //     } else if (
-    //       this.notification.type === 'joinEvent' ||
-    //       this.notification.type === 'joinEventWaitinglist'
-    //     ) {
-    //       this.eventService
-    //         .getEvent(this.notification.objectId)
-    //         .subscribe((event: Event) => {
-    //           this.eventId = event.id;
-    //           this.eventName = event.title;
-    //         });
-    //       this.date = this.notification.date.toMillis();
-    //     }
-    //   }
-    // }
+    if (this.notification) {
+      this.date = this.notification.date.toMillis();
+      if (
+        this.notification.type === 'joinGroup' ||
+        this.notification.type === 'joinGroupWaitinglist' ||
+        this.notification.type === 'makeAdmin'
+      ) {
+        this.personId = this.notification.person.uid;
+        this.personDisplayname = this.notification.person.displayName;
+        this.personPhotoURL = this.notification.person.photoURL;
+        this.group = this.notification.group;
+        this.groupId = this.notification.group.id;
+        this.groupName = this.notification.group.name;
+        this.groupPicture = this.notification.group.grouppicture;
+      } else if (this.notification.type === 'makeEvent') {
+        this.group = this.notification.group;
+        this.groupId = this.notification.group.id;
+        this.groupName = this.notification.group.name;
+        this.groupPicture = this.notification.group.grouppicture;
+        this.event = this.notification.event;
+        this.eventId = this.notification.event.id;
+        this.eventName = this.notification.event.title;
+      } else if (
+        this.notification.type === 'joinEvent' ||
+        this.notification.type === 'joinEventWaitinglist'
+      ) {
+        this.personId = this.notification.person.uid;
+        this.personDisplayname = this.notification.person.displayName;
+        this.personPhotoURL = this.notification.person.photoURL;
+        this.group = this.notification.group;
+        this.groupId = this.notification.group.id;
+        this.groupName = this.notification.group.name;
+        this.groupPicture = this.notification.group.grouppicture;
+        this.event = this.notification.event;
+        this.eventId = this.notification.event.id;
+        this.eventName = this.notification.event.title;
+      }
+    }
   }
 }

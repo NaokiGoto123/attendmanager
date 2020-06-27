@@ -29,7 +29,7 @@ export class GroupDetailsComponent implements OnInit {
   name: string;
   description: string;
   private: boolean;
-  grouppicture: number;
+  grouppicture: string;
   createddate: Date;
   createrId: string;
   createrName: string;

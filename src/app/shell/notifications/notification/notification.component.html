@@ -2,17 +2,183 @@
   <mat-list-item
     ><img
       routerLink="/account"
-      [queryParams]="{ id: userId }"
+      [queryParams]="{ id: personId }"
       class="account-picture"
-      src="{{ userPhotoURL }}"
-    /><span routerLink="/account" [queryParams]="{ id: userId }">{{
-      userDisplayname
+      src="{{ personPhotoURL }}"
+    /><span routerLink="/account" [queryParams]="{ id: personId }">{{
+      personDisplayname
     }}</span
     ><span class="joined">joined</span>
+    <img
+      routerLink="/group-details"
+      [queryParams]="{ id: groupId }"
+      class="group-picture"
+      src="{{ groupPicture }}"
+    />
     <span routerLink="/group-details" [queryParams]="{ id: groupId }">{{
       groupName
     }}</span
-    ><span class="on">on</span
-    >{{ date | date: 'yyy/MM/dd HH:mm:ss' }}</mat-list-item
-  >
+    ><span class="on">on</span>{{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+  </mat-list-item>
+</div>
+
+<div *ngIf="notification.type === 'joinGroupWaitinglist'">
+  <mat-list-item>
+    <img
+      routerLink="/account"
+      [queryParams]="{ id: personId }"
+      class="account-picture"
+      src="{{ personPhotoURL }}"
+    />
+
+    <span routerLink="/account" [queryParams]="{ id: personId }">{{
+      personDisplayname
+    }}</span>
+
+    <span class="joined">joined</span>
+
+    <img
+      routerLink="/group-details"
+      [queryParams]="{ id: groupId }"
+      class="group-picture"
+      src="{{ groupPicture }}"
+    />
+
+    <span routerLink="/group-details" [queryParams]="{ id: groupId }"
+      >{{ groupName }}'s waiting list</span
+    >
+
+    <span class="on">on</span>
+
+    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+  </mat-list-item>
+</div>
+
+<div *ngIf="notification.type === 'makeAdmin'">
+  <mat-list-item>
+    <img
+      routerLink="/account"
+      [queryParams]="{ id: personId }"
+      class="account-picture"
+      src="{{ personPhotoURL }}"
+    />
+
+    <span routerLink="/account" [queryParams]="{ id: personId }">{{
+      personDisplayname
+    }}</span>
+
+    <span class="joined">became an admin of </span>
+
+    <img
+      routerLink="/group-details"
+      [queryParams]="{ id: groupId }"
+      class="group-picture"
+      src="{{ groupPicture }}"
+    />
+
+    <span routerLink="/group-details" [queryParams]="{ id: groupId }">{{
+      groupName
+    }}</span>
+
+    <span class="on">on</span>
+
+    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+  </mat-list-item>
+</div>
+
+<div *ngIf="notification.type === 'makeEvent'">
+  <mat-list-item>
+    <span>{{ eventName }}</span>
+
+    <span class="joined"> is created </span>
+
+    <span>in</span>
+
+    <img
+      routerLink="/group-details"
+      [queryParams]="{ id: groupId }"
+      class="group-picture"
+      src="{{ groupPicture }}"
+    />
+
+    <span routerLink="/group-details" [queryParams]="{ id: groupId }"
+      >{{ groupName }}
+    </span>
+
+    <span class="on">on</span>
+
+    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+  </mat-list-item>
+</div>
+
+<div *ngIf="notification.type === 'joinEvent'">
+  <mat-list-item>
+    <img
+      routerLink="/account"
+      [queryParams]="{ id: personId }"
+      class="account-picture"
+      src="{{ personPhotoURL }}"
+    />
+
+    <span routerLink="/account" [queryParams]="{ id: personId }">{{
+      personDisplayname
+    }}</span>
+
+    <span class="joined">attended</span>
+
+    <span>{{ eventName }}</span>
+
+    <span class="which-belongs-to"> which belongs to</span>
+
+    <img
+      routerLink="/group-details"
+      [queryParams]="{ id: groupId }"
+      class="group-picture"
+      src="{{ groupPicture }}"
+    />
+
+    <span routerLink="/group-details" [queryParams]="{ id: groupId }">{{
+      groupName
+    }}</span>
+
+    <span class="on">on</span>
+
+    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+  </mat-list-item>
+</div>
+
+<div *ngIf="notification.type === 'joinEventWaitinglist'">
+  <mat-list-item>
+    <img
+      routerLink="/account"
+      [queryParams]="{ id: personId }"
+      class="account-picture"
+      src="{{ personPhotoURL }}"
+    />
+
+    <span routerLink="/account" [queryParams]="{ id: personId }">{{
+      personDisplayname
+    }}</span>
+
+    <span class="joined">attended</span>
+
+    <span>{{ eventName }}'s waiting list</span>
+
+    <span class="which-belongs-to">which belongs to</span>
+
+    <img
+      routerLink="/group-details"
+      [queryParams]="{ id: groupId }"
+      class="group-picture"
+      src="{{ groupPicture }}"
+    />
+
+    <span routerLink="/group-details" [queryParams]="{ id: groupId }">{{
+      groupName
+    }}</span>
+
+    <span class="on">on</span>
+
+    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+  </mat-list-item>
 </div>

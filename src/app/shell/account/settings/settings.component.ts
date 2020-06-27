@@ -3,6 +3,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user';
+import * as Jimp from 'jimp';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 
 @Component({
   selector: 'app-settings',
@@ -13,6 +15,10 @@ export class SettingsComponent implements OnInit {
   user: User;
 
   photoURL: string;
+
+  imageChangedEvent: any = '';
+
+  croppedImage: any = '';
 
   // for form
   displayName: string;
@@ -44,22 +50,45 @@ export class SettingsComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
-
   signOut() {
     this.authService.signOut();
   }
 
-  updateUser() {
+  async updateUser() {
+    console.log(this.imageChangedEvent);
+    const photoURL = await this.authService.upload(
+      `usres/${this.user.uid}`,
+      this.croppedImage
+    );
+    console.log(photoURL);
     this.authService.updateUser({
       uid: this.user.uid,
       displayName: this.form.value.displayName,
       email: this.user.email,
-      photoURL: this.user.photoURL,
+      photoURL,
       description: this.form.value.description,
       showGroups: this.form.value.showGroups,
       showAttendingEvents: this.form.value.showAttendingEvents,
       showAttendedEvents: this.form.value.showAttendedEvents,
     });
+    this.imageChangedEvent = '';
   }
+
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+  }
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.base64;
+  }
+  imageLoaded() {
+    // show cropper
+  }
+  cropperReady() {
+    // cropper ready
+  }
+  loadImageFailed() {
+    // show message
+  }
+
+  ngOnInit(): void {}
 }

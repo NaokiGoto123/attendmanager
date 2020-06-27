@@ -6,19 +6,53 @@
     <h1>Create your group</h1>
   </ng-template>
 
-  <h3>Choose an image for your group</h3>
+  <div class="switchUseMyOwnImage-button-container" *ngIf="useMyOwnImage">
+    <button mat-raised-button (click)="switchUseMyOwnImage()" color="primary">
+      Choose from templates
+    </button>
+  </div>
 
-  <div class="swiper">
-    <swiper [config]="config" [(index)]="selectedImageId">
-      <div *ngFor="let imageId of imageIds">
-        <img
-          class="background-image"
-          alt="group image"
-          src="/assets/background/{{ imageId }}.jpg"
-        />
-      </div>
-    </swiper>
-    <div class="pager"></div>
+  <div class="switchUseMyOwnImage-button-container" *ngIf="!useMyOwnImage">
+    <button mat-raised-button (click)="switchUseMyOwnImage()" color="primary">
+      Choose from library
+    </button>
+  </div>
+
+  <div *ngIf="!useMyOwnImage">
+    <h3>Choose an image from templates</h3>
+
+    <div class="swiper">
+      <swiper [config]="config" [(index)]="selectedImageId">
+        <div *ngFor="let imageId of imageIds">
+          <img
+            class="background-image"
+            alt="group image"
+            src="/assets/background/{{ imageId }}.jpg"
+          />
+        </div>
+      </swiper>
+      <div class="pager"></div>
+    </div>
+  </div>
+
+  <div class="select-image-container" *ngIf="useMyOwnImage">
+    <input class="image-input" type="file" (change)="fileChangeEvent($event)" />
+
+    <div class="cropper-container" *ngIf="imageChangedEvent">
+      <img class="selected-image" [src]="croppedImage" />
+
+      <image-cropper
+        [imageChangedEvent]="imageChangedEvent"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="8 / 3"
+        [roundCropper]="false"
+        format="png"
+        (imageCropped)="imageCropped($event)"
+        (imageLoaded)="imageLoaded()"
+        (cropperReady)="cropperReady()"
+        (loadImageFailed)="loadImageFailed()"
+      ></image-cropper>
+    </div>
   </div>
 
   <form class="create-group-form" [formGroup]="form">

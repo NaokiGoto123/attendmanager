@@ -1,9 +1,6 @@
 <div *ngIf="group">
   <div class="group">
-    <img
-      class="group-picture"
-      src="/assets/background/{{ group.grouppicture }}.jpg"
-    />
+    <img class="group-picture" src="{{ group.grouppicture }}" />
     <h1 class="group-name">{{ group.name }}</h1>
     <h2 class="group-description">{{ group.description }}</h2>
     <div class="join-button-container">

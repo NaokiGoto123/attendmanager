@@ -13,6 +13,7 @@ import { SwiperModule } from 'ngx-swiper-wrapper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSelectModule } from '@angular/material/select';
+import { ImageCropperModule } from 'ngx-image-cropper';
 
 @NgModule({
   declarations: [CreateGroupComponent],
@@ -30,6 +31,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatSlideToggleModule,
     MatSliderModule,
     MatSelectModule,
+    ImageCropperModule,
   ],
 })
 export class CreateGroupModule {}
