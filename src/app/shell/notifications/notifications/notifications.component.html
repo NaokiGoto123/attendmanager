@@ -7,6 +7,11 @@
   </mat-list>
 </div>
 
-<div *ngIf="!existance">
+<div class="no-notifications-container" *ngIf="!existance">
+  <img
+    class="no-notifications-image"
+    src="/assets/images/notification1.svg"
+    alt=""
+  />
   <h1>No notifications</h1>
 </div>

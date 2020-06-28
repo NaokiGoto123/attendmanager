@@ -152,7 +152,8 @@
   </div>
 </div>
 
-<div *ngIf="!existance">
+<div class="no-events-container" *ngIf="!existance">
+  <img class="no-events-image" src="/assets/images/event.svg" />
   <h1>No events</h1>
   <h1><a routerLink="/create-event">Create events</a></h1>
 </div>

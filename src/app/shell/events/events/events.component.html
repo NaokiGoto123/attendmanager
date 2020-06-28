@@ -1,15 +1,26 @@
 <div *ngIf="!eventsExistance">
-  <div *ngIf="groupExistance">
-    <h1>You do not have any events.</h1>
-    <h1 routerLink="/search/events">Search for events</h1>
-    <h1>or</h1>
-    <h1 routerLink="/create-event">Create event</h1>
+  <div class="no-event-container" *ngIf="groupExistance">
+    <div class="no-event-left-container">
+      <img class="no-event-image" src="/assets/images/schedule1.svg" />
+    </div>
+    <div class="no-event-right-container">
+      <h1>You do not have any events.</h1>
+      <h1 routerLink="/search/events">Search for events</h1>
+      <h1>or</h1>
+      <h1 routerLink="/create-event">Create event</h1>
+    </div>
   </div>
-  <div *ngIf="!groupExistance">
-    <h1>You do not belong to any groups.</h1>
-    <h1 routerLink="/search/groups">Search for groups</h1>
-    <h1>or</h1>
-    <h1 routerLink="/create-group">Create group</h1>
+
+  <div class="no-group-container" *ngIf="!groupExistance">
+    <div class="no-group-left-container">
+      <img class="no-group-image" src="/assets/images/team1.svg" />
+    </div>
+    <div class="no-group-right-container">
+      <h1>You do not belong to any groups.</h1>
+      <h1 routerLink="/search/groups">Search for groups</h1>
+      <h1>or</h1>
+      <h1 routerLink="/create-group">Create group</h1>
+    </div>
   </div>
 </div>
 
