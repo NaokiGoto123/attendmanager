@@ -16,6 +16,7 @@ export class NotificationComponent implements OnInit {
   @Input() notification: Notification;
 
   personId: string;
+  personSearchId: string;
   personDisplayname: string;
   personPhotoURL: string;
 
@@ -45,6 +46,7 @@ export class NotificationComponent implements OnInit {
         this.notification.type === 'makeAdmin'
       ) {
         this.personId = this.notification.person.uid;
+        this.personSearchId = this.notification.person.searchId;
         this.personDisplayname = this.notification.person.displayName;
         this.personPhotoURL = this.notification.person.photoURL;
         this.group = this.notification.group;

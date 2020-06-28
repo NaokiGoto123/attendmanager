@@ -11,12 +11,15 @@ import { NotificationsService } from 'src/app/services/notifications.service';
 export class ShellComponent implements OnInit {
   notificationCount: number;
 
+  searchId: string;
+
   constructor(
     private authService: AuthService,
     private notificationService: NotificationsService
   ) {
     this.authService.getUser(this.authService.uid).subscribe((user: User) => {
       this.notificationCount = user.notificationCount;
+      this.searchId = user.searchId;
     });
   }
 

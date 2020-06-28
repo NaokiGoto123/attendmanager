@@ -5,6 +5,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user';
 import * as Jimp from 'jimp';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-settings',
@@ -21,6 +22,7 @@ export class SettingsComponent implements OnInit {
   croppedImage: any = '';
 
   // for form
+  searchId: string;
   displayName: string;
   description: string;
   showGroups: boolean;
@@ -28,6 +30,7 @@ export class SettingsComponent implements OnInit {
   showAttendedEvents: boolean;
 
   form = this.fb.group({
+    searchId: [this.searchId],
     displayName: [this.displayName],
     description: [this.description],
     showGroups: [this.showGroups],
@@ -38,15 +41,21 @@ export class SettingsComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
-    private authService: AuthService
+    private authService: AuthService,
+    private db: AngularFirestore
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
-      const id = params.get('id');
-      this.authService.getUser(id).subscribe((user) => {
-        this.user = user;
-        this.photoURL = user.photoURL;
-        this.form.patchValue(this.user);
-      });
+      const searchId = params.get('id');
+      this.authService
+        .getUserFromSearchId(searchId)
+        .subscribe((target: User) => {
+          const id = target.uid;
+          this.authService.getUser(id).subscribe((user) => {
+            this.user = user;
+            this.photoURL = user.photoURL;
+            this.form.patchValue(this.user);
+          });
+        });
     });
   }
 
@@ -54,15 +63,26 @@ export class SettingsComponent implements OnInit {
     this.authService.signOut();
   }
 
+  createNewSearchId() {
+    const newSearchId = this.db.createId();
+    console.log(newSearchId);
+    this.form.controls.searchId.setValue(newSearchId);
+  }
+
   async updateUser() {
-    console.log(this.imageChangedEvent);
-    const photoURL = await this.authService.upload(
-      `usres/${this.user.uid}`,
-      this.croppedImage
-    );
+    let photoURL: any;
+    if (this.croppedImage) {
+      photoURL = await this.authService.upload(
+        `usres/${this.user.uid}`,
+        this.croppedImage
+      );
+    } else {
+      photoURL = this.photoURL;
+    }
     console.log(photoURL);
     this.authService.updateUser({
       uid: this.user.uid,
+      searchId: this.form.value.searchId,
       displayName: this.form.value.displayName,
       email: this.user.email,
       photoURL,

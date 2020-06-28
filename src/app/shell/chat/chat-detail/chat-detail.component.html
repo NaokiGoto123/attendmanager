@@ -33,12 +33,7 @@
               message.sentAt.toMillis() | date: 'MM/dd HH:mm:ss'
             }}</small>
             <p class="texts">{{ message.content }}</p>
-            <img
-              class="account-picture"
-              src="{{ message.ownerPhotoURL }}"
-              routerLink="/account"
-              [queryParams]="{ id: message.ownerId }"
-            />
+            <img class="account-picture" src="{{ message.ownerPhotoURL }}" />
           </div>
         </div>
       </div>

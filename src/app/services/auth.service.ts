@@ -61,6 +61,7 @@ export class AuthService {
     const credential = await this.afAuth.signInWithPopup(provider);
     return this.updateUserData({
       ...credential.user,
+      searchId: this.db.createId(),
       description: '',
       notificationCount: 0,
       showGroups: true,
@@ -76,6 +77,7 @@ export class AuthService {
 
   private updateUserData({
     uid,
+    searchId,
     displayName,
     email,
     photoURL,
@@ -89,6 +91,7 @@ export class AuthService {
 
     const data = {
       uid,
+      searchId,
       displayName,
       email,
       photoURL,
@@ -118,6 +121,18 @@ export class AuthService {
 
   getUser(uid: string): Observable<User> {
     return this.db.doc<User>(`users/${uid}`).valueChanges();
+  }
+
+  getUserFromSearchId(searchId: string): Observable<User> {
+    return this.db
+      .collection<User>(`users`, (ref) => ref.where('searchId', '==', searchId))
+      .valueChanges()
+      .pipe(
+        map((targets: User[]) => {
+          console.log(targets);
+          return targets[0];
+        })
+      );
   }
 
   updateUser(user: Omit<User, 'notifications' | 'notificationCount'>) {

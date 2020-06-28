@@ -1,5 +1,6 @@
-import { firestore, User } from 'firebase';
+import { firestore } from 'firebase';
 import { Group } from './group';
+import { User } from './user';
 import { Event } from './event';
 
 export interface Notification {

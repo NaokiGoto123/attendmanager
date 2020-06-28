@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/interfaces/event';
+import { User } from 'src/app/interfaces/user';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-waiting-paying-events',
@@ -15,20 +17,26 @@ export class WaitingPayingEventsComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private authService: AuthService,
     private eventService: EventService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
-      const id = params.get('id');
-      this.eventService
-        .getWaitingPayingEvents(id)
-        .subscribe((waitingPayingEvents: Event[]) => {
-          if (waitingPayingEvents.length) {
-            this.waitingPayingEvents = waitingPayingEvents;
-            this.waitingPayingEventsExistance = true;
-          } else {
-            this.waitingPayingEvents = waitingPayingEvents;
-            this.waitingPayingEventsExistance = false;
-          }
+      const searchId = params.get('id');
+      this.authService
+        .getUserFromSearchId(searchId)
+        .subscribe((target: User) => {
+          const id = target.uid;
+          this.eventService
+            .getWaitingPayingEvents(id)
+            .subscribe((waitingPayingEvents: Event[]) => {
+              if (waitingPayingEvents.length) {
+                this.waitingPayingEvents = waitingPayingEvents;
+                this.waitingPayingEventsExistance = true;
+              } else {
+                this.waitingPayingEvents = waitingPayingEvents;
+                this.waitingPayingEventsExistance = false;
+              }
+            });
         });
     });
   }

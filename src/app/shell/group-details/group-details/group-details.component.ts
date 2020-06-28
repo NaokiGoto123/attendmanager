@@ -34,6 +34,7 @@ export class GroupDetailsComponent implements OnInit {
   grouppicture: string;
   createddate: Date;
   createrId: string;
+  createrSearchId: string;
   createrName: string;
   price: number;
   currency: string;
@@ -89,6 +90,7 @@ export class GroupDetailsComponent implements OnInit {
         this.description = group.description;
         this.createrId = group.createrId;
         this.authService.getUser(this.createrId).subscribe((creater: User) => {
+          this.createrSearchId = creater.searchId;
           this.createrName = creater.displayName;
         });
         if (group.private) {

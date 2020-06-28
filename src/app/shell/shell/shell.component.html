@@ -2,25 +2,25 @@
 <mat-sidenav-container class="container">
   <mat-sidenav mode="side" class="side-menu" opened>
     <mat-nav-list>
-      <a mat-list-item class="sidenav-item" [routerLink]="''">
+      <a mat-list-item class="sidenav-item" routerLink="">
         <mat-icon class="sidenav-icon">home</mat-icon> Home
       </a>
-      <a mat-list-item class="sidenav-item" [routerLink]="'/groups'">
+      <a mat-list-item class="sidenav-item" routerLink="/groups">
         <mat-icon class="sidenav-icon">people</mat-icon> Groups
       </a>
-      <a mat-list-item class="sidenav-item" [routerLink]="'/create'">
+      <a mat-list-item class="sidenav-item" routerLink="/create">
         <mat-icon class="sidenav-icon">add</mat-icon> Create
       </a>
-      <a mat-list-item class="sidenav-item" [routerLink]="'/search'">
+      <a mat-list-item class="sidenav-item" routerLink="/search">
         <mat-icon class="sidenav-icon">search</mat-icon> Search
       </a>
-      <a mat-list-item class="sidenav-item" [routerLink]="'/chat'">
+      <a mat-list-item class="sidenav-item" routerLink="/chat">
         <mat-icon class="sidenav-icon">chat</mat-icon> Chat
       </a>
       <a
         mat-list-item
         class="sidenav-item"
-        [routerLink]="'/notifications'"
+        routerLink="/notifications"
         (click)="clearNotificationCount()"
       >
         <span *ngIf="notificationCount === 0">
@@ -37,7 +37,12 @@
           >Notifications
         </span>
       </a>
-      <a mat-list-item class="sidenav-item" [routerLink]="'/account'">
+      <a
+        mat-list-item
+        class="sidenav-item"
+        routerLink="/account"
+        [queryParams]="{ id: searchId }"
+      >
         <mat-icon class="sidenav-icon">person</mat-icon> Account
       </a>
     </mat-nav-list>

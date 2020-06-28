@@ -12,12 +12,15 @@ export class HeaderComponent implements OnInit {
 
   uid: string;
 
+  searchId: string;
+
   photoURL: string;
 
   constructor(private authService: AuthService) {
     this.authService.getUser(this.authService.uid).subscribe((user: User) => {
       this.user = user;
       this.uid = user.uid;
+      this.searchId = user.searchId;
       this.photoURL = user.photoURL;
     });
   }

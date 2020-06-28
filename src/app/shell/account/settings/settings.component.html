@@ -25,6 +25,24 @@
       <input matInput formControlName="displayName" type="text" />
     </mat-form-field>
 
+    <mat-form-field class="update-name" appearance="outline">
+      <mat-label>Search ID</mat-label>
+      <input
+        matInput
+        formControlName="searchId"
+        type="text"
+        readonly="readonly"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="createNewSearchId()"
+        color="primary"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-form-field>
+
     <mat-form-field class="update-description" appearance="outline">
       <mat-label>Description</mat-label>
       <input matInput formControlName="description" type="text" />
