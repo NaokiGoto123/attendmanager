@@ -4,25 +4,33 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Group } from 'src/app/interfaces/group';
+import { User } from 'src/app/interfaces/user';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SwiperConfigInterface } from 'ngx-swiper-wrapper';
 import { firestore } from 'firebase';
 import { switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ImageCroppedEvent } from 'ngx-image-cropper';
 @Component({
   selector: 'app-create-group',
   templateUrl: './create-group.component.html',
   styleUrls: ['./create-group.component.scss'],
 })
 export class CreateGroupComponent implements OnInit {
+  user: User;
+
+  uid: string;
+
   ifTarget = false;
 
   isComplete = false;
 
   groupid: string;
 
-  waitingMemberIds: string[];
+  currencies = ['USD', 'SHP', 'JPY', 'CAD', 'CNY', 'EUR'];
+
+  useMyOwnImage = false;
 
   imageIds = [...Array(22)].map((_, index) => index);
 
@@ -39,10 +47,15 @@ export class CreateGroupComponent implements OnInit {
 
   selectedImageId = 1;
 
+  imageChangedEvent: any = '';
+
+  croppedImage: any = '';
+
   form = this.fb.group({
     name: ['', [Validators.required]],
     description: [''],
     price: [0],
+    currency: ['', [Validators.required]],
     private: [false],
     searchable: [false],
   });
@@ -52,10 +65,6 @@ export class CreateGroupComponent implements OnInit {
       return Math.round(value / 1000) + 'k';
     }
     return value;
-  }
-
-  show() {
-    console.log(this.form.value);
   }
 
   constructor(
@@ -77,10 +86,13 @@ export class CreateGroupComponent implements OnInit {
         if (group) {
           this.ifTarget = true;
           this.groupid = group.id;
-          this.waitingMemberIds = group.waitingMemberIds;
           this.form.patchValue(group);
         }
       });
+    this.authService.getUser(this.authService.uid).subscribe((user: User) => {
+      this.user = user;
+      this.uid = user.uid;
+    });
   }
 
   ngOnInit(): void {}
@@ -93,50 +105,110 @@ export class CreateGroupComponent implements OnInit {
     }
   }
 
-  submit() {
-    this.groupSerive
-      .createGroup({
-        id: this.db.createId(),
-        name: this.form.value.name,
-        description: this.form.value.description,
-        grouppicture: this.selectedImageId,
-        createddate: firestore.Timestamp.now(),
-        createrId: this.authService.uid,
-        adminIds: [this.authService.uid],
-        memberIds: [this.authService.uid],
-        eventIds: [],
-        chatRoomId: null,
-        price: this.form.value.price,
-        waitingMemberIds: [],
-        private: this.form.value.private,
-        searchable: this.form.value.searchable,
-      })
-      .then(() => {
-        this.isComplete = true;
-        this.router.navigateByUrl('groups');
-      });
+  async submit() {
+    if (this.useMyOwnImage) {
+      const groupId = this.db.createId();
+      const photoURL = await this.authService.upload(
+        `groups/${groupId}`,
+        this.croppedImage
+      );
+      this.groupSerive
+        .createGroup(this.uid, {
+          id: groupId,
+          name: this.form.value.name,
+          description: this.form.value.description,
+          grouppicture: photoURL,
+          createddate: firestore.Timestamp.now(),
+          createrId: this.authService.uid,
+          chatRoomId: null,
+          price: this.form.value.price,
+          currency: this.form.value.currency,
+          private: this.form.value.private,
+          searchable: this.form.value.searchable,
+        })
+        .then(() => {
+          this.isComplete = true;
+          this.router.navigateByUrl('groups');
+        });
+    } else {
+      const a = '/assets/background/';
+      const selectedImageId: string = this.selectedImageId.toString();
+      const b = a.concat(selectedImageId.toString());
+      const c = '.jpg';
+      const grouppicture = b.concat(c);
+      console.log(grouppicture);
+      this.groupSerive
+        .createGroup(this.uid, {
+          id: this.db.createId(),
+          name: this.form.value.name,
+          description: this.form.value.description,
+          grouppicture: '/assets/background/3.jpg',
+          createddate: firestore.Timestamp.now(),
+          createrId: this.authService.uid,
+          chatRoomId: null,
+          price: this.form.value.price,
+          currency: this.form.value.currency,
+          private: this.form.value.private,
+          searchable: this.form.value.searchable,
+        })
+        .then(() => {
+          this.isComplete = true;
+          this.router.navigateByUrl('groups');
+        });
+    }
   }
 
-  update() {
-    this.groupSerive
-      .updateGroup({
-        id: this.groupid,
-        name: this.form.value.name,
-        description: this.form.value.description,
-        grouppicture: this.selectedImageId,
-        chatRoomId: null,
-        price: this.form.value.price,
-        waitingMemberIds: this.waitingMemberIds,
-        private: this.form.value.private,
-        searchable: this.form.value.searchable,
-      })
-      .then(() => (this.isComplete = true))
-      .then(() => this.router.navigateByUrl('/groups'))
-      .then(() =>
-        this.snackbar.open('Successfully updated the group', null, {
-          duration: 2000,
-        })
+  async update() {
+    if (this.useMyOwnImage) {
+      const groupId = this.db.createId();
+      const photoURL = await this.authService.upload(
+        `groups/${this.groupid}`,
+        this.croppedImage
       );
+      this.groupSerive
+        .createGroup(this.uid, {
+          id: this.groupid,
+          name: this.form.value.name,
+          description: this.form.value.description,
+          grouppicture: photoURL,
+          createddate: firestore.Timestamp.now(),
+          createrId: this.authService.uid,
+          chatRoomId: null,
+          price: this.form.value.price,
+          currency: this.form.value.currency,
+          private: this.form.value.private,
+          searchable: this.form.value.searchable,
+        })
+        .then(() => {
+          this.isComplete = true;
+          this.router.navigateByUrl('groups');
+        });
+    } else {
+      const a = '/assets/background/';
+      const selectedImageId: string = this.selectedImageId.toString();
+      const b = a.concat(selectedImageId.toString());
+      const c = '.jpg';
+      const grouppicture = b.concat(c);
+      console.log(grouppicture);
+      this.groupSerive
+        .updateGroup({
+          id: this.groupid,
+          name: this.form.value.name,
+          description: this.form.value.description,
+          grouppicture,
+          price: this.form.value.price,
+          currency: this.form.value.currency,
+          private: this.form.value.private,
+          searchable: this.form.value.searchable,
+        })
+        .then(() => (this.isComplete = true))
+        .then(() => this.router.navigateByUrl('/groups'))
+        .then(() =>
+          this.snackbar.open('Successfully updated the group', null, {
+            duration: 2000,
+          })
+        );
+    }
   }
 
   delete() {
@@ -149,5 +221,25 @@ export class CreateGroupComponent implements OnInit {
           duration: 2000,
         })
       );
+  }
+
+  switchUseMyOwnImage() {
+    this.useMyOwnImage = !this.useMyOwnImage;
+  }
+
+  fileChangeEvent(event: any): void {
+    this.imageChangedEvent = event;
+  }
+  imageCropped(event: ImageCroppedEvent) {
+    this.croppedImage = event.base64;
+  }
+  imageLoaded() {
+    // show cropper
+  }
+  cropperReady() {
+    // cropper ready
+  }
+  loadImageFailed() {
+    // show message
   }
 }

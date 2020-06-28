@@ -24,45 +24,7 @@
       </button>
     </div>
   </div>
-  <div *ngFor="let group of groups | async">
-    <div class="group">
-      <img
-        class="group-picture"
-        src="/assets/background/{{ group.grouppicture }}.jpg"
-      />
-      <h1 class="group-name">{{ group.name }}</h1>
-      <h2 class="group-description">{{ group.description }}</h2>
-      <div class="join-button-container">
-        <div *ngIf="group.memberIds.includes(uid)">
-          <button mat-raised-button color="accent" (click)="leaveGroup(group)">
-            Joining
-          </button>
-        </div>
-        <div *ngIf="!group.memberIds.includes(uid)">
-          <div *ngIf="!group.private">
-            <button mat-raised-button color="primary">
-              Join
-            </button>
-          </div>
-          <div *ngIf="group.private">
-            <button mat-raised-button color="primary">
-              Join waiting list
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="group-details-button-container">
-        <button
-          mat-icon-button
-          color="primary"
-          aria-label="group description"
-          class="group-details-button"
-          [routerLink]="['/group-details']"
-          [queryParams]="{ id: group.id }"
-        >
-          <mat-icon>fullscreen</mat-icon>
-        </button>
-      </div>
-    </div>
+  <div *ngFor="let group of groups">
+    <app-group [group]="group"></app-group>
   </div>
 </div>

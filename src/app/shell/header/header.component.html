@@ -1,5 +1,23 @@
 <mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <span><a [routerLink]="'events'">AttendManager</a></span>
-  </mat-toolbar-row>
+  <a routerLink="/">AttendManager</a>
+  <span class="spacer"></span>
+  <img
+    class="account-picture"
+    src="{{ photoURL }}"
+    [matMenuTriggerFor]="beforeMenu"
+  />
+  <mat-menu #beforeMenu="matMenu" xPosition="before">
+    <button
+      mat-menu-item
+      routerLink="/account/settings"
+      [queryParams]="{ id: uid }"
+    >
+      <mat-icon>person</mat-icon>
+      <span>Account</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>input</mat-icon>
+      <span>Sign out</span>
+    </button>
+  </mat-menu>
 </mat-toolbar>

@@ -4,6 +4,7 @@ export interface ChatRoom {
   id: string;
   name: string;
   groupid: string;
-  members: string[];
-  messages: Message[];
+  // memberIds: string[]; // サブコレ
+  // messages: Message[]; // サブコレ
+  messageCount: number;
 }

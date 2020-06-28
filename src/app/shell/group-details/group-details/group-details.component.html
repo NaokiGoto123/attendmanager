@@ -18,42 +18,58 @@
     </div>
   </mat-toolbar>
 
-  <img class="group-picture" src="/assets/background/{{ grouppicture }}.jpg" />
+  <img class="group-picture" src="{{ grouppicture }}" />
 
   <div class="group-details-container">
     <h1 class="name">{{ name }}</h1>
 
     <h1>{{ description }}</h1>
 
+    <div *ngIf="private">
+      <h1>This is private group</h1>
+    </div>
+    <div *ngIf="!private">
+      <h1>This is public group</h1>
+    </div>
+
     <h1>
-      Created by <span class="creater">{{ creater | async }}</span> on
+      Created by
+      <span
+        class="creater"
+        routerLink="/account"
+        [queryParams]="{ id: createrId }"
+      >
+        {{ createrName }}
+      </span>
+      on
       {{ createddate | date: 'yyyy/MM/dd' }}
     </h1>
 
-    <h1>Price: {{ price }}</h1>
+    <div *ngIf="price === 0">
+      <h1>Price: {{ price }}</h1>
+    </div>
+    <div *ngIf="price !== 0">
+      <h1>Price: {{ price }} {{ currency }}</h1>
+    </div>
 
     <div *ngIf="ifAdmins">
       <h1>Admins</h1>
       <ul>
-        <div *ngFor="let admin of admins | async">
-          <div *ngIf="admin.uid === uid">
-            <li>
-              <h1 class="member" routerLink="/account">
-                {{ admin.displayName }}
-              </h1>
-            </li>
-          </div>
-          <div *ngIf="admin.uid !== uid">
-            <li>
-              <h1
-                class="member"
-                [routerLink]="['/account']"
-                [queryParams]="{ id: admin.uid }"
-              >
-                {{ admin.displayName }}
-              </h1>
-            </li>
-          </div>
+        <div *ngFor="let admin of admins">
+          <li class="member-container">
+            <h1
+              class="memberName"
+              [routerLink]="['/account']"
+              [queryParams]="{ id: admin.uid }"
+            >
+              {{ admin.displayName }}
+            </h1>
+            <div *ngIf="ifadmin && admin.uid === uid">
+              <button mat-button color="warn" (click)="deleteAdmin(admin.uid)">
+                Unauthorize
+              </button>
+            </div>
+          </li>
         </div>
       </ul>
     </div>
@@ -61,25 +77,32 @@
     <div *ngIf="ifMembers">
       <h1>Members</h1>
       <ul>
-        <div *ngFor="let member of members | async">
-          <div *ngIf="member.uid === uid">
-            <li>
-              <h1 class="member" routerLink="/account">
-                {{ member.displayName }}
-              </h1>
-            </li>
-          </div>
-          <div *ngIf="member.uid !== uid">
-            <li>
-              <h1
-                class="member"
-                [routerLink]="['/account']"
-                [queryParams]="{ id: member.uid }"
+        <div *ngFor="let member of members">
+          <li class="member-container">
+            <h1
+              class="memberName"
+              [routerLink]="['/account']"
+              [queryParams]="{ id: member.uid }"
+            >
+              {{ member.displayName }}
+            </h1>
+            <div
+              *ngIf="
+                ifadmin && member.uid !== uid && !adminIds.includes(member.uid)
+              "
+            >
+              <button
+                mat-button
+                color="primary"
+                (click)="makeAdmin(member.uid)"
               >
-                {{ member.displayName }}
-              </h1>
-            </li>
-          </div>
+                Authorize as an admin
+              </button>
+              <button mat-button color="warn" (click)="leaveGroup(member.uid)">
+                Kick out
+              </button>
+            </div>
+          </li>
         </div>
       </ul>
     </div>
@@ -88,10 +111,10 @@
       <h1>There is no members.</h1>
     </div>
 
-    <div *ngIf="ifWaitingMembers">
+    <div *ngIf="ifWaitingJoinningMembers">
       <h1>Waiting users</h1>
       <ul>
-        <div *ngFor="let waitingMember of waitingMembers | async">
+        <div *ngFor="let waitingMember of waitingJoinningMembers | async">
           <li class="waitingMember-container">
             <h1
               class="waitingMember"
@@ -100,24 +123,53 @@
             >
               {{ waitingMember.displayName }}
             </h1>
-            <div class="waiting-buttons" *ngIf="ifadmin">
-              <div class="allow-button">
-                <button
-                  mat-mini-fab
-                  color="primary"
-                  (click)="allowWaitingMember(waitingMember.uid)"
-                >
-                  <mat-icon>add</mat-icon>
-                </button>
+            <div *ngIf="ifadmin">
+              <!-- 無料グループの場合 -->
+              <div class="waiting-buttons" *ngIf="price === 0">
+                <div class="allow-button">
+                  <button
+                    mat-button
+                    color="primary"
+                    (click)="allowWaitingMember(waitingMember.uid)"
+                  >
+                    Allow
+                  </button>
+                </div>
+                <div class="remove-button">
+                  <button
+                    mat-button
+                    color="warn"
+                    (click)="leaveWaitingList(waitingMember.uid)"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
-              <div class="remove-button">
-                <button
-                  mat-mini-fab
-                  color="warn"
-                  (click)="removeWaitingMember(waitingMember.uid)"
-                >
-                  <mat-icon>remove</mat-icon>
-                </button>
+              <!-- 有料グループの場合 -->
+              <div class="waiting-buttons" *ngIf="price !== 0">
+                <div class="allow-button">
+                  <button
+                    mat-button
+                    color="primary"
+                    (click)="
+                      waitingJoinningMemberToWaitingPayingMember(
+                        waitingMember.uid
+                      )
+                    "
+                  >
+                    Allow
+                  </button>
+                </div>
+
+                <div class="remove-button">
+                  <button
+                    mat-button
+                    color="warn"
+                    (click)="leaveWaitingList(waitingMember.uid)"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
             </div>
           </li>
@@ -125,7 +177,7 @@
       </ul>
     </div>
 
-    <div *ngIf="!ifWaitingMembers">
+    <div *ngIf="!ifWaitingJoinningMembers">
       <h1>There is no waiting member.</h1>
     </div>
 

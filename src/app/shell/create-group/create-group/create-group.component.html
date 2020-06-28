@@ -6,19 +6,53 @@
     <h1>Create your group</h1>
   </ng-template>
 
-  <h3>Choose an image for your group</h3>
+  <div class="switchUseMyOwnImage-button-container" *ngIf="useMyOwnImage">
+    <button mat-raised-button (click)="switchUseMyOwnImage()" color="primary">
+      Choose from templates
+    </button>
+  </div>
 
-  <div class="swiper">
-    <swiper [config]="config" [(index)]="selectedImageId">
-      <div *ngFor="let imageId of imageIds">
-        <img
-          class="background-image"
-          alt="group image"
-          src="/assets/background/{{ imageId }}.jpg"
-        />
-      </div>
-    </swiper>
-    <div class="pager"></div>
+  <div class="switchUseMyOwnImage-button-container" *ngIf="!useMyOwnImage">
+    <button mat-raised-button (click)="switchUseMyOwnImage()" color="primary">
+      Choose from library
+    </button>
+  </div>
+
+  <div *ngIf="!useMyOwnImage">
+    <h3>Choose an image from templates</h3>
+
+    <div class="swiper">
+      <swiper [config]="config" [(index)]="selectedImageId">
+        <div *ngFor="let imageId of imageIds">
+          <img
+            class="background-image"
+            alt="group image"
+            src="/assets/background/{{ imageId }}.jpg"
+          />
+        </div>
+      </swiper>
+      <div class="pager"></div>
+    </div>
+  </div>
+
+  <div class="select-image-container" *ngIf="useMyOwnImage">
+    <input class="image-input" type="file" (change)="fileChangeEvent($event)" />
+
+    <div class="cropper-container" *ngIf="imageChangedEvent">
+      <img class="selected-image" [src]="croppedImage" />
+
+      <image-cropper
+        [imageChangedEvent]="imageChangedEvent"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="8 / 3"
+        [roundCropper]="false"
+        format="png"
+        (imageCropped)="imageCropped($event)"
+        (imageLoaded)="imageLoaded()"
+        (cropperReady)="cropperReady()"
+        (loadImageFailed)="loadImageFailed()"
+      ></image-cropper>
+    </div>
   </div>
 
   <form class="create-group-form" [formGroup]="form">
@@ -32,25 +66,46 @@
       <input matInput formControlName="description" type="text" />
     </mat-form-field>
 
+    <p>{{ form.value.price }} {{ form.value.currency }}</p>
+
+    <mat-form-field>
+      <mat-label>Choose currency</mat-label>
+      <mat-select formControlName="currency">
+        <div *ngFor="let currency of currencies">
+          <mat-option [value]="currency">{{ currency }}</mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+
     <mat-slider
       class="create-group-field"
       thumbLabel
       [displayWith]="formatLabel"
       tickInterval="1000"
-      step="1000"
+      step="500"
       formControlName="price"
       min="0"
       max="50000"
     >
     </mat-slider>
 
-    <mat-slide-toggle class="create-group-field" formControlName="private"
-      >Private: {{ form.value.private }}</mat-slide-toggle
-    >
+    <mat-slide-toggle class="create-group-field" formControlName="private">
+      <div *ngIf="form.value.private">
+        Private
+      </div>
+      <div *ngIf="!form.value.private">
+        Public
+      </div>
+    </mat-slide-toggle>
 
-    <mat-slide-toggle class="create-group-field" formControlName="searchable"
-      >Searchable: {{ form.value.searchable }}</mat-slide-toggle
-    >
+    <mat-slide-toggle class="create-group-field" formControlName="searchable">
+      <div *ngIf="form.value.searchable">
+        Searchable
+      </div>
+      <div *ngIf="!form.value.searchable">
+        Unsearchable
+      </div>
+    </mat-slide-toggle>
 
     <div class="buttons" *ngIf="ifTarget; else create">
       <button

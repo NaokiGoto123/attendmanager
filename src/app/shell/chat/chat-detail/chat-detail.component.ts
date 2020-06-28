@@ -6,6 +6,7 @@ import { Message } from 'src/app/interfaces/message';
 import { AuthService } from 'src/app/services/auth.service';
 import { firestore } from 'firebase';
 import { FormBuilder, Validators } from '@angular/forms';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-chat-detail',
@@ -34,6 +35,7 @@ export class ChatDetailComponent implements OnInit {
   groupid: string;
 
   constructor(
+    private db: AngularFirestore,
     private activatedRoute: ActivatedRoute,
     private chatService: ChatService,
     private authService: AuthService,
@@ -49,21 +51,25 @@ export class ChatDetailComponent implements OnInit {
       this.chatRoomId = chatRoomId;
       this.chatService
         .getChatRoom(chatRoomId)
-        .subscribe((ChatRoom: ChatRoom) => {
-          this.name = ChatRoom.name;
-          this.groupid = ChatRoom.groupid;
-          if (ChatRoom.messages === null) {
-            this.messages = [];
-            this.noMessage = true;
-          } else {
-            if (ChatRoom.messages.length) {
-              this.messages = ChatRoom.messages;
-              this.noMessage = false;
-            } else {
-              this.messages = [];
-              this.noMessage = true;
-            }
-          }
+        .subscribe((chatRoom: ChatRoom) => {
+          this.name = chatRoom.name;
+          this.groupid = chatRoom.groupid;
+          this.chatService
+            .getMessages(chatRoomId)
+            .subscribe((messages: Message[]) => {
+              if (messages === null) {
+                this.messages = [];
+                this.noMessage = true;
+              } else {
+                if (messages.length) {
+                  this.messages = messages;
+                  this.noMessage = false;
+                } else {
+                  this.messages = [];
+                  this.noMessage = true;
+                }
+              }
+            });
         });
     });
     this.loading = false;
@@ -72,6 +78,7 @@ export class ChatDetailComponent implements OnInit {
   send() {
     this.chatService.sendMessage(
       {
+        id: this.db.createId(),
         ownerId: this.uid,
         ownerPhotoURL: this.photoURL,
         content: this.form.value.message,

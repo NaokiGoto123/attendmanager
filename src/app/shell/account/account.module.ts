@@ -12,8 +12,31 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
 import { SharedModule } from '../shared/shared.module';
+import { GroupsComponent } from './groups/groups.component';
+import { AttendingEventsComponent } from './attending-events/attending-events.component';
+import { AttendedEventsComponent } from './attended-events/attended-events.component';
+import { SettingsComponent } from './settings/settings.component';
+import { WaitingJoinningEventsComponent } from './waiting-joinning-events/waiting-joinning-events.component';
+import { WaitingPayingEventsComponent } from './waiting-paying-events/waiting-paying-events.component';
+import { WaitingJoinningGroupsComponent } from './waiting-joinning-groups/waiting-joinning-groups.component';
+import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-paying-groups.component';
+import { ImageCropperModule } from 'ngx-image-cropper';
+import { InvitedGroupsComponent } from './invited-groups/invited-groups.component';
+import { InvitedEventsComponent } from './invited-events/invited-events.component';
 @NgModule({
-  declarations: [AccountComponent],
+  declarations: [
+    AccountComponent,
+    GroupsComponent,
+    AttendingEventsComponent,
+    AttendedEventsComponent,
+    SettingsComponent,
+    WaitingJoinningEventsComponent,
+    WaitingPayingEventsComponent,
+    WaitingJoinningGroupsComponent,
+    WaitingPayingGroupsComponent,
+    InvitedGroupsComponent,
+    InvitedEventsComponent,
+  ],
   imports: [
     CommonModule,
     AccountRoutingModule,
@@ -27,6 +50,7 @@ import { SharedModule } from '../shared/shared.module';
     MatSlideToggleModule,
     MatRadioModule,
     SharedModule,
+    ImageCropperModule,
   ],
 })
 export class AccountModule {}

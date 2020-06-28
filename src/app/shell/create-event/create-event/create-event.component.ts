@@ -25,15 +25,9 @@ export class CreateEventComponent implements OnInit {
 
   groupid: string;
 
-  attendingmembers: string[];
+  adminGroups: Group[];
 
-  waitingJoinningMemberIds: string[];
-
-  waitingPayingMemberIds: string[];
-
-  admingroups$: Observable<Group[]> = this.groupService.getAdminGroup(
-    this.authService.uid
-  );
+  currencies = ['USD', 'SHP', 'JPY', 'CAD', 'CNY', 'EUR'];
 
   form = this.fb.group({
     groupid: ['', [Validators.required]],
@@ -44,8 +38,9 @@ export class CreateEventComponent implements OnInit {
     time: ['', [Validators.required]],
     location: ['', [Validators.required]],
     price: [0],
+    currency: ['', [Validators.required]],
     private: [false],
-    searchable: [false],
+    searchable: [true],
   });
 
   formatLabel(value: number) {
@@ -64,42 +59,37 @@ export class CreateEventComponent implements OnInit {
     private groupService: GroupService,
     private eventService: EventService
   ) {
-    this.activatedRoute.queryParamMap
-      .pipe(
-        switchMap((params) => {
-          return this.eventService.getEvent(params.get('id'));
-        })
-      )
-      .subscribe((event: Event) => {
-        if (!event) {
-          return null;
-        } else {
+    this.activatedRoute.queryParamMap.subscribe((params) => {
+      const id = params.get('id');
+      this.eventService.getEvent(id).subscribe((event: Event) => {
+        if (event) {
           this.ifTarget = true;
           this.groupid = event.groupid;
           this.eventid = event.id;
-          this.attendingmembers = event.attendingMemberIds;
-          this.waitingJoinningMemberIds = event.waitingJoinningMemberIds;
-          this.waitingPayingMemberIds = event.waitingPayingMemberIds;
           this.form.patchValue({
             ...event,
             date: event.date.toDate(),
           });
+        } else {
+          const uid: string = this.authService.uid;
+          console.log(uid);
+          this.groupService
+            .getAdminGroup(uid)
+            .subscribe((adminGroups: Group[]) => {
+              console.log(adminGroups);
+              if (adminGroups.length) {
+                this.noGroup = false;
+                this.adminGroups = adminGroups;
+              } else {
+                this.noGroup = true;
+              }
+            });
         }
       });
-  }
-
-  ngOnInit(): void {
-    this.admingroups$.subscribe((admingroups: Group[]) => {
-      console.log('map working');
-      if (admingroups.length) {
-        this.noGroup = false;
-        console.log('noGroup is false');
-      } else {
-        this.noGroup = true;
-        console.log('noGroup is true');
-      }
     });
   }
+
+  ngOnInit(): void {}
 
   @HostListener('window:beforeunload', ['$event'])
   unloadNotification($event: any) {
@@ -117,14 +107,12 @@ export class CreateEventComponent implements OnInit {
         description: this.form.value.description,
         createrId: this.authService.uid,
         memberlimit: this.form.value.memberlimit,
-        attendingMemberIds: [],
         date: this.form.value.date,
         time: this.form.value.time,
         location: this.form.value.location,
         groupid: this.form.value.groupid,
         price: this.form.value.price,
-        waitingJoinningMemberIds: [],
-        waitingPayingMemberIds: [],
+        currency: this.form.value.currency,
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })
@@ -139,14 +127,12 @@ export class CreateEventComponent implements OnInit {
         title: this.form.value.title,
         description: this.form.value.description,
         memberlimit: this.form.value.memberlimit,
-        attendingMemberIds: this.attendingmembers,
         date: this.form.value.date,
         time: this.form.value.time,
         location: this.form.value.location,
         groupid: this.form.value.groupid,
         price: this.form.value.price,
-        waitingJoinningMemberIds: this.waitingJoinningMemberIds,
-        waitingPayingMemberIds: this.waitingPayingMemberIds,
+        currency: this.form.value.currency,
         private: this.form.value.private,
         searchable: this.form.value.searchable,
       })

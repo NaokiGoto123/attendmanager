@@ -3,11 +3,12 @@ import { AuthService } from './auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ChatRoom } from '../interfaces/chat-room';
 import { Group } from '../interfaces/group';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Message } from '../interfaces/message';
 import { firestore } from 'firebase';
 import { Router } from '@angular/router';
+import { Id } from '../interfaces/id';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ export class ChatService {
     private authService: AuthService
   ) {}
 
-  createChatRoom(chatRoom: ChatRoom) {
+  createChatRoom(uid: string, chatRoom: ChatRoom) {
     const id = chatRoom.id;
     this.db
       .doc(`chatRooms/${id}`)
@@ -29,6 +30,9 @@ export class ChatService {
           .doc(`groups/${chatRoom.groupid}`)
           .update({ chatRoomId: chatRoom.id })
       )
+      .then(() => {
+        this.db.doc(`chatRooms/${id}/memberIds/${uid}`).set({ id: uid });
+      })
       .then(() =>
         this.router.navigate(['/chat/chat-detail'], {
           queryParams: { id: chatRoom.id },
@@ -37,22 +41,45 @@ export class ChatService {
     console.log('Successfully created a chatRoom');
   }
 
+  joinChatRoom(uid: string, chatRoomId: string) {
+    this.db.doc(`chatRooms/${chatRoomId}/memberIds/${uid}`).set({ id: uid });
+  }
+
+  leaveChatRoom(uid: string, chatRoomId: string) {
+    this.db.doc(`chatRooms/${chatRoomId}/memberIds/${uid}`).delete();
+  }
+
   getMyChatRoommIds(uid: string): Observable<string[]> {
     return this.db
-      .collection<Group>(`groups`, (ref) =>
-        ref.where(`members`, 'array-contains', uid)
-      )
+      .collection<Id>(`users/${uid}/groupIds`)
       .valueChanges()
       .pipe(
+        switchMap((groupIds: Id[]) => {
+          if (groupIds.length) {
+            const myGroups: Observable<Group>[] = [];
+            groupIds.forEach((groupId: Id) => {
+              console.log(groupId);
+              myGroups.push(
+                this.db.doc<Group>(`groups/${groupId.id}`).valueChanges()
+              );
+            });
+            return combineLatest(myGroups);
+          } else {
+            return of([]);
+          }
+        }),
         map((myGroups: Group[]) => {
-          const chatRoomIds: string[] = [];
-          myGroups.forEach((myGroup: Group) => {
-            if (myGroup.chatRoomId) {
-              chatRoomIds.push(myGroup.chatRoomId);
-            }
-          });
-          console.log(chatRoomIds);
-          return chatRoomIds;
+          if (myGroups.length) {
+            const chatRoomIds: string[] = [];
+            myGroups.forEach((myGroup: Group) => {
+              if (myGroup.chatRoomId) {
+                chatRoomIds.push(myGroup.chatRoomId);
+              }
+            });
+            return chatRoomIds;
+          } else {
+            return [];
+          }
         })
       );
   }
@@ -61,9 +88,26 @@ export class ChatService {
     return this.db.doc<ChatRoom>(`chatRooms/${chatRoomId}`).valueChanges();
   }
 
+  getMessages(chatRoomId: string) {
+    return this.db
+      .collection(`chatRooms/${chatRoomId}/messages`, (ref) =>
+        ref.orderBy('sentAt')
+      )
+      .valueChanges();
+  }
+
   sendMessage(message: Message, chatRoomId: string) {
     this.db
-      .doc(`chatRooms/${chatRoomId}`)
-      .update({ messages: firestore.FieldValue.arrayUnion(message) });
+      .doc(`chatRooms/${chatRoomId}/messages/${message.id}`)
+      .set(message)
+      .then(() => {
+        this.db
+          .doc(`chatRooms/${chatRoomId}`)
+          .update({ messageCount: firestore.FieldValue.increment(1) });
+      });
+  }
+
+  clearMessageCount(chatRoomId: string) {
+    this.db.doc(`chatRooms/${chatRoomId}`).update({ messageCount: 0 });
   }
 }

@@ -25,19 +25,27 @@ export class GroupDetailsComponent implements OnInit {
 
   ifChatRoom: boolean; // チャットルームが作成済かどうか
 
+  group: Group;
   name: string;
   description: string;
-  grouppicture: number;
+  private: boolean;
+  grouppicture: string;
   createddate: Date;
-  creater: Observable<string>;
+  createrId: string;
+  createrName: string;
   price: number;
+  currency: string;
   chatRoomId: string;
-  admins: Observable<User[]>;
+  adminIds: string[];
+  admins: User[];
   ifAdmins: boolean;
-  members: Observable<User[]>;
+  memberIds: string[];
+  members: User[];
   ifMembers: boolean;
-  waitingMembers: Observable<User[]>;
-  ifWaitingMembers: boolean;
+  waitingJoinningMembers: Observable<User[]>;
+  waitingPayingMembers: Observable<User[]>;
+  ifWaitingJoinningMembers: boolean;
+  ifWaitingPayingMemberId: boolean;
 
   constructor(
     private location: Location,
@@ -52,18 +60,41 @@ export class GroupDetailsComponent implements OnInit {
 
       this.uid = this.authService.uid;
 
+      const resultMemberIds: string[] = [];
       this.groupService
-        .checkIfAdmin(this.uid, this.id)
-        .subscribe((ifAdmin: boolean) => {
-          this.ifadmin = ifAdmin;
+        .getMemberIds(this.id)
+        .subscribe((memberIds: string[]) => {
+          memberIds.forEach((memberId: string) => {
+            resultMemberIds.push(memberId);
+          });
         });
+      this.memberIds = resultMemberIds;
+
+      const resultAdminIds: string[] = [];
+      this.groupService.getAdminIds(this.id).subscribe((adminIds: string[]) => {
+        adminIds.forEach((adminId: string) => {
+          resultAdminIds.push(adminId);
+        });
+      });
+      this.adminIds = resultAdminIds;
 
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
+        this.group = group;
         this.name = group.name;
         this.description = group.description;
+        this.createrId = group.createrId;
+        this.authService.getUser(this.createrId).subscribe((creater: User) => {
+          this.createrName = creater.displayName;
+        });
+        if (group.private) {
+          this.private = true;
+        } else {
+          this.private = false;
+        }
         this.grouppicture = group.grouppicture;
         this.createddate = group.createddate.toDate();
         this.price = group.price;
+        this.currency = group.currency;
         if (group.chatRoomId) {
           this.chatRoomId = group.chatRoomId;
           this.ifChatRoom = true;
@@ -73,66 +104,87 @@ export class GroupDetailsComponent implements OnInit {
         }
       });
 
-      this.creater = this.groupService.getGroupinfo(this.id).pipe(
-        switchMap(
-          (group: Group): Observable<string> => {
-            return this.authService.getName(group.createrId);
-          }
-        )
-      );
-
-      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        if (group.adminIds.length) {
-          this.admins = combineLatest(
-            group.adminIds.map((adminId: string) => {
-              const user: Observable<User> = this.authService.getUser(adminId);
-              return user;
-            })
-          );
+      this.groupService.getAdminIds(this.id).subscribe((adminIds: string[]) => {
+        console.log(adminIds);
+        if (adminIds.length) {
           this.ifAdmins = true;
+          if (adminIds.includes(this.uid)) {
+            this.ifadmin = true;
+          } else {
+            this.ifadmin = false;
+          }
         } else {
           this.ifAdmins = false;
         }
+        const admins: User[] = [];
+        adminIds.forEach((adminId: string) => {
+          this.authService.getUser(adminId).subscribe((admin: User) => {
+            admins.push(admin);
+          });
+        });
+        this.admins = admins;
       });
 
-      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        if (group.memberIds.length) {
-          this.members = combineLatest(
-            group.memberIds.map((memberId: string) => {
-              const user: Observable<User> = this.authService.getUser(memberId);
-              return user;
-            })
-          );
-
-          this.ifMembers = true;
-
-          if (group.memberIds.includes(this.uid)) {
-            this.ifmember = true;
+      this.groupService
+        .getMemberIds(this.id)
+        .subscribe((memberIds: string[]) => {
+          console.log(memberIds);
+          if (memberIds.length) {
+            this.ifMembers = true;
+            if (memberIds.includes(this.uid)) {
+              this.ifmember = true;
+            } else {
+              this.ifmember = false;
+            }
           } else {
-            this.ifmember = false;
+            this.ifMembers = false;
           }
-        } else {
-          this.ifMembers = false;
-          this.ifmember = false;
-        }
-      });
+          const members: User[] = [];
+          memberIds.forEach((memberId: string) => {
+            this.authService.getUser(memberId).subscribe((member: User) => {
+              members.push(member);
+            });
+          });
+          this.members = members;
+        });
 
-      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        if (group.waitingMemberIds.length) {
-          this.waitingMembers = combineLatest(
-            group.waitingMemberIds.map((waitingMemberId) => {
-              console.log(waitingMemberId);
-              const waitingMember: Observable<User> = this.authService.getUser(
-                waitingMemberId
-              );
-              return waitingMember;
-            })
-          );
-          this.ifWaitingMembers = true;
-        } else {
-          this.ifWaitingMembers = false;
-        }
-      });
+      this.groupService
+        .getWaitingJoinningMemberIds(this.id)
+        .subscribe((waitingJoinningMemberIds: string[]) => {
+          if (waitingJoinningMemberIds.length) {
+            this.waitingJoinningMembers = combineLatest(
+              waitingJoinningMemberIds.map((waitingMemberId) => {
+                console.log(waitingMemberId);
+                const waitingMember: Observable<User> = this.authService.getUser(
+                  waitingMemberId
+                );
+                return waitingMember;
+              })
+            );
+            this.ifWaitingJoinningMembers = true;
+          } else {
+            this.ifWaitingJoinningMembers = false;
+          }
+        });
+
+      this.groupService
+        .getWaitingPayingMemberIds(this.id)
+        .subscribe((waitingPayingMemberIds: string[]) => {
+          if (waitingPayingMemberIds.length) {
+            this.waitingPayingMembers = combineLatest(
+              waitingPayingMemberIds.map((waitingPayingMemberId) => {
+                console.log(waitingPayingMemberId);
+                const waitingPayingMember: Observable<User> = this.authService.getUser(
+                  waitingPayingMemberId
+                );
+                return waitingPayingMember;
+              })
+            );
+            this.ifWaitingPayingMemberId = true;
+          } else {
+            this.ifWaitingPayingMemberId = false;
+          }
+        });
     });
   }
 
@@ -142,21 +194,39 @@ export class GroupDetailsComponent implements OnInit {
 
   createChatRoom() {
     const chatRoomId = this.db.createId();
-    this.chatService.createChatRoom({
+    this.chatService.createChatRoom(this.uid, {
       id: chatRoomId,
       name: this.name,
       groupid: this.id,
-      members: [this.authService.uid],
-      messages: null,
+      messageCount: 0,
     });
   }
 
-  removeWaitingMember(waitingMemberId: string) {
-    this.groupService.removeWaitingMember(waitingMemberId, this.id);
+  makeAdmin(uid: string) {
+    this.groupService.makeAdmin(uid, this.id);
+  }
+
+  deleteAdmin(uid: string) {
+    this.groupService.deleteAdmin(uid, this.id);
+  }
+
+  leaveGroup(uid: string) {
+    this.groupService.leaveGroup(uid, this.id);
+  }
+
+  leaveWaitingList(waitingMemberId: string) {
+    this.groupService.leaveWaitingList(waitingMemberId, this.id);
   }
 
   allowWaitingMember(waitingMemberId: string) {
     this.groupService.allowWaitingMember(waitingMemberId, this.id);
+  }
+
+  waitingJoinningMemberToWaitingPayingMember(waitingMemberId: string) {
+    this.groupService.waitingJoinningMemberToWaitingPayingMember(
+      waitingMemberId,
+      this.id
+    );
   }
 
   ngOnInit(): void {}

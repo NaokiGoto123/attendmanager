@@ -1,0 +1,13 @@
+<div class="groups-container">
+  <div class="create-group-grid-container">
+    <div class="create-group-grid">
+      <h1>Create new group</h1>
+      <button mat-fab routerLink="/create-group" color="none">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div *ngFor="let searchableGroup of searchableGroups">
+    <app-group [group]="searchableGroup"></app-group>
+  </div>
+</div>

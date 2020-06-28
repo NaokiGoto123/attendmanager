@@ -17,9 +17,7 @@
 
 .group-details-container {
   position: absolute;
-  width: 50%;
-  margin: 0 0 250px 0;
-  left: 30%;
+  margin: 0 0 250px 20%;
 }
 
 .name {
@@ -29,16 +27,30 @@
 
 .creater,
 .admin,
-.member,
+.memberName,
 .waitingMember {
   text-decoration: none;
 }
 
 .creater:hover,
 .admin:hover,
-.member:hover,
+.memberName:hover,
 .waitingMember:hover {
   text-decoration: underline;
+}
+
+ul {
+  margin: 0;
+}
+
+.member-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0;
+  h1 {
+    margin: 0;
+  }
 }
 
 .waitingMember {
@@ -58,7 +70,7 @@
 
 .allow-button,
 .remove-button {
-  margin: 0 0 0 20px;
+  margin: 0 0 0 10px;
 }
 
 .buttons {

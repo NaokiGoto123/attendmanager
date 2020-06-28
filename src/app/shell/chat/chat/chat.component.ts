@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { ChatRoom } from 'src/app/interfaces/chat-room';
 import { map, switchMap } from 'rxjs/operators';
 import { combineLatest, Observable, of } from 'rxjs';
+import { GroupService } from 'src/app/services/group.service';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -16,7 +17,8 @@ export class ChatComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private groupService: GroupService
   ) {}
 
   ngOnInit(): void {
@@ -32,10 +34,10 @@ export class ChatComponent implements OnInit {
                 }
               );
               this.noChatRooms = false;
+              console.log(ChatRooms);
               return combineLatest(ChatRooms);
             } else {
               this.noChatRooms = true;
-              console.log(this.noChatRooms);
               return of(null);
             }
           }
