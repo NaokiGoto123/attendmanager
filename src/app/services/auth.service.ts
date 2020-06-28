@@ -129,7 +129,6 @@ export class AuthService {
       .valueChanges()
       .pipe(
         map((targets: User[]) => {
-          console.log(targets);
           return targets[0];
         })
       );
