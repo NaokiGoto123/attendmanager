@@ -182,7 +182,12 @@
     </div>
 
     <div class="buttons">
-      <button mat-raised-button class="invite-button" color="primary">
+      <button
+        mat-raised-button
+        class="invite-button"
+        color="primary"
+        (click)="openDialog()"
+      >
         Invite people
       </button>
 

@@ -9,6 +9,8 @@ import { Location } from '@angular/common';
 import { ChatService } from 'src/app/services/chat.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'src/app/interfaces/user';
+import { MatDialog } from '@angular/material/dialog';
+import { GroupDetailsDiaplogComponent } from '../group-details-diaplog/group-details-diaplog.component';
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
@@ -47,13 +49,16 @@ export class GroupDetailsComponent implements OnInit {
   ifWaitingJoinningMembers: boolean;
   ifWaitingPayingMemberId: boolean;
 
+  searchId: string;
+
   constructor(
     private location: Location,
     private activatedRoute: ActivatedRoute,
     private db: AngularFirestore,
     private groupService: GroupService,
     private authService: AuthService,
-    private chatService: ChatService
+    private chatService: ChatService,
+    private dialog: MatDialog
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       this.id = params.get('id');
@@ -190,6 +195,18 @@ export class GroupDetailsComponent implements OnInit {
 
   navigateBack() {
     this.location.back();
+  }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(GroupDetailsDiaplogComponent, {
+      width: '350px',
+      data: { searchId: this.searchId },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log('The dialog was closed');
+      this.searchId = result;
+    });
   }
 
   createChatRoom() {
