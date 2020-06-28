@@ -20,17 +20,19 @@
         <h1>Create event</h1>
       </div>
 
-      <mat-form-field class="create-event-field" appearance="outline">
-        <mat-label>Which group</mat-label>
-        <mat-select formControlName="groupid" required>
-          <mat-option
-            *ngFor="let adminGroups of adminGroups"
-            [value]="adminGroups.id"
-          >
-            {{ adminGroups.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="group-picker-container" *ngIf="!ifTarget">
+        <mat-form-field class="group-picker" appearance="outline">
+          <mat-label>Which group</mat-label>
+          <mat-select formControlName="groupid" required>
+            <mat-option
+              *ngFor="let adminGroups of adminGroups"
+              [value]="adminGroups.id"
+            >
+              {{ adminGroups.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
       <mat-form-field class="create-event-field" appearance="outline">
         <mat-label>What is the event title?</mat-label>

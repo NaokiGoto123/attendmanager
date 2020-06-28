@@ -31,6 +31,16 @@ h1 {
   margin-bottom: 15px;
 }
 
+.group-picker-container {
+  display: flex;
+  align-items: center;
+  width: 80%;
+}
+
+.group-picker {
+  width: 100%;
+}
+
 mat-slider {
   width: 100%;
 }

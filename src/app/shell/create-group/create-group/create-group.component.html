@@ -19,8 +19,6 @@
   </div>
 
   <div *ngIf="!useMyOwnImage">
-    <h3>Choose an image from templates</h3>
-
     <div class="swiper">
       <swiper [config]="config" [(index)]="selectedImageId">
         <div *ngFor="let imageId of imageIds">
