@@ -122,64 +122,8 @@ export class EventService {
   }
 
   async deleteEvent(eventId: string, groupId: string) {
-    await this.db
-      .doc(`events/${eventId}`)
-      .delete()
-      .then(() => this.db.doc(`groups/${groupId}/eventIds/${eventId}`).delete())
-      .then(() => {
-        this.db
-          .collection<Id>(`groups/${groupId}/attendingMemberIds`)
-          .valueChanges()
-          .subscribe((attendingMemberIds: Id[]) => {
-            attendingMemberIds.map((attendingMemberId: Id) => {
-              this.db
-                .doc(
-                  `groups/${groupId}/attendingMemberIds/${attendingMemberId.id}`
-                )
-                .delete();
-            });
-          });
-      })
-      .then(() => {
-        this.db
-          .collection(`groups/${groupId}/waitingJoinningMemberIds`)
-          .valueChanges()
-          .subscribe((waitingJoinningMemberIds: Id[]) => {
-            waitingJoinningMemberIds.map((waitingJoinningMemberId: Id) => {
-              this.db
-                .doc(
-                  `groups/${groupId}/attendingMemberIds/${waitingJoinningMemberId.id}`
-                )
-                .delete();
-            });
-          });
-      })
-      .then(() => {
-        this.db
-          .collection(`groups/${groupId}/waitingPayingMemberIds`)
-          .valueChanges()
-          .subscribe((waitingPayingMemberIds: Id[]) => {
-            waitingPayingMemberIds.map((waitingPayingMemberId: Id) => {
-              this.db
-                .doc(
-                  `groups/${groupId}/attendingMemberIds/${waitingPayingMemberId.id}`
-                )
-                .delete();
-            });
-          });
-      })
-      .then(() => {
-        this.db
-          .collection(`events/${eventId}/attendingMemberIds`)
-          .valueChanges()
-          .subscribe((attendingMemberIds: Id[]) => {
-            attendingMemberIds.map((attendingMemberId: Id) => {
-              this.db
-                .doc(`users/${attendingMemberId.id}/eventIds/${eventId}`)
-                .delete();
-            });
-          });
-      });
+    await this.db.doc(`events/${eventId}`).delete();
+    // cloud functionに処理移行
   }
 
   getSearchableEvents(): Observable<Event[]> {

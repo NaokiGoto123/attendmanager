@@ -26,10 +26,8 @@ export const joinGroup = functions
     ).docs.map((doc) => doc.data());
 
     adminIds.map((adminId) => {
-      console.log(adminId.id);
       const docRef = db.collection(`users/${adminId.id}/notifications`).doc();
       const Id: string = docRef.id;
-      console.log(Id);
 
       return db
         .doc(`users/${adminId.id}/notifications/${Id}`)

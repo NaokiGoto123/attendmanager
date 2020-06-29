@@ -3,3 +3,4 @@ import * as admin from 'firebase-admin';
 admin.initializeApp(functions.config().firebase);
 
 export * from './notifications.function';
+export * from './delete.function';
