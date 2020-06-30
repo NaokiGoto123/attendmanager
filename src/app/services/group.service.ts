@@ -8,11 +8,17 @@ import { firestore } from 'firebase';
 import { User } from '../interfaces/user';
 import { Id } from '../interfaces/id';
 import { Message } from '../interfaces/message';
+import { AngularFireFunctions } from '@angular/fire/functions';
 @Injectable({
   providedIn: 'root',
 })
 export class GroupService {
-  constructor(private db: AngularFirestore) {}
+  data: any;
+  deleteGroupFunction: any;
+
+  constructor(private db: AngularFirestore, private fns: AngularFireFunctions) {
+    this.deleteGroupFunction = fns.httpsCallable('deleteGroup');
+  }
 
   async createGroup(uid: string, group: Group) {
     await this.db
@@ -264,8 +270,9 @@ export class GroupService {
 
   // delete chatroom at the same time
   async deleteGroup(groupId: string) {
-    await this.db.doc(`groups/${groupId}`).delete();
-    // cloud functionに処理移行
+    const result = await this.deleteGroupFunction(
+      `groups/${groupId}`
+    ).toPromise();
   }
 
   getSearchableGroups(): Observable<Group[]> {

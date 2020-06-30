@@ -1,80 +1,88 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+// import * as admin from 'firebase-admin';
 
 const firebase_tools = require('firebase-tools');
 // import * as firebase_tools from 'firebase-tools';
 
-const db = admin.firestore();
+// const db = admin.firestore();
 
 export const deleteGroup = functions
   .runWith({
     timeoutSeconds: 540,
     memory: '2GB',
   })
-  .region('asia-northeast1')
-  .firestore.document('groups/{groupId}')
-  .onDelete(async (snap, context) => {
-    if (!snap.data()) return;
+  .https.onCall((data, context) => {
+    const path = data.path;
 
-    const groupId = context.params.groupId;
-
-    const memberIds = (
-      await db.collection(`groups/${groupId}/memberIds`).get()
-    ).docs.map((doc) => doc.data());
-    const memberDeletions: Promise<any>[] = memberIds.map((memberId) => {
-      return db.doc(`users/${memberId.id}/groupIds/${groupId}`).delete();
-    });
-    await Promise.all(memberDeletions);
-
-    const adminIds = (
-      await db.collection(`groups/${groupId}/adminIds`).get()
-    ).docs.map((doc) => doc.data());
-    const adminDeletions: Promise<any>[] = adminIds.map((adminId) => {
-      return db.doc(`users/${adminId.id}/adminGroupIds/${groupId}`).delete();
-    });
-    await Promise.all(adminDeletions);
-
-    try {
-      await firebase_tools.firestore.delete(snap.ref.path, {
+    return firebase_tools.firestore
+      .delete(path, {
         project: process.env.GCLOUD_PROJECT,
         recursive: true,
         yes: true,
         token: functions.config().fb.token,
+      })
+      .then(() => {
+        return {
+          path: path,
+        };
       });
-    } catch (err) {
-      console.log(snap.ref.path);
-      console.log(process.env.GCLOUD_PROJECT);
-      console.log(functions.config().fb.token);
-      console.log(err);
-    }
   });
 
-export const deleteEvent = functions
-  .runWith({
-    timeoutSeconds: 540,
-    memory: '2GB',
-  })
-  .region('asia-northeast1')
-  .firestore.document('events/{eventId}')
-  .onDelete(async (snap, context) => {
-    try {
-      const eventId = context.params.eventId;
-      const event = (await db.doc(`events/${eventId}`).get()).data();
-      const groupId = event?.groupid;
-      await db.doc(`groups/${groupId}/eventIds/${eventId}`).delete();
-      await firebase_tools.firestore.delete(snap.ref.path, {
-        project: process.env.GCLOUD_PROJECT,
-        recursive: true,
-        yes: true,
-        token: functions.config().fb.token,
-      });
-    } catch (err) {
-      console.log(snap.ref.path);
-      console.log(process.env.GCLOUD_PROJECT);
-      console.log(functions.config().fb.token);
-      console.log(err);
-    }
-  });
+// export const deleteGroup = functions
+//   .runWith({
+//     timeoutSeconds: 540,
+//     memory: '2GB',
+//   })
+//   .region('asia-northeast1')
+//   .firestore.document('groups/{groupId}')
+//   .onDelete(async (snap, context) => {
+//     if (!snap.data()) return;
+
+//     const groupId = context.params.groupId;
+
+//     const memberIds = (
+//       await db.collection(`groups/${groupId}/memberIds`).get()
+//     ).docs.map((doc) => doc.data());
+//     const memberDeletions: Promise<any>[] = memberIds.map((memberId) => {
+//       return db.doc(`users/${memberId.id}/groupIds/${groupId}`).delete();
+//     });
+//     await Promise.all(memberDeletions);
+
+//     const adminIds = (
+//       await db.collection(`groups/${groupId}/adminIds`).get()
+//     ).docs.map((doc) => doc.data());
+//     const adminDeletions: Promise<any>[] = adminIds.map((adminId) => {
+//       return db.doc(`users/${adminId.id}/adminGroupIds/${groupId}`).delete();
+//     });
+//     await Promise.all(adminDeletions);
+//   });
+
+// export const deleteEvent = functions
+//   .runWith({
+//     timeoutSeconds: 540,
+//     memory: '2GB',
+//   })
+//   .region('asia-northeast1')
+//   .firestore.document('events/{eventId}')
+//   .onDelete(async (snap, context) => {
+//     try {
+//       const eventId = context.params.eventId;
+//       const event = (await db.doc(`events/${eventId}`).get()).data();
+//       const groupId = event?.groupid;
+//       await db.doc(`groups/${groupId}/eventIds/${eventId}`).delete();
+//       await firebase_tools.firestore.delete(snap.ref.path, {
+//         project: process.env.GCLOUD_PROJECT,
+//         recursive: true,
+//         yes: true,
+//         token: functions.config().fb.token,
+//       });
+//     } catch (err) {
+//       console.log(snap.ref.path);
+//       console.log(process.env.GCLOUD_PROJECT);
+//       console.log(functions.config().fb.token);
+//       console.log(err);
+//     }
+//   });
 
 // export const deleteGroup =
 //   functions
