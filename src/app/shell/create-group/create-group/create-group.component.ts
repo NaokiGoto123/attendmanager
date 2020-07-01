@@ -135,14 +135,14 @@ export class CreateGroupComponent implements OnInit {
       const selectedImageId: string = this.selectedImageId.toString();
       const b = a.concat(selectedImageId.toString());
       const c = '.jpg';
-      const grouppicture = b.concat(c);
+      const grouppicture: string = b.concat(c);
       console.log(grouppicture);
       this.groupSerive
         .createGroup(this.uid, {
           id: this.db.createId(),
           name: this.form.value.name,
           description: this.form.value.description,
-          grouppicture: '/assets/background/3.jpg',
+          grouppicture,
           createddate: firestore.Timestamp.now(),
           createrId: this.authService.uid,
           chatRoomId: null,

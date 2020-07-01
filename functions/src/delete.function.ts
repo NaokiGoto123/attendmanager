@@ -60,12 +60,57 @@ export const deleteGroup = functions
     await Promise.all(waitingPayingMemberIdsDeletion);
 
     // ユーザーのサブコレクションからイベントを削除
-
-    // イベントの削除
     const eventIds = (
       await db.collection(`groups/${groupId}/eventIds`).get()
     ).docs.map((doc) => doc.data());
 
+    const a = eventIds.map(async (eventId) => {
+      const attendingMemberIds = (
+        await db.collection(`events/${eventId.id}/attendingMemberIds`).get()
+      ).docs.map((doc) => doc.data());
+      return attendingMemberIds.map(async (attendingMemberId) => {
+        return await db
+          .doc(`users/${attendingMemberId.id}/eventIds/${eventId.id}`)
+          .delete();
+      });
+    });
+    await Promise.all(a);
+
+    const b = eventIds.map(async (eventId) => {
+      const eventWaitingJoinningMemberIds = (
+        await db
+          .collection(`events/${eventId.id}/waitingJoinningMemberIds`)
+          .get()
+      ).docs.map((doc) => doc.data());
+      return eventWaitingJoinningMemberIds.map(
+        async (eventWaitingJoinningMemberId) => {
+          return await db
+            .doc(
+              `users/${eventWaitingJoinningMemberId.id}/waitingJoinningEventIds/${eventId.id}`
+            )
+            .delete();
+        }
+      );
+    });
+    await Promise.all(b);
+
+    const c = eventIds.map(async (eventId) => {
+      const eventWaitingPayingMemberIds = (
+        await db.collection(`events/${eventId.id}/waitingPayingMemberIds`).get()
+      ).docs.map((doc) => doc.data());
+      return eventWaitingPayingMemberIds.map(
+        async (eventWaitingPayingMemberId) => {
+          return await db
+            .doc(
+              `users/${eventWaitingPayingMemberId.id}/waitingPayingEventIds/${eventId.id}`
+            )
+            .delete();
+        }
+      );
+    });
+    await Promise.all(c);
+
+    // イベントの削除
     const eventsDeletion: Promise<any>[] = eventIds.map((eventId) => {
       const pathToEvent = `events/${eventId.id}`;
       return firebase_tools.firestore.delete(pathToEvent, {
