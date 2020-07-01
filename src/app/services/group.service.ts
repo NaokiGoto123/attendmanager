@@ -269,7 +269,7 @@ export class GroupService {
   // delete chatroom at the same time
   async deleteGroup(groupId: string) {
     const deleteGroupFunction = this.fns.httpsCallable('deleteGroup');
-    const result = await deleteGroupFunction(`groups/${groupId}`).toPromise();
+    const deleteGroup = await deleteGroupFunction(groupId).toPromise();
   }
 
   getSearchableGroups(): Observable<Group[]> {

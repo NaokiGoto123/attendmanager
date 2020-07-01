@@ -6,6 +6,8 @@ import { GroupService } from './group.service';
 import { map, switchMap } from 'rxjs/operators';
 import { Observable, combineLatest, of, ObservableLike } from 'rxjs';
 import { Id } from '../interfaces/id';
+import { AngularFireFunctions } from '@angular/fire/functions';
+
 @Injectable({
   providedIn: 'root',
 })
@@ -13,7 +15,8 @@ export class EventService {
   constructor(
     private db: AngularFirestore,
     private groupService: GroupService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private fns: AngularFireFunctions
   ) {}
 
   async createEvent(event: Event) {
@@ -122,8 +125,8 @@ export class EventService {
   }
 
   async deleteEvent(eventId: string, groupId: string) {
-    await this.db.doc(`events/${eventId}`).delete();
-    // cloud functionに処理移行
+    const deleteEventFunction = this.fns.httpsCallable('deleteEvent');
+    const result = await deleteEventFunction(eventId).toPromise();
   }
 
   getSearchableEvents(): Observable<Event[]> {
