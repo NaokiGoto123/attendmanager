@@ -13,12 +13,10 @@ import { AngularFireFunctions } from '@angular/fire/functions';
   providedIn: 'root',
 })
 export class GroupService {
-  data: any;
-  deleteGroupFunction: any;
-
-  constructor(private db: AngularFirestore, private fns: AngularFireFunctions) {
-    this.deleteGroupFunction = fns.httpsCallable('deleteGroup');
-  }
+  constructor(
+    private db: AngularFirestore,
+    private fns: AngularFireFunctions
+  ) {}
 
   async createGroup(uid: string, group: Group) {
     await this.db
@@ -270,9 +268,8 @@ export class GroupService {
 
   // delete chatroom at the same time
   async deleteGroup(groupId: string) {
-    const result = await this.deleteGroupFunction(
-      `groups/${groupId}`
-    ).toPromise();
+    const deleteGroupFunction = this.fns.httpsCallable('deleteGroup');
+    const result = await deleteGroupFunction(`groups/${groupId}`).toPromise();
   }
 
   getSearchableGroups(): Observable<Group[]> {

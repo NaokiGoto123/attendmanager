@@ -11,7 +11,10 @@ export const deleteGroup = functions
     timeoutSeconds: 540,
     memory: '2GB',
   })
+  .region('asia-northeast1')
   .https.onCall((data, context) => {
+    console.log(data);
+
     const path = data.path;
 
     return firebase_tools.firestore
@@ -22,6 +25,7 @@ export const deleteGroup = functions
         token: functions.config().fb.token,
       })
       .then(() => {
+        console.log(data);
         return {
           path: path,
         };
