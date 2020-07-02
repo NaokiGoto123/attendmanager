@@ -8,12 +8,18 @@ import { Message } from '../interfaces/message';
 import { firestore } from 'firebase';
 import { Router } from '@angular/router';
 import { Id } from '../interfaces/id';
+import { AngularFireFunctions } from '@angular/fire/functions';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatService {
-  constructor(private router: Router, private db: AngularFirestore) {}
+  constructor(
+    private router: Router,
+    private db: AngularFirestore,
+    private fns: AngularFireFunctions
+  ) {}
 
   createChatRoom(uid: string, chatRoom: ChatRoom) {
     const id = chatRoom.id;
@@ -83,6 +89,23 @@ export class ChatService {
     return this.db.doc<ChatRoom>(`chatRooms/${chatRoomId}`).valueChanges();
   }
 
+  getChatRooomMembers(chatRoomId: string): Observable<User[]> {
+    return this.db
+      .collection<Id>(`chatRooms/${chatRoomId}/memberIds`)
+      .valueChanges()
+      .pipe(
+        switchMap((memberIds: Id[]) => {
+          const members: Observable<User>[] = [];
+          memberIds.map((memberId: Id) => {
+            members.push(
+              this.db.doc<User>(`users/${memberId.id}`).valueChanges()
+            );
+          });
+          return combineLatest(members);
+        })
+      );
+  }
+
   getMessages(chatRoomId: string) {
     return this.db
       .collection(`chatRooms/${chatRoomId}/messages`, (ref) =>
@@ -104,5 +127,11 @@ export class ChatService {
 
   clearMessageCount(chatRoomId: string) {
     this.db.doc(`chatRooms/${chatRoomId}`).update({ messageCount: 0 });
+  }
+
+  async deleteChatRoom(chatRoomId: string) {
+    console.log('deleteChatRoom is running');
+    const deleteChatRoomFunction = this.fns.httpsCallable('deleteChatRoom');
+    const result = await deleteChatRoomFunction(chatRoomId).toPromise();
   }
 }

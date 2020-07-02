@@ -1,0 +1,36 @@
+<mat-toolbar>
+  <button mat-icon-button (click)="navigateBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <span>{{ chatRoom?.name }}</span>
+</mat-toolbar>
+<mat-list
+  class="sidenav"
+  role="list"
+  *ngFor="let chatRoomMember of chatRoomMembers"
+>
+  <mat-list-item class="sidenav-item" role="listitem">
+    <img
+      class="account-picture"
+      src="{{ chatRoomMember?.photoURL }}"
+      alt="account image"
+      routerLink="/account"
+      [queryParams]="{ id: chatRoomMember?.searchId }"
+    />
+    <span
+      routerLink="/account"
+      [queryParams]="{ id: chatRoomMember?.searchId }"
+      >{{ chatRoomMember?.displayName }}</span
+    >
+    <span class="spacer"></span>
+    <button
+      mat-icon-button
+      *ngIf="chatRoomMember.uid !== uid"
+      color="warn"
+      (click)="removeMember()"
+    >
+      <mat-icon>remove</mat-icon>
+    </button>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+</mat-list>

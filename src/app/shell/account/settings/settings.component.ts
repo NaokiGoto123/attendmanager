@@ -3,7 +3,6 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user';
-import * as Jimp from 'jimp';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { UserService } from 'src/app/services/user.service';
@@ -63,6 +62,10 @@ export class SettingsComponent implements OnInit {
 
   signOut() {
     this.authService.signOut();
+  }
+
+  deleteAccount() {
+    this.userService.deleteAccount(this.user?.uid);
   }
 
   createNewSearchId() {

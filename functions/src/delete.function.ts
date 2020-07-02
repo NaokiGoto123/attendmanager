@@ -215,6 +215,10 @@ export const deleteEvent = functions
   });
 
 export const deleteNotifications = functions
+  .runWith({
+    timeoutSeconds: 540,
+    memory: '2GB',
+  })
   .region('asia-northeast1')
   .https.onCall(async (uid, context) => {
     await db.doc(`users/${uid}`).update({ notificationCount: 0 });
@@ -222,6 +226,118 @@ export const deleteNotifications = functions
     const path = `users/${uid}/notifications`;
 
     await firebase_tools.firestore.delete(path, {
+      project: process.env.GCLOUD_PROJECT,
+      recursive: true,
+      yes: true,
+      token: functions.config().fb.token,
+    });
+
+    return;
+  });
+
+export const deleteAccount = functions
+  .runWith({
+    timeoutSeconds: 540,
+    memory: '2GB',
+  })
+  .region('asia-northeast1')
+  .https.onCall(async (uid, context) => {
+    // グループのサブコレクションからの削除
+    const groupIds = (
+      await db.collection(`users/${uid}/groupIds`).get()
+    ).docs.map((doc) => doc.data());
+    const DeleteFromGroups = groupIds.map((groupId) => {
+      db.doc(`groups/${groupId.id}/memberIds/${uid}`);
+    });
+    await Promise.all(DeleteFromGroups);
+
+    const waitingJoinningGroupIds = (
+      await db.collection(`users/${uid}/waitingJoinningGroupIds`).get()
+    ).docs.map((doc) => doc.data());
+    const DeleteFromWaitingJoinningGroups = waitingJoinningGroupIds.map(
+      (waitingJoinningGroupId) => {
+        db.doc(`groups/${waitingJoinningGroupId.id}/memberIds/${uid}`);
+      }
+    );
+    await Promise.all(DeleteFromWaitingJoinningGroups);
+
+    const waitingPayingGroupIds = (
+      await db.collection(`users/${uid}/waitingPayingGroupIds`).get()
+    ).docs.map((doc) => doc.data());
+    const DeleteFromWaitingPayingGroups = waitingPayingGroupIds.map(
+      (waitingPayingGroupId) => {
+        db.doc(`groups/${waitingPayingGroupId.id}/memberIds/${uid}`);
+      }
+    );
+    await Promise.all(DeleteFromWaitingPayingGroups);
+
+    // チャットルームのサブコレクションからの削除
+    const chatRoomIds: string[] = [];
+    groupIds.map((groupId) => {
+      chatRoomIds.push(groupId?.chatRoomId);
+    });
+    const DeleteFromChatRooms = chatRoomIds.map((chatRoomId) => {
+      db.doc(`chatRooms/${chatRoomId}/memberIds/${uid}`);
+    });
+    await Promise.all(DeleteFromChatRooms);
+
+    // イベントのサブコレクションからの削除
+    const eventIds = (
+      await db.collection(`users/${uid}/eventIds`).get()
+    ).docs.map((doc) => doc.data());
+    const DeleteFromEvents = eventIds.map((eventId) => {
+      db.doc(`events/${eventId.id}/memberIds/${uid}`);
+    });
+    await Promise.all(DeleteFromEvents);
+
+    const waitingJoinningEventIds = (
+      await db.collection(`users/${uid}/waitingJoinningEventIds`).get()
+    ).docs.map((doc) => doc.data());
+    const DeleteFromWaitingJoinningEvents = waitingJoinningEventIds.map(
+      (waitingJoinningEventId) => {
+        db.doc(`events/${waitingJoinningEventId.id}/memberIds/${uid}`);
+      }
+    );
+    await Promise.all(DeleteFromWaitingJoinningEvents);
+
+    const waitingPayingEventIds = (
+      await db.collection(`users/${uid}/waitingPayingEventIds`).get()
+    ).docs.map((doc) => doc.data());
+    const DeleteFromWaitingPayingEvents = waitingPayingEventIds.map(
+      (waitingPayingEventId) => {
+        db.doc(`events/${waitingPayingEventId.id}/memberIds/${uid}`);
+      }
+    );
+    await Promise.all(DeleteFromWaitingPayingEvents);
+
+    const pathToAccount = `users/${uid}`;
+
+    await firebase_tools.firestore.delete(pathToAccount, {
+      project: process.env.GCLOUD_PROJECT,
+      recursive: true,
+      yes: true,
+      token: functions.config().fb.token,
+    });
+
+    return;
+  });
+
+export const deleteChatRoom = functions
+  .runWith({
+    timeoutSeconds: 540,
+    memory: '2GB',
+  })
+  .region('asia-northeast1')
+  .https.onCall(async (chatRoomId, context) => {
+    const chatRoom = (await db.doc(`chatRooms/${chatRoomId}`).get()).data();
+
+    const groupId = chatRoom?.groupid;
+
+    await db.doc(`groups/${groupId}`).update({ chatRoomId: null });
+
+    const pathToChatRoom = `chatRooms/${chatRoomId}`;
+
+    await firebase_tools.firestore.delete(pathToChatRoom, {
       project: process.env.GCLOUD_PROJECT,
       recursive: true,
       yes: true,

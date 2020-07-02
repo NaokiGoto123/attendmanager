@@ -16,9 +16,10 @@ import { ChatDetailComponent } from './chat-detail/chat-detail.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
+import { ChatRoomMembersComponent } from './chat-room-members/chat-room-members.component';
 
 @NgModule({
-  declarations: [ChatComponent, ChatDetailComponent],
+  declarations: [ChatComponent, ChatDetailComponent, ChatRoomMembersComponent],
   imports: [
     CommonModule,
     ChatRoutingModule,
