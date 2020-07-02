@@ -7,6 +7,7 @@ import { GroupService } from 'src/app/services/group.service';
 import { Observable } from 'rxjs';
 import { EventService } from 'src/app/services/event.service';
 import { map } from 'rxjs/operators';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-event-card',
   templateUrl: './event-card.component.html',
@@ -42,6 +43,7 @@ export class EventCardComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private userService: UserService,
     private groupService: GroupService,
     public eventService: EventService
   ) {}
@@ -50,7 +52,7 @@ export class EventCardComponent implements OnInit {
     if (this.event) {
       this.uid = this.authService.uid;
 
-      this.createrDisplayname = this.authService
+      this.createrDisplayname = this.userService
         .getUser(this.event.createrId)
         .pipe(
           map((creater: User) => {

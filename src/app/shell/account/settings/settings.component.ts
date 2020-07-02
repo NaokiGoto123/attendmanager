@@ -6,6 +6,7 @@ import { User } from 'src/app/interfaces/user';
 import * as Jimp from 'jimp';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-settings',
@@ -42,15 +43,16 @@ export class SettingsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
     private authService: AuthService,
+    private userService: UserService,
     private db: AngularFirestore
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
-      this.authService
+      this.userService
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;
-          this.authService.getUser(id).subscribe((user) => {
+          this.userService.getUser(id).subscribe((user) => {
             this.user = user;
             this.photoURL = user.photoURL;
             this.form.patchValue(this.user);
@@ -72,7 +74,7 @@ export class SettingsComponent implements OnInit {
   async updateUser() {
     let photoURL: any;
     if (this.croppedImage) {
-      photoURL = await this.authService.upload(
+      photoURL = await this.userService.upload(
         `usres/${this.user.uid}`,
         this.croppedImage
       );
@@ -80,7 +82,7 @@ export class SettingsComponent implements OnInit {
       photoURL = this.photoURL;
     }
     console.log(photoURL);
-    this.authService.updateUser({
+    this.userService.updateUser({
       uid: this.user.uid,
       searchId: this.form.value.searchId,
       displayName: this.form.value.displayName,

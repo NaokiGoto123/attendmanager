@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -16,8 +17,11 @@ export class HeaderComponent implements OnInit {
 
   photoURL: string;
 
-  constructor(private authService: AuthService) {
-    this.authService.getUser(this.authService.uid).subscribe((user: User) => {
+  constructor(
+    private authService: AuthService,
+    private userService: UserService
+  ) {
+    this.userService.getUser(this.authService.uid).subscribe((user: User) => {
       this.user = user;
       this.uid = user.uid;
       this.searchId = user.searchId;

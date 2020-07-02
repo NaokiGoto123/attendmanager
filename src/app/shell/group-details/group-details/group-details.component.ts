@@ -11,6 +11,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'src/app/interfaces/user';
 import { MatDialog } from '@angular/material/dialog';
 import { GroupDetailsDiaplogComponent } from '../group-details-diaplog/group-details-diaplog.component';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
@@ -58,6 +59,7 @@ export class GroupDetailsComponent implements OnInit {
     private db: AngularFirestore,
     private groupService: GroupService,
     private authService: AuthService,
+    private userService: UserService,
     private chatService: ChatService,
     private dialog: MatDialog
   ) {
@@ -89,7 +91,7 @@ export class GroupDetailsComponent implements OnInit {
         this.name = group.name;
         this.description = group.description;
         this.createrId = group.createrId;
-        this.authService.getUser(this.createrId).subscribe((creater: User) => {
+        this.userService.getUser(this.createrId).subscribe((creater: User) => {
           this.createrSearchId = creater.searchId;
           this.createrName = creater.displayName;
         });
@@ -125,7 +127,7 @@ export class GroupDetailsComponent implements OnInit {
         }
         const admins: User[] = [];
         adminIds.forEach((adminId: string) => {
-          this.authService.getUser(adminId).subscribe((admin: User) => {
+          this.userService.getUser(adminId).subscribe((admin: User) => {
             admins.push(admin);
           });
         });
@@ -148,7 +150,7 @@ export class GroupDetailsComponent implements OnInit {
           }
           const members: User[] = [];
           memberIds.forEach((memberId: string) => {
-            this.authService.getUser(memberId).subscribe((member: User) => {
+            this.userService.getUser(memberId).subscribe((member: User) => {
               members.push(member);
             });
           });
@@ -162,7 +164,7 @@ export class GroupDetailsComponent implements OnInit {
             this.waitingJoinningMembers = combineLatest(
               waitingJoinningMemberIds.map((waitingMemberId) => {
                 console.log(waitingMemberId);
-                const waitingMember: Observable<User> = this.authService.getUser(
+                const waitingMember: Observable<User> = this.userService.getUser(
                   waitingMemberId
                 );
                 return waitingMember;
@@ -181,7 +183,7 @@ export class GroupDetailsComponent implements OnInit {
             this.waitingPayingMembers = combineLatest(
               waitingPayingMemberIds.map((waitingPayingMemberId) => {
                 console.log(waitingPayingMemberId);
-                const waitingPayingMember: Observable<User> = this.authService.getUser(
+                const waitingPayingMember: Observable<User> = this.userService.getUser(
                   waitingPayingMemberId
                 );
                 return waitingPayingMember;

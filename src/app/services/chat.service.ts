@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ChatRoom } from '../interfaces/chat-room';
 import { Group } from '../interfaces/group';
@@ -14,11 +13,7 @@ import { Id } from '../interfaces/id';
   providedIn: 'root',
 })
 export class ChatService {
-  constructor(
-    private router: Router,
-    private db: AngularFirestore,
-    private authService: AuthService
-  ) {}
+  constructor(private router: Router, private db: AngularFirestore) {}
 
   createChatRoom(uid: string, chatRoom: ChatRoom) {
     const id = chatRoom.id;

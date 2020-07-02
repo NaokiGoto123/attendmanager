@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { EventService } from 'src/app/services/event.service';
 import { ActivatedRoute } from '@angular/router';
 import { Event } from 'src/app/interfaces/event';
-import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-attended-events',
@@ -17,12 +17,12 @@ export class AttendedEventsComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService,
+    private userService: UserService,
     private eventService: EventService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
-      this.authService
+      this.userService
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;

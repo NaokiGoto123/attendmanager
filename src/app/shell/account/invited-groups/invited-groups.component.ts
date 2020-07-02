@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-invited-groups',
@@ -11,11 +12,11 @@ import { User } from 'src/app/interfaces/user';
 export class InvitedGroupsComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService
+    private userService: UserService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
-      this.authService
+      this.userService
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;

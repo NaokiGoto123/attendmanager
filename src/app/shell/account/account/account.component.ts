@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-account',
@@ -27,19 +28,20 @@ export class AccountComponent implements OnInit {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       console.log(params);
       const searchId = params.get('id');
       console.log(searchId);
-      this.authService
+      this.userService
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;
           if (id === this.authService.uid || id === null) {
             this.ifTarget = false;
-            this.authService
+            this.userService
               .getUser(this.authService.uid)
               .subscribe((user: User) => {
                 this.user = user;
@@ -66,7 +68,7 @@ export class AccountComponent implements OnInit {
                 ];
               });
           } else {
-            this.authService.getUser(id).subscribe((user: User) => {
+            this.userService.getUser(id).subscribe((user: User) => {
               console.log(user);
               this.user = user;
               this.uid = user.uid;
