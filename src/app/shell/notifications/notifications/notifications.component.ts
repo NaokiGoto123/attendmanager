@@ -34,5 +34,9 @@ export class NotificationsComponent implements OnInit {
       });
   }
 
+  deleteNotification() {
+    this.notificationService.deleteNotifications(this.authService.uid);
+  }
+
   ngOnInit(): void {}
 }

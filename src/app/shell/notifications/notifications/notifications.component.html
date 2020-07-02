@@ -1,4 +1,17 @@
 <div *ngIf="existance">
+  <mat-toolbar>
+    <span>Notifications</span>
+    <span class="spacer"></span>
+    <button mat-icon-button class="mat-menu" [matMenuTriggerFor]="menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu" xPosition="before">
+      <button mat-menu-item (click)="deleteNotification()">
+        <mat-icon>delete_sweep</mat-icon>
+        <span>Delete all notifications</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
   <mat-list>
     <div *ngFor="let notification of notifications">
       <app-notification [notification]="notification"></app-notification>

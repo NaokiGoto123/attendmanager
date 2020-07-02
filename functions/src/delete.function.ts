@@ -213,3 +213,20 @@ export const deleteEvent = functions
 
     return;
   });
+
+export const deleteNotifications = functions
+  .region('asia-northeast1')
+  .https.onCall(async (uid, context) => {
+    await db.doc(`users/${uid}`).update({ notificationCount: 0 });
+
+    const path = `users/${uid}/notifications`;
+
+    await firebase_tools.firestore.delete(path, {
+      project: process.env.GCLOUD_PROJECT,
+      recursive: true,
+      yes: true,
+      token: functions.config().fb.token,
+    });
+
+    return;
+  });
