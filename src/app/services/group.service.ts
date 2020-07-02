@@ -47,7 +47,6 @@ export class GroupService {
           if (groupIds.length) {
             const myGroups: Observable<Group>[] = [];
             groupIds.forEach((groupId: Id) => {
-              console.log(groupId);
               myGroups.push(
                 this.db.doc<Group>(`groups/${groupId.id}`).valueChanges()
               );
@@ -69,7 +68,6 @@ export class GroupService {
           if (adminGroupIds.length) {
             const myAdminGroups: Observable<Group>[] = [];
             adminGroupIds.forEach((adminGroupId: Id) => {
-              console.log(adminGroupId);
               myAdminGroups.push(
                 this.db.doc<Group>(`groups/${adminGroupId.id}`).valueChanges()
               );
@@ -161,7 +159,6 @@ export class GroupService {
       .valueChanges()
       .pipe(
         map((memberIds: Id[]) => {
-          console.log(memberIds, 'service');
           const MemberIds: string[] = [];
           memberIds.forEach((memberId: Id) => {
             MemberIds.push(memberId.id);
@@ -333,7 +330,6 @@ export class GroupService {
       .doc(`groups/${groupId}/memberIds/${uid}`)
       .set({ id: uid })
       .then(() => {
-        console.log('test');
         this.db.doc(`users/${uid}/groupIds/${groupId}`).set({ id: groupId });
       })
       .then(() => {

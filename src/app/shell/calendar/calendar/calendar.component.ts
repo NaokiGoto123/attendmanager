@@ -29,7 +29,6 @@ export class CalendarComponent implements OnInit {
           result.push({ title: event.title, date: event.date.toDate() });
         });
         this.eventsWithNameAndDate = result;
-        console.log(this.eventsWithNameAndDate);
       });
   }
 

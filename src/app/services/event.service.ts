@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Event } from '../interfaces/event';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { GroupService } from './group.service';
 import { map, switchMap } from 'rxjs/operators';
-import { Observable, combineLatest, of, ObservableLike } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { Id } from '../interfaces/id';
 import { AngularFireFunctions } from '@angular/fire/functions';
 
@@ -14,8 +12,6 @@ import { AngularFireFunctions } from '@angular/fire/functions';
 export class EventService {
   constructor(
     private db: AngularFirestore,
-    private groupService: GroupService,
-    private snackbar: MatSnackBar,
     private fns: AngularFireFunctions
   ) {}
 
@@ -41,7 +37,6 @@ export class EventService {
       .valueChanges()
       .pipe(
         map((Ids: Id[]) => {
-          console.log(Ids);
           const groupIds: string[] = [];
           Ids.map((id: Id) => {
             groupIds.push(id.id);
@@ -68,7 +63,6 @@ export class EventService {
               events.push(event);
             });
           });
-          console.log(events);
           return combineLatest(events);
         })
       );

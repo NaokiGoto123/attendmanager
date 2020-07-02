@@ -23,7 +23,6 @@ export class AccountComponent implements OnInit {
     private userService: UserService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
-      console.log(params);
       const searchId = params.get('id');
       this.userService
         .getUserFromSearchId(searchId)
@@ -50,7 +49,6 @@ export class AccountComponent implements OnInit {
               });
           } else {
             this.userService.getUser(id).subscribe((user: User) => {
-              console.log(user);
               this.user = user;
               if (
                 user?.showGroups &&

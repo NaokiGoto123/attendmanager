@@ -34,7 +34,6 @@ export class ChatComponent implements OnInit {
                 }
               );
               this.noChatRooms = false;
-              console.log(ChatRooms);
               return combineLatest(ChatRooms);
             } else {
               this.noChatRooms = true;

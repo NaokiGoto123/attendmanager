@@ -70,7 +70,6 @@ export class SettingsComponent implements OnInit {
 
   createNewSearchId() {
     const newSearchId = this.db.createId();
-    console.log(newSearchId);
     this.form.controls.searchId.setValue(newSearchId);
   }
 
@@ -84,7 +83,6 @@ export class SettingsComponent implements OnInit {
     } else {
       photoURL = this.photoURL;
     }
-    console.log(photoURL);
     this.userService.updateUser({
       uid: this.user.uid,
       searchId: this.form.value.searchId,

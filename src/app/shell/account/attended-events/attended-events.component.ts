@@ -34,9 +34,6 @@ export class AttendedEventsComponent implements OnInit {
                 const events: Event[] = [];
                 attendingEvents.forEach((attendedEvent: Event) => {
                   if (attendedEvent.date.toDate() < now) {
-                    console.log(attendedEvent);
-                    console.log(attendedEvent.date.toDate());
-                    console.log(now);
                     events.push(attendedEvent);
                   }
                 });

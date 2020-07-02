@@ -138,7 +138,6 @@ export class CreateGroupComponent implements OnInit {
       const b = a.concat(selectedImageId.toString());
       const c = '.jpg';
       const grouppicture: string = b.concat(c);
-      console.log(grouppicture);
       this.groupSerive
         .createGroup(this.uid, {
           id: this.db.createId(),
@@ -191,7 +190,6 @@ export class CreateGroupComponent implements OnInit {
       const b = a.concat(selectedImageId.toString());
       const c = '.jpg';
       const grouppicture = b.concat(c);
-      console.log(grouppicture);
       this.groupSerive
         .updateGroup({
           id: this.groupid,

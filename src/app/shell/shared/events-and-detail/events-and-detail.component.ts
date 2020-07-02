@@ -6,7 +6,6 @@ import { User } from 'src/app/interfaces/user';
 import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable, combineLatest } from 'rxjs';
-import { timeStamp } from 'console';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -44,7 +43,6 @@ export class EventsAndDetailComponent implements OnInit {
   ngOnInit(): void {}
 
   mouseEnter() {
-    console.log(this.givenEvent);
     this.userService
       .getUser(this.givenEvent.createrId)
       .subscribe((creater: User) => {

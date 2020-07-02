@@ -33,7 +33,6 @@ export class GroupComponent implements OnInit {
         .getMemberIds(this.group.id)
         .subscribe((memberIds: string[]) => {
           this.memberIds = memberIds;
-          console.log(memberIds);
           if (memberIds.includes(this.uid)) {
             this.ifMember = true;
           } else {

@@ -4,7 +4,6 @@ import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable, combineLatest } from 'rxjs';
 import { Group } from 'src/app/interfaces/group';
-import { map, switchMap } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { ChatService } from 'src/app/services/chat.service';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -103,7 +102,6 @@ export class GroupDetailsComponent implements OnInit {
       });
 
       this.groupService.getAdminIds(this.id).subscribe((adminIds: string[]) => {
-        console.log(adminIds);
         this.adminIds = adminIds;
         if (adminIds.length) {
           this.ifAdmins = true;
@@ -127,7 +125,6 @@ export class GroupDetailsComponent implements OnInit {
       this.groupService
         .getMemberIds(this.id)
         .subscribe((memberIds: string[]) => {
-          console.log(memberIds);
           this.memberIds = memberIds;
           if (memberIds.length) {
             this.ifMembers = true;
@@ -154,7 +151,6 @@ export class GroupDetailsComponent implements OnInit {
           if (waitingJoinningMemberIds.length) {
             this.waitingJoinningMembers = combineLatest(
               waitingJoinningMemberIds.map((waitingMemberId) => {
-                console.log(waitingMemberId);
                 const waitingMember: Observable<User> = this.userService.getUser(
                   waitingMemberId
                 );
@@ -173,7 +169,6 @@ export class GroupDetailsComponent implements OnInit {
           if (waitingPayingMemberIds.length) {
             this.waitingPayingMembers = combineLatest(
               waitingPayingMemberIds.map((waitingPayingMemberId) => {
-                console.log(waitingPayingMemberId);
                 const waitingPayingMember: Observable<User> = this.userService.getUser(
                   waitingPayingMemberId
                 );
@@ -199,7 +194,6 @@ export class GroupDetailsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
       this.searchId = result;
     });
   }

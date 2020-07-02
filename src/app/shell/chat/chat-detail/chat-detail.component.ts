@@ -90,8 +90,6 @@ export class ChatDetailComponent implements OnInit {
   }
 
   deleteChatRoom() {
-    console.log('deleteChatRoom is activated');
-    console.log(this.chatRoomId);
     this.chatService.deleteChatRoom(this.chatRoomId);
   }
 }

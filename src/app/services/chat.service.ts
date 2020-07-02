@@ -39,7 +39,6 @@ export class ChatService {
           queryParams: { id: chatRoom.id },
         })
       );
-    console.log('Successfully created a chatRoom');
   }
 
   joinChatRoom(uid: string, chatRoomId: string) {
@@ -59,7 +58,6 @@ export class ChatService {
           if (groupIds.length) {
             const myGroups: Observable<Group>[] = [];
             groupIds.forEach((groupId: Id) => {
-              console.log(groupId);
               myGroups.push(
                 this.db.doc<Group>(`groups/${groupId.id}`).valueChanges()
               );
@@ -130,7 +128,6 @@ export class ChatService {
   }
 
   async deleteChatRoom(chatRoomId: string) {
-    console.log('deleteChatRoom is running');
     const deleteChatRoomFunction = this.fns.httpsCallable('deleteChatRoom');
     const result = await deleteChatRoomFunction(chatRoomId).toPromise();
   }
