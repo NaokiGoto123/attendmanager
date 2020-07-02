@@ -11,22 +11,17 @@ import { UserService } from 'src/app/services/user.service';
 export class HeaderComponent implements OnInit {
   user: User;
 
-  uid: string;
-
-  searchId: string;
-
-  photoURL: string;
-
   constructor(
     private authService: AuthService,
     private userService: UserService
   ) {
     this.userService.getUser(this.authService.uid).subscribe((user: User) => {
       this.user = user;
-      this.uid = user.uid;
-      this.searchId = user.searchId;
-      this.photoURL = user.photoURL;
     });
+  }
+
+  signOut() {
+    this.authService.signOut();
   }
 
   ngOnInit(): void {}

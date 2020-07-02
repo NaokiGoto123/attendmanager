@@ -69,11 +69,6 @@ export class AuthService {
     });
   }
 
-  async signOut() {
-    await this.afAuth.signOut();
-    return this.router.navigate(['/welcome']);
-  }
-
   private updateUserData({
     uid,
     searchId,
@@ -105,5 +100,10 @@ export class AuthService {
       .set(data, { merge: true })
       .then(() => this.router.navigateByUrl(''))
       .then(() => this.snackbar.open('signed in', null, { duration: 2000 }));
+  }
+
+  async signOut() {
+    await this.afAuth.signOut();
+    return this.router.navigate(['/welcome']);
   }
 }

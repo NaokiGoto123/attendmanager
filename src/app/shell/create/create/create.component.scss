@@ -26,6 +26,10 @@
   height: 500px;
 }
 
+.event-text {
+  font-size: 32px;
+}
+
 .group {
   display: flex;
   flex-direction: column;
@@ -46,4 +50,8 @@
   margin: 10% 0 0 0;
   width: 500px;
   height: 500px;
+}
+
+.group-text {
+  font-size: 32px;
 }
