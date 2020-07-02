@@ -23,7 +23,6 @@ export class NotificationsComponent implements OnInit {
     this.notificationService
       .getNotifications(this.uid)
       .subscribe((notifications: Notification[]) => {
-        console.log(notifications);
         if (notifications.length) {
           this.notifications = notifications;
           this.existance = true;
@@ -32,6 +31,10 @@ export class NotificationsComponent implements OnInit {
           this.existance = false;
         }
       });
+  }
+
+  deleteNotification() {
+    this.notificationService.deleteNotifications(this.authService.uid);
   }
 
   ngOnInit(): void {}

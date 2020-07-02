@@ -12,6 +12,7 @@ import { firestore } from 'firebase';
 import { switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-create-group',
   templateUrl: './create-group.component.html',
@@ -71,6 +72,7 @@ export class CreateGroupComponent implements OnInit {
     private fb: FormBuilder,
     private db: AngularFirestore,
     private authService: AuthService,
+    private userService: UserService,
     private groupSerive: GroupService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -89,7 +91,7 @@ export class CreateGroupComponent implements OnInit {
           this.form.patchValue(group);
         }
       });
-    this.authService.getUser(this.authService.uid).subscribe((user: User) => {
+    this.userService.getUser(this.authService.uid).subscribe((user: User) => {
       this.user = user;
       this.uid = user.uid;
     });
@@ -108,7 +110,7 @@ export class CreateGroupComponent implements OnInit {
   async submit() {
     if (this.useMyOwnImage) {
       const groupId = this.db.createId();
-      const photoURL = await this.authService.upload(
+      const photoURL = await this.userService.upload(
         `groups/${groupId}`,
         this.croppedImage
       );
@@ -135,14 +137,13 @@ export class CreateGroupComponent implements OnInit {
       const selectedImageId: string = this.selectedImageId.toString();
       const b = a.concat(selectedImageId.toString());
       const c = '.jpg';
-      const grouppicture = b.concat(c);
-      console.log(grouppicture);
+      const grouppicture: string = b.concat(c);
       this.groupSerive
         .createGroup(this.uid, {
           id: this.db.createId(),
           name: this.form.value.name,
           description: this.form.value.description,
-          grouppicture: '/assets/background/3.jpg',
+          grouppicture,
           createddate: firestore.Timestamp.now(),
           createrId: this.authService.uid,
           chatRoomId: null,
@@ -161,7 +162,7 @@ export class CreateGroupComponent implements OnInit {
   async update() {
     if (this.useMyOwnImage) {
       const groupId = this.db.createId();
-      const photoURL = await this.authService.upload(
+      const photoURL = await this.userService.upload(
         `groups/${this.groupid}`,
         this.croppedImage
       );
@@ -189,7 +190,6 @@ export class CreateGroupComponent implements OnInit {
       const b = a.concat(selectedImageId.toString());
       const c = '.jpg';
       const grouppicture = b.concat(c);
-      console.log(grouppicture);
       this.groupSerive
         .updateGroup({
           id: this.groupid,

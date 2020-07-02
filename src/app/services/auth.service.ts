@@ -28,7 +28,6 @@ export class AuthService {
   constructor(
     private afAuth: AngularFireAuth,
     private db: AngularFirestore,
-    private storage: AngularFireStorage,
     private router: Router,
     private snackbar: MatSnackBar
   ) {
@@ -61,6 +60,7 @@ export class AuthService {
     const credential = await this.afAuth.signInWithPopup(provider);
     return this.updateUserData({
       ...credential.user,
+      searchId: this.db.createId(),
       description: '',
       notificationCount: 0,
       showGroups: true,
@@ -69,13 +69,9 @@ export class AuthService {
     });
   }
 
-  async signOut() {
-    await this.afAuth.signOut();
-    return this.router.navigate(['/welcome']);
-  }
-
   private updateUserData({
     uid,
+    searchId,
     displayName,
     email,
     photoURL,
@@ -89,6 +85,7 @@ export class AuthService {
 
     const data = {
       uid,
+      searchId,
       displayName,
       email,
       photoURL,
@@ -105,36 +102,8 @@ export class AuthService {
       .then(() => this.snackbar.open('signed in', null, { duration: 2000 }));
   }
 
-  getName(uid: string): Observable<string> {
-    return this.db
-      .doc<User>(`users/${uid}`)
-      .valueChanges()
-      .pipe(
-        map((user: User) => {
-          return user.displayName;
-        })
-      );
-  }
-
-  getUser(uid: string): Observable<User> {
-    return this.db.doc<User>(`users/${uid}`).valueChanges();
-  }
-
-  updateUser(user: Omit<User, 'notifications' | 'notificationCount'>) {
-    this.db
-      .doc(`users/${user.uid}`)
-      .set(user, { merge: true })
-      .then(() => {})
-      .then(() =>
-        this.snackbar.open('Successfully updated settings', null, {
-          duration: 2000,
-        })
-      );
-  }
-
-  async upload(path: string, base64: string): Promise<string> {
-    const ref = this.storage.ref(path);
-    const result = await ref.putString(base64, 'data_url');
-    return result.ref.getDownloadURL();
+  async signOut() {
+    await this.afAuth.signOut();
+    return this.router.navigate(['/welcome']);
   }
 }

@@ -23,6 +23,8 @@ import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-pa
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { InvitedGroupsComponent } from './invited-groups/invited-groups.component';
 import { InvitedEventsComponent } from './invited-events/invited-events.component';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
+
 @NgModule({
   declarations: [
     AccountComponent,
@@ -51,6 +53,7 @@ import { InvitedEventsComponent } from './invited-events/invited-events.componen
     MatRadioModule,
     SharedModule,
     ImageCropperModule,
+    MaterialFileInputModule,
   ],
 })
 export class AccountModule {}

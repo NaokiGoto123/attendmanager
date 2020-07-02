@@ -1,7 +1,14 @@
 <form class="update-form" [formGroup]="form">
   <img class="account-photo" src="{{ photoURL }}" />
 
-  <input class="image-input" type="file" (change)="fileChangeEvent($event)" />
+  <mat-form-field class="image-selector" appearance="outline">
+    <mat-label>Select an image</mat-label>
+    <ngx-mat-file-input
+      placeholder="Basic outline placeholder"
+      (change)="fileChangeEvent($event)"
+    ></ngx-mat-file-input>
+    <mat-icon matSuffix>folder</mat-icon>
+  </mat-form-field>
 
   <div class="cropper-container" *ngIf="imageChangedEvent">
     <img class="selected-image" [src]="croppedImage" />
@@ -20,14 +27,34 @@
   </div>
 
   <div class="update-fields">
-    <mat-form-field class="update-name" appearance="outline">
+    <mat-form-field appearance="outline">
       <mat-label>Name</mat-label>
       <input matInput formControlName="displayName" type="text" />
+      <mat-icon matSuffix>person</mat-icon>
     </mat-form-field>
 
-    <mat-form-field class="update-description" appearance="outline">
+    <mat-form-field appearance="outline">
+      <mat-label>Search ID</mat-label>
+      <input
+        matInput
+        formControlName="searchId"
+        type="text"
+        readonly="readonly"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="createNewSearchId()"
+        color="primary"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
       <mat-label>Description</mat-label>
       <input matInput formControlName="description" type="text" />
+      <mat-icon matSuffix>description</mat-icon>
     </mat-form-field>
   </div>
 
@@ -84,7 +111,7 @@
     >
       Sign out
     </button>
-    <button mat-flat-button color="warn">
+    <button mat-flat-button color="warn" (click)="deleteAccount()">
       Delete account
     </button>
   </div>

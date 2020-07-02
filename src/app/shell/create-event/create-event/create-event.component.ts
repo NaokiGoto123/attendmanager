@@ -3,11 +3,9 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { GroupService } from 'src/app/services/group.service';
 import { EventService } from 'src/app/services/event.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { Observable } from 'rxjs';
 import { Group } from 'src/app/interfaces/group';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap, map } from 'rxjs/operators';
 import { Event } from 'src/app/interfaces/event';
 @Component({
   selector: 'app-create-event',
@@ -72,11 +70,9 @@ export class CreateEventComponent implements OnInit {
           });
         } else {
           const uid: string = this.authService.uid;
-          console.log(uid);
           this.groupService
             .getAdminGroup(uid)
             .subscribe((adminGroups: Group[]) => {
-              console.log(adminGroups);
               if (adminGroups.length) {
                 this.noGroup = false;
                 this.adminGroups = adminGroups;

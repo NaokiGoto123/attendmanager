@@ -13,7 +13,6 @@ export class GroupsComponent implements OnInit {
 
   constructor(private groupServiec: GroupService) {
     this.groupServiec.getSearchableGroups().subscribe((groups: Group[]) => {
-      console.log(groups);
       this.searchableGroups = groups;
     });
   }

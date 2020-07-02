@@ -11,8 +11,6 @@ export const joinGroup = functions
 
     if (!data) return;
 
-    console.log('joinGroup is running');
-
     const newMemberId: string = context.params.memberId;
 
     const newMember = (await db.doc(`users/${newMemberId}`).get()).data();
@@ -26,10 +24,8 @@ export const joinGroup = functions
     ).docs.map((doc) => doc.data());
 
     adminIds.map((adminId) => {
-      console.log(adminId.id);
       const docRef = db.collection(`users/${adminId.id}/notifications`).doc();
       const Id: string = docRef.id;
-      console.log(Id);
 
       return db
         .doc(`users/${adminId.id}/notifications/${Id}`)
@@ -60,8 +56,6 @@ export const joinGroupWaitinglist = functions
     const data = snap.data();
     if (!data) return;
 
-    console.log('joinGroupWaitinglist is running');
-
     const groupId = context.params.groupId;
 
     const group = (await db.doc(`groups/${groupId}`).get()).data();
@@ -77,7 +71,6 @@ export const joinGroupWaitinglist = functions
     ).docs.map((doc) => doc.data());
 
     adminIds.map((adminId) => {
-      console.log(adminId.id);
       const docRef = db.collection(`users/${adminId.id}/notifications`).doc();
       const Id: string = docRef.id;
 
@@ -108,8 +101,6 @@ export const makeAdmin = functions
     const data = snap.data();
     if (!data) return;
 
-    console.log('makeAdmin is running');
-
     const groupId = context.params.groupId;
 
     const group = (await db.doc(`groups/${groupId}`).get()).data();
@@ -123,7 +114,6 @@ export const makeAdmin = functions
     ).docs.map((doc) => doc.data());
 
     adminIds.map((adminId) => {
-      console.log(adminId.id);
       const docRef = db.collection(`users/${adminId.id}/notifications`).doc();
       const Id: string = docRef.id;
 
@@ -154,8 +144,6 @@ export const makeEvent = functions
     const data = snap.data();
     if (!data) return;
 
-    console.log('makeEvent is running');
-
     const groupId = context.params.groupId;
 
     const group = (await db.doc(`groups/${groupId}`).get()).data();
@@ -169,7 +157,6 @@ export const makeEvent = functions
     ).docs.map((doc) => doc.data());
 
     adminIds.map((adminId) => {
-      console.log(adminId.id);
       const docRef = db.collection(`users/${adminId.id}/notifications`).doc();
       const Id: string = docRef.id;
 
@@ -200,8 +187,6 @@ export const joinEvent = functions
     const data = snap.data();
     if (!data) return;
 
-    console.log('joinEvent is running');
-
     const eventId: string = context.params.eventId;
 
     const event = (await db.doc(`events/${eventId}`).get()).data();
@@ -221,7 +206,6 @@ export const joinEvent = functions
     ).data();
 
     adminIds.map((adminId) => {
-      console.log(adminId.id);
       const docRef = db.collection(`users/${adminId.id}/notifications`).doc();
       const Id: string = docRef.id;
 
@@ -254,8 +238,6 @@ export const joinEventWaitinglist = functions
     const data = snap.data();
     if (!data) return;
 
-    console.log('joinEventWaitinglist is running');
-
     const eventId = context.params.eventId;
 
     const event = (await db.doc(`events/${eventId}`).get()).data();
@@ -275,7 +257,6 @@ export const joinEventWaitinglist = functions
     ).docs.map((doc) => doc.data());
 
     adminIds.map((adminId) => {
-      console.log(adminId.id);
       const docRef = db.collection(`users/${adminId.id}/notifications`).doc();
       const Id: string = docRef.id;
 

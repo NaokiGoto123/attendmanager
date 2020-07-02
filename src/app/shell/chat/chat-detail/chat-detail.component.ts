@@ -52,8 +52,8 @@ export class ChatDetailComponent implements OnInit {
       this.chatService
         .getChatRoom(chatRoomId)
         .subscribe((chatRoom: ChatRoom) => {
-          this.name = chatRoom.name;
-          this.groupid = chatRoom.groupid;
+          this.name = chatRoom?.name;
+          this.groupid = chatRoom?.groupid;
           this.chatService
             .getMessages(chatRoomId)
             .subscribe((messages: Message[]) => {
@@ -87,5 +87,9 @@ export class ChatDetailComponent implements OnInit {
       this.chatRoomId
     );
     this.form.reset();
+  }
+
+  deleteChatRoom() {
+    this.chatService.deleteChatRoom(this.chatRoomId);
   }
 }

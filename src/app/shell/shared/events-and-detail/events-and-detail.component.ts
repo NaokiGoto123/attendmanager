@@ -6,7 +6,7 @@ import { User } from 'src/app/interfaces/user';
 import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable, combineLatest } from 'rxjs';
-import { timeStamp } from 'console';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-events-and-detail',
@@ -36,14 +36,14 @@ export class EventsAndDetailComponent implements OnInit {
   constructor(
     private eventService: EventService,
     private groupService: GroupService,
-    private authService: AuthService
+    private authService: AuthService,
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {}
 
   mouseEnter() {
-    console.log(this.givenEvent);
-    this.authService
+    this.userService
       .getUser(this.givenEvent.createrId)
       .subscribe((creater: User) => {
         this.createrId = creater.uid;
@@ -69,7 +69,7 @@ export class EventsAndDetailComponent implements OnInit {
           this.ifAttendingMembers = true;
           const result: Observable<User>[] = [];
           attendingMemberIds.forEach((attndingmemberId) => {
-            result.push(this.authService.getUser(attndingmemberId));
+            result.push(this.userService.getUser(attndingmemberId));
             this.attendingMembers = combineLatest(result);
           });
         } else {
@@ -84,7 +84,7 @@ export class EventsAndDetailComponent implements OnInit {
           this.ifWaitingJoinningMembers = true;
           this.waitingJoinningMembers = combineLatest(
             waitingJoinningMemberIds.map((waitingJoinningMemberId) => {
-              return this.authService.getUser(waitingJoinningMemberId);
+              return this.userService.getUser(waitingJoinningMemberId);
             })
           );
         } else {

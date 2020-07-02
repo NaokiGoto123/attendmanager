@@ -8,11 +8,15 @@ import { firestore } from 'firebase';
 import { User } from '../interfaces/user';
 import { Id } from '../interfaces/id';
 import { Message } from '../interfaces/message';
+import { AngularFireFunctions } from '@angular/fire/functions';
 @Injectable({
   providedIn: 'root',
 })
 export class GroupService {
-  constructor(private db: AngularFirestore) {}
+  constructor(
+    private db: AngularFirestore,
+    private fns: AngularFireFunctions
+  ) {}
 
   async createGroup(uid: string, group: Group) {
     await this.db
@@ -43,7 +47,6 @@ export class GroupService {
           if (groupIds.length) {
             const myGroups: Observable<Group>[] = [];
             groupIds.forEach((groupId: Id) => {
-              console.log(groupId);
               myGroups.push(
                 this.db.doc<Group>(`groups/${groupId.id}`).valueChanges()
               );
@@ -65,7 +68,6 @@ export class GroupService {
           if (adminGroupIds.length) {
             const myAdminGroups: Observable<Group>[] = [];
             adminGroupIds.forEach((adminGroupId: Id) => {
-              console.log(adminGroupId);
               myAdminGroups.push(
                 this.db.doc<Group>(`groups/${adminGroupId.id}`).valueChanges()
               );
@@ -125,7 +127,11 @@ export class GroupService {
   }
 
   getGroupinfo(groupId: string): Observable<Group> {
-    return this.db.doc<Group>(`groups/${groupId}`).valueChanges();
+    if (this.db.doc<Group>(`groups/${groupId}`).valueChanges()) {
+      return this.db.doc<Group>(`groups/${groupId}`).valueChanges();
+    } else {
+      return null;
+    }
   }
 
   ifAdmin(uid: string, groupId: string): Observable<boolean> {
@@ -153,7 +159,6 @@ export class GroupService {
       .valueChanges()
       .pipe(
         map((memberIds: Id[]) => {
-          console.log(memberIds, 'service');
           const MemberIds: string[] = [];
           memberIds.forEach((memberId: Id) => {
             MemberIds.push(memberId.id);
@@ -264,185 +269,8 @@ export class GroupService {
 
   // delete chatroom at the same time
   async deleteGroup(groupId: string) {
-    await this.db
-      .doc(`groups/${groupId}`)
-      .delete()
-      .then(() => {
-        this.getAdminIds(groupId).subscribe((adminIds: string[]) => {
-          adminIds.forEach((adminId: string) => {
-            console.log(adminId);
-            this.db.doc(`groups/${groupId}/adminIds/${adminId}`).delete();
-          });
-        });
-      })
-      .then(() => {
-        this.getMemberIds(groupId).subscribe((memberIds: string[]) => {
-          memberIds.forEach((memberId: string) => {
-            console.log(memberId);
-            this.db.doc(`groups/${groupId}/memberIds/${memberId}`).delete();
-          });
-        });
-      })
-      .then(() => {
-        this.db
-          .collection(`groups/${groupId}/eventIds`)
-          .valueChanges()
-          .subscribe((eventIds: Id[]) => {
-            eventIds.map((eventId: Id) => {
-              this.db.doc(`groups/${groupId}/eventIds/${eventId.id}`).delete();
-            });
-          });
-      })
-      // チャットルームのサブコレ削除
-      .then(() => {
-        this.db
-          .doc(`groups/${groupId}`)
-          .valueChanges()
-          .subscribe((group: Group) => {
-            const chatRoomId: string = group.chatRoomId;
-            this.db
-              .collection<Message>(`chatRooms/${chatRoomId}/messages`)
-              .valueChanges()
-              .subscribe((messages: Message[]) => {
-                messages.map((message: Message) => {
-                  this.db
-                    .doc(`chatRooms/${chatRoomId}/messages/${message.id}`)
-                    .delete();
-                });
-              });
-          });
-      })
-      // チャットルームのサブコレ削除
-      .then(() => {
-        this.db
-          .doc(`groups/${groupId}`)
-          .valueChanges()
-          .subscribe((group: Group) => {
-            const chatRoomId: string = group.chatRoomId;
-            this.db
-              .collection<Id>(`chatRooms/${chatRoomId}/memberIds`)
-              .valueChanges()
-              .subscribe((memberIds: Id[]) => {
-                memberIds.map((memberId: Id) => {
-                  this.db
-                    .doc(`chatRooms/${chatRoomId}/memberIds/${memberId.id}`)
-                    .delete();
-                });
-              });
-          });
-      })
-      // チャットルーム削除
-      .then(() => {
-        this.db
-          .doc(`groups/${groupId}`)
-          .valueChanges()
-          .subscribe((group: Group) => {
-            const chatRoomId: string = group.chatRoomId;
-            this.db.doc(`chatRooms/${chatRoomId}`).delete();
-          });
-      })
-      // サブコレ消す処理
-      .then(() => {
-        this.getMemberIds(groupId).subscribe((memberIds: string[]) => {
-          memberIds.forEach((memberId: string) => {
-            this.db.doc(`users/${memberId}/groupIds/${groupId}`).delete();
-          });
-        });
-      })
-      // サブコレ消す処理
-      .then(() => {
-        this.getAdminIds(groupId).subscribe((adminIds: string[]) => {
-          adminIds.forEach((adminId: string) => {
-            console.log('this is adminIds', adminIds);
-            this.db.doc(`users/${adminId}/adminGroupIds/${groupId}`).delete();
-          });
-        });
-      })
-      // イベントのサブコレ削除
-      .then(() => {
-        this.db
-          .collection<Event>(`events`, (ref) =>
-            ref.where('groupid', '==', groupId)
-          )
-          .valueChanges()
-          .subscribe((events: Event[]) => {
-            events.map((event: Event) => {
-              this.db
-                .collection<Id>(`events/${event.id}/attendingMemberIds`)
-                .valueChanges()
-                .subscribe((attendingMemberIds: Id[]) => {
-                  attendingMemberIds.map((attendingMemberId: Id) => {
-                    this.db
-                      .doc(
-                        `events/${event.id}/attendingMemberIds/${attendingMemberId.id}`
-                      )
-                      .delete();
-                  });
-                });
-            });
-          });
-      })
-      // イベントのサブコレ削除
-      .then(() => {
-        this.db
-          .collection<Event>(`events`, (ref) =>
-            ref.where('groupid', '==', groupId)
-          )
-          .valueChanges()
-          .subscribe((events: Event[]) => {
-            events.map((event: Event) => {
-              this.db
-                .collection<Id>(`events/${event.id}/waitingJoinningMemberIds`)
-                .valueChanges()
-                .subscribe((waitingJoinningMemberIds: Id[]) => {
-                  waitingJoinningMemberIds.map(
-                    (waitingJoinningMemberId: Id) => {
-                      this.db
-                        .doc(
-                          `events/${event.id}/waitingJoinningMemberIds/${waitingJoinningMemberId.id}`
-                        )
-                        .delete();
-                    }
-                  );
-                });
-            });
-          });
-      })
-      // イベントのサブコレ削除
-      .then(() => {
-        this.db
-          .collection<Event>(`events`, (ref) =>
-            ref.where('groupid', '==', groupId)
-          )
-          .valueChanges()
-          .subscribe((events: Event[]) => {
-            events.map((event: Event) => {
-              this.db
-                .collection<Id>(`events/${event.id}/waitingPayingMemberIds`)
-                .valueChanges()
-                .subscribe((waitingPayingMemberIds: Id[]) => {
-                  waitingPayingMemberIds.map((waitingPayingMemberId: Id) => {
-                    this.db
-                      .doc(
-                        `events/${event.id}/waitingPayingMemberIds/${waitingPayingMemberId.id}`
-                      )
-                      .delete();
-                  });
-                });
-            });
-          });
-      })
-      // イベント消す処理
-      .then(() => {
-        this.db
-          .collection(`events`, (ref) => ref.where('groupid', '==', groupId))
-          .valueChanges()
-          .subscribe((events: Event[]) => {
-            events.forEach((event) => {
-              this.db.doc<Event>(`events/${event.id}`).delete();
-            });
-          });
-      });
+    const deleteGroupFunction = this.fns.httpsCallable('deleteGroup');
+    const deleteGroup = await deleteGroupFunction(groupId).toPromise();
   }
 
   getSearchableGroups(): Observable<Group[]> {
@@ -502,7 +330,6 @@ export class GroupService {
       .doc(`groups/${groupId}/memberIds/${uid}`)
       .set({ id: uid })
       .then(() => {
-        console.log('test');
         this.db.doc(`users/${uid}/groupIds/${groupId}`).set({ id: groupId });
       })
       .then(() => {

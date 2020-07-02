@@ -13,32 +13,8 @@
   margin: 0 0 30px 0;
 }
 
-.image-input {
-  margin: 0 0 20px 0;
-}
-
-.update-image {
-  margin: 0 0 20px 0;
-}
-
-.update-fields {
-  display: flex;
-  flex-direction: column;
-  width: 500px;
-}
-
-.update-toggles {
-  display: flex;
-  flex-direction: column;
-  margin: 0 0 20px 0;
-}
-
-.update-button-container {
-  margin: 0 0 20px 0;
-}
-
-.signout-button {
-  margin: 0 20px 0 0;
+.image-selector {
+  width: 60%;
 }
 
 .cropper-container {
@@ -56,4 +32,24 @@
 
 image-cropper {
   width: 50%;
+}
+
+.update-fields {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+
+.update-toggles {
+  display: flex;
+  flex-direction: column;
+  margin: 0 0 20px 0;
+}
+
+.update-button-container {
+  margin: 0 0 20px 0;
+}
+
+.signout-button {
+  margin: 0 20px 0 0;
 }

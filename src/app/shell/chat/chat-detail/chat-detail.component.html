@@ -12,9 +12,17 @@
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu" xPosition="before">
-      <button mat-menu-item>
-        <mat-icon>dialpad</mat-icon>
-        <span>Redial</span>
+      <button mat-menu-item (click)="deleteChatRoom()">
+        <mat-icon>delete_sweep</mat-icon>
+        <span>Delete this chat room</span>
+      </button>
+      <button
+        mat-menu-item
+        routerLink="/chat/chat-room-members"
+        [queryParams]="{ id: chatRoomId }"
+      >
+        <mat-icon>people</mat-icon>
+        <span>View members</span>
       </button>
     </mat-menu>
   </mat-toolbar>
@@ -33,12 +41,7 @@
               message.sentAt.toMillis() | date: 'MM/dd HH:mm:ss'
             }}</small>
             <p class="texts">{{ message.content }}</p>
-            <img
-              class="account-picture"
-              src="{{ message.ownerPhotoURL }}"
-              routerLink="/account"
-              [queryParams]="{ id: message.ownerId }"
-            />
+            <img class="account-picture" src="{{ message.ownerPhotoURL }}" />
           </div>
         </div>
       </div>

@@ -1,4 +1,12 @@
-<div class="container">
+<div *ngIf="noGroup" class="container">
+  <img
+    class="no-group-image"
+    src="/assets/images/404.svg"
+    alt="group does not exist"
+  />
+</div>
+
+<div *ngIf="!noGroup" class="container">
   <mat-toolbar class="mat-toolbar">
     <button
       class="edit-button"
@@ -37,7 +45,7 @@
       <span
         class="creater"
         routerLink="/account"
-        [queryParams]="{ id: createrId }"
+        [queryParams]="{ searchId: createrSearchId }"
       >
         {{ createrName }}
       </span>
@@ -59,8 +67,8 @@
           <li class="member-container">
             <h1
               class="memberName"
-              [routerLink]="['/account']"
-              [queryParams]="{ id: admin.uid }"
+              routerLink="/account"
+              [queryParams]="{ searchId: admin.searchId }"
             >
               {{ admin.displayName }}
             </h1>
@@ -81,8 +89,8 @@
           <li class="member-container">
             <h1
               class="memberName"
-              [routerLink]="['/account']"
-              [queryParams]="{ id: member.uid }"
+              routerLink="/account"
+              [queryParams]="{ id: member.searchId }"
             >
               {{ member.displayName }}
             </h1>
@@ -118,8 +126,8 @@
           <li class="waitingMember-container">
             <h1
               class="waitingMember"
-              [routerLink]="['/account']"
-              [queryParams]="{ id: waitingMember.uid }"
+              routerLink="/account"
+              [queryParams]="{ searchId: waitingMember.searchId }"
             >
               {{ waitingMember.displayName }}
             </h1>

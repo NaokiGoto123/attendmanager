@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { AuthService } from './auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ChatRoom } from '../interfaces/chat-room';
 import { Group } from '../interfaces/group';
@@ -9,6 +8,8 @@ import { Message } from '../interfaces/message';
 import { firestore } from 'firebase';
 import { Router } from '@angular/router';
 import { Id } from '../interfaces/id';
+import { AngularFireFunctions } from '@angular/fire/functions';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class ChatService {
   constructor(
     private router: Router,
     private db: AngularFirestore,
-    private authService: AuthService
+    private fns: AngularFireFunctions
   ) {}
 
   createChatRoom(uid: string, chatRoom: ChatRoom) {
@@ -38,7 +39,6 @@ export class ChatService {
           queryParams: { id: chatRoom.id },
         })
       );
-    console.log('Successfully created a chatRoom');
   }
 
   joinChatRoom(uid: string, chatRoomId: string) {
@@ -58,7 +58,6 @@ export class ChatService {
           if (groupIds.length) {
             const myGroups: Observable<Group>[] = [];
             groupIds.forEach((groupId: Id) => {
-              console.log(groupId);
               myGroups.push(
                 this.db.doc<Group>(`groups/${groupId.id}`).valueChanges()
               );
@@ -88,6 +87,23 @@ export class ChatService {
     return this.db.doc<ChatRoom>(`chatRooms/${chatRoomId}`).valueChanges();
   }
 
+  getChatRooomMembers(chatRoomId: string): Observable<User[]> {
+    return this.db
+      .collection<Id>(`chatRooms/${chatRoomId}/memberIds`)
+      .valueChanges()
+      .pipe(
+        switchMap((memberIds: Id[]) => {
+          const members: Observable<User>[] = [];
+          memberIds.map((memberId: Id) => {
+            members.push(
+              this.db.doc<User>(`users/${memberId.id}`).valueChanges()
+            );
+          });
+          return combineLatest(members);
+        })
+      );
+  }
+
   getMessages(chatRoomId: string) {
     return this.db
       .collection(`chatRooms/${chatRoomId}/messages`, (ref) =>
@@ -109,5 +125,10 @@ export class ChatService {
 
   clearMessageCount(chatRoomId: string) {
     this.db.doc(`chatRooms/${chatRoomId}`).update({ messageCount: 0 });
+  }
+
+  async deleteChatRoom(chatRoomId: string) {
+    const deleteChatRoomFunction = this.fns.httpsCallable('deleteChatRoom');
+    const result = await deleteChatRoomFunction(chatRoomId).toPromise();
   }
 }

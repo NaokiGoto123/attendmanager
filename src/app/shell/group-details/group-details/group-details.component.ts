@@ -4,13 +4,13 @@ import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable, combineLatest } from 'rxjs';
 import { Group } from 'src/app/interfaces/group';
-import { map, switchMap } from 'rxjs/operators';
 import { Location } from '@angular/common';
 import { ChatService } from 'src/app/services/chat.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from 'src/app/interfaces/user';
 import { MatDialog } from '@angular/material/dialog';
 import { GroupDetailsDiaplogComponent } from '../group-details-diaplog/group-details-diaplog.component';
+import { UserService } from 'src/app/services/user.service';
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
@@ -20,6 +20,8 @@ export class GroupDetailsComponent implements OnInit {
   id: string;
 
   uid: string;
+
+  noGroup: boolean;
 
   ifadmin: boolean; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
 
@@ -34,6 +36,7 @@ export class GroupDetailsComponent implements OnInit {
   grouppicture: string;
   createddate: Date;
   createrId: string;
+  createrSearchId: string;
   createrName: string;
   price: number;
   currency: string;
@@ -57,6 +60,7 @@ export class GroupDetailsComponent implements OnInit {
     private db: AngularFirestore,
     private groupService: GroupService,
     private authService: AuthService,
+    private userService: UserService,
     private chatService: ChatService,
     private dialog: MatDialog
   ) {
@@ -65,30 +69,18 @@ export class GroupDetailsComponent implements OnInit {
 
       this.uid = this.authService.uid;
 
-      const resultMemberIds: string[] = [];
-      this.groupService
-        .getMemberIds(this.id)
-        .subscribe((memberIds: string[]) => {
-          memberIds.forEach((memberId: string) => {
-            resultMemberIds.push(memberId);
-          });
-        });
-      this.memberIds = resultMemberIds;
-
-      const resultAdminIds: string[] = [];
-      this.groupService.getAdminIds(this.id).subscribe((adminIds: string[]) => {
-        adminIds.forEach((adminId: string) => {
-          resultAdminIds.push(adminId);
-        });
-      });
-      this.adminIds = resultAdminIds;
-
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
+        if (group) {
+          this.noGroup = false;
+        } else {
+          this.noGroup = true;
+        }
         this.group = group;
         this.name = group.name;
         this.description = group.description;
         this.createrId = group.createrId;
-        this.authService.getUser(this.createrId).subscribe((creater: User) => {
+        this.userService.getUser(this.createrId).subscribe((creater: User) => {
+          this.createrSearchId = creater.searchId;
           this.createrName = creater.displayName;
         });
         if (group.private) {
@@ -110,7 +102,7 @@ export class GroupDetailsComponent implements OnInit {
       });
 
       this.groupService.getAdminIds(this.id).subscribe((adminIds: string[]) => {
-        console.log(adminIds);
+        this.adminIds = adminIds;
         if (adminIds.length) {
           this.ifAdmins = true;
           if (adminIds.includes(this.uid)) {
@@ -123,7 +115,7 @@ export class GroupDetailsComponent implements OnInit {
         }
         const admins: User[] = [];
         adminIds.forEach((adminId: string) => {
-          this.authService.getUser(adminId).subscribe((admin: User) => {
+          this.userService.getUser(adminId).subscribe((admin: User) => {
             admins.push(admin);
           });
         });
@@ -133,7 +125,7 @@ export class GroupDetailsComponent implements OnInit {
       this.groupService
         .getMemberIds(this.id)
         .subscribe((memberIds: string[]) => {
-          console.log(memberIds);
+          this.memberIds = memberIds;
           if (memberIds.length) {
             this.ifMembers = true;
             if (memberIds.includes(this.uid)) {
@@ -146,7 +138,7 @@ export class GroupDetailsComponent implements OnInit {
           }
           const members: User[] = [];
           memberIds.forEach((memberId: string) => {
-            this.authService.getUser(memberId).subscribe((member: User) => {
+            this.userService.getUser(memberId).subscribe((member: User) => {
               members.push(member);
             });
           });
@@ -159,8 +151,7 @@ export class GroupDetailsComponent implements OnInit {
           if (waitingJoinningMemberIds.length) {
             this.waitingJoinningMembers = combineLatest(
               waitingJoinningMemberIds.map((waitingMemberId) => {
-                console.log(waitingMemberId);
-                const waitingMember: Observable<User> = this.authService.getUser(
+                const waitingMember: Observable<User> = this.userService.getUser(
                   waitingMemberId
                 );
                 return waitingMember;
@@ -178,8 +169,7 @@ export class GroupDetailsComponent implements OnInit {
           if (waitingPayingMemberIds.length) {
             this.waitingPayingMembers = combineLatest(
               waitingPayingMemberIds.map((waitingPayingMemberId) => {
-                console.log(waitingPayingMemberId);
-                const waitingPayingMember: Observable<User> = this.authService.getUser(
+                const waitingPayingMember: Observable<User> = this.userService.getUser(
                   waitingPayingMemberId
                 );
                 return waitingPayingMember;
@@ -204,7 +194,6 @@ export class GroupDetailsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log('The dialog was closed');
       this.searchId = result;
     });
   }

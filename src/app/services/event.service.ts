@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Event } from '../interfaces/event';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { GroupService } from './group.service';
 import { map, switchMap } from 'rxjs/operators';
-import { Observable, combineLatest, of, ObservableLike } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { Id } from '../interfaces/id';
+import { AngularFireFunctions } from '@angular/fire/functions';
+
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
   constructor(
     private db: AngularFirestore,
-    private groupService: GroupService,
-    private snackbar: MatSnackBar
+    private fns: AngularFireFunctions
   ) {}
 
   async createEvent(event: Event) {
@@ -38,7 +37,6 @@ export class EventService {
       .valueChanges()
       .pipe(
         map((Ids: Id[]) => {
-          console.log(Ids);
           const groupIds: string[] = [];
           Ids.map((id: Id) => {
             groupIds.push(id.id);
@@ -65,7 +63,6 @@ export class EventService {
               events.push(event);
             });
           });
-          console.log(events);
           return combineLatest(events);
         })
       );
@@ -122,64 +119,8 @@ export class EventService {
   }
 
   async deleteEvent(eventId: string, groupId: string) {
-    await this.db
-      .doc(`events/${eventId}`)
-      .delete()
-      .then(() => this.db.doc(`groups/${groupId}/eventIds/${eventId}`).delete())
-      .then(() => {
-        this.db
-          .collection<Id>(`groups/${groupId}/attendingMemberIds`)
-          .valueChanges()
-          .subscribe((attendingMemberIds: Id[]) => {
-            attendingMemberIds.map((attendingMemberId: Id) => {
-              this.db
-                .doc(
-                  `groups/${groupId}/attendingMemberIds/${attendingMemberId.id}`
-                )
-                .delete();
-            });
-          });
-      })
-      .then(() => {
-        this.db
-          .collection(`groups/${groupId}/waitingJoinningMemberIds`)
-          .valueChanges()
-          .subscribe((waitingJoinningMemberIds: Id[]) => {
-            waitingJoinningMemberIds.map((waitingJoinningMemberId: Id) => {
-              this.db
-                .doc(
-                  `groups/${groupId}/attendingMemberIds/${waitingJoinningMemberId.id}`
-                )
-                .delete();
-            });
-          });
-      })
-      .then(() => {
-        this.db
-          .collection(`groups/${groupId}/waitingPayingMemberIds`)
-          .valueChanges()
-          .subscribe((waitingPayingMemberIds: Id[]) => {
-            waitingPayingMemberIds.map((waitingPayingMemberId: Id) => {
-              this.db
-                .doc(
-                  `groups/${groupId}/attendingMemberIds/${waitingPayingMemberId.id}`
-                )
-                .delete();
-            });
-          });
-      })
-      .then(() => {
-        this.db
-          .collection(`events/${eventId}/attendingMemberIds`)
-          .valueChanges()
-          .subscribe((attendingMemberIds: Id[]) => {
-            attendingMemberIds.map((attendingMemberId: Id) => {
-              this.db
-                .doc(`users/${attendingMemberId.id}/eventIds/${eventId}`)
-                .delete();
-            });
-          });
-      });
+    const deleteEventFunction = this.fns.httpsCallable('deleteEvent');
+    const result = await deleteEventFunction(eventId).toPromise();
   }
 
   getSearchableEvents(): Observable<Event[]> {

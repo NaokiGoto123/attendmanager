@@ -22,9 +22,7 @@ export class GroupsComponent implements OnInit {
   ) {
     this.uid = this.authService.uid;
     this.groupService.getMyGroup(this.uid).subscribe((myGroups: Group[]) => {
-      console.log(myGroups);
       this.groups = myGroups;
-      console.log(this.groups);
     });
   }
 
