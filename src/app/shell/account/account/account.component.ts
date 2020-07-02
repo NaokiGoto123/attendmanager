@@ -13,15 +13,6 @@ export class AccountComponent implements OnInit {
   routerLinks: any[];
 
   user: User;
-  uid: string;
-  searchId: string;
-  displayName: string;
-  photoURL: string;
-  email: string;
-  description: string;
-  showGroups: boolean;
-  showAttendingEvents: boolean;
-  showAttendedEvents: boolean;
 
   ifTarget: boolean;
 
@@ -34,7 +25,6 @@ export class AccountComponent implements OnInit {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       console.log(params);
       const searchId = params.get('id');
-      console.log(searchId);
       this.userService
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
@@ -45,15 +35,6 @@ export class AccountComponent implements OnInit {
               .getUser(this.authService.uid)
               .subscribe((user: User) => {
                 this.user = user;
-                this.uid = user.uid;
-                this.searchId = user.searchId;
-                this.displayName = user.displayName;
-                this.photoURL = user.photoURL;
-                this.email = user.email;
-                this.description = user.description;
-                this.showGroups = user.showGroups;
-                this.showAttendingEvents = user.showAttendingEvents;
-                this.showAttendedEvents = user.showAttendedEvents;
                 this.routerLinks = [
                   { label: 'Settings', link: 'settings' },
                   { label: 'Invited groups', link: 'invited-groups' },
@@ -71,47 +52,41 @@ export class AccountComponent implements OnInit {
             this.userService.getUser(id).subscribe((user: User) => {
               console.log(user);
               this.user = user;
-              this.uid = user.uid;
-              this.searchId = user.searchId;
-              this.displayName = user.displayName;
-              this.photoURL = user.photoURL;
-              this.email = user.email;
-              this.description = user.description;
-              this.showGroups = user.showGroups;
-              this.showAttendingEvents = user.showAttendingEvents;
-              this.showAttendedEvents = user.showAttendedEvents;
               if (
-                this.showGroups &&
-                this.showAttendingEvents &&
-                this.showAttendingEvents
+                user?.showGroups &&
+                user?.showAttendingEvents &&
+                user?.showAttendingEvents
               ) {
                 this.routerLinks = [
                   { label: 'Groups', link: 'groups' },
                   { label: 'Attending events', link: 'attending-events' },
                   { label: 'Attended events', link: 'attended-events' },
                 ];
-              } else if (this.showGroups && this.showAttendingEvents) {
+              } else if (user?.showGroups && user?.showAttendingEvents) {
                 this.routerLinks = [
                   { label: 'Groups', link: 'groups' },
                   { label: 'Attending events', link: 'attending-events' },
                 ];
-              } else if (this.showGroups && this.showAttendedEvents) {
+              } else if (user?.showGroups && user?.showAttendedEvents) {
                 this.routerLinks = [
                   { label: 'Groups', link: 'groups' },
                   { label: 'Attended events', link: 'attended-events' },
                 ];
-              } else if (this.showAttendingEvents && this.showAttendedEvents) {
+              } else if (
+                user?.showAttendingEvents &&
+                user?.showAttendedEvents
+              ) {
                 this.routerLinks = [
                   { label: 'Attending events', link: 'attending-events' },
                   { label: 'Attended events', link: 'attended-events' },
                 ];
-              } else if (this.showGroups) {
+              } else if (user?.showGroups) {
                 this.routerLinks = [{ label: 'Groups', link: 'groups' }];
-              } else if (this.showAttendingEvents) {
+              } else if (user?.showAttendingEvents) {
                 this.routerLinks = [
                   { label: 'Attending events', link: 'attending-events' },
                 ];
-              } else if (this.showAttendedEvents) {
+              } else if (user?.showAttendedEvents) {
                 this.routerLinks = [
                   { label: 'Attended events', link: 'attended-events' },
                 ];

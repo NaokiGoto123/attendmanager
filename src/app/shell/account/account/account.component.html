@@ -1,12 +1,12 @@
 <div class="account-header">
-  <img class="account-photo" alt="account photo" src="{{ photoURL }}" />
+  <img class="account-photo" alt="account photo" src="{{ user?.photoURL }}" />
   <div class="account-name-account-email">
-    <h1 class="account-name">{{ displayName }}</h1>
-    <h3 class="account-email">{{ email }}</h3>
+    <h1 class="account-name">{{ user?.displayName }}</h1>
+    <h3 class="account-email">{{ user?.email }}</h3>
   </div>
 </div>
 <div>
-  <p class="account-description">{{ description }}</p>
+  <p class="account-description">{{ user?.description }}</p>
 </div>
 
 <nav mat-tab-nav-bar>
@@ -18,7 +18,7 @@
       routerLinkActive
       #rla="routerLinkActive"
       [active]="rla.isActive"
-      [queryParams]="{ id: searchId }"
+      [queryParams]="{ id: user?.searchId }"
     >
       {{ routerLink.label }}
     </a>
