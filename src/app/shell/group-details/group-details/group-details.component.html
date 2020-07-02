@@ -1,4 +1,12 @@
-<div class="container">
+<div *ngIf="noGroup" class="container">
+  <img
+    class="no-group-image"
+    src="/assets/images/404.svg"
+    alt="group does not exist"
+  />
+</div>
+
+<div *ngIf="!noGroup" class="container">
   <mat-toolbar class="mat-toolbar">
     <button
       class="edit-button"

@@ -129,7 +129,11 @@ export class GroupService {
   }
 
   getGroupinfo(groupId: string): Observable<Group> {
-    return this.db.doc<Group>(`groups/${groupId}`).valueChanges();
+    if (this.db.doc<Group>(`groups/${groupId}`).valueChanges()) {
+      return this.db.doc<Group>(`groups/${groupId}`).valueChanges();
+    } else {
+      return null;
+    }
   }
 
   ifAdmin(uid: string, groupId: string): Observable<boolean> {

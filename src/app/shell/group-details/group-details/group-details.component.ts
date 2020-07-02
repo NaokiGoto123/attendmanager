@@ -22,6 +22,8 @@ export class GroupDetailsComponent implements OnInit {
 
   uid: string;
 
+  noGroup: boolean;
+
   ifadmin: boolean; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
 
   ifmember: boolean;
@@ -68,25 +70,12 @@ export class GroupDetailsComponent implements OnInit {
 
       this.uid = this.authService.uid;
 
-      const resultMemberIds: string[] = [];
-      this.groupService
-        .getMemberIds(this.id)
-        .subscribe((memberIds: string[]) => {
-          memberIds.forEach((memberId: string) => {
-            resultMemberIds.push(memberId);
-          });
-        });
-      this.memberIds = resultMemberIds;
-
-      const resultAdminIds: string[] = [];
-      this.groupService.getAdminIds(this.id).subscribe((adminIds: string[]) => {
-        adminIds.forEach((adminId: string) => {
-          resultAdminIds.push(adminId);
-        });
-      });
-      this.adminIds = resultAdminIds;
-
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
+        if (group) {
+          this.noGroup = false;
+        } else {
+          this.noGroup = true;
+        }
         this.group = group;
         this.name = group.name;
         this.description = group.description;
@@ -115,6 +104,7 @@ export class GroupDetailsComponent implements OnInit {
 
       this.groupService.getAdminIds(this.id).subscribe((adminIds: string[]) => {
         console.log(adminIds);
+        this.adminIds = adminIds;
         if (adminIds.length) {
           this.ifAdmins = true;
           if (adminIds.includes(this.uid)) {
@@ -138,6 +128,7 @@ export class GroupDetailsComponent implements OnInit {
         .getMemberIds(this.id)
         .subscribe((memberIds: string[]) => {
           console.log(memberIds);
+          this.memberIds = memberIds;
           if (memberIds.length) {
             this.ifMembers = true;
             if (memberIds.includes(this.uid)) {
