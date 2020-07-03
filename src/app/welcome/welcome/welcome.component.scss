@@ -1,86 +1,68 @@
+mat-toolbar {
+  position: fixed;
+  top: 0;
+}
+
 .spacer {
   flex: 1 1 auto;
+}
+
+.service-name {
+  font-size: 32px;
+  color: #ff725d;
 }
 
 .detail-button {
   padding: 0 20px;
 }
 
+.detail-button-text {
+  color: #ff725d;
+}
+
 .container {
   width: 100%;
+  height: calc(100% - 64px);
+  top: 64px;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+}
+
+.welcome-image {
   height: 100%;
+  margin: 0 40px 0 0;
 }
 
-h1 {
-  text-align: center;
-  padding-top: 80px;
-  margin-bottom: 50px;
+.detail-container {
+  display: flex;
+  flex-direction: column;
 }
 
-h2 {
-  text-align: center;
-  margin-bottom: 50px;
+.message-text {
+  font-size: 32px;
+  margin: 200px 0 150px 0;
 }
 
-h3 {
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 50px;
+.signin-card {
+  border-radius: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
 }
 
-h5 {
-  text-align: center;
-  margin-bottom: 40px;
+.signin-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
 }
 
-p {
-  text-align: center;
-}
-
-.signin-form {
-  width: 500px;
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.email-field {
-  display: block;
-}
-
-.password-field {
-  display: block;
-  margin-bottom: 30px;
-}
-
-.submit-button {
-  margin-bottom: 60px;
-}
-
-.sns-login {
-  text-align: center;
-  margin-bottom: 40px;
-}
-
-.google-login {
-  margin-right: 40px;
-}
-
-.twitter-login {
-  margin-right: 40px;
+.signin-text {
+  margin: 0 0 20px 0;
+  font-size: 32px;
 }
 
 .google-logo {
-  width: 80%;
-  height: 80%;
-}
-
-.twitter-logo {
-  width: 80%;
-  height: 80%;
-}
-
-.instagram-logo {
-  width: 80%;
-  height: 80%;
+  height: 50px;
+  width: 50px;
 }

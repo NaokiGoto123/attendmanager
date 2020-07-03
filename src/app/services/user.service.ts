@@ -5,6 +5,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from '../interfaces/user';
 import { map } from 'rxjs/operators';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +15,9 @@ export class UserService {
   constructor(
     private db: AngularFirestore,
     private storage: AngularFireStorage,
-    private fns: AngularFireFunctions
+    private afAuth: AngularFireAuth,
+    private fns: AngularFireFunctions,
+    private router: Router
   ) {}
 
   getUser(uid: string): Observable<User> {
@@ -44,5 +48,7 @@ export class UserService {
   async deleteAccount(uid: string) {
     const deleteAccountFunction = this.fns.httpsCallable('deleteAccount');
     const result = await deleteAccountFunction(uid).toPromise();
+    await this.afAuth.signOut();
+    await this.router.navigateByUrl('/');
   }
 }

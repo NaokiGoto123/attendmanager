@@ -11,6 +11,7 @@ import { User } from 'src/app/interfaces/user';
 import { MatDialog } from '@angular/material/dialog';
 import { GroupDetailsDiaplogComponent } from '../group-details-diaplog/group-details-diaplog.component';
 import { UserService } from 'src/app/services/user.service';
+import { InviteService } from 'src/app/services/invite.service';
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
@@ -30,17 +31,7 @@ export class GroupDetailsComponent implements OnInit {
   ifChatRoom: boolean; // チャットルームが作成済かどうか
 
   group: Group;
-  name: string;
-  description: string;
-  private: boolean;
-  grouppicture: string;
-  createddate: Date;
-  createrId: string;
-  createrSearchId: string;
-  createrName: string;
-  price: number;
-  currency: string;
-  chatRoomId: string;
+  creater: User;
   adminIds: string[];
   admins: User[];
   ifAdmins: boolean;
@@ -62,7 +53,8 @@ export class GroupDetailsComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private chatService: ChatService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private inviteService: InviteService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       this.id = params.get('id');
@@ -76,27 +68,14 @@ export class GroupDetailsComponent implements OnInit {
           this.noGroup = true;
         }
         this.group = group;
-        this.name = group.name;
-        this.description = group.description;
-        this.createrId = group.createrId;
-        this.userService.getUser(this.createrId).subscribe((creater: User) => {
-          this.createrSearchId = creater.searchId;
-          this.createrName = creater.displayName;
-        });
-        if (group.private) {
-          this.private = true;
-        } else {
-          this.private = false;
-        }
-        this.grouppicture = group.grouppicture;
-        this.createddate = group.createddate.toDate();
-        this.price = group.price;
-        this.currency = group.currency;
+        this.userService
+          .getUser(this.group.createrId)
+          .subscribe((creater: User) => {
+            this.creater = creater;
+          });
         if (group.chatRoomId) {
-          this.chatRoomId = group.chatRoomId;
           this.ifChatRoom = true;
         } else {
-          this.chatRoomId = null;
           this.ifChatRoom = false;
         }
       });
@@ -187,14 +166,27 @@ export class GroupDetailsComponent implements OnInit {
     this.location.back();
   }
 
-  openDialog(): void {
+  async openDialog(): Promise<void> {
     const dialogRef = this.dialog.open(GroupDetailsDiaplogComponent, {
       width: '350px',
       data: { searchId: this.searchId },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      this.searchId = result;
+    dialogRef.afterClosed().subscribe(async (result) => {
+      console.log('this is result', result);
+      if (result) {
+        this.userService.getUserFromSearchId(result).subscribe((user: User) => {
+          console.log(user);
+          if (user) {
+            this.inviteService.inviteToGroup(user.uid, this.group.id);
+          } else {
+            return;
+          }
+        });
+        this.searchId = null;
+      } else {
+        return;
+      }
     });
   }
 
@@ -202,7 +194,7 @@ export class GroupDetailsComponent implements OnInit {
     const chatRoomId = this.db.createId();
     this.chatService.createChatRoom(this.uid, {
       id: chatRoomId,
-      name: this.name,
+      name: this.group?.name,
       groupid: this.id,
       messageCount: 0,
     });

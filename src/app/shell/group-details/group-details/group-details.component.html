@@ -26,17 +26,17 @@
     </div>
   </mat-toolbar>
 
-  <img class="group-picture" src="{{ grouppicture }}" />
+  <img class="group-picture" src="{{ group?.grouppicture }}" />
 
   <div class="group-details-container">
-    <h1 class="name">{{ name }}</h1>
+    <h1 class="name">{{ group?.name }}</h1>
 
-    <h1>{{ description }}</h1>
+    <h1>{{ group?.description }}</h1>
 
-    <div *ngIf="private">
+    <div *ngIf="group?.private">
       <h1>This is private group</h1>
     </div>
-    <div *ngIf="!private">
+    <div *ngIf="!group?.private">
       <h1>This is public group</h1>
     </div>
 
@@ -45,19 +45,19 @@
       <span
         class="creater"
         routerLink="/account"
-        [queryParams]="{ searchId: createrSearchId }"
+        [queryParams]="{ id: creater?.searchId }"
       >
-        {{ createrName }}
+        {{ creater?.displayName }}
       </span>
       on
-      {{ createddate | date: 'yyyy/MM/dd' }}
+      {{ group?.createddate.toDate() | date: 'yyyy/MM/dd' }}
     </h1>
 
-    <div *ngIf="price === 0">
-      <h1>Price: {{ price }}</h1>
+    <div *ngIf="group?.price === 0">
+      <h1>Price: {{ group?.price }}</h1>
     </div>
-    <div *ngIf="price !== 0">
-      <h1>Price: {{ price }} {{ currency }}</h1>
+    <div *ngIf="group?.price !== 0">
+      <h1>Price: {{ group?.price }} {{ group?.currency }}</h1>
     </div>
 
     <div *ngIf="ifAdmins">
@@ -68,7 +68,7 @@
             <h1
               class="memberName"
               routerLink="/account"
-              [queryParams]="{ searchId: admin.searchId }"
+              [queryParams]="{ id: admin.searchId }"
             >
               {{ admin.displayName }}
             </h1>
@@ -133,7 +133,7 @@
             </h1>
             <div *ngIf="ifadmin">
               <!-- 無料グループの場合 -->
-              <div class="waiting-buttons" *ngIf="price === 0">
+              <div class="waiting-buttons" *ngIf="group?.price === 0">
                 <div class="allow-button">
                   <button
                     mat-button
@@ -154,7 +154,7 @@
                 </div>
               </div>
               <!-- 有料グループの場合 -->
-              <div class="waiting-buttons" *ngIf="price !== 0">
+              <div class="waiting-buttons" *ngIf="group?.price !== 0">
                 <div class="allow-button">
                   <button
                     mat-button
@@ -224,7 +224,7 @@
             mat-raised-button
             class="chat-button"
             routerLink="/chat/chat-detail"
-            [queryParams]="{ id: chatRoomId }"
+            [queryParams]="{ id: group?.chatRoomId }"
             color="primary"
           >
             Go to chat room

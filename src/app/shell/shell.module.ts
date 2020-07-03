@@ -13,6 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [ShellComponent, HeaderComponent],
@@ -27,6 +28,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatIconModule,
     MatBadgeModule,
     MatMenuModule,
+    MatDividerModule,
   ],
 })
 export class ShellModule {}

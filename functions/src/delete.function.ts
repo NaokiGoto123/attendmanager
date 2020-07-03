@@ -281,7 +281,7 @@ export const deleteAccount = functions
     });
     await Promise.all(DeleteFromChatRooms);
 
-    // イベントのサブコレクションからの削除
+    // // イベントのサブコレクションからの削除
     const eventIds = (
       await db.collection(`users/${uid}/eventIds`).get()
     ).docs.map((doc) => doc.data());
@@ -310,6 +310,7 @@ export const deleteAccount = functions
     );
     await Promise.all(DeleteFromWaitingPayingEvents);
 
+    // Usersからの削除
     const pathToAccount = `users/${uid}`;
 
     await firebase_tools.firestore.delete(pathToAccount, {
@@ -318,6 +319,9 @@ export const deleteAccount = functions
       yes: true,
       token: functions.config().fb.token,
     });
+
+    // ユーザー削除
+    await admin.auth().deleteUser(uid);
 
     return;
   });

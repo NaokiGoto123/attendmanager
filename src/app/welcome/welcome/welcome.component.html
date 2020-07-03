@@ -1,98 +1,38 @@
-<mat-toolbar color="primary">
+<mat-toolbar>
   <mat-toolbar-row>
-    <span>AttendManager</span>
+    <span class="service-name">Joiner</span>
     <span class="spacer"></span>
-    <button mat-button class="detail-button">About</button>
+    <button mat-button class="detail-button">
+      <span class="detail-button-text">About</span>
+    </button>
     <button mat-button class="detail-button" routerLink="/pricing">
-      Pricing
+      <span class="detail-button-text">Pricing</span>
     </button>
     <button mat-button class="detail-button" routerLink="/tos">
-      Terms of service
+      <span class="detail-button-text">Terms of service</span>
     </button>
     <button mat-button class="detail-button" routerLink="/legal">
-      特定商取引法に基づく表示
+      <span class="detail-button-text">特定商取引法に基づく表示</span>
     </button>
   </mat-toolbar-row>
 </mat-toolbar>
 
 <div class="container">
-  <h1>Welcome back to AttendManager!!</h1>
+  <img class="welcome-image" src="/assets/images/staying.svg" />
 
-  <h2>Sign in</h2>
+  <div class="detail-container">
+    <p class="message-text">Get your friends and share fun with them!!</p>
 
-  <form class="signin-form" [formGroup]="form" (ngSubmit)="submit()">
-    <mat-form-field class="email-field" appearance="outline">
-      <mat-label>Enter your Email address</mat-label>
-      <input
-        matInput
-        formControlName="email"
-        autocomplete="email"
-        placeholder="ex. attendmanager@gmail.com"
-        type="email"
-        required
-      />
-    </mat-form-field>
-
-    <mat-form-field class="password-field" appearance="outline">
-      <mat-label>Enter your password</mat-label>
-      <input
-        matInput
-        formControlName="password"
-        [type]="hide ? 'password' : 'text'"
-        required
-      />
-      <button
-        mat-icon-button
-        type="button"
-        matSuffix
-        (click)="hide = !hide"
-        [attr.aria-label]="'Hide password'"
-        [attr.aria-pressed]="hide"
-      >
-        <mat-icon>{{ hide ? 'visibility_off' : 'visibility' }}</mat-icon>
-      </button>
-    </mat-form-field>
-
-    <button
-      mat-fab
-      class="submit-button"
-      (click)="openSnackBar()"
-      [disabled]="form.invalid || form.pristine"
-      color="primary"
-    >
-      <mat-icon>done</mat-icon>
-    </button>
-  </form>
-
-  <h3>If you don't have an account, sign up using</h3>
-
-  <div class="sns-login">
-    <button mat-icon-button class="google-login" (click)="auth.googleSignin()">
-      <img
-        alt="google-logo"
-        class="google-logo"
-        src="assets/images/google.png"
-      />
-    </button>
-    <button mat-icon-button class="twitter-login">
-      <img
-        alt="twitter-logo"
-        class="twitter-logo"
-        src="assets/images/twitter.png"
-      />
-    </button>
-    <button mat-icon-button class="instagram-login">
-      <img
-        alt="instagram-logo"
-        class="instagram-logo"
-        src="assets/images/instagram.png"
-      />
-    </button>
+    <div class="signin-card">
+      <div class="signin-container">
+        <p class="signin-text">Signin with Google</p>
+        <img
+          alt="google-logo"
+          class="google-logo"
+          src="assets/images/google.png"
+          (click)="auth.googleSignin()"
+        />
+      </div>
+    </div>
   </div>
-
-  <h5>or</h5>
-
-  <p>
-    Sign up with email and password! <a [routerLink]="'/signup'">Click here.</a>
-  </p>
 </div>

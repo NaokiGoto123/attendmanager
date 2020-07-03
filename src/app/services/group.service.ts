@@ -3,8 +3,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Group } from '../interfaces/group';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { Event } from '../interfaces/event';
-import { firestore } from 'firebase';
 import { User } from '../interfaces/user';
 import { Id } from '../interfaces/id';
 import { Message } from '../interfaces/message';
