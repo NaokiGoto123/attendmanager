@@ -7,6 +7,7 @@ export interface Group {
   grouppicture: string;
   createddate: firestore.Timestamp;
   createrId: string;
+  memberlimit: number;
   // adminIds: string[]; サブコレ
   // memberIds: string[]; サブコレ
   // eventIds: string[]; サブコレ

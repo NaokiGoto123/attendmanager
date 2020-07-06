@@ -11,58 +11,65 @@
       </div>
 
       <div *ngIf="!ifMember">
-        <div *ngIf="group.private">
-          <div *ngIf="ifWaitingJoinningMember">
-            <button mat-raised-button color="warn" (click)="leaveWaitingList()">
-              Leave waiting list
-            </button>
-          </div>
-          <div *ngIf="!ifWaitingJoinningMember">
-            <div *ngIf="ifWaitingPayingMember">
-              <button
-                mat-raised-button
-                class="pay-button"
-                color="primary"
-                (click)="waitingPayinglistToMember()"
-              >
-                Pay {{ group.price }} to join
-              </button>
+        <div *ngIf="overMemberLimit">
+          <button mat-raised-button>
+            cannot join due to the limits
+          </button>
+        </div>
+        <div *ngIf="!overMemberLimit">
+          <div *ngIf="group.private">
+            <div *ngIf="ifWaitingJoinningMember">
               <button
                 mat-raised-button
                 color="warn"
-                (click)="removeWaitingPayingMember()"
+                (click)="leaveWaitingList()"
               >
-                Cancel
+                Leave waiting list
               </button>
             </div>
+            <div *ngIf="!ifWaitingJoinningMember">
+              <div *ngIf="ifWaitingPayingMember">
+                <button
+                  mat-raised-button
+                  class="pay-button"
+                  color="primary"
+                  (click)="waitingPayinglistToMember()"
+                >
+                  Pay {{ group.price }} to join
+                </button>
+                <button
+                  mat-raised-button
+                  color="warn"
+                  (click)="removeWaitingPayingMember()"
+                >
+                  Cancel
+                </button>
+              </div>
 
-            <div *ngIf="!ifWaitingPayingMember">
-              <button
-                mat-raised-button
-                color="primary"
-                (click)="joinWaitingJoinningList()"
-              >
-                Join waiting list
-              </button>
+              <div *ngIf="!ifWaitingPayingMember">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="joinWaitingJoinningList()"
+                >
+                  Join waiting list
+                </button>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div *ngIf="!group.private">
-          <div *ngIf="group.price === 0">
-            <button mat-raised-button color="primary" (click)="joinGroup()">
-              Join
-            </button>
-          </div>
-          <div *ngIf="group.price !== 0">
-            <button
-              mat-raised-button
-              color="primary"
-              (click)="payToJoinGroup()"
-            >
-              Pay {{ group.price }} tp join
-            </button>
-          </div>
+      <div *ngIf="!group.private">
+        <div *ngIf="group.price === 0">
+          <button mat-raised-button color="primary" (click)="joinGroup()">
+            Join
+          </button>
+        </div>
+        <div *ngIf="group.price !== 0">
+          <button mat-raised-button color="primary" (click)="payToJoinGroup()">
+            Pay {{ group.price }} tp join
+          </button>
         </div>
       </div>
     </div>

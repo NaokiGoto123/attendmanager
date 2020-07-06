@@ -1,1 +1,13 @@
-<p>invited-groups works!</p>
+<div class="groups-container">
+  <div class="create-group-grid-container">
+    <div class="create-group-grid">
+      <p>Create new group</p>
+      <button mat-fab routerLink="/create-group" color="none">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+  </div>
+  <div *ngFor="let invitedGroup of invitedGroups">
+    <app-group [group]="invitedGroup"></app-group>
+  </div>
+</div>

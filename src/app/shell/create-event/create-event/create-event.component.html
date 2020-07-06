@@ -55,8 +55,22 @@
         />
       </mat-form-field>
 
-      <mat-form-field class="create-event-field" appearance="outline">
-        <mat-label>Is there a limit for number of members?</mat-label>
+      <p>Is there a limit for number of members?</p>
+      <mat-radio-group
+        aria-label="Select an option"
+        [(ngModel)]="ifMemberLimit"
+        [ngModelOptions]="{ standalone: true }"
+      >
+        <mat-radio-button [value]="true">Yes</mat-radio-button>
+        <mat-radio-button [value]="false">No</mat-radio-button>
+      </mat-radio-group>
+
+      <mat-form-field
+        *ngIf="ifMemberLimit"
+        class="create-event-field"
+        appearance="outline"
+      >
+        <mat-label>What is the limit?</mat-label>
         <input
           matInput
           formControlName="memberlimit"
@@ -72,9 +86,10 @@
           formControlName="date"
           [matDatepicker]="picker"
           required
+          readonly
         />
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
+        <mat-datepicker touchUi #picker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field class="create-event-field" appearance="outline">

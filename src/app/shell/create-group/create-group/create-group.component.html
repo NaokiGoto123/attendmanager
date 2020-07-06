@@ -64,6 +64,30 @@
       <input matInput formControlName="description" type="text" />
     </mat-form-field>
 
+    <p>Is there a limit for number of members?</p>
+    <mat-radio-group
+      aria-label="Select an option"
+      [(ngModel)]="ifMemberLimit"
+      [ngModelOptions]="{ standalone: true }"
+    >
+      <mat-radio-button [value]="true">Yes</mat-radio-button>
+      <mat-radio-button [value]="false">No</mat-radio-button>
+    </mat-radio-group>
+
+    <mat-form-field
+      *ngIf="ifMemberLimit"
+      class="create-group-field"
+      appearance="outline"
+    >
+      <mat-label>What is the limit?</mat-label>
+      <input
+        matInput
+        formControlName="memberlimit"
+        placeholder="E.g. 0"
+        type="number"
+      />
+    </mat-form-field>
+
     <p>{{ form.value.price }} {{ form.value.currency }}</p>
 
     <mat-form-field>

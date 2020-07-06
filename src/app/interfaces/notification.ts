@@ -16,5 +16,7 @@ export interface Notification {
     | 'makeEvent'
     | 'makeAdmin'
     | 'joinGroupWaitinglist'
-    | 'joinEventWaitinglist';
+    | 'joinEventWaitinglist'
+    | 'invitingUser'
+    | 'getInvitation';
 }

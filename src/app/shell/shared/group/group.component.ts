@@ -16,6 +16,7 @@ export class GroupComponent implements OnInit {
 
   memberIds: string[];
   ifMember: boolean;
+  overMemberLimit: boolean;
   waitingJoinningMemberIds: string[];
   ifWaitingJoinningMember: boolean;
   waitingPayingMemberIds: string[];
@@ -33,6 +34,14 @@ export class GroupComponent implements OnInit {
         .getMemberIds(this.group.id)
         .subscribe((memberIds: string[]) => {
           this.memberIds = memberIds;
+          if (
+            memberIds.length >= this.group?.memberlimit &&
+            this.group?.memberlimit !== null
+          ) {
+            this.overMemberLimit = true;
+          } else {
+            this.overMemberLimit = false;
+          }
           if (memberIds.includes(this.uid)) {
             this.ifMember = true;
           } else {

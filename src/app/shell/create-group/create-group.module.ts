@@ -14,6 +14,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSelectModule } from '@angular/material/select';
 import { ImageCropperModule } from 'ngx-image-cropper';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [CreateGroupComponent],
@@ -32,6 +33,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
     MatSliderModule,
     MatSelectModule,
     ImageCropperModule,
+    MatRadioModule,
   ],
 })
 export class CreateGroupModule {}

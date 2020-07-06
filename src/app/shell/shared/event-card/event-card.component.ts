@@ -22,10 +22,6 @@ export class EventCardComponent implements OnInit {
 
   ifadmin: boolean; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
 
-  ifFree: boolean;
-
-  ifPrivate: boolean;
-
   ifWaitingJoinningMember: boolean;
 
   ifWaitingPayingMember: boolean;
@@ -34,12 +30,11 @@ export class EventCardComponent implements OnInit {
 
   attended = false;
 
-  createrDisplayname: Observable<string>;
-  groupName: Observable<string>;
-  eventid: string;
-  grouppicture: string;
-  price: number;
-  date: Date;
+  creater: User;
+
+  group: Group;
+
+  overMemberLimit: boolean;
 
   constructor(
     private authService: AuthService,
@@ -52,37 +47,17 @@ export class EventCardComponent implements OnInit {
     if (this.event) {
       this.uid = this.authService.uid;
 
-      this.createrDisplayname = this.userService
+      this.userService
         .getUser(this.event.createrId)
-        .pipe(
-          map((creater: User) => {
-            return creater.displayName;
-          })
-        );
+        .subscribe((creater: User) => {
+          this.creater = creater;
+        });
 
-      this.groupName = this.groupService.getGroupinfo(this.event.groupid).pipe(
-        map((group: Group) => {
-          return group.name;
-        })
-      );
-
-      this.eventid = this.event.id;
-
-      this.date = this.event.date.toDate();
-
-      this.price = this.event.price;
-
-      if (this.price > 0) {
-        this.ifFree = false;
-      } else {
-        this.ifFree = true;
-      }
-
-      if (this.event.private) {
-        this.ifPrivate = true;
-      } else {
-        this.ifPrivate = false;
-      }
+      this.groupService
+        .getGroupinfo(this.event.groupid)
+        .subscribe((group: Group) => {
+          this.group = group;
+        });
 
       this.eventService
         .getWaitingJoinningMemberIds(this.event.id)
@@ -106,17 +81,11 @@ export class EventCardComponent implements OnInit {
 
       const now = new Date();
 
-      if (this.date > now) {
+      if (this.event.date.toDate() > now) {
         this.ifPast = false;
       } else {
         this.ifPast = true;
       }
-
-      this.groupService
-        .getGroupinfo(this.event.groupid)
-        .subscribe((group: Group) => {
-          this.grouppicture = group.grouppicture;
-        });
 
       this.groupService
         .ifAdmin(this.uid, this.event.groupid)
@@ -127,6 +96,13 @@ export class EventCardComponent implements OnInit {
       this.eventService
         .getAttendingMemberIds(this.event.id)
         .subscribe((attendingMemberIds: string[]) => {
+          if (this.event.memberlimit !== null) {
+            if (attendingMemberIds.length >= this.event.memberlimit) {
+              this.overMemberLimit = true;
+            } else {
+              this.overMemberLimit = false;
+            }
+          }
           if (attendingMemberIds.includes(this.authService.uid)) {
             this.attended = true;
           } else {
@@ -142,35 +118,35 @@ export class EventCardComponent implements OnInit {
 
   // nothing to attending (pay+public, pay+private, free+public, free+private)
   attendEvent() {
-    this.eventService.attendEvent(this.uid, this.eventid);
+    this.eventService.attendEvent(this.uid, this.event?.id);
   }
 
   payToAttendEvent() {
-    this.eventService.payToAttendEvent(this.uid, this.eventid);
+    this.eventService.payToAttendEvent(this.uid, this.event?.id);
   }
 
   // attending to nothing (pay+public, pay+private, free+public, free+private)
   leaveEvent() {
-    this.eventService.leaveEvent(this.uid, this.eventid);
+    this.eventService.leaveEvent(this.uid, this.event?.id);
   }
 
   // nothing to waitingJoinning (pay+private, free+private)
   joinWaitingJoinningList() {
-    this.eventService.joinWaitingJoinningList(this.uid, this.event.id);
+    this.eventService.joinWaitingJoinningList(this.uid, this.event?.id);
   }
 
   // waitingJoinning to waitingPaying (pay+private)
   joinWaitingPayingList() {
-    this.eventService.joinWaitingPayingList(this.uid, this.event.id);
+    this.eventService.joinWaitingPayingList(this.uid, this.event?.id);
   }
 
   // waitingJoinning to nothing (pay+private, free+private)
   removeWaitingJoinningMember() {
-    this.eventService.removeWaitingJoinningMember(this.uid, this.event.id);
+    this.eventService.removeWaitingJoinningMember(this.uid, this.event?.id);
   }
 
   // waitingPaying to nothing (pay+private)
   removeWaitingPayingMember() {
-    this.eventService.removeWaitingPayingMember(this.uid, this.event.id);
+    this.eventService.removeWaitingPayingMember(this.uid, this.event?.id);
   }
 }

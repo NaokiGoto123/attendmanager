@@ -361,3 +361,81 @@ export const joinEventWaitinglist = functions
       }
     });
   });
+
+export const getInvitation = functions
+  .region('asia-northeast1')
+  .firestore.document('groups/{groupId}/invitingUserIds/{invitingUserId}')
+  .onCreate(async (snap, context) => {
+    const eventId = context.eventId;
+    return shouldEventRun(eventId).then(async (should: boolean) => {
+      if (should) {
+        const data = snap.data();
+
+        if (!data) return;
+
+        const groupId = context.params.groupId;
+
+        const group = (await db.doc(`groups/${groupId}`).get()).data();
+
+        const invitingUserId = context.params.invitingUserId;
+
+        const invitingUser = (
+          await db.doc(`users/${invitingUserId}`).get()
+        ).data();
+
+        const docRef1 = db
+          .collection(`users/${invitingUserId}/notifications`)
+          .doc();
+
+        const Id1: string = docRef1.id;
+
+        await db.doc(`users/${invitingUserId}/notifications/${Id1}`).set({
+          id: Id1,
+          person: invitingUser,
+          group: group,
+          event: null,
+          date: admin.firestore.Timestamp.now(),
+          type: 'getInvitation',
+        });
+
+        await db
+          .doc(`users/${invitingUserId}`)
+          .update('notificationCount', admin.firestore.FieldValue.increment(1));
+
+        const adminIds = (
+          await db.collection(`groups/${groupId}/adminIds`).get()
+        ).docs.map((doc) => doc.data());
+
+        const sendNotificationsToAdmin = adminIds.map((adminId) => {
+          const docRef2 = db
+            .collection(`users/${adminId.id}/notifications`)
+            .doc();
+          const Id2: string = docRef2.id;
+
+          return db.doc(`users/${adminId.id}/notifications/${Id2}`).set({
+            id: Id2,
+            person: invitingUser,
+            group: group,
+            event: null,
+            date: admin.firestore.Timestamp.now(),
+            type: 'invitingUser',
+          });
+        });
+        await Promise.all(sendNotificationsToAdmin);
+
+        const incrementNotificationCount = adminIds.map((adminId) => {
+          return db
+            .doc(`users/${adminId.id}`)
+            .update(
+              'notificationCount',
+              admin.firestore.FieldValue.increment(1)
+            );
+        });
+        await Promise.all(incrementNotificationCount);
+
+        return markEventTried(eventId);
+      } else {
+        return true;
+      }
+    });
+  });

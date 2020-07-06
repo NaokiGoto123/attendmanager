@@ -27,6 +27,8 @@ export class CreateEventComponent implements OnInit {
 
   currencies = ['USD', 'SHP', 'JPY', 'CAD', 'CNY', 'EUR'];
 
+  ifMemberLimit = false;
+
   form = this.fb.group({
     groupid: ['', [Validators.required]],
     title: ['', [Validators.required]],
@@ -96,13 +98,19 @@ export class CreateEventComponent implements OnInit {
   }
 
   submit() {
+    let memberlimit: number;
+    if (this.ifMemberLimit) {
+      memberlimit = this.form.value.memberlimit;
+    } else {
+      memberlimit = null;
+    }
     this.eventService
       .createEvent({
         id: this.db.createId(),
         title: this.form.value.title,
         description: this.form.value.description,
         createrId: this.authService.uid,
-        memberlimit: this.form.value.memberlimit,
+        memberlimit,
         date: this.form.value.date,
         time: this.form.value.time,
         location: this.form.value.location,
@@ -117,12 +125,18 @@ export class CreateEventComponent implements OnInit {
   }
 
   update() {
+    let memberlimit: number;
+    if (this.ifMemberLimit) {
+      memberlimit = this.form.value.memberlimit;
+    } else {
+      memberlimit = null;
+    }
     this.eventService
       .updateEvent(this.authService.uid, {
         id: this.eventid,
         title: this.form.value.title,
         description: this.form.value.description,
-        memberlimit: this.form.value.memberlimit,
+        memberlimit,
         date: this.form.value.date,
         time: this.form.value.time,
         location: this.form.value.location,

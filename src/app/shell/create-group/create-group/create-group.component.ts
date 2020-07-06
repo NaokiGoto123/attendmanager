@@ -52,9 +52,12 @@ export class CreateGroupComponent implements OnInit {
 
   croppedImage: any = '';
 
+  ifMemberLimit = false;
+
   form = this.fb.group({
     name: ['', [Validators.required]],
     description: [''],
+    memberlimit: [null],
     price: [0],
     currency: ['', [Validators.required]],
     private: [false],
@@ -114,6 +117,12 @@ export class CreateGroupComponent implements OnInit {
         `groups/${groupId}`,
         this.croppedImage
       );
+      let memberlimit: number;
+      if (this.ifMemberLimit) {
+        memberlimit = this.form.value.memberlimit;
+      } else {
+        memberlimit = null;
+      }
       this.groupSerive
         .createGroup(this.uid, {
           id: groupId,
@@ -122,6 +131,7 @@ export class CreateGroupComponent implements OnInit {
           grouppicture: photoURL,
           createddate: firestore.Timestamp.now(),
           createrId: this.authService.uid,
+          memberlimit,
           chatRoomId: null,
           price: this.form.value.price,
           currency: this.form.value.currency,
@@ -138,6 +148,12 @@ export class CreateGroupComponent implements OnInit {
       const b = a.concat(selectedImageId.toString());
       const c = '.jpg';
       const grouppicture: string = b.concat(c);
+      let memberlimit: number;
+      if (this.ifMemberLimit) {
+        memberlimit = this.form.value.memberlimit;
+      } else {
+        memberlimit = null;
+      }
       this.groupSerive
         .createGroup(this.uid, {
           id: this.db.createId(),
@@ -146,6 +162,7 @@ export class CreateGroupComponent implements OnInit {
           grouppicture,
           createddate: firestore.Timestamp.now(),
           createrId: this.authService.uid,
+          memberlimit,
           chatRoomId: null,
           price: this.form.value.price,
           currency: this.form.value.currency,
@@ -166,6 +183,12 @@ export class CreateGroupComponent implements OnInit {
         `groups/${this.groupid}`,
         this.croppedImage
       );
+      let memberlimit: number;
+      if (this.ifMemberLimit) {
+        memberlimit = this.form.value.memberlimit;
+      } else {
+        memberlimit = null;
+      }
       this.groupSerive
         .createGroup(this.uid, {
           id: this.groupid,
@@ -174,6 +197,7 @@ export class CreateGroupComponent implements OnInit {
           grouppicture: photoURL,
           createddate: firestore.Timestamp.now(),
           createrId: this.authService.uid,
+          memberlimit,
           chatRoomId: null,
           price: this.form.value.price,
           currency: this.form.value.currency,
@@ -190,11 +214,18 @@ export class CreateGroupComponent implements OnInit {
       const b = a.concat(selectedImageId.toString());
       const c = '.jpg';
       const grouppicture = b.concat(c);
+      let memberlimit: number;
+      if (this.ifMemberLimit) {
+        memberlimit = this.form.value.memberlimit;
+      } else {
+        memberlimit = null;
+      }
       this.groupSerive
         .updateGroup({
           id: this.groupid,
           name: this.form.value.name,
           description: this.form.value.description,
+          memberlimit,
           grouppicture,
           price: this.form.value.price,
           currency: this.form.value.currency,

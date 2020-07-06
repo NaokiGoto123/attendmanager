@@ -66,6 +66,7 @@ export class NotificationComponent implements OnInit {
         this.notification.type === 'joinEventWaitinglist'
       ) {
         this.personId = this.notification.person.uid;
+        this.personSearchId = this.notification.person.searchId;
         this.personDisplayname = this.notification.person.displayName;
         this.personPhotoURL = this.notification.person.photoURL;
         this.group = this.notification.group;
@@ -75,6 +76,18 @@ export class NotificationComponent implements OnInit {
         this.event = this.notification.event;
         this.eventId = this.notification.event.id;
         this.eventName = this.notification.event.title;
+      } else if (
+        this.notification.type === 'invitingUser' ||
+        this.notification.type === 'getInvitation'
+      ) {
+        this.personId = this.notification.person.uid;
+        this.personSearchId = this.notification.person.searchId;
+        this.personDisplayname = this.notification.person.displayName;
+        this.personPhotoURL = this.notification.person.photoURL;
+        this.group = this.notification.group;
+        this.groupId = this.notification.group.id;
+        this.groupName = this.notification.group.name;
+        this.groupPicture = this.notification.group.grouppicture;
       }
     }
   }

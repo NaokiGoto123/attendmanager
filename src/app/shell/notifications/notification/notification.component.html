@@ -182,3 +182,59 @@
     {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
   </mat-list-item>
 </div>
+
+<div *ngIf="notification.type === 'invitingUser'">
+  <mat-list-item>
+    <img
+      routerLink="/account"
+      [queryParams]="{ id: personSearchId }"
+      class="account-picture"
+      src="{{ personPhotoURL }}"
+    />
+
+    <span routerLink="/account" [queryParams]="{ id: personSearchId }">{{
+      personDisplayname
+    }}</span>
+
+    <span class="joined">is now in</span>
+
+    <img
+      routerLink="/group-details"
+      [queryParams]="{ id: groupId }"
+      class="group-picture"
+      src="{{ groupPicture }}"
+    />
+
+    <span
+      ><span routerLink="/group-details" [queryParams]="{ id: groupId }">{{
+        groupName
+      }}</span
+      >'s inviting list</span
+    >
+
+    <span class="on">on</span>
+
+    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+  </mat-list-item>
+</div>
+
+<div *ngIf="notification.type === 'getInvitation'">
+  <mat-list-item>
+    <span class="got-invited-to">Got invited to</span>
+
+    <img
+      routerLink="/group-details"
+      [queryParams]="{ id: groupId }"
+      class="group-picture"
+      src="{{ groupPicture }}"
+    />
+
+    <span routerLink="/group-details" [queryParams]="{ id: groupId }">{{
+      groupName
+    }}</span>
+
+    <span class="on">on</span>
+
+    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+  </mat-list-item>
+</div>

@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSliderModule } from '@angular/material/slider';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatRadioModule } from '@angular/material/radio';
 
 @NgModule({
   declarations: [CreateEventComponent],
@@ -34,6 +35,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
     MatSlideToggleModule,
     MatSliderModule,
     NgxMaterialTimepickerModule,
+    MatRadioModule,
   ],
 })
 export class CreateEventModule {}

@@ -1,14 +1,12 @@
 <div *ngIf="ifEvent">
   <div class="event-card">
-    <img class="group-picture" src="{{ grouppicture }}" />
+    <img class="group-picture" src="{{ group?.grouppicture }}" />
     <div class="card-content">
       <h2>{{ event.title }}</h2>
 
       <p>Description: {{ event.description }}</p>
 
-      <p>
-        Created by {{ createrDisplayname | async }} in {{ groupName | async }}
-      </p>
+      <p>Created by {{ creater?.displayName }} in {{ group?.name }}</p>
 
       <p>Date: {{ event.date.toDate() | date: 'yyyy/MM/dd' }}</p>
 
@@ -19,74 +17,81 @@
       </div>
 
       <div *ngIf="!ifPast">
-        <div *ngIf="!attended">
-          <div *ngIf="ifPrivate">
-            <div *ngIf="ifWaitingJoinningMember">
-              <button
-                class="submit-button"
-                mat-raised-button
-                color="warn"
-                (click)="removeWaitingJoinningMember()"
-              >
-                Leave waiting list
-              </button>
-            </div>
-
-            <div *ngIf="!ifWaitingJoinningMember">
-              <div *ngIf="ifWaitingPayingMember">
-                <button
-                  class="submit-button1"
-                  mat-raised-button
-                  color="primary"
-                  (click)="payToAttendEvent()"
-                >
-                  Pay {{ price }} to attend
-                </button>
-
+        <div *ngIf="overMemberLimit">
+          <button class="submit-button" mat-raised-button>
+            cannot attended due to the limit
+          </button>
+        </div>
+        <div *ngIf="!overMemberLimit">
+          <div *ngIf="!attended">
+            <div *ngIf="event?.private">
+              <div *ngIf="ifWaitingJoinningMember">
                 <button
                   class="submit-button"
                   mat-raised-button
                   color="warn"
-                  (click)="removeWaitingPayingMember()"
+                  (click)="removeWaitingJoinningMember()"
                 >
-                  Cancel paying
+                  Leave waiting list
                 </button>
               </div>
 
-              <div *ngIf="!ifWaitingPayingMember">
+              <div *ngIf="!ifWaitingJoinningMember">
+                <div *ngIf="ifWaitingPayingMember">
+                  <button
+                    class="submit-button1"
+                    mat-raised-button
+                    color="primary"
+                    (click)="payToAttendEvent()"
+                  >
+                    Pay {{ event?.price }} to attend
+                  </button>
+
+                  <button
+                    class="submit-button"
+                    mat-raised-button
+                    color="warn"
+                    (click)="removeWaitingPayingMember()"
+                  >
+                    Cancel paying
+                  </button>
+                </div>
+
+                <div *ngIf="!ifWaitingPayingMember">
+                  <button
+                    class="submit-button"
+                    mat-raised-button
+                    color="primary"
+                    (click)="joinWaitingJoinningList()"
+                  >
+                    Join waiting list
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="!event?.private">
+              <div *ngIf="event?.price === 0">
                 <button
                   class="submit-button"
                   mat-raised-button
                   color="primary"
-                  (click)="joinWaitingJoinningList()"
+                  (click)="attendEvent()"
                 >
-                  Join waiting list
+                  Attend
                 </button>
               </div>
-            </div>
-          </div>
 
-          <div *ngIf="!ifPrivate">
-            <div *ngIf="ifFree">
-              <button
-                class="submit-button"
-                mat-raised-button
-                color="primary"
-                (click)="attendEvent()"
-              >
-                Attend
-              </button>
-            </div>
-
-            <div *ngIf="!ifFree">
-              <button
-                class="submit-button"
-                mat-raised-button
-                color="primary"
-                (click)="attendEvent()"
-              >
-                Pay {{ price }} to attend
-              </button>
+              <div *ngIf="event?.price !== 0">
+                <button
+                  class="submit-button"
+                  mat-raised-button
+                  color="primary"
+                  (click)="attendEvent()"
+                >
+                  Pay {{ event?.price }} to attend
+                </button>
+              </div>
             </div>
           </div>
         </div>
