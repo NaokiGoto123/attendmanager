@@ -38,11 +38,6 @@ const routes: Routes = [
       import('./legal/legal.module').then((m) => m.LegalModule),
   },
   {
-    path: 'upgrade',
-    loadChildren: () =>
-      import('./upgrade/upgrade.module').then((m) => m.UpgradeModule),
-  },
-  {
     path: '**',
     loadChildren: () =>
       import('./not-found/not-found.module').then((m) => m.NotFoundModule),

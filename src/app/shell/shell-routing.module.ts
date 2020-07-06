@@ -75,9 +75,9 @@ const routes: Routes = [
           import('./calendar/calendar.module').then((m) => m.CalendarModule),
       },
       {
-        path: 'shared',
+        path: 'upgrade',
         loadChildren: () =>
-          import('./shared/shared.module').then((m) => m.SharedModule),
+          import('./upgrade/upgrade.module').then((m) => m.UpgradeModule),
       },
     ],
   },
