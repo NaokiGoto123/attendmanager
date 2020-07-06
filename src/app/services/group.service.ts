@@ -409,4 +409,36 @@ export class GroupService {
         this.db.doc(`users/${uid}/groupIds/${groupId}`).set({ id: groupId });
       });
   }
+
+  // invitingUserIds to memberIds
+  async invitingUserListToMembers(uid: string, groupId: string) {
+    this.db
+      .doc(`groups/${groupId}/invitingUserIds/${uid}`)
+      .delete()
+      .then(() => {
+        this.db.doc(`users/${uid}/invitedGroupIds/${groupId}`).delete();
+      })
+      .then(() => {
+        this.db.doc(`groups/${groupId}/memberIds/${uid}`).set({ id: uid });
+      })
+      .then(() => {
+        this.db.doc(`users/${uid}/groupIds/${groupId}`).set({ id: groupId });
+      });
+  }
+
+  // invitingUserIds to memberIds
+  async PayToInvitingUserListToMembers(uid: string, groupId: string) {
+    this.db
+      .doc(`groups/${groupId}/invitingUserIds/${uid}`)
+      .delete()
+      .then(() => {
+        this.db.doc(`users/${uid}/invitedGroupIds/${groupId}`).delete();
+      })
+      .then(() => {
+        this.db.doc(`groups/${groupId}/memberIds/${uid}`).set({ id: uid });
+      })
+      .then(() => {
+        this.db.doc(`users/${uid}/groupIds/${groupId}`).set({ id: groupId });
+      });
+  }
 }

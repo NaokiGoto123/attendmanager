@@ -14,7 +14,7 @@ export const deleteGroup = functions
   .https.onCall(async (groupId, context) => {
     const group = (await db.doc(`groups/${groupId}`).get()).data();
 
-    // ユーザーのサブコレ（group系）から削除
+    // ユーザーのサブコレクションからグループを削除
     const adminIds = (
       await db.collection(`groups/${groupId}/adminIds`).get()
     ).docs.map((doc) => doc.data());
@@ -58,6 +58,18 @@ export const deleteGroup = functions
         .delete();
     });
     await Promise.all(waitingPayingMemberIdsDeletion);
+
+    const invitingUserIds = (
+      await db.collection(`groups/${groupId}/invitingUserIds`).get()
+    ).docs.map((doc) => doc.data());
+    const invitingUserIdsDeletion: Promise<any>[] = invitingUserIds.map(
+      (invitingUserId) => {
+        return db
+          .doc(`users/${invitingUserId.id}/invitedGroupIds/${groupId}`)
+          .delete();
+      }
+    );
+    await Promise.all(invitingUserIdsDeletion);
 
     // ユーザーのサブコレクションからイベントを削除
     const eventIds = (

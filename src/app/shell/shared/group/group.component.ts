@@ -138,4 +138,12 @@ export class GroupComponent implements OnInit {
   allowWaitingMember() {
     this.groupService.allowWaitingMember(this.uid, this.group.id);
   }
+
+  invitingUserListToMembers() {
+    this.groupService.invitingUserListToMembers(this.uid, this.group.id);
+  }
+
+  PayToInvitingUserListToMembers() {
+    this.groupService.PayToInvitingUserListToMembers(this.uid, this.group.id);
+  }
 }
