@@ -12,8 +12,15 @@
             class="sidenav-item"
             routerLink="chat-detail"
             [queryParams]="{ id: chatRoom.id }"
+            (click)="clearMessageCount(chatRoom.id)"
           >
-            {{ chatRoom.name }}
+            <span
+              *ngIf="chatRoom.messageCount > 0"
+              matBadge="{{ chatRoom.messageCount }}"
+              matBadgeOverlap="false"
+              >{{ chatRoom.name }}</span
+            >
+            <span *ngIf="chatRoom.messageCount === 0">{{ chatRoom.name }}</span>
           </mat-list-item>
           <mat-divider></mat-divider>
         </div>

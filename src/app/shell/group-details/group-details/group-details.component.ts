@@ -22,26 +22,19 @@ export class GroupDetailsComponent implements OnInit {
 
   uid: string;
 
-  noGroup: boolean;
-
   ifadmin: boolean; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
 
   ifmember: boolean;
-
-  ifChatRoom: boolean; // チャットルームが作成済かどうか
 
   group: Group;
   creater: User;
   adminIds: string[];
   admins: User[];
-  ifAdmins: boolean;
   memberIds: string[];
   members: User[];
-  ifMembers: boolean;
   waitingJoinningMembers: Observable<User[]>;
   waitingPayingMembers: Observable<User[]>;
-  ifWaitingJoinningMembers: boolean;
-  ifWaitingPayingMemberId: boolean;
+  invitingUsers: User[];
 
   searchId: string;
 
@@ -62,35 +55,22 @@ export class GroupDetailsComponent implements OnInit {
       this.uid = this.authService.uid;
 
       this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
-        if (group) {
-          this.noGroup = false;
-        } else {
-          this.noGroup = true;
-        }
         this.group = group;
         this.userService
           .getUser(this.group.createrId)
           .subscribe((creater: User) => {
             this.creater = creater;
           });
-        if (group.chatRoomId) {
-          this.ifChatRoom = true;
-        } else {
-          this.ifChatRoom = false;
-        }
       });
 
       this.groupService.getAdminIds(this.id).subscribe((adminIds: string[]) => {
         this.adminIds = adminIds;
         if (adminIds.length) {
-          this.ifAdmins = true;
           if (adminIds.includes(this.uid)) {
             this.ifadmin = true;
           } else {
             this.ifadmin = false;
           }
-        } else {
-          this.ifAdmins = false;
         }
         const admins: User[] = [];
         adminIds.forEach((adminId: string) => {
@@ -106,14 +86,11 @@ export class GroupDetailsComponent implements OnInit {
         .subscribe((memberIds: string[]) => {
           this.memberIds = memberIds;
           if (memberIds.length) {
-            this.ifMembers = true;
             if (memberIds.includes(this.uid)) {
               this.ifmember = true;
             } else {
               this.ifmember = false;
             }
-          } else {
-            this.ifMembers = false;
           }
           const members: User[] = [];
           memberIds.forEach((memberId: string) => {
@@ -136,9 +113,6 @@ export class GroupDetailsComponent implements OnInit {
                 return waitingMember;
               })
             );
-            this.ifWaitingJoinningMembers = true;
-          } else {
-            this.ifWaitingJoinningMembers = false;
           }
         });
 
@@ -154,16 +128,23 @@ export class GroupDetailsComponent implements OnInit {
                 return waitingPayingMember;
               })
             );
-            this.ifWaitingPayingMemberId = true;
-          } else {
-            this.ifWaitingPayingMemberId = false;
           }
+        });
+
+      this.inviteService
+        .getInvitingUsers(this.id)
+        .subscribe((invitingUsers: User[]) => {
+          this.invitingUsers = invitingUsers;
         });
     });
   }
 
   navigateBack() {
     this.location.back();
+  }
+
+  uninvite(uid: string) {
+    this.inviteService.uninviteFromGroup(uid, this.id);
   }
 
   async openDialog(): Promise<void> {

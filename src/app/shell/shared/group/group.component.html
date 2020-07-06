@@ -16,6 +16,7 @@
             cannot join due to the limits
           </button>
         </div>
+
         <div *ngIf="!overMemberLimit">
           <div *ngIf="group.private">
             <div *ngIf="ifWaitingJoinningMember">
@@ -27,6 +28,7 @@
                 Leave waiting list
               </button>
             </div>
+
             <div *ngIf="!ifWaitingJoinningMember">
               <div *ngIf="ifWaitingPayingMember">
                 <button
@@ -60,7 +62,7 @@
         </div>
       </div>
 
-      <div *ngIf="!group.private">
+      <div *ngIf="!group.private || invited">
         <div *ngIf="group.price === 0">
           <button mat-raised-button color="primary" (click)="joinGroup()">
             Join

@@ -2,86 +2,11 @@
   height: 100%;
 }
 
-.container {
-  width: 100%;
-  height: 100%;
-}
-
-.edit-button {
-  right: 0;
-}
-
-.image-container {
-  position: relative;
-}
-
 .group-picture {
   width: 100%;
 }
 
-.group-details-container {
-  position: absolute;
-  margin: 0 0 250px 20%;
-}
-
-.name {
-  position: relative;
-  font-size: 60px;
-}
-
-.creater,
-.admin,
-.memberName,
-.waitingMember {
-  text-decoration: none;
-}
-
-.creater:hover,
-.admin:hover,
-.memberName:hover,
-.waitingMember:hover {
-  text-decoration: underline;
-}
-
-ul {
-  margin: 0;
-}
-
-.member-container {
+.actions {
   display: flex;
   flex-direction: row;
-  align-items: center;
-  margin: 0;
-  h1 {
-    margin: 0;
-  }
-}
-
-.waitingMember {
-  margin: 0 0 21.44px 0;
-}
-
-.waitingMember-container {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-}
-
-.waiting-buttons {
-  display: flex;
-  flex-direction: row;
-}
-
-.allow-button,
-.remove-button {
-  margin: 0 0 0 10px;
-}
-
-.buttons {
-  display: inline-flex;
-}
-
-.invite-button,
-.calendar-button {
-  margin: 0 30px 0 0;
 }

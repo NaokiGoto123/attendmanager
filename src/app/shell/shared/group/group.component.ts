@@ -3,6 +3,7 @@ import { Group } from 'src/app/interfaces/group';
 import { AuthService } from 'src/app/services/auth.service';
 import { GroupService } from 'src/app/services/group.service';
 import { User } from 'src/app/interfaces/user';
+import { InviteService } from 'src/app/services/invite.service';
 
 @Component({
   selector: 'app-group',
@@ -17,14 +18,14 @@ export class GroupComponent implements OnInit {
   memberIds: string[];
   ifMember: boolean;
   overMemberLimit: boolean;
-  waitingJoinningMemberIds: string[];
   ifWaitingJoinningMember: boolean;
-  waitingPayingMemberIds: string[];
   ifWaitingPayingMember: boolean;
+  invited: boolean;
 
   constructor(
     private authService: AuthService,
-    private groupService: GroupService
+    private groupService: GroupService,
+    private inviteService: InviteService
   ) {}
 
   ngOnInit(): void {
@@ -52,14 +53,12 @@ export class GroupComponent implements OnInit {
         .getWaitingJoinningMemberIds(this.group.id)
         .subscribe((waitingJoinningMemberIds: string[]) => {
           if (waitingJoinningMemberIds.length) {
-            this.waitingJoinningMemberIds = waitingJoinningMemberIds;
             if (waitingJoinningMemberIds.includes(this.uid)) {
               this.ifWaitingJoinningMember = true;
             } else {
               this.ifWaitingJoinningMember = false;
             }
           } else {
-            this.waitingJoinningMemberIds = waitingJoinningMemberIds;
             this.ifWaitingJoinningMember = false;
           }
         });
@@ -67,15 +66,26 @@ export class GroupComponent implements OnInit {
         .getWaitingPayingMemberIds(this.group.id)
         .subscribe((waitingPayingMemberIds: string[]) => {
           if (waitingPayingMemberIds.length) {
-            this.waitingPayingMemberIds = waitingPayingMemberIds;
             if (waitingPayingMemberIds.includes(this.uid)) {
               this.ifWaitingPayingMember = true;
             } else {
               this.ifWaitingPayingMember = false;
             }
           } else {
-            this.waitingPayingMemberIds = waitingPayingMemberIds;
             this.ifWaitingPayingMember = false;
+          }
+        });
+      this.inviteService
+        .getInvitingUsers(this.group.id)
+        .subscribe((invitingUsers: User[]) => {
+          const invitingUserIds: string[] = [];
+          invitingUsers.map((invitingUser: User) => {
+            invitingUserIds.push(invitingUser.uid);
+          });
+          if (invitingUserIds.includes(this.uid)) {
+            this.invited = true;
+          } else {
+            this.invited = false;
           }
         });
     }

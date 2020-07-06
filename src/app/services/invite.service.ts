@@ -5,6 +5,7 @@ import { Id } from '../interfaces/id';
 import { switchMap } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
 import { Group } from '../interfaces/group';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root',
@@ -65,6 +66,23 @@ export class InviteService {
             );
           });
           return combineLatest(invitedGroups);
+        })
+      );
+  }
+
+  getInvitingUsers(groupId: string): Observable<User[]> {
+    return this.db
+      .collection(`groups/${groupId}/invitingUserIds`)
+      .valueChanges()
+      .pipe(
+        switchMap((invitingUserIds: Id[]) => {
+          const invitingUsers: Observable<User>[] = [];
+          invitingUserIds.map((invitingUserId: Id) => {
+            invitingUsers.push(
+              this.db.doc<User>(`users/${invitingUserId.id}`).valueChanges()
+            );
+          });
+          return combineLatest(invitingUsers);
         })
       );
   }

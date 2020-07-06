@@ -1,4 +1,4 @@
-<div *ngIf="noGroup" class="container">
+<div *ngIf="!group" class="container">
   <img
     class="no-group-image"
     src="/assets/images/404.svg"
@@ -6,20 +6,15 @@
   />
 </div>
 
-<div *ngIf="!noGroup" class="container">
-  <mat-toolbar class="mat-toolbar">
-    <button
-      class="edit-button"
-      mat-icon-button
-      color="primary"
-      (click)="navigateBack()"
-    >
+<div *ngIf="group">
+  <mat-toolbar>
+    <button mat-icon-button color="primary" (click)="navigateBack()">
       <mat-icon>arrow_back</mat-icon>
     </button>
 
     <div *ngIf="ifadmin">
       <a routerLink="/create-group" [queryParams]="{ id: id }">
-        <button class="edit-button" mat-icon-button color="primary">
+        <button mat-icon-button color="primary">
           <mat-icon>edit</mat-icon>
         </button>
       </a>
@@ -28,72 +23,63 @@
 
   <img class="group-picture" src="{{ group?.grouppicture }}" />
 
-  <div class="group-details-container">
-    <h1 class="name">{{ group?.name }}</h1>
+  <div>
+    <p>{{ group?.name }}</p>
 
-    <h1>{{ group?.description }}</h1>
+    <p>{{ group?.description }}</p>
 
     <div *ngIf="group?.private">
-      <h1>This is private group</h1>
+      <p>This is private group</p>
     </div>
     <div *ngIf="!group?.private">
-      <h1>This is public group</h1>
+      <p>This is public group</p>
     </div>
 
-    <h1>
+    <p>
       Created by
-      <span
-        class="creater"
-        routerLink="/account"
-        [queryParams]="{ id: creater?.searchId }"
-      >
+      <span routerLink="/account" [queryParams]="{ id: creater?.searchId }">
         {{ creater?.displayName }}
       </span>
       on
       {{ group?.createddate.toDate() | date: 'yyyy/MM/dd' }}
-    </h1>
+    </p>
 
     <div *ngIf="group?.price === 0">
-      <h1>Price: {{ group?.price }}</h1>
+      <p>Price: {{ group?.price }}</p>
     </div>
     <div *ngIf="group?.price !== 0">
-      <h1>Price: {{ group?.price }} {{ group?.currency }}</h1>
+      <p>Price: {{ group?.price }} {{ group?.currency }}</p>
     </div>
 
-    <div *ngIf="ifAdmins">
-      <h1>Admins</h1>
+    <div *ngIf="admins?.length">
+      <p>Admins</p>
       <ul>
         <div *ngFor="let admin of admins">
-          <li class="member-container">
-            <h1
-              class="memberName"
-              routerLink="/account"
-              [queryParams]="{ id: admin.searchId }"
-            >
+          <li>
+            <span routerLink="/account" [queryParams]="{ id: admin.searchId }">
               {{ admin.displayName }}
-            </h1>
-            <div *ngIf="ifadmin && admin.uid === uid">
-              <button mat-button color="warn" (click)="deleteAdmin(admin.uid)">
-                Unauthorize
-              </button>
-            </div>
+            </span>
+            <button
+              mat-button
+              *ngIf="ifadmin && admin.uid === uid"
+              color="warn"
+              (click)="deleteAdmin(admin.uid)"
+            >
+              Unauthorize
+            </button>
           </li>
         </div>
       </ul>
     </div>
 
-    <div *ngIf="ifMembers">
-      <h1>Members</h1>
+    <div *ngIf="members?.length">
+      <p>Members</p>
       <ul>
         <div *ngFor="let member of members">
-          <li class="member-container">
-            <h1
-              class="memberName"
-              routerLink="/account"
-              [queryParams]="{ id: member.searchId }"
-            >
+          <li>
+            <p routerLink="/account" [queryParams]="{ id: member.searchId }">
               {{ member.displayName }}
-            </h1>
+            </p>
             <div
               *ngIf="
                 ifadmin && member.uid !== uid && !adminIds.includes(member.uid)
@@ -115,26 +101,25 @@
       </ul>
     </div>
 
-    <div *ngIf="!ifMembers">
-      <h1>There is no members.</h1>
+    <div *ngIf="!members?.length">
+      <p>There is no members.</p>
     </div>
 
-    <div *ngIf="ifWaitingJoinningMembers">
-      <h1>Waiting users</h1>
+    <div *ngIf="(waitingJoinningMembers | async)?.length">
+      <p>Waiting users</p>
       <ul>
         <div *ngFor="let waitingMember of waitingJoinningMembers | async">
-          <li class="waitingMember-container">
-            <h1
-              class="waitingMember"
+          <li>
+            <span
               routerLink="/account"
               [queryParams]="{ searchId: waitingMember.searchId }"
             >
               {{ waitingMember.displayName }}
-            </h1>
+            </span>
             <div *ngIf="ifadmin">
               <!-- 無料グループの場合 -->
-              <div class="waiting-buttons" *ngIf="group?.price === 0">
-                <div class="allow-button">
+              <div *ngIf="group?.price === 0">
+                <div>
                   <button
                     mat-button
                     color="primary"
@@ -154,8 +139,8 @@
                 </div>
               </div>
               <!-- 有料グループの場合 -->
-              <div class="waiting-buttons" *ngIf="group?.price !== 0">
-                <div class="allow-button">
+              <div *ngIf="group?.price !== 0">
+                <div>
                   <button
                     mat-button
                     color="primary"
@@ -169,7 +154,7 @@
                   </button>
                 </div>
 
-                <div class="remove-button">
+                <div>
                   <button
                     mat-button
                     color="warn"
@@ -185,44 +170,48 @@
       </ul>
     </div>
 
-    <div *ngIf="!ifWaitingJoinningMembers">
-      <h1>There is no waiting member.</h1>
+    <div *ngIf="!(waitingJoinningMembers | async)?.length">
+      <p>There is no waiting member.</p>
     </div>
 
-    <div class="buttons">
-      <button
-        mat-raised-button
-        class="invite-button"
-        color="primary"
-        (click)="openDialog()"
-      >
+    <p>Inviting list</p>
+
+    <div *ngIf="invitingUsers?.length">
+      <ul>
+        <div *ngFor="let invitingUser of invitingUsers">
+          <li>
+            <span
+              routerLink="/account"
+              [queryParams]="{ id: invitingUser.searchId }"
+            >
+              {{ invitingUser.displayName }}
+            </span>
+            <button mat-button>
+              Remove
+            </button>
+          </li>
+        </div>
+      </ul>
+    </div>
+
+    <div class="actions">
+      <button mat-raised-button color="primary" (click)="openDialog()">
         Invite people
       </button>
 
-      <button
-        mat-raised-button
-        class="calendar-button"
-        routerLink="/"
-        color="primary"
-      >
+      <button mat-raised-button routerLink="/" color="primary">
         Check events
       </button>
 
       <div *ngIf="ifmember">
-        <div *ngIf="!ifChatRoom && ifadmin">
-          <button
-            mat-raised-button
-            class="chat-button"
-            (click)="createChatRoom()"
-            color="primary"
-          >
+        <div *ngIf="!group?.chatRoomId && ifadmin">
+          <button mat-raised-button (click)="createChatRoom()" color="primary">
             Create chat room
           </button>
         </div>
-        <div *ngIf="ifChatRoom">
+        <div *ngIf="group?.chatRoomId">
           <button
             mat-raised-button
-            class="chat-button"
             routerLink="/chat/chat-detail"
             [queryParams]="{ id: group?.chatRoomId }"
             color="primary"

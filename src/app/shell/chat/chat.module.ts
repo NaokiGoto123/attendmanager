@@ -17,6 +17,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { ChatRoomMembersComponent } from './chat-room-members/chat-room-members.component';
+import { MatBadgeModule } from '@angular/material/badge';
 
 @NgModule({
   declarations: [ChatComponent, ChatDetailComponent, ChatRoomMembersComponent],
@@ -36,6 +37,7 @@ import { ChatRoomMembersComponent } from './chat-room-members/chat-room-members.
     MatProgressSpinnerModule,
     MatToolbarModule,
     MatMenuModule,
+    MatBadgeModule,
   ],
 })
 export class ChatModule {}

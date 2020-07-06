@@ -43,4 +43,8 @@ export class ChatComponent implements OnInit {
         )
       );
   }
+
+  clearMessageCount(chatRoomId: string) {
+    this.chatService.clearMessageCount(chatRoomId);
+  }
 }
