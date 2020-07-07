@@ -3,38 +3,38 @@ import * as functions from 'firebase-functions';
 
 const algolia = new Algolia();
 
-export const createEvent = functions
+export const createUser = functions
   .region('asia-northeast1')
-  .firestore.document('events/{id}')
+  .firestore.document('users/{id}')
   .onCreate((snap) => {
     const data = snap.data();
     return algolia.saveRecord({
-      indexName: 'events',
+      indexName: 'users',
       largeConcentKey: 'body',
       data,
     });
   });
 
-export const deleteEventFromIndex = functions
+export const deleteUserFromIndex = functions
   .region('asia-northeast1')
-  .firestore.document('events/{id}')
+  .firestore.document('users/{id}')
   .onDelete((snap) => {
     const data = snap.data();
 
     if (data) {
-      return algolia.removeRecord('events', data.id);
+      return algolia.removeRecord('users', data.id);
     } else {
       return;
     }
   });
 
-export const updateEvent = functions
+export const updateUser = functions
   .region('asia-northeast1')
-  .firestore.document('events/{id}')
+  .firestore.document('users/{id}')
   .onUpdate((change) => {
     const data = change.after.data();
     return algolia.saveRecord({
-      indexName: 'events',
+      indexName: 'users',
       largeConcentKey: 'body',
       isUpdate: true,
       data,

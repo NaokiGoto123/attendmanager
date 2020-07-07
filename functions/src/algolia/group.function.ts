@@ -15,7 +15,7 @@ export const createGroup = functions
     });
   });
 
-export const deleteGroup = functions
+export const deleteGroupFromIndex = functions
   .region('asia-northeast1')
   .firestore.document('groups/{id}')
   .onDelete((snap) => {
