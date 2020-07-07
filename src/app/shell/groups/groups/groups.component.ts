@@ -10,18 +10,14 @@ import { Observable } from 'rxjs';
   styleUrls: ['./groups.component.scss'],
 })
 export class GroupsComponent implements OnInit {
-  value = '';
-
-  uid: string;
-
   groups: Group[];
 
   constructor(
     private groupService: GroupService,
     private authService: AuthService
   ) {
-    this.uid = this.authService.uid;
-    this.groupService.getMyGroup(this.uid).subscribe((myGroups: Group[]) => {
+    const uid = this.authService.uid;
+    this.groupService.getMyGroup(uid).subscribe((myGroups: Group[]) => {
       this.groups = myGroups;
     });
   }
