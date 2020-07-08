@@ -10,6 +10,7 @@ export const createUser = functions
     const data = snap.data();
     return algolia.saveRecord({
       indexName: 'users',
+      idKey: 'uid',
       largeConcentKey: 'body',
       data,
     });
@@ -22,7 +23,7 @@ export const deleteUserFromIndex = functions
     const data = snap.data();
 
     if (data) {
-      return algolia.removeRecord('users', data.id);
+      return algolia.removeRecord('users', data.id, 'uid');
     } else {
       return;
     }
@@ -35,6 +36,7 @@ export const updateUser = functions
     const data = change.after.data();
     return algolia.saveRecord({
       indexName: 'users',
+      idKey: 'uid',
       largeConcentKey: 'body',
       isUpdate: true,
       data,

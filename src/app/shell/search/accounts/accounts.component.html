@@ -3,20 +3,25 @@
   (ngSubmit)="search(valueControl.value, searchOptions)"
 >
   <mat-form-field class="search-field" appearance="outline">
-    <mat-label>Search from your events</mat-label>
+    <mat-label>Search users</mat-label>
 
     <input
       matInput
       type="text"
       [formControl]="valueControl"
       autocomplete="off"
+      [matAutocomplete]="auto"
     />
 
-    <!-- <mat-autocomplete autoActiveFirstOption (optionSelected)="search(valueControl.value, searchOptions)" #auto="matAutocomplete">
-      <mat-option *ngFor="let searchableGroup of searchableGroups" [value]="searchableGroup.name">
-        {{searchableGroup.name}}
+    <mat-autocomplete
+      autoActiveFirstOption
+      (optionSelected)="search(valueControl.value, searchOptions)"
+      #auto="matAutocomplete"
+    >
+      <mat-option *ngFor="let option of options" [value]="option.displayName">
+        {{ option.displayName }}
       </mat-option>
-    </mat-autocomplete> -->
+    </mat-autocomplete>
 
     <button
       mat-button
@@ -31,3 +36,15 @@
     </button>
   </mat-form-field>
 </form>
+
+<mat-list role="list" *ngFor="let hit of result?.hits">
+  <mat-list-item
+    role="listitem"
+    routerLink="/account"
+    [queryParams]="{ id: hit.searchId }"
+  >
+    <img class="account-picture" src="{{ hit.photoURL }}" />
+    {{ hit.displayName }}
+  </mat-list-item>
+  <mat-divider></mat-divider>
+</mat-list>

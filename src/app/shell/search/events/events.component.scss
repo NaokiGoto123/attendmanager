@@ -18,6 +18,7 @@
 .container {
   display: flex;
   position: sticky;
+  justify-content: center;
   height: calc(100% - 158.5px);
   top: 158.8px;
   bottom: 0;

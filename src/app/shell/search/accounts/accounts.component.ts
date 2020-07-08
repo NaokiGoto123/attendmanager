@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { AuthService } from 'src/app/services/auth.service';
-import { EventService } from 'src/app/services/event.service';
-import { GroupService } from 'src/app/services/group.service';
 import { SearchService } from 'src/app/services/search.service';
 
 @Component({
@@ -19,19 +16,27 @@ export class AccountsComponent implements OnInit {
     facetFilters: [],
   };
 
+  options = [];
+
   result: {
     nbHits: number;
     hits: any[];
   };
 
-  constructor(
-    private authService: AuthService,
-    private eventService: EventService,
-    private groupService: GroupService,
-    private searchService: SearchService
-  ) {}
+  constructor(private searchService: SearchService) {
+    this.search('', this.searchOptions);
+    this.index.search('', this.searchOptions).then((result) => {
+      this.options = result.hits;
+    });
+  }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.valueControl.valueChanges.subscribe((query) => {
+      this.index.search(query, this.searchOptions).then((result) => {
+        this.options = result.hits;
+      });
+    });
+  }
 
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {

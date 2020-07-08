@@ -14,6 +14,8 @@ import { EventsComponent } from './events/events.component';
 import { GroupsComponent } from './groups/groups.component';
 import { AccountsComponent } from './accounts/accounts.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     SharedModule,
     MatTabsModule,
     MatAutocompleteModule,
+    MatListModule,
+    MatDividerModule,
   ],
 })
 export class SearchModule {}
