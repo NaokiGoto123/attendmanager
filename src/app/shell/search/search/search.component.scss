@@ -1,13 +1,6 @@
-.search-field-container {
-  text-align: center;
-  display: block;
-  background-color: #fafafa;
+nav {
+  display: flex;
+  width: 100%;
   position: sticky;
-  position: -webkit-sticky; // For macOS/iOS Safari */
-  top: 0px; // Sets the sticky toolbar to be on top */
-  z-index: 1000;
-}
-.search-field {
-  width: 40%;
-  padding-top: 40px;
+  top: 0;
 }

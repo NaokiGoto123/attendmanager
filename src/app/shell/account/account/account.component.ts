@@ -12,6 +12,8 @@ import { UserService } from 'src/app/services/user.service';
 export class AccountComponent implements OnInit {
   routerLinks: any[];
 
+  menuLinks: any[];
+
   user: User;
 
   ifTarget: boolean;
@@ -35,16 +37,19 @@ export class AccountComponent implements OnInit {
               .subscribe((user: User) => {
                 this.user = user;
                 this.routerLinks = [
+                  { label: 'Groups', link: 'groups' },
+                  { label: 'Attending events', link: 'attending-events' },
+                  { label: 'Attended events', link: 'attended-events' },
                   { label: 'Settings', link: 'settings' },
+                  { label: 'Others' },
+                ];
+                this.menuLinks = [
                   { label: 'Invited groups', link: 'invited-groups' },
                   { label: 'Invited events', link: 'invited-events' },
                   { label: 'Waiting groups', link: 'waiting-groups' },
                   { label: 'Paying groups', link: 'paying-groups' },
                   { label: 'Waiting events', link: 'waiting-events' },
                   { label: 'Paying events', link: 'paying-events' },
-                  { label: 'Groups', link: 'groups' },
-                  { label: 'Attending events', link: 'attending-events' },
-                  { label: 'Attended events', link: 'attended-events' },
                 ];
               });
           } else {

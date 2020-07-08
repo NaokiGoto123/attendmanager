@@ -22,8 +22,7 @@ export class EventsAndDetailComponent implements OnInit {
 
   ifAdmin: boolean;
 
-  createrName: string;
-  createrId: string;
+  creater: User;
   groupName: string;
   groupId: string;
   ifAttendingMembers: boolean;
@@ -46,8 +45,7 @@ export class EventsAndDetailComponent implements OnInit {
     this.userService
       .getUser(this.givenEvent.createrId)
       .subscribe((creater: User) => {
-        this.createrId = creater.uid;
-        this.createrName = creater.displayName;
+        this.creater = creater;
       });
 
     this.groupService

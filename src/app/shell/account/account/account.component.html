@@ -10,10 +10,10 @@
 </div>
 
 <nav mat-tab-nav-bar>
-  <div>
+  <div *ngFor="let routerLink of routerLinks">
     <a
+      *ngIf="routerLink.label !== 'Others'"
       mat-tab-link
-      *ngFor="let routerLink of routerLinks"
       [routerLink]="routerLink.link"
       routerLinkActive
       #rla="routerLinkActive"
@@ -22,6 +22,24 @@
     >
       {{ routerLink.label }}
     </a>
+    <a
+      *ngIf="routerLink.label === 'Others'"
+      mat-tab-link
+      [matMenuTriggerFor]="menu"
+    >
+      {{ routerLink.label }}
+    </a>
+    <mat-menu #menu="matMenu" xPosition="after">
+      <div *ngFor="let menuLink of menuLinks">
+        <button
+          mat-menu-item
+          [routerLink]="menuLink.link"
+          [queryParams]="{ id: user?.searchId }"
+        >
+          {{ menuLink.label }}
+        </button>
+      </div>
+    </mat-menu>
   </div>
 </nav>
 <router-outlet></router-outlet>

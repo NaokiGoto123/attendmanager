@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { EventService } from 'src/app/services/event.service';
 import { map } from 'rxjs/operators';
 import { UserService } from 'src/app/services/user.service';
+import * as moment from 'moment';
 @Component({
   selector: 'app-event-card',
   templateUrl: './event-card.component.html',
@@ -79,13 +80,7 @@ export class EventCardComponent implements OnInit {
           }
         });
 
-      const now = new Date();
-
-      if (this.event.date.toDate() > now) {
-        this.ifPast = false;
-      } else {
-        this.ifPast = true;
-      }
+      this.ifPast = moment(this.event.date).isBefore(new Date());
 
       this.groupService
         .ifAdmin(this.uid, this.event.groupid)

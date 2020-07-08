@@ -1,5 +1,5 @@
-<div *ngIf="!eventsExistance">
-  <div class="no-event-container" *ngIf="groupExistance">
+<div *ngIf="!events?.length">
+  <div class="no-event-container" *ngIf="groups?.length">
     <div class="no-event-left-container">
       <img
         class="no-event-image"
@@ -15,7 +15,7 @@
     </div>
   </div>
 
-  <div class="no-group-container" *ngIf="!groupExistance">
+  <div class="no-group-container" *ngIf="!groups?.length">
     <div class="no-group-left-container">
       <img
         class="no-group-image"
@@ -32,10 +32,15 @@
   </div>
 </div>
 
-<div class="container" *ngIf="eventsExistance">
+<div class="container" *ngIf="events?.length">
   <mat-toolbar class="toolbar">
-    <div *ngFor="let group of groups">
-      <mat-checkbox class="checkbox">{{ group.name }}</mat-checkbox>
+    <div [formGroup]="form">
+      <mat-checkbox
+        *ngFor="let group of groups"
+        [formControlName]="group.id"
+        class="checkbox"
+        >{{ group.name }}</mat-checkbox
+      >
     </div>
   </mat-toolbar>
 
@@ -53,27 +58,51 @@
         </button>
       </a>
 
-      <mat-form-field class="search-field">
-        <mat-label>Search bar</mat-label>
-        <input matInput type="text" [(ngModel)]="value" />
-        <button
-          mat-button
-          *ngIf="value"
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="value = ''"
-        >
-          <mat-icon>close</mat-icon>
-        </button>
-      </mat-form-field>
+      <form
+        class="search-field-container"
+        (ngSubmit)="search(valueControl.value, searchOptions)"
+      >
+        <mat-form-field class="search-field" appearance="outline">
+          <mat-label>Search from your events</mat-label>
+
+          <input
+            matInput
+            type="text"
+            [formControl]="valueControl"
+            autocomplete="off"
+            [matAutocomplete]="auto"
+          />
+
+          <mat-autocomplete
+            autoActiveFirstOption
+            (optionSelected)="search(valueControl.value, searchOptions)"
+            #auto="matAutocomplete"
+          >
+            <mat-option *ngFor="let option of options" [value]="option.title">
+              {{ option.title }}
+            </mat-option>
+          </mat-autocomplete>
+
+          <button
+            mat-button
+            *ngIf="valueControl.value"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            type="button"
+            (click)="clearSearch(); search(valueControl.value, searchOptions)"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
     </div>
   </div>
 
   <div class="events-container">
     <app-events-and-detail
-      [events]="events"
-      [existance]="eventsExistance"
+      [events]="result?.hits"
+      [existance]="result?.hits?.length"
     ></app-events-and-detail>
   </div>
 </div>

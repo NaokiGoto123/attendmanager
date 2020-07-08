@@ -24,6 +24,7 @@ import { ImageCropperModule } from 'ngx-image-cropper';
 import { InvitedGroupsComponent } from './invited-groups/invited-groups.component';
 import { InvitedEventsComponent } from './invited-events/invited-events.component';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     SharedModule,
     ImageCropperModule,
     MaterialFileInputModule,
+    MatMenuModule,
   ],
 })
 export class AccountModule {}

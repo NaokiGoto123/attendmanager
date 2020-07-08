@@ -22,7 +22,7 @@
           <div *ngIf="givenEvent.private">
             <h2>Private event</h2>
           </div>
-          <h2>{{ givenEvent.date.toDate() | date: 'yyyy/MM/dd' }}</h2>
+          <h2>{{ givenEvent.date | date: 'yyyy/MM/dd' }}</h2>
           <h2>
             Happening at {{ givenEvent.time }} in {{ givenEvent.location }}
           </h2>
@@ -31,8 +31,8 @@
             <span
               class="creater-name"
               [routerLink]="['/account']"
-              [queryParams]="{ id: createrId }"
-              >{{ createrName }}</span
+              [queryParams]="{ id: creater?.searchId }"
+              >{{ creater?.displayName }}</span
             >
             in
             <span

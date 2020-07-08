@@ -8,7 +8,7 @@
 
       <p>Created by {{ creater?.displayName }} in {{ group?.name }}</p>
 
-      <p>Date: {{ event.date.toDate() | date: 'yyyy/MM/dd' }}</p>
+      <p>Date: {{ event.date | date: 'yyyy/MM/dd' }}</p>
 
       <div *ngIf="ifPast">
         <button class="submit-button" mat-raised-button>

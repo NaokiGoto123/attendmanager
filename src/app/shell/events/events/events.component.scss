@@ -96,9 +96,13 @@ p {
   border-bottom: solid 0.3px rgb(224, 224, 224);
 }
 
-.search-field {
+.search-field-container {
   margin: 15px 0 0 0;
   width: 40%;
+}
+
+.search-field {
+  width: 100%;
 }
 
 .add-button {
@@ -116,6 +120,6 @@ p {
 }
 
 .events-container {
-  position: relative;
-  height: calc(100% - 145.5px);
+  position: sticky;
+  height: calc(100% - 169px);
 }
