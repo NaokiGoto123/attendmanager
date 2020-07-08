@@ -4,7 +4,7 @@ import { ChatRoom } from '../interfaces/chat-room';
 import { Group } from '../interfaces/group';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { Message } from '../interfaces/message';
+import { Message, MessageWithUser } from '../interfaces/message';
 import { firestore } from 'firebase';
 import { Router } from '@angular/router';
 import { Id } from '../interfaces/id';
@@ -104,12 +104,21 @@ export class ChatService {
       );
   }
 
-  getMessages(chatRoomId: string) {
+  getMessages(chatRoomId: string): Observable<Message[]> {
     return this.db
-      .collection(`chatRooms/${chatRoomId}/messages`, (ref) =>
+      .collection<Message>(`chatRooms/${chatRoomId}/messages`, (ref) =>
         ref.orderBy('sentAt')
       )
-      .valueChanges();
+      .valueChanges()
+      .pipe(
+        map((messages: Message[]) => {
+          if (messages.length) {
+            return messages;
+          } else {
+            return [];
+          }
+        })
+      );
   }
 
   sendMessage(message: Message, chatRoomId: string) {

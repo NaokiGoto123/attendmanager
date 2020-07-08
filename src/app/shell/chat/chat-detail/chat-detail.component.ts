@@ -16,8 +16,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class ChatDetailComponent implements OnInit {
   loading = true;
 
-  noMessage: boolean;
-
   chatRoomId: string;
 
   uid: string;
@@ -57,18 +55,7 @@ export class ChatDetailComponent implements OnInit {
           this.chatService
             .getMessages(chatRoomId)
             .subscribe((messages: Message[]) => {
-              if (messages === null) {
-                this.messages = [];
-                this.noMessage = true;
-              } else {
-                if (messages.length) {
-                  this.messages = messages;
-                  this.noMessage = false;
-                } else {
-                  this.messages = [];
-                  this.noMessage = true;
-                }
-              }
+              this.messages = messages;
             });
         });
     });

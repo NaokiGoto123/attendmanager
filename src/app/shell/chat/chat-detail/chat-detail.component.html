@@ -29,7 +29,7 @@
 
   <div *ngIf="!loading">
     <div class="messages">
-      <div *ngIf="!noMessage">
+      <div *ngIf="messages?.length">
         <div
           *ngFor="let message of messages"
           class="message"
@@ -46,7 +46,7 @@
         </div>
       </div>
 
-      <div *ngIf="noMessage">
+      <div *ngIf="!messages?.length">
         <p class="no-message-text">No message is send yet.</p>
       </div>
     </div>

@@ -7,3 +7,8 @@ export interface Message {
   content: string;
   sentAt: firestore.Timestamp;
 }
+export interface MessageWithUser extends Message {
+  searchId: string;
+  displayName: string;
+  photoURL: string;
+}
