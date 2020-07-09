@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { EventService } from 'src/app/services/event.service';
-import { Event } from 'src/app/interfaces/event';
 import { UserService } from 'src/app/services/user.service';
-import { User } from 'src/app/interfaces/user';
-import { Group } from 'src/app/interfaces/group';
 import { GroupService } from 'src/app/services/group.service';
+import { Event } from 'src/app/interfaces/event';
+import { Group } from 'src/app/interfaces/group';
+import { User } from 'src/app/interfaces/user';
 
 @Component({
   selector: 'app-event-details',
@@ -15,23 +15,27 @@ import { GroupService } from 'src/app/services/group.service';
 export class EventDetailsComponent implements OnInit {
   event: Event;
 
-  creater: User;
-
   group: Group;
 
+  creater: User;
+
   constructor(
-    private actvatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
+    private eventService: EventService,
     private userService: UserService,
-    private groupService: GroupService,
-    private eventService: EventService
+    private groupService: GroupService
   ) {
-    this.actvatedRoute.queryParamMap.subscribe((params) => {
+    this.activatedRoute.queryParamMap.subscribe((params) => {
       const id = params.get('id');
+
       this.eventService.getEvent(id).subscribe((event: Event) => {
         this.event = event;
+        console.log(event);
+
         this.userService.getUser(event.createrId).subscribe((creater: User) => {
           this.creater = creater;
         });
+
         this.groupService
           .getGroupinfo(event.groupid)
           .subscribe((group: Group) => {

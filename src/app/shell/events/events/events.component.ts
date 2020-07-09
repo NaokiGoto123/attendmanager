@@ -63,6 +63,7 @@ export class EventsComponent implements OnInit {
           return `groupid:${group.id}`;
         });
         this.searchOptions = { facetFilters: [filters] };
+
         this.search('', this.searchOptions);
 
         this.index.search('', this.searchOptions).then((result) => {
