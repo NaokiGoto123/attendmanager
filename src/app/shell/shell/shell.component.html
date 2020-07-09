@@ -45,6 +45,14 @@
       >
         <mat-icon class="sidenav-icon">person</mat-icon> Account
       </a>
+      <a
+        mat-list-item
+        class="sidenav-item"
+        routerLink="/settings"
+        [queryParams]="{ id: searchId }"
+      >
+        <mat-icon class="sidenav-icon">settings</mat-icon> Settings
+      </a>
       <mat-divider></mat-divider>
       <a mat-list-item class="sidenav-item" routerLink="/upgrade">
         <mat-icon class="sidenav-icon">whatshot</mat-icon> Upgrade

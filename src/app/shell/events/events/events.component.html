@@ -39,8 +39,8 @@
         *ngFor="let group of groups"
         [formControlName]="group.id"
         class="checkbox"
-        >{{ group.name }}</mat-checkbox
-      >
+        >{{ group.name }}
+      </mat-checkbox>
     </div>
   </mat-toolbar>
 
@@ -55,6 +55,17 @@
       <a routerLink="/calendar">
         <button class="calendar-button" mat-fab color="accent">
           <mat-icon>calendar_today</mat-icon>
+        </button>
+      </a>
+
+      <a>
+        <button
+          class="list-button"
+          mat-fab
+          color="accent"
+          (click)="toggleView()"
+        >
+          <mat-icon>list</mat-icon>
         </button>
       </a>
 
@@ -99,10 +110,17 @@
     </div>
   </div>
 
-  <div class="events-container">
+  <div class="events-container" *ngIf="!listView">
     <app-events-and-detail
       [events]="result?.hits"
       [existance]="result?.hits?.length"
     ></app-events-and-detail>
   </div>
+
+  <ng-container *ngIf="listView">
+    <app-events-list-view
+      [events]="result?.hits"
+      [existence]="result?.hits?.length"
+    ></app-events-list-view>
+  </ng-container>
 </div>

@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService } from 'src/app/services/auth.service';
-import { User } from 'src/app/interfaces/user';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
+import { User } from 'src/app/interfaces/user';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { UserService } from 'src/app/services/user.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss'],
+  selector: 'app-profile-settings',
+  templateUrl: './profile-settings.component.html',
+  styleUrls: ['./profile-settings.component.scss'],
 })
-export class SettingsComponent implements OnInit {
+export class ProfileSettingsComponent implements OnInit {
   user: User;
 
   photoURL: string;
@@ -79,7 +79,7 @@ export class SettingsComponent implements OnInit {
     let photoURL: any;
     if (this.croppedImage) {
       photoURL = await this.userService.upload(
-        `usres/${this.user.uid}`,
+        `users/${this.user.uid}`,
         this.croppedImage
       );
     } else {

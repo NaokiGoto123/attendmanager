@@ -1,0 +1,11 @@
+<mat-list role="list" *ngFor="let event of events">
+  <mat-list-item
+    role="listitem"
+    routerLink="/event-details"
+    [queryParams]="{ id: event.id }"
+  >
+    {{ event.title }}
+    {{ event.date | date: 'yyyy/MM/dd' }}
+  </mat-list-item>
+  <mat-divider></mat-divider>
+</mat-list>

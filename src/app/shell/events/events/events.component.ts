@@ -36,6 +36,8 @@ export class EventsComponent implements OnInit {
 
   events: Event[];
 
+  listView = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -102,5 +104,9 @@ export class EventsComponent implements OnInit {
 
   clearSearch() {
     this.valueControl.setValue('');
+  }
+
+  toggleView() {
+    this.listView = !this.listView;
   }
 }

@@ -9,9 +9,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { GroupComponent } from './group/group.component';
 import { EventsAndDetailComponent } from './events-and-detail/events-and-detail.component';
+import { EventsListViewComponent } from './events-list-view/events-list-view.component';
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
-  declarations: [EventCardComponent, GroupComponent, EventsAndDetailComponent],
+  declarations: [
+    EventCardComponent,
+    GroupComponent,
+    EventsAndDetailComponent,
+    EventsListViewComponent,
+  ],
   imports: [
     CommonModule,
     SharedRoutingModule,
@@ -19,7 +27,14 @@ import { EventsAndDetailComponent } from './events-and-detail/events-and-detail.
     MatButtonModule,
     FlexLayoutModule,
     MatIconModule,
+    MatListModule,
+    MatDividerModule,
   ],
-  exports: [EventCardComponent, GroupComponent, EventsAndDetailComponent],
+  exports: [
+    EventCardComponent,
+    GroupComponent,
+    EventsAndDetailComponent,
+    EventsListViewComponent,
+  ],
 })
 export class SharedModule {}

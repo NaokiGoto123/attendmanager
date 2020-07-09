@@ -40,7 +40,6 @@ export class AccountComponent implements OnInit {
                   { label: 'Groups', link: 'groups' },
                   { label: 'Attending events', link: 'attending-events' },
                   { label: 'Attended events', link: 'attended-events' },
-                  { label: 'Settings', link: 'settings' },
                   { label: 'Others' },
                 ];
                 this.menuLinks = [

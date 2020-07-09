@@ -15,12 +15,10 @@ import { SharedModule } from '../shared/shared.module';
 import { GroupsComponent } from './groups/groups.component';
 import { AttendingEventsComponent } from './attending-events/attending-events.component';
 import { AttendedEventsComponent } from './attended-events/attended-events.component';
-import { SettingsComponent } from './settings/settings.component';
 import { WaitingJoinningEventsComponent } from './waiting-joinning-events/waiting-joinning-events.component';
 import { WaitingPayingEventsComponent } from './waiting-paying-events/waiting-paying-events.component';
 import { WaitingJoinningGroupsComponent } from './waiting-joinning-groups/waiting-joinning-groups.component';
 import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-paying-groups.component';
-import { ImageCropperModule } from 'ngx-image-cropper';
 import { InvitedGroupsComponent } from './invited-groups/invited-groups.component';
 import { InvitedEventsComponent } from './invited-events/invited-events.component';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
@@ -32,7 +30,6 @@ import { MatMenuModule } from '@angular/material/menu';
     GroupsComponent,
     AttendingEventsComponent,
     AttendedEventsComponent,
-    SettingsComponent,
     WaitingJoinningEventsComponent,
     WaitingPayingEventsComponent,
     WaitingJoinningGroupsComponent,
@@ -53,8 +50,6 @@ import { MatMenuModule } from '@angular/material/menu';
     MatSlideToggleModule,
     MatRadioModule,
     SharedModule,
-    ImageCropperModule,
-    MaterialFileInputModule,
     MatMenuModule,
   ],
 })

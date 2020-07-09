@@ -119,6 +119,13 @@ p {
   margin: 10px 0 0 10px;
 }
 
+.list-button {
+  position: absolute;
+  box-shadow: none !important;
+  left: 140px;
+  margin: 10px 0 0 10px;
+}
+
 .events-container {
   position: sticky;
   height: calc(100% - 169px);

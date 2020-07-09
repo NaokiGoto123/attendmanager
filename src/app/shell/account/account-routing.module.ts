@@ -4,7 +4,6 @@ import { AccountComponent } from './account/account.component';
 import { GroupsComponent } from './groups/groups.component';
 import { AttendingEventsComponent } from './attending-events/attending-events.component';
 import { AttendedEventsComponent } from './attended-events/attended-events.component';
-import { SettingsComponent } from './settings/settings.component';
 import { WaitingJoinningGroupsComponent } from './waiting-joinning-groups/waiting-joinning-groups.component';
 import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-paying-groups.component';
 import { WaitingJoinningEventsComponent } from './waiting-joinning-events/waiting-joinning-events.component';
@@ -18,8 +17,9 @@ const routes: Routes = [
     component: AccountComponent,
     children: [
       {
-        path: 'settings',
-        component: SettingsComponent,
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'groups',
       },
       {
         path: 'groups',

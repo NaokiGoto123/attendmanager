@@ -7,8 +7,6 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit {
-  value = '';
-
   routerLinks = [
     {
       label: 'Events',
