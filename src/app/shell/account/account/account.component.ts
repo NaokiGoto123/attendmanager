@@ -29,7 +29,7 @@ export class AccountComponent implements OnInit {
       this.userService
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
-          const id = target.uid;
+          const id = target?.uid;
           if (id === this.authService.uid || id === null) {
             this.ifTarget = false;
             this.userService

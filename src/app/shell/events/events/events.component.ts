@@ -58,7 +58,6 @@ export class EventsComponent implements OnInit {
         groups.map((group) => {
           this.form.addControl(`${group.id}`, this.fb.control(false));
         });
-        console.log(this.form);
 
         const filters: string[] = groups.map((group: Group) => {
           return `groupid:${group.id}`;
@@ -80,7 +79,6 @@ export class EventsComponent implements OnInit {
       const filters = selecteds.map((selected) => {
         return `groupid:${selected}`;
       });
-      console.log(filters);
       this.searchOptions = { facetFilters: [filters] };
       this.search('', this.searchOptions);
 

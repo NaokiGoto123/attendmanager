@@ -154,10 +154,8 @@ export class GroupDetailsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(async (result) => {
-      console.log('this is result', result);
       if (result) {
         this.userService.getUserFromSearchId(result).subscribe((user: User) => {
-          console.log(user);
           if (user) {
             this.inviteService.inviteToGroup(user.uid, this.group.id);
           } else {

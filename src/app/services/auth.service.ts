@@ -98,8 +98,6 @@ export class AuthService {
       showAttendedEvents,
     };
 
-    console.log(data);
-
     return userRef
       .set(data, { merge: true })
       .then(() => this.router.navigateByUrl(''))

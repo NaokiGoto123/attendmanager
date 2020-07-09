@@ -52,7 +52,7 @@ export class ProfileSettingsComponent implements OnInit {
       this.userService
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
-          const id = target.uid;
+          const id = target?.uid;
           this.userService.getUser(id).subscribe((user) => {
             this.user = user;
             this.photoURL = user.photoURL;

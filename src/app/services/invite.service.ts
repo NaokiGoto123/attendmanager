@@ -24,7 +24,6 @@ export class InviteService {
             memberIds.push(MemberId.id);
           });
           if (memberIds.includes(uid)) {
-            console.log('user is already a member');
             return;
           } else {
             this.db
@@ -35,11 +34,9 @@ export class InviteService {
                   .doc(`users/${uid}/invitedGroupIds/${groupId}`)
                   .set({ id: groupId });
               });
-            console.log('successfully invited the user');
           }
         });
     } else {
-      console.log('cannot invite yourself');
       return;
     }
   }

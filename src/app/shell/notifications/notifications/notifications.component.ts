@@ -61,7 +61,6 @@ export class NotificationsComponent implements OnInit {
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {
       this.result = result;
-      console.log(result);
     });
   }
 

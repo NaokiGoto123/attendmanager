@@ -54,7 +54,6 @@ export class GroupsComponent implements OnInit {
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {
       this.result = result;
-      console.log(result);
     });
   }
 
