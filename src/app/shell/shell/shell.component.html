@@ -5,28 +5,51 @@
       <a mat-list-item class="sidenav-item" routerLink="">
         <mat-icon class="sidenav-icon">home</mat-icon> Home
       </a>
+
       <a mat-list-item class="sidenav-item" routerLink="/groups">
         <mat-icon class="sidenav-icon">people</mat-icon> Groups
       </a>
+
       <a mat-list-item class="sidenav-item" routerLink="/create">
         <mat-icon class="sidenav-icon">add</mat-icon> Create
       </a>
+
       <a mat-list-item class="sidenav-item" routerLink="/search">
         <mat-icon class="sidenav-icon">search</mat-icon> Search
       </a>
+
       <a mat-list-item class="sidenav-item" routerLink="/chat">
         <mat-icon class="sidenav-icon">chat</mat-icon> Chat
       </a>
+
+      <a mat-list-item class="sidenav-item" routerLink="/chat">
+        <ng-container *ngIf="messageCount === 0">
+          <mat-icon class="sidenav-icon"> chat</mat-icon>Chat
+        </ng-container>
+
+        <ng-container *ngIf="messageCount !== 0">
+          <mat-icon
+            class="sidenav-icon"
+            matBadge="{{ messageCount }}"
+            matBadgeOverlap="true"
+            matBadgeColor="warn"
+          >
+            chat</mat-icon
+          >Chat
+        </ng-container>
+      </a>
+
       <a
         mat-list-item
         class="sidenav-item"
         routerLink="/notifications"
         (click)="clearNotificationCount()"
       >
-        <span *ngIf="notificationCount === 0">
+        <ng-container *ngIf="notificationCount === 0">
           <mat-icon class="sidenav-icon"> notifications</mat-icon>Notifications
-        </span>
-        <span *ngIf="notificationCount !== 0">
+        </ng-container>
+
+        <ng-container *ngIf="notificationCount !== 0">
           <mat-icon
             class="sidenav-icon"
             matBadge="{{ notificationCount }}"
@@ -35,8 +58,9 @@
           >
             notifications</mat-icon
           >Notifications
-        </span>
+        </ng-container>
       </a>
+
       <a
         mat-list-item
         class="sidenav-item"
@@ -45,6 +69,7 @@
       >
         <mat-icon class="sidenav-icon">person</mat-icon> Account
       </a>
+
       <a
         mat-list-item
         class="sidenav-item"
@@ -53,7 +78,9 @@
       >
         <mat-icon class="sidenav-icon">settings</mat-icon> Settings
       </a>
+
       <mat-divider></mat-divider>
+
       <a mat-list-item class="sidenav-item" routerLink="/upgrade">
         <mat-icon class="sidenav-icon">whatshot</mat-icon> Upgrade
       </a>

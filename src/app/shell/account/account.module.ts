@@ -21,7 +21,6 @@ import { WaitingJoinningGroupsComponent } from './waiting-joinning-groups/waitin
 import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-paying-groups.component';
 import { InvitedGroupsComponent } from './invited-groups/invited-groups.component';
 import { InvitedEventsComponent } from './invited-events/invited-events.component';
-import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { MatMenuModule } from '@angular/material/menu';
 
 @NgModule({

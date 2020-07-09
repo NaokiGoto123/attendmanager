@@ -83,6 +83,57 @@ export class ChatService {
       );
   }
 
+  getAllMesssageCounts(uid: string): Observable<number> {
+    return this.db
+      .collection<Id>(`users/${uid}/groupIds`)
+      .valueChanges()
+      .pipe(
+        switchMap((groupIds: Id[]) => {
+          if (groupIds.length) {
+            const myGroups: Observable<Group>[] = [];
+            groupIds.forEach((groupId: Id) => {
+              myGroups.push(
+                this.db.doc<Group>(`groups/${groupId.id}`).valueChanges()
+              );
+            });
+            return combineLatest(myGroups);
+          } else {
+            return of([]);
+          }
+        }),
+        map((myGroups: Group[]) => {
+          if (myGroups.length) {
+            const chatRoomIds: string[] = [];
+            myGroups.forEach((myGroup: Group) => {
+              if (myGroup.chatRoomId) {
+                chatRoomIds.push(myGroup.chatRoomId);
+              }
+            });
+            return chatRoomIds;
+          } else {
+            return [];
+          }
+        }),
+        switchMap((chatRoomIds: string[]) => {
+          const chatRooms: Observable<ChatRoom>[] = [];
+          chatRoomIds.map((chatRoomId: string) => {
+            chatRooms.push(
+              this.db.doc<ChatRoom>(`chatRooms/${chatRoomId}`).valueChanges()
+            );
+          });
+          return combineLatest(chatRooms);
+        }),
+        map((chatRooms: ChatRoom[]) => {
+          let messageCount = 0;
+          chatRooms.map((chatRoom: ChatRoom) => {
+            messageCount += chatRoom.messageCount;
+          });
+          console.log(messageCount);
+          return messageCount;
+        })
+      );
+  }
+
   getChatRoom(chatRoomId: string): Observable<ChatRoom> {
     return this.db.doc<ChatRoom>(`chatRooms/${chatRoomId}`).valueChanges();
   }

@@ -3,6 +3,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { UserService } from 'src/app/services/user.service';
+import { ChatService } from 'src/app/services/chat.service';
 
 @Component({
   selector: 'app-shell',
@@ -12,17 +13,25 @@ import { UserService } from 'src/app/services/user.service';
 export class ShellComponent implements OnInit {
   notificationCount: number;
 
+  messageCount: number;
+
   searchId: string;
 
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private notificationService: NotificationsService
+    private notificationService: NotificationsService,
+    private chatService: ChatService
   ) {
     this.userService.getUser(this.authService.uid).subscribe((user: User) => {
       this.notificationCount = user.notificationCount;
       this.searchId = user.searchId;
     });
+    this.chatService
+      .getAllMesssageCounts(this.authService.uid)
+      .subscribe((messageCount: number) => {
+        this.messageCount = messageCount;
+      });
   }
 
   ngOnInit(): void {}
