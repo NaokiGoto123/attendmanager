@@ -1,1 +1,25 @@
-<p>payments-settings works!</p>
+<mat-sidenav-container class="container">
+  <mat-sidenav mode="side" class="side-menu" opened>
+    <mat-nav-list>
+      <a
+        mat-list-item
+        class="sidenav-item"
+        routerLink="cards"
+        [queryParams]="{ id: uid }"
+      >
+        <mat-icon class="sidenav-icon">credit_card</mat-icon> Cards
+      </a>
+      <a
+        mat-list-item
+        class="sidenav-item"
+        routerLink="payments-history"
+        [queryParams]="{ id: uid }"
+      >
+        <mat-icon class="sidenav-icon">history</mat-icon> History
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

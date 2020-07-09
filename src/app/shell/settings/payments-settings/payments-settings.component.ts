@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-payments-settings',
@@ -6,7 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./payments-settings.component.scss'],
 })
 export class PaymentsSettingsComponent implements OnInit {
-  constructor() {}
+  uid: string;
+
+  constructor(private activatedRoute: ActivatedRoute) {
+    this.activatedRoute.queryParamMap.subscribe((params) => {
+      this.uid = params.get('id');
+    });
+  }
 
   ngOnInit(): void {}
 }

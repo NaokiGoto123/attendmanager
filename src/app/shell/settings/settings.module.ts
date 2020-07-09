@@ -17,12 +17,18 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { MatMenuModule } from '@angular/material/menu';
 import { ProfileSettingsComponent } from './profile-settings/profile-settings.component';
 import { PaymentsSettingsComponent } from './payments-settings/payments-settings.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { CardsComponent } from './cards/cards.component';
+import { PaymentsHistoryComponent } from './payments-history/payments-history.component';
 
 @NgModule({
   declarations: [
     SettingsComponent,
     ProfileSettingsComponent,
     PaymentsSettingsComponent,
+    CardsComponent,
+    PaymentsHistoryComponent,
   ],
   imports: [
     CommonModule,
@@ -40,6 +46,8 @@ import { PaymentsSettingsComponent } from './payments-settings/payments-settings
     ImageCropperModule,
     MaterialFileInputModule,
     MatMenuModule,
+    MatSidenavModule,
+    MatListModule,
   ],
 })
 export class SettingsModule {}
