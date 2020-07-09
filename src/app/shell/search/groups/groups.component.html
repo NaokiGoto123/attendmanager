@@ -37,8 +37,23 @@
   </mat-form-field>
 </form>
 
-<div class="groups-container">
-  <div *ngFor="let hit of result?.hits">
-    <app-group [group]="hit"></app-group>
+<div *ngIf="searchableGroups?.length">
+  <div class="groups-container" *ngIf="result?.hits.length">
+    <div *ngFor="let hit of result?.hits">
+      <app-group [group]="hit"></app-group>
+    </div>
   </div>
+
+  <div *ngIf="!result?.hits.length">
+    <h1>No result</h1>
+  </div>
+</div>
+
+<div class="no-group-container" *ngIf="!searchableGroups?.length">
+  <img class="no-group-image" src="/assets/images/smily.svg" />
+  <p class="no-group-text">You do not belong to any groups.</p>
+  <p class="no-group-text">
+    <a routerLink="/search/groups">Search for groups</a> or
+    <a routerLink="/create-group">create one</a>
+  </p>
 </div>

@@ -16,6 +16,10 @@ export class AccountsComponent implements OnInit {
     facetFilters: [],
   };
 
+  optionOptions = {
+    facetFilters: ['covert:false'],
+  };
+
   options = [];
 
   result: {
@@ -25,14 +29,15 @@ export class AccountsComponent implements OnInit {
 
   constructor(private searchService: SearchService) {
     this.search('', this.searchOptions);
-    this.index.search('', this.searchOptions).then((result) => {
+
+    this.index.search('', this.optionOptions).then((result) => {
       this.options = result.hits;
     });
   }
 
   ngOnInit(): void {
     this.valueControl.valueChanges.subscribe((query) => {
-      this.index.search(query, this.searchOptions).then((result) => {
+      this.index.search(query, this.optionOptions).then((result) => {
         this.options = result.hits;
       });
     });

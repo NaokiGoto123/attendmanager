@@ -34,8 +34,9 @@ export class GroupsComponent implements OnInit {
   ) {
     this.groupServiec.getSearchableGroups().subscribe((groups: Group[]) => {
       this.searchableGroups = groups;
-      this.search('', this.searchOptions);
     });
+
+    this.search('', this.searchOptions);
 
     this.index.search('', this.searchOptions).then((result) => {
       this.options = result.hits;

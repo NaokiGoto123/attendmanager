@@ -25,6 +25,7 @@ export class SettingsComponent implements OnInit {
   searchId: string;
   displayName: string;
   description: string;
+  covert: boolean;
   showGroups: boolean;
   showAttendingEvents: boolean;
   showAttendedEvents: boolean;
@@ -33,6 +34,7 @@ export class SettingsComponent implements OnInit {
     searchId: [this.searchId],
     displayName: [this.displayName],
     description: [this.description],
+    covert: [this.covert],
     showGroups: [this.showGroups],
     showAttendingEvents: [this.showAttendingEvents],
     showAttendedEvents: [this.showAttendedEvents],
@@ -90,6 +92,7 @@ export class SettingsComponent implements OnInit {
       email: this.user.email,
       photoURL,
       description: this.form.value.description,
+      covert: this.form.value.covert,
       showGroups: this.form.value.showGroups,
       showAttendingEvents: this.form.value.showAttendingEvents,
       showAttendedEvents: this.form.value.showAttendedEvents,

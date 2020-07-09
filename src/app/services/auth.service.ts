@@ -13,7 +13,6 @@ import { Observable, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AngularFireStorage } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root',
@@ -61,8 +60,9 @@ export class AuthService {
     return this.updateUserData({
       ...credential.user,
       searchId: this.db.createId(),
-      description: '',
+      description: `This is ${credential.user.displayName}'s account.`,
       notificationCount: 0,
+      covert: false,
       showGroups: true,
       showAttendingEvents: true,
       showAttendedEvents: true,
@@ -77,6 +77,7 @@ export class AuthService {
     photoURL,
     description,
     notificationCount,
+    covert,
     showGroups,
     showAttendingEvents,
     showAttendedEvents,
@@ -91,10 +92,13 @@ export class AuthService {
       photoURL,
       description,
       notificationCount,
+      covert,
       showGroups,
       showAttendingEvents,
       showAttendedEvents,
     };
+
+    console.log(data);
 
     return userRef
       .set(data, { merge: true })

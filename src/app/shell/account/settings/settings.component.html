@@ -59,6 +59,15 @@
   </div>
 
   <div class="update-toggles">
+    <mat-slide-toggle formControlName="covert">
+      <div *ngIf="form.value.covert">
+        Covert
+      </div>
+      <div *ngIf="!form.value.covert">
+        Overt
+      </div>
+    </mat-slide-toggle>
+
     <mat-slide-toggle class="update-showGroup" formControlName="showGroups">
       <div *ngIf="form.value.showGroups">
         Show my groups

@@ -16,6 +16,7 @@ export class SearchService {
     events_date: searchClient.initIndex('events_date'),
     groups: searchClient.initIndex('groups'),
     users: searchClient.initIndex('users'),
+    notifications_date: searchClient.initIndex('notifications_date'),
   };
 
   constructor() {}

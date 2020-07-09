@@ -7,3 +7,4 @@ export * from './delete.function';
 export * from './algolia/event.function';
 export * from './algolia/group.function';
 export * from './algolia/user.function';
+export * from './algolia/notification.function';

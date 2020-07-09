@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Notification } from '../interfaces/notification';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,16 @@ export class NotificationsService {
   getNotifications(uid: string): Observable<Notification[]> {
     return this.db
       .collection<Notification>(`users/${uid}/notifications`)
-      .valueChanges();
+      .valueChanges()
+      .pipe(
+        map((notifications: Notification[]) => {
+          if (notifications.length) {
+            return notifications;
+          } else {
+            return [];
+          }
+        })
+      );
   }
 
   clearNotificationCount(uid: string) {

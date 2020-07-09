@@ -1,5 +1,14 @@
-<div class="groups-container">
+<div class="groups-container" *ngIf="groups?.length">
   <div *ngFor="let group of groups">
     <app-group [group]="group"></app-group>
   </div>
+</div>
+
+<div class="no-group-container" *ngIf="!groups?.length">
+  <img class="no-group-image" src="/assets/images/smily.svg" />
+  <p class="no-group-text">You do not belong to any groups.</p>
+  <p class="no-group-text">
+    <a routerLink="/search/groups">Search for groups</a> or
+    <a routerLink="/create-group">create one</a>
+  </p>
 </div>

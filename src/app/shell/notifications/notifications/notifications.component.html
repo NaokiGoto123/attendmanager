@@ -1,4 +1,4 @@
-<div *ngIf="existance">
+<div *ngIf="notifications?.length">
   <mat-toolbar>
     <span class="toolbar-title">Notifications</span>
     <span class="spacer"></span>
@@ -12,19 +12,55 @@
       </button>
     </mat-menu>
   </mat-toolbar>
+
+  <form
+    class="search-field-container"
+    (ngSubmit)="search(valueControl.value, searchOptions)"
+  >
+    <mat-form-field class="search-field" appearance="outline">
+      <mat-label>Search notifications</mat-label>
+
+      <input
+        matInput
+        type="text"
+        [formControl]="valueControl"
+        autocomplete="off"
+        [matAutocomplete]="auto"
+      />
+
+      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+        <mat-option
+          *ngFor="let option of options"
+          [value]="option.group.name"
+          (optionSelected)="search(valueControl.value, searchOptions)"
+        >
+          {{ option.group.name }}
+        </mat-option>
+      </mat-autocomplete>
+
+      <button
+        mat-button
+        *ngIf="valueControl.value"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        type="button"
+        (click)="clearSearch(); search(valueControl.value, searchOptions)"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+
   <mat-list>
-    <div *ngFor="let notification of notifications">
-      <app-notification [notification]="notification"></app-notification>
+    <div *ngFor="let hit of result?.hits">
+      <app-notification [notification]="hit"></app-notification>
       <mat-divider></mat-divider>
     </div>
   </mat-list>
 </div>
 
-<div class="no-notifications-container" *ngIf="!existance">
-  <img
-    class="no-notifications-image"
-    src="/assets/images/notification1.svg"
-    alt=""
-  />
+<div class="no-notifications-container" *ngIf="!notifications?.length">
+  <img class="no-notifications-image" src="/assets/images/notification1.svg" />
   <p class="no-notifications-text">No notifications</p>
 </div>
