@@ -4,8 +4,6 @@
     <div class="card-content">
       <h2>{{ event.title }}</h2>
 
-      <p>Description: {{ event.description }}</p>
-
       <p>Created by {{ creater?.displayName }} in {{ group?.name }}</p>
 
       <p>Date: {{ event.date | date: 'yyyy/MM/dd' }}</p>

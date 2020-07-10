@@ -132,7 +132,7 @@ export class GroupDetailsComponent implements OnInit {
         });
 
       this.inviteService
-        .getInvitingUsers(this.id)
+        .getGroupInvitingUsers(this.id)
         .subscribe((invitingUsers: User[]) => {
           this.invitingUsers = invitingUsers;
         });

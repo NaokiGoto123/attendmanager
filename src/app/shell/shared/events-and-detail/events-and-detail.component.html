@@ -15,13 +15,12 @@
       <div class="event-card-detail">
         <div *ngIf="givenEvent">
           <h1>{{ givenEvent.title }}</h1>
-          <h2>{{ givenEvent.description }}</h2>
-          <div *ngIf="!givenEvent.private">
+          <ng-container *ngIf="!givenEvent.private">
             <h2>Public event</h2>
-          </div>
-          <div *ngIf="givenEvent.private">
+          </ng-container>
+          <ng-container *ngIf="givenEvent.private">
             <h2>Private event</h2>
-          </div>
+          </ng-container>
           <h2>{{ givenEvent.date | date: 'yyyy/MM/dd' }}</h2>
           <h2>
             Happening at {{ givenEvent.time }} in {{ givenEvent.location }}
@@ -46,9 +45,11 @@
 
           <h2>First {{ givenEvent.memberlimit }} people can attend</h2>
 
-          <div *ngIf="ifAttendingMembers">
+          <ng-container *ngIf="ifAttendingMembers">
             <h2>Attending members</h2>
-            <div *ngFor="let attendingmember of attendingMembers | async">
+            <ng-container
+              *ngFor="let attendingmember of attendingMembers | async"
+            >
               <ul>
                 <li
                   class="attendingMember-name"
@@ -58,12 +59,12 @@
                   {{ attendingmember.displayName }}
                 </li>
               </ul>
-            </div>
-          </div>
+            </ng-container>
+          </ng-container>
 
-          <div *ngIf="!ifAttendingMembers">
+          <ng-container *ngIf="!ifAttendingMembers">
             <h2>There is no attending member yet.</h2>
-          </div>
+          </ng-container>
 
           <div *ngIf="ifWaitingJoinningMembers">
             <h2>Waiting list</h2>
@@ -142,6 +143,8 @@
           <div *ngIf="!ifWaitingJoinningMembers">
             <h2>There are no waiting users.</h2>
           </div>
+
+          <button mat-raised-button color="primary">Invite</button>
         </div>
 
         <div *ngIf="!givenEvent">

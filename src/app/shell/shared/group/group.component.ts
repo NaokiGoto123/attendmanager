@@ -76,7 +76,7 @@ export class GroupComponent implements OnInit {
           }
         });
       this.inviteService
-        .getInvitingUsers(this.group.id)
+        .getGroupInvitingUsers(this.group.id)
         .subscribe((invitingUsers: User[]) => {
           const invitingUserIds: string[] = [];
           invitingUsers.map((invitingUser: User) => {
