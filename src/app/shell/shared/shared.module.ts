@@ -12,7 +12,6 @@ import { EventsAndDetailComponent } from './events-and-detail/events-and-detail.
 import { EventsListViewComponent } from './events-list-view/events-list-view.component';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
-import { EventDialogComponent } from './event-dialog/event-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
@@ -21,7 +20,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     GroupComponent,
     EventsAndDetailComponent,
     EventsListViewComponent,
-    EventDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -39,7 +37,6 @@ import { MatDialogModule } from '@angular/material/dialog';
     GroupComponent,
     EventsAndDetailComponent,
     EventsListViewComponent,
-    EventDialogComponent,
   ],
 })
 export class SharedModule {}

@@ -11,7 +11,8 @@
 <p>First {{ event?.memberlimit }} people can attend</p>
 
 <p>
-  Happening at {{ event?.time }} on {{ event?.date | date: 'yyyy/MM/dd' }} in
+  Happening at {{ event?.time }} on
+  {{ event?.date.toDate() | date: 'yyyy/MM/dd' }} in
   {{ event?.location }}
 </p>
 
