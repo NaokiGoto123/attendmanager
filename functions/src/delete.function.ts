@@ -211,6 +211,18 @@ export const deleteEvent = functions
     });
     await Promise.all(waitingPayingMemberIdsDeletion);
 
+    const invitedUserIds = (
+      await db.collection(`events/${eventId}/invitingUserIds`).get()
+    ).docs.map((doc) => doc.data());
+    const invitingUsersDeletion: Promise<any>[] = invitedUserIds.map(
+      (invitedUserId) => {
+        return db
+          .doc(`users/${invitedUserId.id}/invitedEventIds/${eventId}`)
+          .delete();
+      }
+    );
+    await Promise.all(invitingUsersDeletion);
+
     // グループのサブコレクションから削除
     await db.doc(`groups/${groupId}/eventIds/${eventId}`).delete();
 
@@ -321,6 +333,14 @@ export const deleteAccount = functions
       }
     );
     await Promise.all(DeleteFromWaitingPayingEvents);
+
+    const invitedEventIds = (
+      await db.collection(`users/${uid}/invitedEventIds`).get()
+    ).docs.map((doc) => doc.data());
+    const DeleteFromInvitingList = invitedEventIds.map((invitedEventId) => {
+      db.doc(`events/${invitedEventId.id}/invitingUserIds/${uid}`);
+    });
+    await Promise.all(DeleteFromInvitingList);
 
     // Usersからの削除
     const pathToAccount = `users/${uid}`;

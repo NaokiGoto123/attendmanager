@@ -144,7 +144,14 @@
             <h2>There are no waiting users.</h2>
           </div>
 
-          <button mat-raised-button color="primary">Invite</button>
+          <button
+            mat-icon-button
+            color="primary"
+            routerLink="/event-details"
+            [queryParams]="{ id: givenEvent.id }"
+          >
+            <mat-icon>launch</mat-icon>
+          </button>
         </div>
 
         <div *ngIf="!givenEvent">

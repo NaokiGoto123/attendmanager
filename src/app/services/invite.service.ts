@@ -84,15 +84,44 @@ export class InviteService {
       );
   }
 
+  // inviteToEvent(uid: string, eventId: string) {
+  //   this.db
+  //     .doc(`events/${eventId}/invitingUserIds/${uid}`)
+  //     .set({ id: uid })
+  //     .then(() => {
+  //       this.db
+  //         .doc(`users/${uid}/invitedEventIds/${eventId}`)
+  //         .set({ id: eventId });
+  //     });
+  // }
   inviteToEvent(uid: string, eventId: string) {
-    this.db
-      .doc(`events/${eventId}/invitingUserIds/${uid}`)
-      .set({ id: uid })
-      .then(() => {
-        this.db
-          .doc(`users/${uid}/invitedEventIds/${eventId}`)
-          .set({ id: eventId });
-      });
+    if (uid !== this.authService.uid) {
+      const memberIds: string[] = [];
+      this.db
+        .collection<Id>(`events/${eventId}/attendingMemberIds`)
+        .valueChanges()
+        .subscribe((attendingMemberIds: Id[]) => {
+          attendingMemberIds.map((attendingMemberId: Id) => {
+            memberIds.push(attendingMemberId.id);
+          });
+          if (memberIds.includes(uid)) {
+            console.log('already attending');
+            return;
+          } else {
+            this.db
+              .doc(`events/${eventId}/invitingUserIds/${uid}`)
+              .set({ id: uid })
+              .then(() => {
+                this.db
+                  .doc(`users/${uid}/invitedEventIds/${eventId}`)
+                  .set({ id: eventId });
+              });
+          }
+        });
+    } else {
+      console.log('cannot invite yourself');
+      return;
+    }
   }
 
   uninviteFromEvent(uid: string, eventId: string) {

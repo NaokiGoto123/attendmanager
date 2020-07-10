@@ -313,4 +313,40 @@ export class EventService {
         this.db.doc(`users/${uid}/eventIds/${eventId}`).set({ id: eventId });
       });
   }
+
+  // invitingUserIds to attedingMemberIds
+  async invitingUserListToAttendingMembers(uid: string, eventId: string) {
+    this.db
+      .doc(`events/${eventId}/invitingUserIds/${uid}`)
+      .delete()
+      .then(() => {
+        this.db.doc(`users/${uid}/invitedEventIds/${eventId}`).delete();
+      })
+      .then(() => {
+        this.db
+          .doc(`events/${eventId}/attendingMemberIds/${uid}`)
+          .set({ id: uid });
+      })
+      .then(() => {
+        this.db.doc(`users/${uid}/groupIds/${eventId}`).set({ id: eventId });
+      });
+  }
+
+  // invitingUserIds to attedingMemberIds
+  async PayToInvitingUserListToAttendingMembers(uid: string, eventId: string) {
+    this.db
+      .doc(`events/${eventId}/invitingUserIds/${uid}`)
+      .delete()
+      .then(() => {
+        this.db.doc(`users/${uid}/invitedEventIds/${eventId}`).delete();
+      })
+      .then(() => {
+        this.db
+          .doc(`events/${eventId}/attendingMemberIds/${uid}`)
+          .set({ id: uid });
+      })
+      .then(() => {
+        this.db.doc(`users/${uid}/eventIds/${eventId}`).set({ id: eventId });
+      });
+  }
 }
