@@ -5,6 +5,7 @@ import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
+import { EventGetService } from 'src/app/services/event-get.service';
 
 @Component({
   selector: 'app-waiting-paying-events',
@@ -20,7 +21,8 @@ export class WaitingPayingEventsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private userService: UserService,
-    private eventService: EventService
+    private eventService: EventService,
+    private eventGetService: EventGetService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
@@ -28,7 +30,7 @@ export class WaitingPayingEventsComponent implements OnInit {
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;
-          this.eventService
+          this.eventGetService
             .getWaitingPayingEvents(id)
             .subscribe((waitingPayingEvents: Event[]) => {
               if (waitingPayingEvents.length) {

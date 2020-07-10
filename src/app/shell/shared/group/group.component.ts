@@ -4,6 +4,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { GroupService } from 'src/app/services/group.service';
 import { User } from 'src/app/interfaces/user';
 import { InviteService } from 'src/app/services/invite.service';
+import { GroupGetService } from 'src/app/services/group-get.service';
 
 @Component({
   selector: 'app-group',
@@ -25,13 +26,14 @@ export class GroupComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private groupService: GroupService,
+    private groupGetService: GroupGetService,
     private inviteService: InviteService
   ) {}
 
   ngOnInit(): void {
     this.uid = this.authService.uid;
     if (this.group) {
-      this.groupService
+      this.groupGetService
         .getMemberIds(this.group.id)
         .subscribe((memberIds: string[]) => {
           this.memberIds = memberIds;
@@ -49,7 +51,7 @@ export class GroupComponent implements OnInit {
             this.ifMember = false;
           }
         });
-      this.groupService
+      this.groupGetService
         .getWaitingJoinningMemberIds(this.group.id)
         .subscribe((waitingJoinningMemberIds: string[]) => {
           if (waitingJoinningMemberIds.length) {
@@ -62,7 +64,7 @@ export class GroupComponent implements OnInit {
             this.ifWaitingJoinningMember = false;
           }
         });
-      this.groupService
+      this.groupGetService
         .getWaitingPayingMemberIds(this.group.id)
         .subscribe((waitingPayingMemberIds: string[]) => {
           if (waitingPayingMemberIds.length) {

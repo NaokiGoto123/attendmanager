@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Event } from 'src/app/interfaces/event';
-import { EventService } from 'src/app/services/event.service';
 import { User } from 'src/app/interfaces/user';
-import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
+import { EventGetService } from 'src/app/services/event-get.service';
 @Component({
   selector: 'app-attending-events',
   templateUrl: './attending-events.component.html',
@@ -18,7 +17,7 @@ export class AttendingEventsComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
-    private eventService: EventService
+    private eventGetService: EventGetService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
@@ -26,7 +25,7 @@ export class AttendingEventsComponent implements OnInit {
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;
-          this.eventService
+          this.eventGetService
             .getAttendingEvents(id)
             .subscribe((attendingEvents: Event[]) => {
               if (attendingEvents.length) {

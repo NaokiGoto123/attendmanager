@@ -128,7 +128,6 @@ export class ChatService {
           chatRooms.map((chatRoom: ChatRoom) => {
             messageCount += chatRoom.messageCount;
           });
-          console.log(messageCount);
           return messageCount;
         })
       );

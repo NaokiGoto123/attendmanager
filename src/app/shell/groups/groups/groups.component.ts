@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { GroupService } from 'src/app/services/group.service';
 import { Group } from 'src/app/interfaces/group';
 import { AuthService } from 'src/app/services/auth.service';
-import { Observable } from 'rxjs';
+import { GroupGetService } from 'src/app/services/group-get.service';
 
 @Component({
   selector: 'app-groups',
@@ -13,11 +12,11 @@ export class GroupsComponent implements OnInit {
   groups: Group[];
 
   constructor(
-    private groupService: GroupService,
+    private groupGetService: GroupGetService,
     private authService: AuthService
   ) {
     const uid = this.authService.uid;
-    this.groupService.getMyGroup(uid).subscribe((myGroups: Group[]) => {
+    this.groupGetService.getMyGroup(uid).subscribe((myGroups: Group[]) => {
       this.groups = myGroups;
     });
   }

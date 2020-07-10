@@ -13,6 +13,7 @@ import { switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { UserService } from 'src/app/services/user.service';
+import { GroupGetService } from 'src/app/services/group-get.service';
 @Component({
   selector: 'app-create-group',
   templateUrl: './create-group.component.html',
@@ -77,6 +78,7 @@ export class CreateGroupComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private groupSerive: GroupService,
+    private groupGetService: GroupGetService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private snackbar: MatSnackBar
@@ -84,7 +86,7 @@ export class CreateGroupComponent implements OnInit {
     this.activatedRoute.queryParamMap
       .pipe(
         switchMap((params) => {
-          return this.groupSerive.getGroupinfo(params.get('id'));
+          return this.groupGetService.getGroupinfo(params.get('id'));
         })
       )
       .subscribe((group: Group) => {

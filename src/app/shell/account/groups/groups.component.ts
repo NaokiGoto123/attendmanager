@@ -5,6 +5,7 @@ import { Group } from 'src/app/interfaces/group';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user';
 import { UserService } from 'src/app/services/user.service';
+import { GroupGetService } from 'src/app/services/group-get.service';
 
 @Component({
   selector: 'app-groups',
@@ -17,6 +18,7 @@ export class GroupsComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private groupService: GroupService,
+    private groupGetService: GroupGetService,
     private userService: UserService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
@@ -25,7 +27,7 @@ export class GroupsComponent implements OnInit {
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;
-          this.groupService.getMyGroup(id).subscribe((groups: Group[]) => {
+          this.groupGetService.getMyGroup(id).subscribe((groups: Group[]) => {
             this.groups = groups;
           });
         });

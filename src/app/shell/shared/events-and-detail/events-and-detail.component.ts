@@ -7,6 +7,8 @@ import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable, combineLatest } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
+import { EventGetService } from 'src/app/services/event-get.service';
+import { GroupGetService } from 'src/app/services/group-get.service';
 
 @Component({
   selector: 'app-events-and-detail',
@@ -34,6 +36,8 @@ export class EventsAndDetailComponent implements OnInit {
 
   constructor(
     private eventService: EventService,
+    private eventGetService: EventGetService,
+    private groupGetService: GroupGetService,
     private groupService: GroupService,
     private authService: AuthService,
     private userService: UserService
@@ -48,7 +52,7 @@ export class EventsAndDetailComponent implements OnInit {
         this.creater = creater;
       });
 
-    this.groupService
+    this.groupGetService
       .getGroupinfo(this.givenEvent.groupid)
       .subscribe((group: Group) => {
         this.groupId = group.id;
@@ -60,7 +64,7 @@ export class EventsAndDetailComponent implements OnInit {
           });
       });
 
-    this.eventService
+    this.eventGetService
       .getAttendingMemberIds(this.givenEvent.id)
       .subscribe((attendingMemberIds: string[]) => {
         if (attendingMemberIds.length) {
@@ -75,7 +79,7 @@ export class EventsAndDetailComponent implements OnInit {
         }
       });
 
-    this.eventService
+    this.eventGetService
       .getWaitingJoinningMemberIds(this.givenEvent.id)
       .subscribe((waitingJoinningMemberIds: string[]) => {
         if (waitingJoinningMemberIds.length) {

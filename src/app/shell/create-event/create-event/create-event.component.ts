@@ -1,12 +1,14 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { GroupService } from 'src/app/services/group.service';
-import { EventService } from 'src/app/services/event.service';
+import { EventGetService } from 'src/app/services/event-get.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Group } from 'src/app/interfaces/group';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Event } from 'src/app/interfaces/event';
+import { EventService } from 'src/app/services/event.service';
+import { GroupGetService } from 'src/app/services/group-get.service';
 @Component({
   selector: 'app-create-event',
   templateUrl: './create-event.component.html',
@@ -33,7 +35,7 @@ export class CreateEventComponent implements OnInit {
     groupid: ['', [Validators.required]],
     title: ['', [Validators.required]],
     description: [''],
-    memberlimit: [null, [Validators.required]],
+    memberlimit: [null],
     date: [null, [Validators.required]],
     time: ['', [Validators.required]],
     location: ['', [Validators.required]],
@@ -57,11 +59,13 @@ export class CreateEventComponent implements OnInit {
     private db: AngularFirestore,
     private authService: AuthService,
     private groupService: GroupService,
-    private eventService: EventService
+    private gorupGetService: GroupGetService,
+    private eventService: EventService,
+    private eventGetService: EventGetService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const id = params.get('id');
-      this.eventService.getEvent(id).subscribe((event: Event) => {
+      this.eventGetService.getEvent(id).subscribe((event: Event) => {
         if (event) {
           this.ifTarget = true;
           this.groupid = event.groupid;
@@ -72,7 +76,7 @@ export class CreateEventComponent implements OnInit {
           });
         } else {
           const uid: string = this.authService.uid;
-          this.groupService
+          this.gorupGetService
             .getAdminGroup(uid)
             .subscribe((adminGroups: Group[]) => {
               if (adminGroups.length) {

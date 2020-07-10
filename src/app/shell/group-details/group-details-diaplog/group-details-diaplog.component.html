@@ -2,7 +2,15 @@
 <div mat-dialog-content>
   <mat-form-field>
     <mat-label>Search ID</mat-label>
-    <input matInput [(ngModel)]="data.searchId" />
+    <input matInput [(ngModel)]="data.searchId" [matAutocomplete]="auto" />
+
+    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+      <ng-container *ngFor="let option of options">
+        <mat-option *ngIf="option.uid !== uid" [value]="option.searchId">
+          {{ option.displayName }}
+        </mat-option>
+      </ng-container>
+    </mat-autocomplete>
   </mat-form-field>
 </div>
 <div mat-dialog-actions>

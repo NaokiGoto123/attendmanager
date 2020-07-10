@@ -5,6 +5,7 @@ import { Group } from 'src/app/interfaces/group';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user';
 import { UserService } from 'src/app/services/user.service';
+import { GroupGetService } from 'src/app/services/group-get.service';
 
 @Component({
   selector: 'app-waiting-joinning-groups',
@@ -18,7 +19,8 @@ export class WaitingJoinningGroupsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private userService: UserService,
-    private groupService: GroupService
+    private groupService: GroupService,
+    private groupGetService: GroupGetService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
@@ -26,7 +28,7 @@ export class WaitingJoinningGroupsComponent implements OnInit {
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;
-          this.groupService
+          this.groupGetService
             .getWaitingJoinningGroups(id)
             .subscribe((waitingJoinningGroups: Group[]) => {
               this.waitingJoinningGroups = waitingJoinningGroups;

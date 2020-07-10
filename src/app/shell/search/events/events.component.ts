@@ -3,6 +3,7 @@ import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/interfaces/event';
 import { FormControl } from '@angular/forms';
 import { SearchService } from 'src/app/services/search.service';
+import { EventGetService } from 'src/app/services/event-get.service';
 
 @Component({
   selector: 'app-events',
@@ -29,9 +30,10 @@ export class EventsComponent implements OnInit {
 
   constructor(
     private eventService: EventService,
+    private eventGetService: EventGetService,
     private searchService: SearchService
   ) {
-    this.eventService
+    this.eventGetService
       .getSearchableEvents()
       .subscribe((searchableEvents: Event[]) => {
         this.searchableEvents = searchableEvents;

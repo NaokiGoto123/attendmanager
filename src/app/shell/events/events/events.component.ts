@@ -9,6 +9,8 @@ import { GroupService } from 'src/app/services/group.service';
 import { group } from '@angular/animations';
 import { FormControl, FormBuilder } from '@angular/forms';
 import { map } from 'rxjs/operators';
+import { GroupGetService } from 'src/app/services/group-get.service';
+import { EventGetService } from 'src/app/services/event-get.service';
 @Component({
   selector: 'app-events',
   templateUrl: './events.component.html',
@@ -43,14 +45,16 @@ export class EventsComponent implements OnInit {
     private authService: AuthService,
     private eventService: EventService,
     private groupService: GroupService,
+    private eventGetService: EventGetService,
+    private groupGetService: GroupGetService,
     private searchService: SearchService
   ) {
-    this.eventService
+    this.eventGetService
       .getMyEvents(this.authService.uid)
       .subscribe((events: Event[]) => {
         this.events = events;
       });
-    this.groupService
+    this.groupGetService
       .getMyGroup(this.authService.uid)
       .subscribe((groups: Group[]) => {
         this.groups = groups;

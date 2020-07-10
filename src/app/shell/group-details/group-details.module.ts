@@ -11,6 +11,8 @@ import { GroupDetailsDiaplogComponent } from './group-details-diaplog/group-deta
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 @NgModule({
   declarations: [GroupDetailsComponent, GroupDetailsDiaplogComponent],
   imports: [
@@ -23,6 +25,7 @@ import { FormsModule } from '@angular/forms';
     MatDialogModule,
     MatInputModule,
     FormsModule,
+    MatAutocompleteModule,
   ],
 })
 export class GroupDetailsModule {}

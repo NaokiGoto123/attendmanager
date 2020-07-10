@@ -17,20 +17,11 @@ export class EventDialogComponent implements OnInit {
 
   index = this.searchService.index.users;
 
-  searchOptions = {
-    facetFilters: [],
-  };
-
   optionOptions = {
     facetFilters: ['covert:false'],
   };
 
   options = [];
-
-  result: {
-    nbHits: number;
-    hits: any[];
-  };
 
   constructor(
     private authService: AuthService,

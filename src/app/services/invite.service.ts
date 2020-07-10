@@ -3,8 +3,9 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { Id } from '../interfaces/id';
 import { switchMap } from 'rxjs/operators';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, of } from 'rxjs';
 import { Group } from '../interfaces/group';
+import { Event } from '../interfaces/event';
 import { User } from '../interfaces/user';
 
 @Injectable({
@@ -139,13 +140,17 @@ export class InviteService {
       .valueChanges()
       .pipe(
         switchMap((invitedEventIds: Id[]) => {
-          const invitedEvents: Observable<Event>[] = [];
-          invitedEventIds.map((invitedEventId: Id) => {
-            invitedEvents.push(
-              this.db.doc<Event>(`events/${invitedEventId.id}`).valueChanges()
-            );
-          });
-          return combineLatest(invitedEvents);
+          if (invitedEventIds.length) {
+            const invitedEvents: Observable<Event>[] = [];
+            invitedEventIds.map((invitedEventId: Id) => {
+              invitedEvents.push(
+                this.db.doc<Event>(`events/${invitedEventId.id}`).valueChanges()
+              );
+            });
+            return combineLatest(invitedEvents);
+          } else {
+            return of([]);
+          }
         })
       );
   }
