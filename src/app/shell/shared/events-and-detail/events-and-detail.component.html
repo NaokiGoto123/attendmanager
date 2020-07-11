@@ -43,7 +43,9 @@
           </h2>
           <h2>Price: {{ givenEvent.price }} {{ givenEvent.currency }}</h2>
 
-          <h2>First {{ givenEvent.memberlimit }} people can attend</h2>
+          <ng-container *ngIf="givenEvent.memberlimit !== null">
+            <h2>First {{ givenEvent.memberlimit }} people can attend</h2>
+          </ng-container>
 
           <ng-container *ngIf="ifAttendingMembers">
             <h2>Attending members</h2>
