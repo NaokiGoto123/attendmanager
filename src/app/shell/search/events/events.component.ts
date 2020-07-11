@@ -15,6 +15,8 @@ export class EventsComponent implements OnInit {
 
   searchOptions = {
     facetFilters: ['searchable:true'],
+    page: 0,
+    hitsPerPage: 3,
   };
 
   options = [];

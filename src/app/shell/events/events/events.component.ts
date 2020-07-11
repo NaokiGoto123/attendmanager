@@ -1,14 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Event } from 'src/app/interfaces/event';
-import { EventService } from 'src/app/services/event.service';
 import { SearchService } from 'src/app/services/search.service';
-import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { Group } from 'src/app/interfaces/group';
-import { GroupService } from 'src/app/services/group.service';
-import { group } from '@angular/animations';
 import { FormControl, FormBuilder } from '@angular/forms';
-import { map } from 'rxjs/operators';
 import { GroupGetService } from 'src/app/services/group-get.service';
 import { EventGetService } from 'src/app/services/event-get.service';
 @Component({
@@ -23,6 +18,8 @@ export class EventsComponent implements OnInit {
 
   searchOptions = {
     facetFilters: [],
+    page: 0,
+    hitsPerPage: 3,
   };
 
   options = [];
@@ -43,8 +40,6 @@ export class EventsComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private eventService: EventService,
-    private groupService: GroupService,
     private eventGetService: EventGetService,
     private groupGetService: GroupGetService,
     private searchService: SearchService
@@ -66,7 +61,11 @@ export class EventsComponent implements OnInit {
         const filters: string[] = groups.map((group: Group) => {
           return `groupid:${group.id}`;
         });
-        this.searchOptions = { facetFilters: [filters] };
+        this.searchOptions = {
+          facetFilters: [filters],
+          page: 0,
+          hitsPerPage: 3,
+        };
 
         this.search('', this.searchOptions);
 
@@ -84,7 +83,7 @@ export class EventsComponent implements OnInit {
       const filters = selecteds.map((selected) => {
         return `groupid:${selected}`;
       });
-      this.searchOptions = { facetFilters: [filters] };
+      this.searchOptions = { facetFilters: [filters], page: 0, hitsPerPage: 3 };
       this.search('', this.searchOptions);
 
       this.index.search('', this.searchOptions).then((result) => {

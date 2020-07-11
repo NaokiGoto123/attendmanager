@@ -19,6 +19,8 @@ export class NotificationsComponent implements OnInit {
 
   searchOptions = {
     facetFilters: [`person.uid:${this.authService.uid}`],
+    page: 0,
+    hitsPerPage: 3,
   };
 
   options = [];
