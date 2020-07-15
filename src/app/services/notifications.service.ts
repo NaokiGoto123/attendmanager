@@ -29,6 +29,25 @@ export class NotificationsService {
       );
   }
 
+  getNotificationIds(uid: string): Observable<string[]> {
+    return this.db
+      .collection<Notification>(`users/${uid}/notifications`)
+      .valueChanges()
+      .pipe(
+        map((notifications: Notification[]) => {
+          if (notifications.length) {
+            const notificationIds: string[] = [];
+            notifications.map((notification: Notification) => {
+              notificationIds.push(notification.id);
+            });
+            return notificationIds;
+          } else {
+            return [];
+          }
+        })
+      );
+  }
+
   clearNotificationCount(uid: string) {
     return this.db.doc(`users/${uid}`).update({
       notificationCount: 0,
