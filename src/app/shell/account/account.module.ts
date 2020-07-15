@@ -22,6 +22,7 @@ import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-pa
 import { InvitedGroupsComponent } from './invited-groups/invited-groups.component';
 import { InvitedEventsComponent } from './invited-events/invited-events.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,7 @@ import { MatMenuModule } from '@angular/material/menu';
     MatRadioModule,
     SharedModule,
     MatMenuModule,
+    MatAutocompleteModule,
   ],
 })
 export class AccountModule {}
