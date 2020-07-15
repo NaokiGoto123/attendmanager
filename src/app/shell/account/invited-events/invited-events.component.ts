@@ -3,8 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { User } from 'src/app/interfaces/user';
 import { UserService } from 'src/app/services/user.service';
 import { Event } from 'src/app/interfaces/event';
-import { EventGetService } from 'src/app/services/event-get.service';
-import { InviteService } from 'src/app/services/invite.service';
+import { InviteGetService } from 'src/app/services/invite-get.service';
 
 @Component({
   selector: 'app-invited-events',
@@ -17,8 +16,7 @@ export class InvitedEventsComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private userService: UserService,
-    private eventGetService: EventGetService,
-    private invitedService: InviteService
+    private invitedGetService: InviteGetService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
@@ -26,7 +24,7 @@ export class InvitedEventsComponent implements OnInit {
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;
-          this.invitedService
+          this.invitedGetService
             .getInvitedEvents(id)
             .subscribe((invitedEvents: Event[]) => {
               this.invitedEvents = invitedEvents;
