@@ -1,6 +1,45 @@
+<form
+  class="search-field-container"
+  (ngSubmit)="search(valueControl.value, searchOptions)"
+>
+  <mat-form-field class="search-field" appearance="outline">
+    <mat-label>Search users</mat-label>
+
+    <input
+      matInput
+      type="text"
+      [formControl]="valueControl"
+      autocomplete="off"
+      [matAutocomplete]="auto"
+    />
+
+    <mat-autocomplete
+      autoActiveFirstOption
+      (optionSelected)="search(valueControl.value, searchOptions)"
+      #auto="matAutocomplete"
+    >
+      <mat-option *ngFor="let option of options" [value]="option.title">
+        {{ option.title }}
+      </mat-option>
+    </mat-autocomplete>
+
+    <button
+      mat-button
+      *ngIf="valueControl.value"
+      matSuffix
+      mat-icon-button
+      aria-label="Clear"
+      type="button"
+      (click)="clearSearch(); search(valueControl.value, searchOptions)"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+</form>
+
 <div class="container">
   <app-events-and-detail
-    [events]="invitedEvents"
-    [existance]="invitedEvents?.length"
+    [events]="result?.hits"
+    [existance]="result?.hits.length"
   ></app-events-and-detail>
 </div>
