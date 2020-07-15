@@ -5,6 +5,7 @@ import { User } from 'src/app/interfaces/user';
 import { ChatRoom } from 'src/app/interfaces/chat-room';
 import { Location } from '@angular/common';
 import { AuthService } from 'src/app/services/auth.service';
+import { ChatGetService } from 'src/app/services/chat-get.service';
 
 @Component({
   selector: 'app-chat-room-members',
@@ -22,16 +23,17 @@ export class ChatRoomMembersComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private chatService: ChatService,
+    private chatGetService: ChatGetService,
     private location: Location
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const chatRoomId = params.get('id');
-      this.chatService
+      this.chatGetService
         .getChatRoom(chatRoomId)
         .subscribe((chatRoom: ChatRoom) => {
           this.chatRoom = chatRoom;
         });
-      this.chatService
+      this.chatGetService
         .getChatRooomMembers(chatRoomId)
         .subscribe((chatRoomMembers: User[]) => {
           this.chatRoomMembers = chatRoomMembers;

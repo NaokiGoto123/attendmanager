@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { ChatService } from 'src/app/services/chat.service';
+import { ChatGetService } from 'src/app/services/chat-get.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { ChatRoom } from 'src/app/interfaces/chat-room';
 import { map, switchMap } from 'rxjs/operators';
 import { combineLatest, Observable, of } from 'rxjs';
-import { GroupService } from 'src/app/services/group.service';
+import { ChatService } from 'src/app/services/chat.service';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -18,11 +18,11 @@ export class ChatComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private chatService: ChatService,
-    private groupService: GroupService
+    private chatGetService: ChatGetService
   ) {}
 
   ngOnInit(): void {
-    this.chatRooms = this.chatService
+    this.chatRooms = this.chatGetService
       .getMyChatRoommIds(this.authService.uid)
       .pipe(
         switchMap(
@@ -30,7 +30,7 @@ export class ChatComponent implements OnInit {
             if (chatRoomIds.length) {
               const ChatRooms: Observable<ChatRoom>[] = chatRoomIds.map(
                 (chatRoomId: string) => {
-                  return this.chatService.getChatRoom(chatRoomId);
+                  return this.chatGetService.getChatRoom(chatRoomId);
                 }
               );
               this.noChatRooms = false;

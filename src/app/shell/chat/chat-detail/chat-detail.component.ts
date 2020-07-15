@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { firestore } from 'firebase';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { ChatGetService } from 'src/app/services/chat-get.service';
 
 @Component({
   selector: 'app-chat-detail',
@@ -36,6 +37,7 @@ export class ChatDetailComponent implements OnInit {
     private db: AngularFirestore,
     private activatedRoute: ActivatedRoute,
     private chatService: ChatService,
+    private chatGetService: ChatGetService,
     private authService: AuthService,
     private fb: FormBuilder
   ) {}
@@ -47,12 +49,12 @@ export class ChatDetailComponent implements OnInit {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const chatRoomId = params.get('id');
       this.chatRoomId = chatRoomId;
-      this.chatService
+      this.chatGetService
         .getChatRoom(chatRoomId)
         .subscribe((chatRoom: ChatRoom) => {
           this.name = chatRoom?.name;
           this.groupid = chatRoom?.groupid;
-          this.chatService
+          this.chatGetService
             .getMessages(chatRoomId)
             .subscribe((messages: Message[]) => {
               this.messages = messages;
