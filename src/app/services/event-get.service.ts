@@ -128,24 +128,67 @@ export class EventGetService {
       );
   }
 
+  // getAttendingEvents(uid: string): Observable<Event[]> {
+  //   return this.db
+  //     .collection(`users/${uid}/eventIds`)
+  //     .valueChanges()
+  //     .pipe(
+  //       switchMap((eventIds: Id[]) => {
+  //         if (eventIds.length) {
+  //           const result: Observable<Event>[] = [];
+  //           eventIds.map((eventId: Id) => {
+  //             const attendingEvent: Observable<Event> = this.db
+  //               .doc<Event>(`events/${eventId.id}`)
+  //               .valueChanges();
+  //             result.push(attendingEvent);
+  //           });
+  //           return combineLatest(result);
+  //         } else {
+  //           return of([]);
+  //         }
+  //       })
+  //     );
+  // }
+
+  // getAttendingEventIds(uid: string): Observable<string[]> {
+  //   return this.db
+  //     .collection<Id>(`users/${uid}/eventIds`)
+  //     .valueChanges()
+  //     .pipe(
+  //       map((eventIds: Id[]) => {
+  //         const Ids: string[] = [];
+  //         eventIds.map((eventId: Id) => {
+  //           Ids.push(eventId.id);
+  //         });
+  //         return Ids;
+  //       })
+  //     );
+  // }
+
   getAttendingEvents(uid: string): Observable<Event[]> {
     return this.db
-      .collection(`users/${uid}/eventIds`)
+      .collection<Id>(`users/${uid}/eventIds`)
       .valueChanges()
       .pipe(
         switchMap((eventIds: Id[]) => {
-          if (eventIds.length) {
-            const result: Observable<Event>[] = [];
-            eventIds.map((eventId: Id) => {
-              const attendingEvent: Observable<Event> = this.db
-                .doc<Event>(`events/${eventId.id}`)
-                .valueChanges();
-              result.push(attendingEvent);
-            });
-            return combineLatest(result);
-          } else {
-            return of([]);
-          }
+          const attendingEvents: Observable<Event>[] = [];
+          eventIds.map((eventId: Id) => {
+            attendingEvents.push(
+              this.db.doc<Event>(`events/${eventId.id}`).valueChanges()
+            );
+          });
+          return combineLatest(attendingEvents);
+        }),
+        map((attendingEvents: Event[]) => {
+          const attendedEvents: Event[] = [];
+          attendingEvents.map((attendingEvent: Event) => {
+            const now: number = new Date().getTime();
+            if (attendingEvent.date.toMillis() > now) {
+              attendedEvents.push(attendingEvent);
+            }
+          });
+          console.log(attendedEvents);
+          return attendedEvents;
         })
       );
   }
@@ -155,12 +198,102 @@ export class EventGetService {
       .collection<Id>(`users/${uid}/eventIds`)
       .valueChanges()
       .pipe(
-        map((eventIds: Id[]) => {
-          const Ids: string[] = [];
+        switchMap((eventIds: Id[]) => {
+          const attendingEvents: Observable<Event>[] = [];
           eventIds.map((eventId: Id) => {
-            Ids.push(eventId.id);
+            attendingEvents.push(
+              this.db.doc<Event>(`events/${eventId.id}`).valueChanges()
+            );
           });
-          return Ids;
+          return combineLatest(attendingEvents);
+        }),
+        map((attendingEvents: Event[]) => {
+          const attendedEvents: Event[] = [];
+          attendingEvents.map((attendingEvent: Event) => {
+            const now: number = new Date().getTime();
+            if (attendingEvent.date.toMillis() > now) {
+              attendedEvents.push(attendingEvent);
+            }
+          });
+          return attendedEvents;
+        }),
+        map((attendedEvents: Event[]) => {
+          if (attendedEvents.length) {
+            const attendedEventIds: string[] = [];
+            attendedEvents.map((attendedEvent: Event) => {
+              attendedEventIds.push(attendedEvent.id);
+            });
+            return attendedEventIds;
+          } else {
+            return [];
+          }
+        })
+      );
+  }
+
+  getAttendedEvents(uid: string): Observable<Event[]> {
+    return this.db
+      .collection<Id>(`users/${uid}/eventIds`)
+      .valueChanges()
+      .pipe(
+        switchMap((eventIds: Id[]) => {
+          const attendingEvents: Observable<Event>[] = [];
+          eventIds.map((eventId: Id) => {
+            attendingEvents.push(
+              this.db.doc<Event>(`events/${eventId.id}`).valueChanges()
+            );
+          });
+          return combineLatest(attendingEvents);
+        }),
+        map((attendingEvents: Event[]) => {
+          const attendedEvents: Event[] = [];
+          attendingEvents.map((attendingEvent: Event) => {
+            const now = new Date().getTime();
+            if (attendingEvent.date.toMillis() < now) {
+              attendedEvents.push(attendingEvent);
+            }
+          });
+          console.log(attendedEvents);
+          return attendedEvents;
+        })
+      );
+  }
+
+  getAttendedEventIds(uid: string): Observable<string[]> {
+    return this.db
+      .collection<Id>(`users/${uid}/eventIds`)
+      .valueChanges()
+      .pipe(
+        switchMap((eventIds: Id[]) => {
+          const attendingEvents: Observable<Event>[] = [];
+          eventIds.map((eventId: Id) => {
+            attendingEvents.push(
+              this.db.doc<Event>(`events/${eventId.id}`).valueChanges()
+            );
+          });
+          return combineLatest(attendingEvents);
+        }),
+        map((attendingEvents: Event[]) => {
+          const attendedEvents: Event[] = [];
+          attendingEvents.map((attendingEvent: Event) => {
+            const now: number = new Date().getTime();
+            if (attendingEvent.date.toMillis() < now) {
+              attendedEvents.push(attendingEvent);
+            }
+          });
+          console.log(attendedEvents);
+          return attendedEvents;
+        }),
+        map((attendedEvents: Event[]) => {
+          if (attendedEvents.length) {
+            const attendedEventIds: string[] = [];
+            attendedEvents.map((attendedEvent: Event) => {
+              attendedEventIds.push(attendedEvent.id);
+            });
+            return attendedEventIds;
+          } else {
+            return [];
+          }
         })
       );
   }
