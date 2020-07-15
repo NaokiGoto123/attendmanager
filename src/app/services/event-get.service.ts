@@ -75,6 +75,21 @@ export class EventGetService {
       );
   }
 
+  getWaitingJoinningEventIds(uid: string): Observable<string[]> {
+    return this.db
+      .collection<Id>(`users/${uid}/waitingJoinningEventIds`)
+      .valueChanges()
+      .pipe(
+        map((waitingJoinningEventIds: Id[]) => {
+          const Ids: string[] = [];
+          waitingJoinningEventIds.map((waitingJoinningEventId: Id) => {
+            Ids.push(waitingJoinningEventId.id);
+          });
+          return Ids;
+        })
+      );
+  }
+
   getWaitingPayingEvents(uid: string): Observable<Event[]> {
     return this.db
       .collection<Id>(`users/${uid}/waitingPayingEventIds`)
@@ -94,6 +109,58 @@ export class EventGetService {
           } else {
             return of([]);
           }
+        })
+      );
+  }
+
+  getWaitingPayingEventIds(uid: string): Observable<string[]> {
+    return this.db
+      .collection<Id>(`users/${uid}/waitingPayingEventIds`)
+      .valueChanges()
+      .pipe(
+        map((waitingPayingEventIds: Id[]) => {
+          const Ids: string[] = [];
+          waitingPayingEventIds.map((waitingPayingEventId: Id) => {
+            Ids.push(waitingPayingEventId.id);
+          });
+          return Ids;
+        })
+      );
+  }
+
+  getAttendingEvents(uid: string): Observable<Event[]> {
+    return this.db
+      .collection(`users/${uid}/eventIds`)
+      .valueChanges()
+      .pipe(
+        switchMap((eventIds: Id[]) => {
+          if (eventIds.length) {
+            const result: Observable<Event>[] = [];
+            eventIds.map((eventId: Id) => {
+              const attendingEvent: Observable<Event> = this.db
+                .doc<Event>(`events/${eventId.id}`)
+                .valueChanges();
+              result.push(attendingEvent);
+            });
+            return combineLatest(result);
+          } else {
+            return of([]);
+          }
+        })
+      );
+  }
+
+  getAttendingEventIds(uid: string): Observable<string[]> {
+    return this.db
+      .collection<Id>(`users/${uid}/eventIds`)
+      .valueChanges()
+      .pipe(
+        map((eventIds: Id[]) => {
+          const Ids: string[] = [];
+          eventIds.map((eventId: Id) => {
+            Ids.push(eventId.id);
+          });
+          return Ids;
         })
       );
   }
@@ -156,28 +223,6 @@ export class EventGetService {
             return result;
           } else {
             return [];
-          }
-        })
-      );
-  }
-
-  getAttendingEvents(uid: string): Observable<Event[]> {
-    return this.db
-      .collection(`users/${uid}/eventIds`)
-      .valueChanges()
-      .pipe(
-        switchMap((eventIds: Id[]) => {
-          if (eventIds.length) {
-            const result: Observable<Event>[] = [];
-            eventIds.map((eventId: Id) => {
-              const attendingEvent: Observable<Event> = this.db
-                .doc<Event>(`events/${eventId.id}`)
-                .valueChanges();
-              result.push(attendingEvent);
-            });
-            return combineLatest(result);
-          } else {
-            return of([]);
           }
         })
       );

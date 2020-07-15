@@ -15,6 +15,44 @@ export class GroupGetService {
     private fns: AngularFireFunctions
   ) {}
 
+  getGroupinfo(groupId: string): Observable<Group> {
+    if (this.db.doc<Group>(`groups/${groupId}`).valueChanges()) {
+      return this.db.doc<Group>(`groups/${groupId}`).valueChanges();
+    } else {
+      return null;
+    }
+  }
+
+  getMemberIds(groupId: string): Observable<string[]> {
+    return this.db
+      .collection<Id>(`groups/${groupId}/memberIds`)
+      .valueChanges()
+      .pipe(
+        map((memberIds: Id[]) => {
+          const MemberIds: string[] = [];
+          memberIds.forEach((memberId: Id) => {
+            MemberIds.push(memberId.id);
+          });
+          return MemberIds;
+        })
+      );
+  }
+
+  getAdminIds(groupId: string): Observable<string[]> {
+    return this.db
+      .collection<Id>(`groups/${groupId}/adminIds`)
+      .valueChanges()
+      .pipe(
+        map((adminIds: Id[]) => {
+          const AdminIds: string[] = [];
+          adminIds.forEach((adminId: Id) => {
+            AdminIds.push(adminId.id);
+          });
+          return AdminIds;
+        })
+      );
+  }
+
   getMyGroup(uid: string): Observable<Group[]> {
     return this.db
       .collection<Id>(`users/${uid}/groupIds`)
@@ -80,6 +118,25 @@ export class GroupGetService {
       );
   }
 
+  getWaitingJoinningGroupIds(uid: string): Observable<string[]> {
+    return this.db
+      .collection<Id>(`users/${uid}/waitingJoinningGroupIds`)
+      .valueChanges()
+      .pipe(
+        map((waitingJoinningGroupIds: Id[]) => {
+          if (waitingJoinningGroupIds.length) {
+            const Ids: string[] = [];
+            waitingJoinningGroupIds.map((waitingJoinningGroupId: Id) => {
+              Ids.push(waitingJoinningGroupId.id);
+            });
+            return Ids;
+          } else {
+            return [];
+          }
+        })
+      );
+  }
+
   getWaitingPayingGroups(uid: string) {
     return this.db
       .collection<Id>(`users/${uid}/waitingPayingGroupIds`)
@@ -103,40 +160,21 @@ export class GroupGetService {
       );
   }
 
-  getGroupinfo(groupId: string): Observable<Group> {
-    if (this.db.doc<Group>(`groups/${groupId}`).valueChanges()) {
-      return this.db.doc<Group>(`groups/${groupId}`).valueChanges();
-    } else {
-      return null;
-    }
-  }
-
-  getMemberIds(groupId: string): Observable<string[]> {
+  getWaitingPayingGroupIds(uid: string): Observable<string[]> {
     return this.db
-      .collection<Id>(`groups/${groupId}/memberIds`)
+      .collection<Id>(`users/${uid}/waitingPayingGroupIds`)
       .valueChanges()
       .pipe(
-        map((memberIds: Id[]) => {
-          const MemberIds: string[] = [];
-          memberIds.forEach((memberId: Id) => {
-            MemberIds.push(memberId.id);
-          });
-          return MemberIds;
-        })
-      );
-  }
-
-  getAdminIds(groupId: string): Observable<string[]> {
-    return this.db
-      .collection<Id>(`groups/${groupId}/adminIds`)
-      .valueChanges()
-      .pipe(
-        map((adminIds: Id[]) => {
-          const AdminIds: string[] = [];
-          adminIds.forEach((adminId: Id) => {
-            AdminIds.push(adminId.id);
-          });
-          return AdminIds;
+        map((waitingPayingGroupIds: Id[]) => {
+          if (waitingPayingGroupIds.length) {
+            const Ids: string[] = [];
+            waitingPayingGroupIds.map((waitingPayingGroupId: Id) => {
+              Ids.push(waitingPayingGroupId.id);
+            });
+            return Ids;
+          } else {
+            return [];
+          }
         })
       );
   }
