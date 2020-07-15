@@ -1,5 +1,5 @@
-<div *ngIf="notifications?.length">
-  <mat-toolbar>
+<div *ngIf="notificationIds?.length">
+  <mat-toolbar class="toolbar">
     <span class="toolbar-title">Notifications</span>
     <span class="spacer"></span>
     <button mat-icon-button class="mat-menu" [matMenuTriggerFor]="menu">
@@ -13,54 +13,20 @@
     </mat-menu>
   </mat-toolbar>
 
-  <form
-    class="search-field-container"
-    (ngSubmit)="search(valueControl.value, searchOptions)"
+  <mat-list
+    infiniteScroll
+    [infiniteScrollDistance]="1"
+    [infiniteScrollThrottle]="50"
+    (scrolled)="additionalSearch()"
   >
-    <mat-form-field class="search-field" appearance="outline">
-      <mat-label>Search notifications</mat-label>
-
-      <input
-        matInput
-        type="text"
-        [formControl]="valueControl"
-        autocomplete="off"
-        [matAutocomplete]="auto"
-      />
-
-      <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-        <mat-option
-          *ngFor="let option of options"
-          [value]="option.group.name"
-          (optionSelected)="search(valueControl.value, searchOptions)"
-        >
-          {{ option.group.name }}
-        </mat-option>
-      </mat-autocomplete>
-
-      <button
-        mat-button
-        *ngIf="valueControl.value"
-        matSuffix
-        mat-icon-button
-        aria-label="Clear"
-        type="button"
-        (click)="clearSearch(); search(valueControl.value, searchOptions)"
-      >
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
-  </form>
-
-  <mat-list>
-    <div *ngFor="let hit of result?.hits">
+    <ng-container *ngFor="let hit of result?.hits">
       <app-notification [notification]="hit"></app-notification>
       <mat-divider></mat-divider>
-    </div>
+    </ng-container>
   </mat-list>
 </div>
 
-<div class="no-notifications-container" *ngIf="!notifications?.length">
+<div class="no-notifications-container" *ngIf="!notificationIds?.length">
   <img class="no-notifications-image" src="/assets/images/notification1.svg" />
   <p class="no-notifications-text">No notifications</p>
 </div>
