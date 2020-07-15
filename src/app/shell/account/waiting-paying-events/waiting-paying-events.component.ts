@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
-import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { EventGetService } from 'src/app/services/event-get.service';
+import { FormBuilder, FormControl } from '@angular/forms';
+import { SearchService } from 'src/app/services/search.service';
 
 @Component({
   selector: 'app-waiting-paying-events',
@@ -13,15 +13,30 @@ import { EventGetService } from 'src/app/services/event-get.service';
   styleUrls: ['./waiting-paying-events.component.scss'],
 })
 export class WaitingPayingEventsComponent implements OnInit {
-  waitingPayingEvents: Event[];
+  index = this.searchService.index.events_date;
 
-  waitingPayingEventsExistance: boolean;
+  form = this.fb.group({});
+
+  searchOptions = {
+    facetFilters: [],
+    page: 0,
+    hitsPerPage: 3,
+  };
+
+  options = [];
+
+  result: {
+    nbHits: number;
+    hits: any[];
+  };
+
+  valueControl: FormControl = new FormControl();
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService,
+    private fb: FormBuilder,
+    private searchService: SearchService,
     private userService: UserService,
-    private eventService: EventService,
     private eventGetService: EventGetService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
@@ -31,14 +46,28 @@ export class WaitingPayingEventsComponent implements OnInit {
         .subscribe((target: User) => {
           const id = target.uid;
           this.eventGetService
-            .getWaitingPayingEvents(id)
-            .subscribe((waitingPayingEvents: Event[]) => {
-              if (waitingPayingEvents.length) {
-                this.waitingPayingEvents = waitingPayingEvents;
-                this.waitingPayingEventsExistance = true;
-              } else {
-                this.waitingPayingEvents = waitingPayingEvents;
-                this.waitingPayingEventsExistance = false;
+            .getWaitingPayingEventIds(id)
+            .subscribe((waitingPayingEventIds: string[]) => {
+              if (waitingPayingEventIds.length) {
+                const facetFilters = waitingPayingEventIds.map(
+                  (waitingPayingEventId: string) => {
+                    return `id:${waitingPayingEventId}`;
+                  }
+                );
+                console.log(facetFilters);
+
+                this.searchOptions = {
+                  facetFilters: [facetFilters],
+                  page: 0,
+                  hitsPerPage: 3,
+                };
+
+                this.index.search('', this.searchOptions).then((result) => {
+                  console.log(result);
+                  this.options = result.hits;
+                });
+
+                this.search('', this.searchOptions);
               }
             });
         });
@@ -46,4 +75,14 @@ export class WaitingPayingEventsComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  search(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.result = result;
+    });
+  }
+
+  clearSearch() {
+    this.valueControl.setValue('');
+  }
 }
