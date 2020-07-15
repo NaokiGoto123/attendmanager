@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
-import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { EventGetService } from 'src/app/services/event-get.service';
+import { FormControl, FormBuilder } from '@angular/forms';
+import { SearchService } from 'src/app/services/search.service';
 
 @Component({
   selector: 'app-waiting-joinning-events',
@@ -13,15 +13,30 @@ import { EventGetService } from 'src/app/services/event-get.service';
   styleUrls: ['./waiting-joinning-events.component.scss'],
 })
 export class WaitingJoinningEventsComponent implements OnInit {
-  waitingJoinningEvents: Event[];
+  index = this.searchService.index.events_date;
 
-  waitingJoinningEventsExistance: boolean;
+  form = this.fb.group({});
+
+  searchOptions = {
+    facetFilters: [],
+    page: 0,
+    hitsPerPage: 3,
+  };
+
+  options = [];
+
+  result: {
+    nbHits: number;
+    hits: any[];
+  };
+
+  valueControl: FormControl = new FormControl();
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService,
+    private fb: FormBuilder,
+    private searchService: SearchService,
     private userService: UserService,
-    private eventService: EventService,
     private eventGetService: EventGetService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
@@ -31,14 +46,28 @@ export class WaitingJoinningEventsComponent implements OnInit {
         .subscribe((target: User) => {
           const id = target.uid;
           this.eventGetService
-            .getWaitingJoinningEvents(id)
-            .subscribe((waitingJoinningEvents: Event[]) => {
-              if (waitingJoinningEvents.length) {
-                this.waitingJoinningEvents = waitingJoinningEvents;
-                this.waitingJoinningEventsExistance = true;
-              } else {
-                this.waitingJoinningEvents = waitingJoinningEvents;
-                this.waitingJoinningEventsExistance = false;
+            .getWaitingJoinningEventIds(id)
+            .subscribe((waitingJoinningEventIds: string[]) => {
+              if (waitingJoinningEventIds.length) {
+                const facetFilters = waitingJoinningEventIds.map(
+                  (waitingJoinningEventId: string) => {
+                    return `id:${waitingJoinningEventId}`;
+                  }
+                );
+                console.log(facetFilters);
+
+                this.searchOptions = {
+                  facetFilters: [facetFilters],
+                  page: 0,
+                  hitsPerPage: 3,
+                };
+
+                this.index.search('', this.searchOptions).then((result) => {
+                  console.log(result);
+                  this.options = result.hits;
+                });
+
+                this.search('', this.searchOptions);
               }
             });
         });
@@ -46,4 +75,14 @@ export class WaitingJoinningEventsComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  search(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.result = result;
+    });
+  }
+
+  clearSearch() {
+    this.valueControl.setValue('');
+  }
 }
