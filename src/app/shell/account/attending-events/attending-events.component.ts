@@ -4,18 +4,37 @@ import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { UserService } from 'src/app/services/user.service';
 import { EventGetService } from 'src/app/services/event-get.service';
+import { SearchService } from 'src/app/services/search.service';
+import { FormBuilder, FormControl } from '@angular/forms';
 @Component({
   selector: 'app-attending-events',
   templateUrl: './attending-events.component.html',
   styleUrls: ['./attending-events.component.scss'],
 })
 export class AttendingEventsComponent implements OnInit {
-  attendingEvents: Event[];
+  index = this.searchService.index.events_date;
 
-  ifAttendingEvents: boolean;
+  form = this.fb.group({});
+
+  searchOptions = {
+    facetFilters: [],
+    page: 0,
+    hitsPerPage: 3,
+  };
+
+  options = [];
+
+  result: {
+    nbHits: number;
+    hits: any[];
+  };
+
+  valueControl: FormControl = new FormControl();
 
   constructor(
     private activatedRoute: ActivatedRoute,
+    private fb: FormBuilder,
+    private searchService: SearchService,
     private userService: UserService,
     private eventGetService: EventGetService
   ) {
@@ -26,24 +45,28 @@ export class AttendingEventsComponent implements OnInit {
         .subscribe((target: User) => {
           const id = target.uid;
           this.eventGetService
-            .getAttendingEvents(id)
-            .subscribe((attendingEvents: Event[]) => {
-              if (attendingEvents.length) {
-                const now = new Date();
-                const events: Event[] = [];
-                attendingEvents.forEach((attendingEvent: Event) => {
-                  if (attendingEvent.date.toDate() > now) {
-                    events.push(attendingEvent);
+            .getAttendingEventIds(id)
+            .subscribe((attendingEventIds: string[]) => {
+              if (attendingEventIds.length) {
+                const facetFilters = attendingEventIds.map(
+                  (attendingEventId: string) => {
+                    return `id:${attendingEventId}`;
                   }
+                );
+                console.log(facetFilters);
+
+                this.searchOptions = {
+                  facetFilters: [facetFilters],
+                  page: 0,
+                  hitsPerPage: 3,
+                };
+
+                this.index.search('', this.searchOptions).then((result) => {
+                  console.log(result);
+                  this.options = result.hits;
                 });
-                if (events.length) {
-                  this.ifAttendingEvents = true;
-                  this.attendingEvents = events;
-                } else {
-                  this.ifAttendingEvents = false;
-                }
-              } else {
-                this.ifAttendingEvents = false;
+
+                this.search('', this.searchOptions);
               }
             });
         });
@@ -51,4 +74,14 @@ export class AttendingEventsComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  search(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.result = result;
+    });
+  }
+
+  clearSearch() {
+    this.valueControl.setValue('');
+  }
 }
