@@ -1,22 +1,11 @@
-.toolbar-title {
-  color: #ff725d;
-}
-
-.search-field-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
+.toolbar {
   position: sticky;
   z-index: 1;
-  top: 64px;
-  border-bottom: solid 0.3px rgb(224, 224, 224);
+  top: 0;
 }
 
-.search-field {
-  position: sticky;
-  width: 50%;
-  padding: 21.5px 0 0 0;
+.toolbar-title {
+  color: #ff725d;
 }
 
 .spacer {
