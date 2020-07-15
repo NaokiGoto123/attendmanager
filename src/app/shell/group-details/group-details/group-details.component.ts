@@ -13,6 +13,7 @@ import { GroupDetailsDiaplogComponent } from '../group-details-diaplog/group-det
 import { UserService } from 'src/app/services/user.service';
 import { InviteService } from 'src/app/services/invite.service';
 import { GroupGetService } from 'src/app/services/group-get.service';
+import { InviteGetService } from 'src/app/services/invite-get.service';
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
@@ -49,7 +50,8 @@ export class GroupDetailsComponent implements OnInit {
     private userService: UserService,
     private chatService: ChatService,
     private dialog: MatDialog,
-    private inviteService: InviteService
+    private inviteService: InviteService,
+    private inviteGetService: InviteGetService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       this.id = params.get('id');
@@ -135,7 +137,7 @@ export class GroupDetailsComponent implements OnInit {
           }
         });
 
-      this.inviteService
+      this.inviteGetService
         .getGroupInvitingUsers(this.id)
         .subscribe((invitingUsers: User[]) => {
           this.invitingUsers = invitingUsers;
