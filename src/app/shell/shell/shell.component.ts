@@ -1,16 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from 'src/app/interfaces/user';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { UserService } from 'src/app/services/user.service';
 import { ChatGetService } from 'src/app/services/chat-get.service';
+import { UiService } from 'src/app/services/ui.service';
+import { MatSidenavContent } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-shell',
   templateUrl: './shell.component.html',
   styleUrls: ['./shell.component.scss'],
 })
-export class ShellComponent implements OnInit {
+export class ShellComponent implements AfterViewInit {
+  @ViewChild('wrap') private wrap: MatSidenavContent;
+
   notificationCount: number;
 
   messageCount: number;
@@ -21,7 +25,8 @@ export class ShellComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private notificationService: NotificationsService,
-    private chatGetService: ChatGetService
+    private chatGetService: ChatGetService,
+    private uiService: UiService
   ) {
     this.userService.getUser(this.authService.uid).subscribe((user: User) => {
       this.notificationCount = user.notificationCount;
@@ -34,7 +39,10 @@ export class ShellComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {}
+  ngAfterViewInit(): void {
+    this.uiService.scrollWrapperElement = this.wrap.getElementRef().nativeElement;
+    console.log(this.uiService.scrollWrapperElement);
+  }
 
   clearNotificationCount() {
     this.notificationService.clearNotificationCount(this.authService.uid);

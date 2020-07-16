@@ -14,6 +14,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 @NgModule({
   declarations: [NotificationsComponent, NotificationComponent],
   imports: [
@@ -30,6 +32,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     MatInputModule,
     MatAutocompleteModule,
     InfiniteScrollModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class NotificationsModule {}

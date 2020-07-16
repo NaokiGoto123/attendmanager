@@ -5,6 +5,7 @@ import { GroupService } from 'src/app/services/group.service';
 import { User } from 'src/app/interfaces/user';
 import { InviteService } from 'src/app/services/invite.service';
 import { GroupGetService } from 'src/app/services/group-get.service';
+import { InviteGetService } from 'src/app/services/invite-get.service';
 
 @Component({
   selector: 'app-group',
@@ -27,7 +28,7 @@ export class GroupComponent implements OnInit {
     private authService: AuthService,
     private groupService: GroupService,
     private groupGetService: GroupGetService,
-    private inviteService: InviteService
+    private inviteGetService: InviteGetService
   ) {}
 
   ngOnInit(): void {
@@ -77,7 +78,7 @@ export class GroupComponent implements OnInit {
             this.ifWaitingPayingMember = false;
           }
         });
-      this.inviteService
+      this.inviteGetService
         .getGroupInvitingUsers(this.group.id)
         .subscribe((invitingUsers: User[]) => {
           const invitingUserIds: string[] = [];

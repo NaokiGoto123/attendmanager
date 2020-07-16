@@ -17,13 +17,17 @@
     infiniteScroll
     [infiniteScrollDistance]="1"
     [infiniteScrollThrottle]="50"
+    [infiniteScrollContainer]="uiService.scrollWrapperElement"
     (scrolled)="additionalSearch()"
   >
-    <ng-container *ngFor="let hit of result?.hits">
-      <app-notification [notification]="hit"></app-notification>
+    <ng-container *ngFor="let item of items">
+      <app-notification [notification]="item"></app-notification>
       <mat-divider></mat-divider>
     </ng-container>
   </mat-list>
+  <!-- <ng-container *ngIf="loading"> -->
+  <mat-spinner *ngIf="loading" class="spinner"></mat-spinner>
+  <!-- </ng-container> -->
 </div>
 
 <div class="no-notifications-container" *ngIf="!notificationIds?.length">

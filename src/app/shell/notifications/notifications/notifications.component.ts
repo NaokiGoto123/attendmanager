@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { SearchService } from 'src/app/services/search.service';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-notifications',
@@ -14,7 +15,6 @@ export class NotificationsComponent implements OnInit {
   searchOptions = {
     facetFilters: [],
     page: 0,
-    hitsPerPage: 11,
   };
 
   result: {
@@ -22,18 +22,19 @@ export class NotificationsComponent implements OnInit {
     hits: any[];
   };
 
+  items = [];
+
   notificationIds: string[];
 
-  maxPage: number;
-
-  page: number;
-
   loading = false;
+
+  facetFilters = [];
 
   constructor(
     private authService: AuthService,
     private notificationService: NotificationsService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    public uiService: UiService
   ) {
     this.notificationService
       .getNotificationIds(this.authService.uid)
@@ -41,15 +42,14 @@ export class NotificationsComponent implements OnInit {
         this.notificationIds = notificationIds;
 
         if (notificationIds.length) {
-          const facetFilters = notificationIds.map((notificationId: string) => {
+          this.facetFilters = notificationIds.map((notificationId: string) => {
             return `id:${notificationId}`;
           });
-          console.log(facetFilters);
+          console.log(this.facetFilters);
 
           this.searchOptions = {
-            facetFilters: [facetFilters],
+            facetFilters: [this.facetFilters],
             page: 0,
-            hitsPerPage: 11,
           };
 
           this.search('', this.searchOptions);
@@ -60,27 +60,21 @@ export class NotificationsComponent implements OnInit {
   ngOnInit(): void {}
 
   search(query: string, searchOptions) {
-    this.index.search(query, searchOptions).then((result) => {
-      this.result = result;
-    });
+    this.loading = true;
+    setTimeout(() => {
+      console.log('1');
+      this.index.search(query, searchOptions).then((result) => {
+        console.log(result);
+        this.items.push(...result.hits);
+      });
+      this.loading = false;
+    }, 1000);
   }
 
   additionalSearch() {
     console.log('called');
-    // 最大ページ未満かつローディング中でなければ発動
-    if (!this.maxPage || (this.maxPage > this.page && !this.loading)) {
-      this.page++;
-      this.loading = true; // ローディング開始
-      this.index
-        .search('', {
-          page: this.page,
-        })
-        .then((result) => {
-          this.maxPage = result.nbPages; // 最大ページ数を保持
-          this.result.hits.push(...result.hits); // 結果リストに追加取得分を追加
-          this.loading = false; // ローディング終了
-        });
-    }
+    this.searchOptions.page++;
+    this.search('', this.searchOptions);
   }
 
   deleteNotification() {
