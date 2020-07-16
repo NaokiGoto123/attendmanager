@@ -19,15 +19,11 @@ export class EventsComponent implements OnInit {
   searchOptions = {
     facetFilters: [],
     page: 0,
-    hitsPerPage: 3,
   };
 
   options = [];
 
-  result: {
-    nbHits: number;
-    hits: any[];
-  };
+  items = [];
 
   valueControl: FormControl = new FormControl();
 
@@ -36,6 +32,8 @@ export class EventsComponent implements OnInit {
   events: Event[];
 
   listView = false;
+
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
@@ -64,7 +62,6 @@ export class EventsComponent implements OnInit {
         this.searchOptions = {
           facetFilters: [filters],
           page: 0,
-          hitsPerPage: 3,
         };
 
         this.search('', this.searchOptions);
@@ -83,7 +80,7 @@ export class EventsComponent implements OnInit {
       const filters = selecteds.map((selected) => {
         return `groupid:${selected}`;
       });
-      this.searchOptions = { facetFilters: [filters], page: 0, hitsPerPage: 3 };
+      this.searchOptions = { facetFilters: [filters], page: 0 };
       this.search('', this.searchOptions);
 
       this.index.search('', this.searchOptions).then((result) => {
@@ -99,9 +96,23 @@ export class EventsComponent implements OnInit {
   }
 
   search(query: string, searchOptions) {
-    this.index.search(query, searchOptions).then((result) => {
-      this.result = result;
+    this.loading = true;
+    const execution = new Promise(() => {
+      setTimeout(() => {
+        this.index.search(query, searchOptions).then((result) => {
+          this.items.push(...result.hits);
+        });
+      }, 2000);
     });
+    execution.then(() => {
+      this.loading = false;
+    });
+  }
+
+  additionalSearch() {
+    console.log('called');
+    this.searchOptions.page++;
+    this.search('', this.searchOptions);
   }
 
   clearSearch() {

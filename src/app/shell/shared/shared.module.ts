@@ -13,6 +13,7 @@ import { EventsListViewComponent } from './events-list-view/events-list-view.com
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatListModule,
     MatDividerModule,
     MatDialogModule,
+    InfiniteScrollModule,
   ],
   exports: [
     EventCardComponent,

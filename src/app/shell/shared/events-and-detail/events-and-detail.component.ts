@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/interfaces/event';
 import { Group } from 'src/app/interfaces/group';
@@ -9,6 +9,7 @@ import { Observable, combineLatest } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 import { EventGetService } from 'src/app/services/event-get.service';
 import { GroupGetService } from 'src/app/services/group-get.service';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-events-and-detail',
@@ -19,6 +20,8 @@ export class EventsAndDetailComponent implements OnInit {
   @Input() events: Event[];
 
   @Input() existance: boolean;
+
+  @Output() scrolls: EventEmitter<boolean> = new EventEmitter();
 
   givenEvent: Event;
 
@@ -40,7 +43,8 @@ export class EventsAndDetailComponent implements OnInit {
     private groupGetService: GroupGetService,
     private groupService: GroupService,
     private authService: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    public uiService: UiService
   ) {}
 
   ngOnInit(): void {}
@@ -108,5 +112,9 @@ export class EventsAndDetailComponent implements OnInit {
   // waitingJoinning to waitingPaying (pay+private)
   joinWaitingPayingList(uid: string, eventId: string) {
     this.eventService.joinWaitingPayingList(uid, eventId);
+  }
+
+  onScroll() {
+    this.scrolls.emit(true);
   }
 }

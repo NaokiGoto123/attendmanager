@@ -62,9 +62,7 @@ export class NotificationsComponent implements OnInit {
   search(query: string, searchOptions) {
     this.loading = true;
     setTimeout(() => {
-      console.log('1');
       this.index.search(query, searchOptions).then((result) => {
-        console.log(result);
         this.items.push(...result.hits);
       });
       this.loading = false;

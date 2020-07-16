@@ -112,15 +112,20 @@
 
   <div class="events-container" *ngIf="!listView">
     <app-events-and-detail
-      [events]="result?.hits"
-      [existance]="result?.hits?.length"
+      [events]="items"
+      [existance]="items?.length"
+      (scrolls)="search(valueControl.value, searchOptions)"
     ></app-events-and-detail>
   </div>
 
   <ng-container *ngIf="listView">
     <app-events-list-view
-      [events]="result?.hits"
-      [existence]="result?.hits?.length"
+      [events]="items"
+      [existence]="items.length"
     ></app-events-list-view>
+  </ng-container>
+
+  <ng-container *ngIf="loading">
+    <mat-spinner></mat-spinner>
   </ng-container>
 </div>

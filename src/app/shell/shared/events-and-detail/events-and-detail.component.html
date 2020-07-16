@@ -2,13 +2,20 @@
   <div class="container">
     <div class="event-cards-container">
       <div class="event-cards">
-        <div *ngFor="let event of events">
-          <app-event-card
-            [event]="event"
-            (mouseenter)="givenEvent = event; mouseEnter()"
-          ></app-event-card>
-        </div>
+        <app-event-card
+          *ngFor="let event of events"
+          [event]="event"
+          (mouseenter)="givenEvent = event; mouseEnter()"
+        >
+        </app-event-card>
       </div>
+      <div
+        infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="50"
+        [infiniteScrollContainer]="uiService.scrollWrapperElement"
+        (scrolled)="onScroll()"
+      ></div>
     </div>
 
     <div class="event-card-detail-container">
