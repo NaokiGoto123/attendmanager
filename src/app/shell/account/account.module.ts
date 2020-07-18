@@ -23,6 +23,7 @@ import { InvitedGroupsComponent } from './invited-groups/invited-groups.componen
 import { InvitedEventsComponent } from './invited-events/invited-events.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -52,6 +53,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     SharedModule,
     MatMenuModule,
     MatAutocompleteModule,
+    MatProgressBarModule,
   ],
 })
 export class AccountModule {}
