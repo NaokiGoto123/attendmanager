@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChatService } from 'src/app/services/chat.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChatRoom } from 'src/app/interfaces/chat-room';
-import { Message } from 'src/app/interfaces/message';
+import { Message, MessageWithUser } from 'src/app/interfaces/message';
 import { AuthService } from 'src/app/services/auth.service';
 import { firestore } from 'firebase';
 import { FormBuilder, Validators } from '@angular/forms';
@@ -29,7 +29,7 @@ export class ChatDetailComponent implements OnInit {
 
   name: string;
 
-  messages: Message[];
+  messagesWithUsers: MessageWithUser[];
 
   groupid: string;
 
@@ -55,9 +55,9 @@ export class ChatDetailComponent implements OnInit {
           this.name = chatRoom?.name;
           this.groupid = chatRoom?.groupid;
           this.chatGetService
-            .getMessages(chatRoomId)
-            .subscribe((messages: Message[]) => {
-              this.messages = messages;
+            .getMessagesWithUsers(chatRoomId)
+            .subscribe((messagesWithUsers: MessageWithUser[]) => {
+              this.messagesWithUsers = messagesWithUsers;
             });
         });
     });
