@@ -18,6 +18,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatMenuModule } from '@angular/material/menu';
 import { ChatRoomMembersComponent } from './chat-room-members/chat-room-members.component';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [ChatComponent, ChatDetailComponent, ChatRoomMembersComponent],
@@ -38,6 +39,7 @@ import { MatBadgeModule } from '@angular/material/badge';
     MatToolbarModule,
     MatMenuModule,
     MatBadgeModule,
+    MatTooltipModule,
   ],
 })
 export class ChatModule {}
