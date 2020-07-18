@@ -25,12 +25,11 @@ export class WaitingJoinningEventsComponent implements OnInit {
 
   options = [];
 
-  result: {
-    nbHits: number;
-    hits: any[];
-  };
+  items = [];
 
   valueControl: FormControl = new FormControl();
+
+  loading = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -78,8 +77,22 @@ export class WaitingJoinningEventsComponent implements OnInit {
 
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {
-      this.result = result;
+      this.items.push(...result.hits);
     });
+  }
+
+  additionalSearch() {
+    console.log('called');
+    if (!this.loading) {
+      this.loading = true;
+      this.searchOptions.page++;
+      setTimeout(() => {
+        this.index.search('', this.searchOptions).then((result) => {
+          this.items.push(...result.hits);
+          this.loading = false;
+        });
+      }, 1000);
+    }
   }
 
   clearSearch() {
