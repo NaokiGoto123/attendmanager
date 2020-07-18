@@ -74,7 +74,13 @@ export class InvitedEventsComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.valueControl.valueChanges.subscribe((query) => {
+      this.index.search(query, this.searchOptions).then((result) => {
+        this.options = result.hits;
+      });
+    });
+  }
 
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {

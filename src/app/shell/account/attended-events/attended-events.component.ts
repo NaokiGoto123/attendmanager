@@ -62,10 +62,11 @@ export class AttendedEventsComponent implements OnInit {
                   hitsPerPage: 3,
                 };
 
-                this.index.search('', this.searchOptions).then((result) => {
-                  console.log(result);
-                  this.options = result.hits;
-                });
+                this.index
+                  .search('', { facetFilters: [facetFilters] })
+                  .then((result) => {
+                    this.options = result.hits;
+                  });
 
                 this.search('', this.searchOptions);
               }
@@ -74,7 +75,13 @@ export class AttendedEventsComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.valueControl.valueChanges.subscribe((query) => {
+      this.index.search(query, this.searchOptions).then((result) => {
+        this.options = result.hits;
+      });
+    });
+  }
 
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {
