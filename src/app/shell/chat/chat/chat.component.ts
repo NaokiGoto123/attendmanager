@@ -5,6 +5,7 @@ import { ChatRoom } from 'src/app/interfaces/chat-room';
 import { map, switchMap } from 'rxjs/operators';
 import { combineLatest, Observable, of } from 'rxjs';
 import { ChatService } from 'src/app/services/chat.service';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
@@ -15,11 +16,21 @@ export class ChatComponent implements OnInit {
 
   chatRooms: Observable<ChatRoom[]>;
 
+  url: string;
+
   constructor(
     private authService: AuthService,
     private chatService: ChatService,
-    private chatGetService: ChatGetService
-  ) {}
+    private chatGetService: ChatGetService,
+    private router: Router
+  ) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        console.log(this.router.url);
+        this.url = this.router.url;
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.chatRooms = this.chatGetService
