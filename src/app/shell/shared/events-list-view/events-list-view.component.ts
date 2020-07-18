@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Event } from 'src/app/interfaces/event';
 
 @Component({
@@ -11,7 +11,13 @@ export class EventsListViewComponent implements OnInit {
 
   @Input() existence: boolean;
 
+  @Output() more: EventEmitter<boolean> = new EventEmitter();
+
   constructor() {}
 
   ngOnInit(): void {}
+
+  moreFunction() {
+    this.more.emit(true);
+  }
 }
