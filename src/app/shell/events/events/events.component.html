@@ -108,24 +108,26 @@
         </mat-form-field>
       </form>
     </div>
+    <mat-progress-bar
+      class="progress-bar"
+      mode="indeterminate"
+      *ngIf="loading"
+    ></mat-progress-bar>
   </div>
 
   <div class="events-container" *ngIf="!listView">
     <app-events-and-detail
       [events]="items"
       [existance]="items?.length"
-      (scrolls)="search(valueControl.value, searchOptions)"
+      (scrolls)="additionalSearch()"
     ></app-events-and-detail>
   </div>
 
   <ng-container *ngIf="listView">
     <app-events-list-view
       [events]="items"
-      [existence]="items.length"
+      [existence]="items?.length"
+      (more)="additionalSearch()"
     ></app-events-list-view>
-  </ng-container>
-
-  <ng-container *ngIf="loading">
-    <mat-spinner></mat-spinner>
   </ng-container>
 </div>

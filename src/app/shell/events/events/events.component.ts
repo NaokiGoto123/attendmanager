@@ -16,16 +16,17 @@ export class EventsComponent implements OnInit {
 
   form = this.fb.group({});
 
+  valueControl: FormControl = new FormControl();
+
   searchOptions = {
     facetFilters: [],
     page: 0,
+    hitsPerPage: 3,
   };
 
   options = [];
 
   items = [];
-
-  valueControl: FormControl = new FormControl();
 
   groups: Group[];
 
@@ -62,13 +63,8 @@ export class EventsComponent implements OnInit {
         this.searchOptions = {
           facetFilters: [filters],
           page: 0,
+          hitsPerPage: 3,
         };
-
-        this.search('', this.searchOptions);
-
-        this.index.search('', this.searchOptions).then((result) => {
-          this.options = result.hits;
-        });
       });
   }
 
@@ -80,10 +76,13 @@ export class EventsComponent implements OnInit {
       const filters = selecteds.map((selected) => {
         return `groupid:${selected}`;
       });
-      this.searchOptions = { facetFilters: [filters], page: 0 };
-      this.search('', this.searchOptions);
-
+      console.log(filters);
+      this.searchOptions = { facetFilters: [filters], page: 0, hitsPerPage: 3 };
       this.index.search('', this.searchOptions).then((result) => {
+        this.items = result.hits;
+      });
+
+      this.index.search('', { facetFilters: [filters] }).then((result) => {
         this.options = result.hits;
       });
     });
@@ -96,23 +95,23 @@ export class EventsComponent implements OnInit {
   }
 
   search(query: string, searchOptions) {
-    this.loading = true;
-    const execution = new Promise(() => {
-      setTimeout(() => {
-        this.index.search(query, searchOptions).then((result) => {
-          this.items.push(...result.hits);
-        });
-      }, 2000);
-    });
-    execution.then(() => {
-      this.loading = false;
+    this.index.search(query, searchOptions).then((result) => {
+      this.items.push(...result.hits);
     });
   }
 
   additionalSearch() {
     console.log('called');
-    this.searchOptions.page++;
-    this.search('', this.searchOptions);
+    if (!this.loading) {
+      this.loading = true;
+      this.searchOptions.page++;
+      setTimeout(() => {
+        this.index.search('', this.searchOptions).then((result) => {
+          this.items.push(...result.hits);
+          this.loading = false;
+        });
+      }, 1000);
+    }
   }
 
   clearSearch() {

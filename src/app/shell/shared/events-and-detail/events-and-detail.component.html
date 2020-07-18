@@ -1,6 +1,6 @@
 <div *ngIf="existance">
   <div class="container">
-    <div class="event-cards-container">
+    <div class="event-cards-container" #container>
       <div class="event-cards">
         <app-event-card
           *ngFor="let event of events"
@@ -13,7 +13,7 @@
         infiniteScroll
         [infiniteScrollDistance]="2"
         [infiniteScrollThrottle]="50"
-        [infiniteScrollContainer]="uiService.scrollWrapperElement"
+        [infiniteScrollContainer]="container"
         (scrolled)="onScroll()"
       ></div>
     </div>

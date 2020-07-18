@@ -9,7 +9,6 @@ import { Observable, combineLatest } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
 import { EventGetService } from 'src/app/services/event-get.service';
 import { GroupGetService } from 'src/app/services/group-get.service';
-import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-events-and-detail',
@@ -43,8 +42,7 @@ export class EventsAndDetailComponent implements OnInit {
     private groupGetService: GroupGetService,
     private groupService: GroupService,
     private authService: AuthService,
-    private userService: UserService,
-    public uiService: UiService
+    private userService: UserService
   ) {}
 
   ngOnInit(): void {}
@@ -115,6 +113,7 @@ export class EventsAndDetailComponent implements OnInit {
   }
 
   onScroll() {
+    console.log('scrolled');
     this.scrolls.emit(true);
   }
 }

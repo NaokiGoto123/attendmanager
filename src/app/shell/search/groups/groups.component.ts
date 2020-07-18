@@ -16,19 +16,18 @@ export class GroupsComponent implements OnInit {
   searchOptions = {
     facetFilters: ['searchable:true'],
     page: 0,
-    hitsPerPage: 3,
+    hitsPerPage: 6,
   };
 
   options = [];
 
-  result: {
-    nbHits: number;
-    hits: any[];
-  };
+  items = [];
 
   valueControl: FormControl = new FormControl();
 
   searchableGroups: Group[];
+
+  loading = false;
 
   constructor(
     private groupServiec: GroupService,
@@ -55,8 +54,22 @@ export class GroupsComponent implements OnInit {
 
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {
-      this.result = result;
+      this.items.push(...result.hits);
     });
+  }
+
+  additionalSearch() {
+    console.log('called');
+    if (this.loading) {
+      this.searchOptions.page++;
+      this.loading = true;
+      setTimeout(() => {
+        this.index.search('', this.searchOptions).then((result) => {
+          this.items.push(...result.hits);
+          this.loading = false;
+        });
+      }, 1000);
+    }
   }
 
   clearSearch() {

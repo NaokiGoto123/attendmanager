@@ -21,14 +21,13 @@ export class EventsComponent implements OnInit {
 
   options = [];
 
-  result: {
-    nbHits: number;
-    hits: any[];
-  };
+  items = [];
 
   valueControl: FormControl = new FormControl();
 
   searchableEvents: Event[];
+
+  loading = false;
 
   constructor(
     private eventService: EventService,
@@ -57,8 +56,22 @@ export class EventsComponent implements OnInit {
 
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {
-      this.result = result;
+      this.items.push(...result.hits);
     });
+  }
+
+  additionalSearch() {
+    console.log('called');
+    if (!this.loading) {
+      this.loading = true;
+      this.searchOptions.page++;
+      setTimeout(() => {
+        this.index.search('', this.searchOptions).then((result) => {
+          this.items.push(...result.hits);
+          this.loading = false;
+        });
+      }, 1000);
+    }
   }
 
   clearSearch() {

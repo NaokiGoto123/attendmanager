@@ -60,36 +60,40 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <div *ngIf="!group.private || invited">
-        <div *ngIf="group.price === 0 && invited">
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="PayToInvitingUserListToMembers()"
-          >
-            Join
-          </button>
-        </div>
-        <div *ngIf="group.price === 0 && !invited">
-          <button mat-raised-button color="primary" (click)="joinGroup()">
-            Join
-          </button>
-        </div>
-        <div *ngIf="group.price !== 0 && !invited">
-          <button mat-raised-button color="primary" (click)="payToJoinGroup()">
-            Pay {{ group.price }} tp join
-          </button>
-        </div>
-        <div *ngIf="group.price !== 0 && invited">
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="invitingUserListToMembers()"
-          >
-            Pay {{ group.price }} tp join
-          </button>
+        <div *ngIf="!group.private || invited">
+          <div *ngIf="group.price === 0 && invited">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="PayToInvitingUserListToMembers()"
+            >
+              Join
+            </button>
+          </div>
+          <div *ngIf="group.price === 0 && !invited">
+            <button mat-raised-button color="primary" (click)="joinGroup()">
+              Join
+            </button>
+          </div>
+          <div *ngIf="group.price !== 0 && !invited">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="payToJoinGroup()"
+            >
+              Pay {{ group.price }} tp join
+            </button>
+          </div>
+          <div *ngIf="group.price !== 0 && invited">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="invitingUserListToMembers()"
+            >
+              Pay {{ group.price }} tp join
+            </button>
+          </div>
         </div>
       </div>
     </div>

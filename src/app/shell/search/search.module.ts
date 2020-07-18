@@ -16,6 +16,8 @@ import { AccountsComponent } from './accounts/accounts.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatAutocompleteModule,
     MatListModule,
     MatDividerModule,
+    InfiniteScrollModule,
+    MatProgressBarModule,
   ],
 })
 export class SearchModule {}
