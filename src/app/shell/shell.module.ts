@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { ShellRoutingModule } from './shell-routing.module';
 import { ShellComponent } from './shell/shell.component';
-import { HeaderComponent } from './header/header.component';
 import { SharedModule } from './shared/shared.module';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -16,7 +15,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
 
 @NgModule({
-  declarations: [ShellComponent, HeaderComponent],
+  declarations: [ShellComponent],
   imports: [
     CommonModule,
     ShellRoutingModule,
