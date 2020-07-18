@@ -4,7 +4,7 @@ import { ChatRoom } from '../interfaces/chat-room';
 import { Group } from '../interfaces/group';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-import { Message } from '../interfaces/message';
+import { Message, MessageWithUser } from '../interfaces/message';
 import { Id } from '../interfaces/id';
 import { User } from '../interfaces/user';
 
@@ -132,6 +132,45 @@ export class ChatGetService {
           } else {
             return [];
           }
+        })
+      );
+  }
+
+  getMessagesWithUsers(chatRoomId: string): Observable<MessageWithUser[]> {
+    return this.db
+      .collection<Message>(`chatRooms/${chatRoomId}/messages`, (ref) =>
+        ref.orderBy('sentAt')
+      )
+      .valueChanges()
+      .pipe(
+        switchMap((messages: Message[]) => {
+          const messagesWithOwners: Observable<
+            [Message, User]
+          >[] = messages.map((message: Message) => {
+            const owner: Observable<User> = this.db
+              .doc<User>(`users/${message.ownerId}`)
+              .valueChanges();
+            return combineLatest(of(message), owner);
+          });
+          return combineLatest(messagesWithOwners);
+        }),
+        map((messagesWithOwners: [Message, User][]) => {
+          const messagesWithUsers: MessageWithUser[] = [];
+          messagesWithOwners.map((messageWithOwner: [Message, User]) => {
+            const messageWithUser: MessageWithUser = {
+              id: messageWithOwner[0].id,
+              ownerId: messageWithOwner[0].ownerId,
+              ownerPhotoURL: messageWithOwner[0].ownerPhotoURL,
+              content: messageWithOwner[0].content,
+              sentAt: messageWithOwner[0].sentAt,
+              searchId: messageWithOwner[1].searchId,
+              displayName: messageWithOwner[1].displayName,
+              photoURL: messageWithOwner[1].photoURL,
+            };
+            messagesWithUsers.push(messageWithUser);
+          });
+          console.log(messagesWithUsers);
+          return messagesWithUsers;
         })
       );
   }
