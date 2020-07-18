@@ -1,23 +1,48 @@
 <mat-sidenav-container class="container">
   <mat-sidenav mode="side" class="side-menu" opened>
-    <mat-nav-list>
-      <a mat-list-item class="sidenav-item" routerLink="">
+    <mat-nav-list class="sidenav-list">
+      <a
+        mat-list-item
+        class="sidenav-item"
+        [class.sidenav-item-colored]="url === '/'"
+        routerLink=""
+      >
         <mat-icon class="sidenav-icon">home</mat-icon> Home
       </a>
 
-      <a mat-list-item class="sidenav-item" routerLink="/groups">
+      <a
+        mat-list-item
+        class="sidenav-item"
+        [class.sidenav-item-colored]="url === '/groups'"
+        routerLink="/groups"
+      >
         <mat-icon class="sidenav-icon">people</mat-icon> Groups
       </a>
 
-      <a mat-list-item class="sidenav-item" routerLink="/create">
+      <a
+        mat-list-item
+        class="sidenav-item"
+        [class.sidenav-item-colored]="url === '/create'"
+        routerLink="/create"
+      >
         <mat-icon class="sidenav-icon">add</mat-icon> Create
       </a>
 
-      <a mat-list-item class="sidenav-item" routerLink="/search">
+      <a
+        mat-list-item
+        class="sidenav-item"
+        [class.sidenav-item-colored]="url === '/search'"
+        routerLink="/search"
+      >
         <mat-icon class="sidenav-icon">search</mat-icon> Search
       </a>
 
-      <a mat-list-item class="sidenav-item" routerLink="/chat">
+      <a
+        mat-list-item
+        class="sidenav-item"
+        [class.sidenav-item-colored]="url === '/chat'"
+        routerLink="/chat"
+      >
         <ng-container *ngIf="messageCount === 0">
           <mat-icon class="sidenav-icon"> chat</mat-icon>Chat
         </ng-container>
@@ -37,6 +62,7 @@
       <a
         mat-list-item
         class="sidenav-item"
+        [class.sidenav-item-colored]="url === '/notifications'"
         routerLink="/notifications"
         (click)="clearNotificationCount()"
       >
@@ -59,6 +85,7 @@
       <a
         mat-list-item
         class="sidenav-item"
+        [class.sidenav-item-colored]="url === '/account'"
         routerLink="/account"
         [queryParams]="{ id: searchId }"
       >
@@ -68,6 +95,7 @@
       <a
         mat-list-item
         class="sidenav-item"
+        [class.sidenav-item-colored]="url === '/settings/?'"
         routerLink="/settings"
         [queryParams]="{ id: searchId }"
       >
@@ -76,7 +104,12 @@
 
       <mat-divider></mat-divider>
 
-      <a mat-list-item class="sidenav-item" routerLink="/upgrade">
+      <a
+        mat-list-item
+        class="sidenav-item"
+        [class.sidenav-item-colored]="url === '/upgrade'"
+        routerLink="/upgrade"
+      >
         <mat-icon class="sidenav-icon">whatshot</mat-icon> Upgrade
       </a>
     </mat-nav-list>

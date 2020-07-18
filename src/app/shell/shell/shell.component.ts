@@ -6,6 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { ChatGetService } from 'src/app/services/chat-get.service';
 import { UiService } from 'src/app/services/ui.service';
 import { MatSidenavContent } from '@angular/material/sidenav';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-shell',
@@ -21,17 +22,28 @@ export class ShellComponent implements AfterViewInit {
 
   searchId: string;
 
+  url: string;
+
   constructor(
     private authService: AuthService,
     private userService: UserService,
     private notificationService: NotificationsService,
     private chatGetService: ChatGetService,
-    private uiService: UiService
+    private uiService: UiService,
+    private router: Router
   ) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        console.log(this.router.url);
+        this.url = this.router.url;
+      }
+    });
+
     this.userService.getUser(this.authService.uid).subscribe((user: User) => {
       this.notificationCount = user.notificationCount;
       this.searchId = user.searchId;
     });
+
     this.chatGetService
       .getAllMesssageCounts(this.authService.uid)
       .subscribe((messageCount: number) => {
