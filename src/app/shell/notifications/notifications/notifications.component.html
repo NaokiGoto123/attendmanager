@@ -25,9 +25,7 @@
       <mat-divider></mat-divider>
     </ng-container>
   </mat-list>
-  <!-- <ng-container *ngIf="loading"> -->
   <mat-spinner *ngIf="loading" class="spinner"></mat-spinner>
-  <!-- </ng-container> -->
 </div>
 
 <div class="no-notifications-container" *ngIf="!notificationIds?.length">

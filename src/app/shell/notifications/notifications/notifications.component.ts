@@ -60,19 +60,23 @@ export class NotificationsComponent implements OnInit {
   ngOnInit(): void {}
 
   search(query: string, searchOptions) {
-    this.loading = true;
-    setTimeout(() => {
-      this.index.search(query, searchOptions).then((result) => {
-        this.items.push(...result.hits);
-      });
-      this.loading = false;
-    }, 1000);
+    this.index.search(query, searchOptions).then((result) => {
+      this.items.push(...result.hits);
+    });
   }
 
   additionalSearch() {
     console.log('called');
-    this.searchOptions.page++;
-    this.search('', this.searchOptions);
+    if (!this.loading) {
+      this.loading = true;
+      this.searchOptions.page++;
+      setTimeout(() => {
+        this.index.search('', this.searchOptions).then((result) => {
+          this.items.push(...result.hits);
+          this.loading = false;
+        });
+      }, 1000);
+    }
   }
 
   deleteNotification() {
