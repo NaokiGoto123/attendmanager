@@ -43,12 +43,24 @@ export class AccountComponent implements OnInit {
                   { label: 'Others' },
                 ];
                 this.menuLinks = [
-                  { label: 'Invited groups', link: 'invited-groups' },
-                  { label: 'Invited events', link: 'invited-events' },
-                  { label: 'Waiting groups', link: 'waiting-groups' },
-                  { label: 'Paying groups', link: 'paying-groups' },
-                  { label: 'Waiting events', link: 'waiting-events' },
-                  { label: 'Paying events', link: 'paying-events' },
+                  {
+                    label: 'Groups you are getting invitations from',
+                    link: 'invited-groups',
+                  },
+                  {
+                    label: 'Events you are getting invitations from',
+                    link: 'invited-events',
+                  },
+                  {
+                    label: 'Groups you are waiting to be approved',
+                    link: 'waiting-groups',
+                  },
+                  { label: 'Pay to join groups', link: 'paying-groups' },
+                  {
+                    label: 'Events you are waiting to be approved',
+                    link: 'waiting-events',
+                  },
+                  { label: 'Pay to attend events', link: 'paying-events' },
                 ];
               });
           } else {
