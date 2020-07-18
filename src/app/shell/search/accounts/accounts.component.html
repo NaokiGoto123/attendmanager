@@ -1,6 +1,6 @@
 <form
   class="search-field-container"
-  (ngSubmit)="search(valueControl.value, searchOptions)"
+  (ngSubmit)="querySearch(valueControl.value, searchOptions)"
 >
   <mat-form-field class="search-field" appearance="outline">
     <mat-label>Search users</mat-label>
@@ -15,7 +15,7 @@
 
     <mat-autocomplete
       autoActiveFirstOption
-      (optionSelected)="search(valueControl.value, searchOptions)"
+      (optionSelected)="querySearch(valueControl.value, searchOptions)"
       #auto="matAutocomplete"
     >
       <mat-option *ngFor="let option of options" [value]="option.displayName">
@@ -30,21 +30,31 @@
       mat-icon-button
       aria-label="Clear"
       type="button"
-      (click)="clearSearch(); search(valueControl.value, searchOptions)"
+      (click)="clearSearch(); querySearch(valueControl.value, searchOptions)"
     >
       <mat-icon>close</mat-icon>
     </button>
   </mat-form-field>
 </form>
 
-<mat-list role="list" *ngFor="let hit of result?.hits">
+<mat-list
+  role="list"
+  *ngFor="let item of items"
+  infiniteScroll
+  [infiniteScrollDistance]="1"
+  [infiniteScrollThrottle]="50"
+  [infiniteScrollContainer]="uiService.scrollWrapperElement"
+  (scrolled)="additionalSearch()"
+>
   <mat-list-item
+    class="list-item"
     role="listitem"
     routerLink="/account"
-    [queryParams]="{ id: hit.searchId }"
+    [queryParams]="{ id: item.searchId }"
   >
-    <img class="account-picture" src="{{ hit.photoURL }}" />
-    {{ hit.displayName }}
+    <img class="account-picture" src="{{ item.photoURL }}" />
+    {{ item.displayName }}
   </mat-list-item>
   <mat-divider></mat-divider>
 </mat-list>
+<mat-spinner *ngIf="loading" class="spinner"></mat-spinner>

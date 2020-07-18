@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { SearchService } from 'src/app/services/search.service';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-accounts',
@@ -14,6 +15,8 @@ export class AccountsComponent implements OnInit {
 
   searchOptions = {
     facetFilters: [],
+    page: 0,
+    hitsPerPage: 3,
   };
 
   optionOptions = {
@@ -22,12 +25,14 @@ export class AccountsComponent implements OnInit {
 
   options = [];
 
-  result: {
-    nbHits: number;
-    hits: any[];
-  };
+  items = [];
 
-  constructor(private searchService: SearchService) {
+  loading = false;
+
+  constructor(
+    private searchService: SearchService,
+    public uiService: UiService
+  ) {
     this.search('', this.searchOptions);
 
     this.index.search('', this.optionOptions).then((result) => {
@@ -45,8 +50,28 @@ export class AccountsComponent implements OnInit {
 
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {
-      this.result = result;
+      this.items.push(...result.hits);
     });
+  }
+
+  querySearch(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.items = result?.hits;
+    });
+  }
+
+  additionalSearch() {
+    console.log('called');
+    if (!this.loading) {
+      this.loading = true;
+      this.searchOptions.page++;
+      setTimeout(() => {
+        this.index.search('', this.searchOptions).then((result) => {
+          this.items.push(...result.hits);
+          this.loading = false;
+        });
+      }, 1000);
+    }
   }
 
   clearSearch() {
