@@ -1,6 +1,6 @@
 <form
   class="search-field-container"
-  (ngSubmit)="search(valueControl.value, searchOptions)"
+  (ngSubmit)="querySearch(valueControl.value, searchOptions)"
 >
   <mat-form-field class="search-field" appearance="outline">
     <mat-label>Search from your events</mat-label>
@@ -15,7 +15,7 @@
 
     <mat-autocomplete
       autoActiveFirstOption
-      (optionSelected)="search(valueControl.value, searchOptions)"
+      (optionSelected)="querySearch(valueControl.value, searchOptions)"
       #auto="matAutocomplete"
     >
       <mat-option *ngFor="let option of options" [value]="option.title">
@@ -30,7 +30,7 @@
       mat-icon-button
       aria-label="Clear"
       type="button"
-      (click)="clearSearch(); search(valueControl.value, searchOptions)"
+      (click)="clearSearch(); querySearch(valueControl.value, searchOptions)"
     >
       <mat-icon>close</mat-icon>
     </button>

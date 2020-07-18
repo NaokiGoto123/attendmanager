@@ -41,9 +41,11 @@ export class EventsComponent implements OnInit {
       });
     this.search('', this.searchOptions);
 
-    this.index.search('', this.searchOptions).then((result) => {
-      this.options = result.hits;
-    });
+    this.index
+      .search('', { facetFilters: ['searchable:true'] })
+      .then((result) => {
+        this.options = result.hits;
+      });
   }
 
   ngOnInit(): void {
@@ -57,6 +59,12 @@ export class EventsComponent implements OnInit {
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {
       this.items.push(...result.hits);
+    });
+  }
+
+  querySearch(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.items = result?.hits;
     });
   }
 
