@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
 import { UserService } from 'src/app/services/user.service';
 import { EventGetService } from 'src/app/services/event-get.service';
@@ -84,6 +83,12 @@ export class AttendingEventsComponent implements OnInit {
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {
       this.items.push(...result.hits);
+    });
+  }
+
+  querySearch(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.items = result?.hits;
     });
   }
 

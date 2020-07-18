@@ -89,6 +89,12 @@ export class WaitingPayingEventsComponent implements OnInit {
     });
   }
 
+  querySearch(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.items = result?.hits;
+    });
+  }
+
   additionalSearch() {
     console.log('called');
     if (!this.loading) {
