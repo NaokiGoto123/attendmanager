@@ -9,51 +9,31 @@
 }
 
 .container {
+  text-align: center;
+  width: 60%;
+  margin: 0 auto;
+}
+
+.title {
+  font-size: 32px;
+  margin: 50px 0 40px 0;
+}
+
+.field {
   width: 100%;
 }
 
-.create-event-form {
+.radio-button {
+  margin: 0 22px 22px 0;
+}
+
+.toggle {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 1000px;
-  min-width: 600px;
-  margin: 40px auto;
+  align-self: flex-start;
+  margin: 0 0 20px 0;
 }
 
-h1 {
-  padding: 0 0 40px 0;
-}
-
-.create-event-field {
-  display: block;
-  width: 80%;
-  margin-bottom: 15px;
-}
-
-.group-picker-container {
-  display: flex;
-  align-items: center;
-  width: 80%;
-}
-
-.group-picker {
+.submit-button {
   width: 100%;
-}
-
-mat-slider {
-  width: 100%;
-}
-
-.buttons {
-  margin: 0 0 200px 0;
-}
-
-.create-button {
-  margin: 0 0 200px 0;
-}
-
-.ortext {
-  display: inline-block;
-  margin: 0 15px 0 15px;
+  margin: 0 0 150px 0;
 }

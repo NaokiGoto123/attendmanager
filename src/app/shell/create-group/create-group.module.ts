@@ -15,7 +15,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatSelectModule } from '@angular/material/select';
 import { ImageCropperModule } from 'ngx-image-cropper';
 import { MatRadioModule } from '@angular/material/radio';
-
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 @NgModule({
   declarations: [CreateGroupComponent],
   imports: [
@@ -34,6 +34,7 @@ import { MatRadioModule } from '@angular/material/radio';
     MatSelectModule,
     ImageCropperModule,
     MatRadioModule,
+    MaterialFileInputModule,
   ],
 })
 export class CreateGroupModule {}
