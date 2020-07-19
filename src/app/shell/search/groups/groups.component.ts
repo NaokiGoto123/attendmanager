@@ -4,6 +4,7 @@ import { GroupService } from 'src/app/services/group.service';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { SearchService } from 'src/app/services/search.service';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-groups',
@@ -33,7 +34,8 @@ export class GroupsComponent implements OnInit {
 
   constructor(
     private groupServiec: GroupService,
-    private searchService: SearchService
+    private searchService: SearchService,
+    public uiService: UiService
   ) {
     this.initialLoading = true;
 
@@ -68,9 +70,9 @@ export class GroupsComponent implements OnInit {
 
   additionalSearch() {
     console.log('called');
-    if (this.loading) {
-      this.searchOptions.page++;
+    if (!this.loading) {
       this.loading = true;
+      this.searchOptions.page++;
       setTimeout(() => {
         this.index.search('', this.searchOptions).then((result) => {
           this.items.push(...result.hits);

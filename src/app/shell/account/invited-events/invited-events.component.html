@@ -41,7 +41,11 @@
       </button>
     </mat-form-field>
   </form>
-  <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
+  <mat-progress-bar
+    class="progress-bar"
+    mode="indeterminate"
+    *ngIf="loading"
+  ></mat-progress-bar>
 
   <div class="container" *ngIf="items?.length">
     <app-events-and-detail
