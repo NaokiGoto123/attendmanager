@@ -61,8 +61,10 @@
       </div>
     </div>
 
-    <div *ngIf="!items.length">
-      <h1>No result</h1>
+    <div class="no-groups-container" *ngIf="!items?.length">
+      <img class="no-groups-image" src="/assets/images/music-festival.svg" />
+      <h1>No groups</h1>
+      <h1 routerLink="/create-group">Create group</h1>
     </div>
   </ng-container>
 </ng-container>
