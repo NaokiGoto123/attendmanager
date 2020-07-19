@@ -57,7 +57,6 @@ export class AttendedEventsComponent implements OnInit {
                     return `id:${attendingEventId}`;
                   }
                 );
-                console.log(facetFilters);
 
                 this.searchOptions = {
                   facetFilters: [facetFilters],
