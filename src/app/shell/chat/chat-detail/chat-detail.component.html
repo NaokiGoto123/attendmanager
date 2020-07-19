@@ -60,7 +60,12 @@
     <div class="message-field-container">
       <form [formGroup]="form" (ngSubmit)="send()">
         <mat-form-field class="message-field" appearance="standard">
-          <input matInput type="text" formControlName="message" />
+          <input
+            matInput
+            type="text"
+            formControlName="message"
+            autocomplete="off"
+          />
           <button
             mat-button
             matSuffix
@@ -68,6 +73,7 @@
             [disabled]="
               form.value.message === '' || form.value.message === null
             "
+            matTooltip="Send"
             (click)="send()"
           >
             <mat-icon>send</mat-icon>
