@@ -14,6 +14,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialogModule } from '@angular/material/dialog';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     MatDividerModule,
     MatDialogModule,
     InfiniteScrollModule,
+    MatTableModule,
   ],
   exports: [
     EventCardComponent,
