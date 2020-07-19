@@ -91,9 +91,11 @@ export class EventsComponent implements OnInit {
     });
 
     this.valueControl.valueChanges.subscribe((query) => {
-      this.index.search(query, this.searchOptions).then((result) => {
-        this.options = result.hits;
-      });
+      this.index
+        .search(query, { facetFilters: this.searchOptions.facetFilters })
+        .then((result) => {
+          this.options = result.hits;
+        });
     });
 
     setTimeout(() => {
@@ -104,6 +106,12 @@ export class EventsComponent implements OnInit {
   search(query: string, searchOptions) {
     this.index.search(query, searchOptions).then((result) => {
       this.items.push(...result.hits);
+    });
+  }
+
+  querySearch(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.items = result?.hits;
     });
   }
 
