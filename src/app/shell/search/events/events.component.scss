@@ -31,3 +31,15 @@
   top: 158.8px;
   bottom: 0;
 }
+
+.no-events-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: calc(100% - 158.5px);
+}
+
+.no-events-image {
+  height: 55%;
+}
