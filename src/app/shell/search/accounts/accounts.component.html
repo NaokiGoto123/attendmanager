@@ -53,7 +53,7 @@
     [queryParams]="{ id: item.searchId }"
   >
     <img class="account-picture" src="{{ item.photoURL }}" />
-    {{ item.displayName }}
+    <span class="account-displayname">{{ item.displayName }}</span>
   </mat-list-item>
   <mat-divider></mat-divider>
 </mat-list>
