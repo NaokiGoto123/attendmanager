@@ -12,8 +12,6 @@ import { UserService } from 'src/app/services/user.service';
 export class AccountComponent implements OnInit {
   routerLinks: any[];
 
-  menuLinks: any[];
-
   user: User;
 
   ifTarget: boolean;
@@ -41,26 +39,6 @@ export class AccountComponent implements OnInit {
                   { label: 'Attending events', link: 'attending-events' },
                   { label: 'Attended events', link: 'attended-events' },
                   { label: 'Others' },
-                ];
-                this.menuLinks = [
-                  {
-                    label: 'Groups you are getting invitations from',
-                    link: 'invited-groups',
-                  },
-                  {
-                    label: 'Events you are getting invitations from',
-                    link: 'invited-events',
-                  },
-                  {
-                    label: 'Groups you are waiting to be approved',
-                    link: 'waiting-groups',
-                  },
-                  { label: 'Pay to join groups', link: 'paying-groups' },
-                  {
-                    label: 'Events you are waiting to be approved',
-                    link: 'waiting-events',
-                  },
-                  { label: 'Pay to attend events', link: 'paying-events' },
                 ];
               });
           } else {

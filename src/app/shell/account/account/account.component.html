@@ -27,15 +27,63 @@
       {{ routerLink.label }}
     </a>
     <mat-menu #menu="matMenu" xPosition="after">
-      <div *ngFor="let menuLink of menuLinks">
+      <button mat-menu-item [matMenuTriggerFor]="invitations">
+        Invitations
+      </button>
+      <mat-menu #invitations="matMenu" xPosition="after">
         <button
           mat-menu-item
-          [routerLink]="menuLink.link"
+          routerLink="invited-events"
           [queryParams]="{ id: user?.searchId }"
         >
-          {{ menuLink.label }}
+          Events
         </button>
-      </div>
+        <button
+          mat-menu-item
+          routerLink="invited-groups"
+          [queryParams]="{ id: user?.searchId }"
+        >
+          Groups
+        </button>
+      </mat-menu>
+      <button mat-menu-item [matMenuTriggerFor]="waitinglist">
+        Waiting list
+      </button>
+      <mat-menu #waitinglist="matMenu" xPosition="after">
+        <button
+          mat-menu-item
+          routerLink="waiting-events"
+          [queryParams]="{ id: user?.searchId }"
+        >
+          Events
+        </button>
+        <button
+          mat-menu-item
+          routerLink="waiting-groups"
+          [queryParams]="{ id: user?.searchId }"
+        >
+          Groups
+        </button>
+      </mat-menu>
+      <button mat-menu-item [matMenuTriggerFor]="Approved">
+        Approved
+      </button>
+      <mat-menu #Approved="matMenu" xPosition="after">
+        <button
+          mat-menu-item
+          routerLink="paying-events"
+          [queryParams]="{ id: user?.searchId }"
+        >
+          Events
+        </button>
+        <button
+          mat-menu-item
+          routerLink="paying-groups"
+          [queryParams]="{ id: user?.searchId }"
+        >
+          Groups
+        </button>
+      </mat-menu>
     </mat-menu>
   </div>
 </nav>
