@@ -30,12 +30,15 @@ export class NotificationsComponent implements OnInit {
 
   facetFilters = [];
 
+  initialLoading = false;
+
   constructor(
     private authService: AuthService,
     private notificationService: NotificationsService,
     private searchService: SearchService,
     public uiService: UiService
   ) {
+    this.initialLoading = true;
     this.notificationService
       .getNotificationIds(this.authService.uid)
       .subscribe((notificationIds: string[]) => {
@@ -53,6 +56,14 @@ export class NotificationsComponent implements OnInit {
           };
 
           this.search('', this.searchOptions);
+
+          setTimeout(() => {
+            this.initialLoading = false;
+          }, 1000);
+        } else {
+          setTimeout(() => {
+            this.initialLoading = false;
+          }, 1000);
         }
       });
   }
@@ -80,6 +91,11 @@ export class NotificationsComponent implements OnInit {
   }
 
   deleteNotification() {
-    this.notificationService.deleteNotifications(this.authService.uid);
+    this.initialLoading = true;
+    this.notificationService
+      .deleteNotifications(this.authService.uid)
+      .then(() => {
+        this.initialLoading = false;
+      });
   }
 }

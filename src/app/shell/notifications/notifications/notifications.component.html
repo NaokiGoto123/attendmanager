@@ -1,34 +1,43 @@
-<div *ngIf="notificationIds?.length">
-  <mat-toolbar class="toolbar">
-    <span class="toolbar-title">Notifications</span>
-    <span class="spacer"></span>
-    <button mat-icon-button class="mat-menu" [matMenuTriggerFor]="menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu" xPosition="before">
-      <button mat-menu-item (click)="deleteNotification()">
-        <mat-icon>delete_sweep</mat-icon>
-        <span>Delete all notifications</span>
+<div class="spinner-container" *ngIf="initialLoading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<ng-container *ngIf="!initialLoading">
+  <div *ngIf="notificationIds?.length">
+    <mat-toolbar class="toolbar">
+      <span class="toolbar-title">Notifications</span>
+      <span class="spacer"></span>
+      <button mat-icon-button class="mat-menu" [matMenuTriggerFor]="menu">
+        <mat-icon>more_vert</mat-icon>
       </button>
-    </mat-menu>
-  </mat-toolbar>
+      <mat-menu #menu="matMenu" xPosition="before">
+        <button mat-menu-item (click)="deleteNotification()">
+          <mat-icon>delete_sweep</mat-icon>
+          <span>Delete all notifications</span>
+        </button>
+      </mat-menu>
+    </mat-toolbar>
 
-  <mat-list
-    infiniteScroll
-    [infiniteScrollDistance]="1"
-    [infiniteScrollThrottle]="50"
-    [infiniteScrollContainer]="uiService.scrollWrapperElement"
-    (scrolled)="additionalSearch()"
-  >
-    <ng-container *ngFor="let item of items">
-      <app-notification [notification]="item"></app-notification>
-      <mat-divider></mat-divider>
-    </ng-container>
-  </mat-list>
-  <mat-spinner *ngIf="loading" class="spinner"></mat-spinner>
-</div>
+    <mat-list
+      infiniteScroll
+      [infiniteScrollDistance]="1"
+      [infiniteScrollThrottle]="50"
+      [infiniteScrollContainer]="uiService.scrollWrapperElement"
+      (scrolled)="additionalSearch()"
+    >
+      <ng-container *ngFor="let item of items">
+        <app-notification [notification]="item"></app-notification>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-list>
+    <mat-spinner *ngIf="loading" class="spinner"></mat-spinner>
+  </div>
 
-<div class="no-notifications-container" *ngIf="!notificationIds?.length">
-  <img class="no-notifications-image" src="/assets/images/notification1.svg" />
-  <p class="no-notifications-text">No notifications</p>
-</div>
+  <div class="no-notifications-container" *ngIf="!notificationIds?.length">
+    <img
+      class="no-notifications-image"
+      src="/assets/images/notification1.svg"
+    />
+    <p class="no-notifications-text">No notifications</p>
+  </div>
+</ng-container>
