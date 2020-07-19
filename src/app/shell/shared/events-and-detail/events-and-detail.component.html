@@ -1,4 +1,4 @@
-<div *ngIf="existance">
+<div *ngIf="events?.length">
   <div class="container">
     <div class="event-cards-container" #container>
       <div class="event-cards">
@@ -171,8 +171,8 @@
   </div>
 </div>
 
-<div class="no-events-container" *ngIf="!existance">
+<!-- <div class="no-events-container" *ngIf="!events?.length">
   <img class="no-events-image" src="/assets/images/event.svg" />
   <h1>No events</h1>
   <h1 routerLink="/create-event">Create events</h1>
-</div>
+</div> -->

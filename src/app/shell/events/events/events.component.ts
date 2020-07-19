@@ -36,6 +36,8 @@ export class EventsComponent implements OnInit {
 
   loading = false;
 
+  initialLoading = false;
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -43,6 +45,7 @@ export class EventsComponent implements OnInit {
     private groupGetService: GroupGetService,
     private searchService: SearchService
   ) {
+    this.initialLoading = true;
     this.eventGetService
       .getMyEvents(this.authService.uid)
       .subscribe((events: Event[]) => {
@@ -92,6 +95,10 @@ export class EventsComponent implements OnInit {
         this.options = result.hits;
       });
     });
+
+    setTimeout(() => {
+      this.initialLoading = false;
+    }, 1000);
   }
 
   search(query: string, searchOptions) {

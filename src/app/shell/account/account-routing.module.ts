@@ -17,11 +17,6 @@ const routes: Routes = [
     component: AccountComponent,
     children: [
       {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'attending-events',
-      },
-      {
         path: 'groups',
         component: GroupsComponent,
       },

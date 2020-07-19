@@ -24,6 +24,7 @@ import { InvitedEventsComponent } from './invited-events/invited-events.componen
 import { MatMenuModule } from '@angular/material/menu';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatMenuModule,
     MatAutocompleteModule,
     MatProgressBarModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class AccountModule {}

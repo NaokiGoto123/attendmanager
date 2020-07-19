@@ -29,10 +29,14 @@ export class AccountsComponent implements OnInit {
 
   loading = false;
 
+  initialLoading = false;
+
   constructor(
     private searchService: SearchService,
     public uiService: UiService
   ) {
+    this.initialLoading = true;
+
     this.search('', this.searchOptions);
 
     this.index.search('', this.optionOptions).then((result) => {
@@ -46,6 +50,9 @@ export class AccountsComponent implements OnInit {
         this.options = result.hits;
       });
     });
+    setTimeout(() => {
+      this.initialLoading = false;
+    }, 1000);
   }
 
   search(query: string, searchOptions) {

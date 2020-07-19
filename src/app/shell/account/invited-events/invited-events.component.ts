@@ -30,6 +30,8 @@ export class InvitedEventsComponent implements OnInit {
 
   loading = false;
 
+  initialLoading = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
@@ -37,6 +39,7 @@ export class InvitedEventsComponent implements OnInit {
     private userService: UserService,
     private invitedGetService: InviteGetService
   ) {
+    this.initialLoading = true;
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
       this.userService
@@ -68,6 +71,16 @@ export class InvitedEventsComponent implements OnInit {
                   });
 
                 this.search('', this.searchOptions);
+
+                console.log('check');
+
+                setTimeout(() => {
+                  this.initialLoading = false;
+                }, 1000);
+              } else {
+                setTimeout(() => {
+                  this.initialLoading = false;
+                }, 1000);
               }
             });
         });

@@ -1,16 +1,107 @@
-<mat-list role="list" *ngFor="let event of events">
+<!-- <mat-list role="list" *ngFor="let eventWithGroupId of eventsWithGroupIds">
   <mat-list-item role="listitem">
-    Title: {{ event.title }} Date: {{ event.date | date: 'yyyy/MM/dd' }} Time:
-    {{ event.time }} Location: {{ event.location }}
+    Title: {{ eventWithGroupId.title }} Date: {{ eventWithGroupId.date | date: 'yyyy/MM/dd' }} Time:
+    {{ eventWithGroupId.time }} Location: {{ eventWithGroupId.location }}
     <span class="spacer"></span>
     <button
       mat-icon-button
       routerLink="/event-details"
-      [queryParams]="{ id: event.id }"
+      [queryParams]="{ id: eventWithGroupId.id }"
     >
       <mat-icon>launch</mat-icon>
     </button>
   </mat-list-item>
   <mat-divider></mat-divider>
 </mat-list>
-<button mat-raised-button (click)="moreFunction()">Load more</button>
+<button mat-raised-button (click)="moreFunction()">Load more</button> -->
+
+<!-- <div class="container">
+  <table mat-table [dataSource]="eventsWithGroupNames">
+
+    <ng-container matColumnDef="Title">
+      <th mat-header-cell *matHeaderCellDef> Title </th>
+      <td mat-cell *matCellDef="let eventWithGroupName"> {{eventWithGroupName.title}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Date">
+      <th mat-header-cell *matHeaderCellDef> Date </th>
+      <td mat-cell *matCellDef="let eventWithGroupName"> {{eventWithGroupName.date | date: 'yyyy/MM/dd'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Location">
+      <th mat-header-cell *matHeaderCellDef> Location </th>
+      <td mat-cell *matCellDef="let eventWithGroupName"> {{eventWithGroupName.location}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Group">
+      <th mat-header-cell *matHeaderCellDef> Group </th>
+      <td mat-cell *matCellDef="let eventWithGroupName"> {{eventWithGroupName.groupName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Price">
+      <th mat-header-cell *matHeaderCellDef> Price </th>
+      <td mat-cell *matCellDef="let eventWithGroupName"> {{eventWithGroupName.price}} {{eventWithGroupName.currency}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Details" end>
+      <th mat-header-cell *matHeaderCellDef> Details </th>
+      <td mat-cell *matCellDef="let eventWithGroupName">
+        <button mat-icon-button routerLink="group-details" [queryParams]="{id: eventWithGroupName.groupid}">
+          <mat-icon>launch</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div> -->
+
+<div class="container">
+  <table mat-table [dataSource]="events">
+    <ng-container matColumnDef="Title">
+      <th mat-header-cell *matHeaderCellDef>Title</th>
+      <td mat-cell *matCellDef="let event">{{ event.title }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let event">
+        {{ event.date | date: 'yyyy/MM/dd' }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Location">
+      <th mat-header-cell *matHeaderCellDef>Location</th>
+      <td mat-cell *matCellDef="let event">{{ event.location }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Group">
+      <th mat-header-cell *matHeaderCellDef>Group</th>
+      <td mat-cell *matCellDef="let event">{{ event.groupid }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="Price">
+      <th mat-header-cell *matHeaderCellDef>Price</th>
+      <td mat-cell *matCellDef="let event">
+        {{ event.price }} {{ event.currency }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="Details" end>
+      <th mat-header-cell *matHeaderCellDef>Details</th>
+      <td mat-cell *matCellDef="let event">
+        <button
+          mat-icon-button
+          routerLink="group-details"
+          [queryParams]="{ id: event.groupid }"
+        >
+          <mat-icon>launch</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

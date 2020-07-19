@@ -29,22 +29,30 @@ export class EventsComponent implements OnInit {
 
   loading = false;
 
+  initialLoading = false;
+
   constructor(
     private eventService: EventService,
     private eventGetService: EventGetService,
     private searchService: SearchService
   ) {
+    this.initialLoading = true;
     this.eventGetService
       .getSearchableEvents()
       .subscribe((searchableEvents: Event[]) => {
         this.searchableEvents = searchableEvents;
-      });
-    this.search('', this.searchOptions);
 
-    this.index
-      .search('', { facetFilters: ['searchable:true'] })
-      .then((result) => {
-        this.options = result.hits;
+        this.search('', this.searchOptions);
+
+        this.index
+          .search('', { facetFilters: ['searchable:true'] })
+          .then((result) => {
+            this.options = result.hits;
+          });
+
+        setTimeout(() => {
+          this.initialLoading = false;
+        }, 1000);
       });
   }
 

@@ -31,6 +31,8 @@ export class WaitingJoinningEventsComponent implements OnInit {
 
   loading = false;
 
+  initialLoading = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private fb: FormBuilder,
@@ -38,6 +40,7 @@ export class WaitingJoinningEventsComponent implements OnInit {
     private userService: UserService,
     private eventGetService: EventGetService
   ) {
+    this.initialLoading = true;
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
       this.userService
@@ -69,6 +72,14 @@ export class WaitingJoinningEventsComponent implements OnInit {
                   });
 
                 this.search('', this.searchOptions);
+
+                setTimeout(() => {
+                  this.initialLoading = false;
+                }, 1000);
+              } else {
+                setTimeout(() => {
+                  this.initialLoading = false;
+                }, 1000);
               }
             });
         });

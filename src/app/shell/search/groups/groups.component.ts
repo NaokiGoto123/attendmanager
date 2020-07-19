@@ -29,10 +29,14 @@ export class GroupsComponent implements OnInit {
 
   loading = false;
 
+  initialLoading = false;
+
   constructor(
     private groupServiec: GroupService,
     private searchService: SearchService
   ) {
+    this.initialLoading = true;
+
     this.groupServiec.getSearchableGroups().subscribe((groups: Group[]) => {
       this.searchableGroups = groups;
     });
@@ -50,6 +54,10 @@ export class GroupsComponent implements OnInit {
         this.options = result.hits;
       });
     });
+
+    setTimeout(() => {
+      this.initialLoading = false;
+    }, 1000);
   }
 
   search(query: string, searchOptions) {

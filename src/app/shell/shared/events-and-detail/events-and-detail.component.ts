@@ -18,8 +18,6 @@ import { GroupGetService } from 'src/app/services/group-get.service';
 export class EventsAndDetailComponent implements OnInit {
   @Input() events: Event[];
 
-  @Input() existance: boolean;
-
   @Output() scrolls: EventEmitter<boolean> = new EventEmitter();
 
   givenEvent: Event;
