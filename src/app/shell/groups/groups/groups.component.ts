@@ -11,14 +11,20 @@ import { GroupGetService } from 'src/app/services/group-get.service';
 export class GroupsComponent implements OnInit {
   groups: Group[];
 
+  loading = false;
+
   constructor(
     private groupGetService: GroupGetService,
     private authService: AuthService
   ) {
     const uid = this.authService.uid;
-    this.groupGetService.getMyGroup(uid).subscribe((myGroups: Group[]) => {
-      this.groups = myGroups;
-    });
+    this.loading = true;
+    setTimeout(() => {
+      this.groupGetService.getMyGroup(uid).subscribe((myGroups: Group[]) => {
+        this.groups = myGroups;
+        this.loading = false;
+      });
+    }, 1000);
   }
 
   ngOnInit(): void {}
