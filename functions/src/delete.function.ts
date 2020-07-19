@@ -122,6 +122,18 @@ export const deleteGroup = functions
     });
     await Promise.all(c);
 
+    const d = eventIds.map(async (eventId) => {
+      const eventInvitingUserIds = (
+        await db.collection(`events/${eventId.id}/invitingUserIds`).get()
+      ).docs.map((doc) => doc.data());
+      return eventInvitingUserIds.map(async (eventInvitingUserId) => {
+        return await db
+          .doc(`users/${eventInvitingUserId.id}/invitedEventIds/${eventId.id}`)
+          .delete();
+      });
+    });
+    await Promise.all(d);
+
     // イベントの削除
     const eventsDeletion: Promise<any>[] = eventIds.map((eventId) => {
       const pathToEvent = `events/${eventId.id}`;
