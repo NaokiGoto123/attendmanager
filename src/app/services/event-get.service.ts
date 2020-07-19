@@ -170,23 +170,31 @@ export class EventGetService {
       .valueChanges()
       .pipe(
         switchMap((eventIds: Id[]) => {
-          const attendingEvents: Observable<Event>[] = [];
-          eventIds.map((eventId: Id) => {
-            attendingEvents.push(
-              this.db.doc<Event>(`events/${eventId.id}`).valueChanges()
-            );
-          });
-          return combineLatest(attendingEvents);
+          if (eventIds.length) {
+            const attendingEvents: Observable<Event>[] = [];
+            eventIds.map((eventId: Id) => {
+              attendingEvents.push(
+                this.db.doc<Event>(`events/${eventId.id}`).valueChanges()
+              );
+            });
+            return combineLatest(attendingEvents);
+          } else {
+            return of([]);
+          }
         }),
         map((attendingEvents: Event[]) => {
-          const attendedEvents: Event[] = [];
-          attendingEvents.map((attendingEvent: Event) => {
-            const now: number = new Date().getTime();
-            if (attendingEvent.date.toMillis() > now) {
-              attendedEvents.push(attendingEvent);
-            }
-          });
-          return attendedEvents;
+          if (attendingEvents.length) {
+            const attendedEvents: Event[] = [];
+            attendingEvents.map((attendingEvent: Event) => {
+              const now: number = new Date().getTime();
+              if (attendingEvent.date.toMillis() > now) {
+                attendedEvents.push(attendingEvent);
+              }
+            });
+            return attendedEvents;
+          } else {
+            return [];
+          }
         }),
         map((attendedEvents: Event[]) => {
           if (attendedEvents.length) {
@@ -236,24 +244,32 @@ export class EventGetService {
       .valueChanges()
       .pipe(
         switchMap((eventIds: Id[]) => {
-          const attendingEvents: Observable<Event>[] = [];
-          eventIds.map((eventId: Id) => {
-            attendingEvents.push(
-              this.db.doc<Event>(`events/${eventId.id}`).valueChanges()
-            );
-          });
-          return combineLatest(attendingEvents);
+          if (eventIds.length) {
+            const attendingEvents: Observable<Event>[] = [];
+            eventIds.map((eventId: Id) => {
+              attendingEvents.push(
+                this.db.doc<Event>(`events/${eventId.id}`).valueChanges()
+              );
+            });
+            return combineLatest(attendingEvents);
+          } else {
+            return of([]);
+          }
         }),
         map((attendingEvents: Event[]) => {
-          const attendedEvents: Event[] = [];
-          attendingEvents.map((attendingEvent: Event) => {
-            const now: number = new Date().getTime();
-            if (attendingEvent.date.toMillis() < now) {
-              attendedEvents.push(attendingEvent);
-            }
-          });
-          console.log(attendedEvents);
-          return attendedEvents;
+          if (attendingEvents.length) {
+            const attendedEvents: Event[] = [];
+            attendingEvents.map((attendingEvent: Event) => {
+              const now: number = new Date().getTime();
+              if (attendingEvent.date.toMillis() < now) {
+                attendedEvents.push(attendingEvent);
+              }
+            });
+            console.log(attendedEvents);
+            return attendedEvents;
+          } else {
+            return [];
+          }
         }),
         map((attendedEvents: Event[]) => {
           if (attendedEvents.length) {
@@ -263,6 +279,7 @@ export class EventGetService {
             });
             return attendedEventIds;
           } else {
+            console.log('checking');
             return [];
           }
         })
