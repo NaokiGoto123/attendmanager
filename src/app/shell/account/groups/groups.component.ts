@@ -15,11 +15,14 @@ import { GroupGetService } from 'src/app/services/group-get.service';
 export class GroupsComponent implements OnInit {
   groups: Group[];
 
+  allowedToShow = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private groupService: GroupService,
     private groupGetService: GroupGetService,
-    private userService: UserService
+    private userService: UserService,
+    private authService: AuthService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
@@ -27,6 +30,15 @@ export class GroupsComponent implements OnInit {
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;
+          if (target.uid === this.authService.uid) {
+            this.allowedToShow = true;
+          } else {
+            if (target.showAttendedEvents) {
+              this.allowedToShow = true;
+            } else {
+              this.allowedToShow = false;
+            }
+          }
           this.groupGetService.getMyGroup(id).subscribe((groups: Group[]) => {
             this.groups = groups;
           });

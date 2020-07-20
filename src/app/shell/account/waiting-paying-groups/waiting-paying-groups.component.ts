@@ -15,6 +15,8 @@ import { GroupGetService } from 'src/app/services/group-get.service';
 export class WaitingPayingGroupsComponent implements OnInit {
   waitingPayingGroups: Group[];
 
+  allowedToShow = false;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
@@ -28,6 +30,15 @@ export class WaitingPayingGroupsComponent implements OnInit {
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;
+          if (target.uid === this.authService.uid) {
+            this.allowedToShow = true;
+          } else {
+            if (target.showAttendedEvents) {
+              this.allowedToShow = true;
+            } else {
+              this.allowedToShow = false;
+            }
+          }
           this.groupGetService
             .getWaitingPayingGroups(id)
             .subscribe((waitingPayingGroups: Group[]) => {

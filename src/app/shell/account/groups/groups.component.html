@@ -1,5 +1,10 @@
-<div class="groups-container">
+<div class="groups-container" *ngIf="allowedToShow">
   <div *ngFor="let group of groups">
     <app-group [group]="group"></app-group>
   </div>
+</div>
+
+<div class="protected-container" *ngIf="!allowedToShow">
+  <mat-icon class="protected-container__icon">lock</mat-icon>
+  <p class="protected-container__text">Protected</p>
 </div>

@@ -2,7 +2,7 @@
   <mat-spinner></mat-spinner>
 </div>
 
-<ng-container *ngIf="!initialLoading">
+<ng-container *ngIf="!initialLoading && allowedToShow">
   <form
     class="search-field-container"
     (ngSubmit)="querySearch(valueControl.value, searchOptions)"
@@ -58,3 +58,8 @@
     <h1 routerLink="/create-event">Create events</h1>
   </div>
 </ng-container>
+
+<div class="protected-container" *ngIf="!initialLoading && !allowedToShow">
+  <mat-icon class="protected-container__icon">lock</mat-icon>
+  <p class="protected-container__text">Protected</p>
+</div>

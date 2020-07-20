@@ -1,4 +1,4 @@
-<div class="groups-container">
+<div class="groups-container" *ngIf="allowedToShow">
   <div class="create-group-grid-container">
     <div class="create-group-grid">
       <p>Create new group</p>
@@ -10,4 +10,9 @@
   <div *ngFor="let waitingJoinningGroup of waitingJoinningGroups">
     <app-group [group]="waitingJoinningGroup"></app-group>
   </div>
+</div>
+
+<div class="protected-container" *ngIf="!allowedToShow">
+  <mat-icon class="protected-container__icon">lock</mat-icon>
+  <p class="protected-container__text">Protected</p>
 </div>

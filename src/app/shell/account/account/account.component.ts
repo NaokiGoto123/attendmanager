@@ -44,47 +44,12 @@ export class AccountComponent implements OnInit {
           } else {
             this.userService.getUser(id).subscribe((user: User) => {
               this.user = user;
-              if (
-                user?.showGroups &&
-                user?.showAttendingEvents &&
-                user?.showAttendingEvents
-              ) {
-                this.routerLinks = [
-                  { label: 'Groups', link: 'groups' },
-                  { label: 'Attending events', link: 'attending-events' },
-                  { label: 'Attended events', link: 'attended-events' },
-                ];
-              } else if (user?.showGroups && user?.showAttendingEvents) {
-                this.routerLinks = [
-                  { label: 'Groups', link: 'groups' },
-                  { label: 'Attending events', link: 'attending-events' },
-                ];
-              } else if (user?.showGroups && user?.showAttendedEvents) {
-                this.routerLinks = [
-                  { label: 'Groups', link: 'groups' },
-                  { label: 'Attended events', link: 'attended-events' },
-                ];
-              } else if (
-                user?.showAttendingEvents &&
-                user?.showAttendedEvents
-              ) {
-                this.routerLinks = [
-                  { label: 'Attending events', link: 'attending-events' },
-                  { label: 'Attended events', link: 'attended-events' },
-                ];
-              } else if (user?.showGroups) {
-                this.routerLinks = [{ label: 'Groups', link: 'groups' }];
-              } else if (user?.showAttendingEvents) {
-                this.routerLinks = [
-                  { label: 'Attending events', link: 'attending-events' },
-                ];
-              } else if (user?.showAttendedEvents) {
-                this.routerLinks = [
-                  { label: 'Attended events', link: 'attended-events' },
-                ];
-              } else {
-                this.routerLinks = [];
-              }
+              this.routerLinks = [
+                { label: 'Attending events', link: 'attending-events' },
+                { label: 'Attended events', link: 'attended-events' },
+                { label: 'Groups', link: 'groups' },
+                { label: 'Others' },
+              ];
             });
           }
         });
