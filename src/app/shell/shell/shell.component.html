@@ -1,4 +1,4 @@
-<mat-sidenav-container class="container">
+<mat-sidenav-container class="container" *ngIf="!uiService.deletingAccount">
   <mat-sidenav mode="side" class="side-menu" opened>
     <mat-nav-list class="sidenav-list">
       <a
@@ -118,3 +118,7 @@
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>
+
+<div class="spinner-container" *ngIf="uiService.deletingAccount">
+  <mat-spinner></mat-spinner>
+</div>

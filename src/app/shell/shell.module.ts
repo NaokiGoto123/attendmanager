@@ -13,6 +13,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [ShellComponent],
@@ -28,6 +29,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatBadgeModule,
     MatMenuModule,
     MatDividerModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class ShellModule {}

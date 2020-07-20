@@ -29,7 +29,7 @@ export class ShellComponent implements AfterViewInit {
     private userService: UserService,
     private notificationService: NotificationsService,
     private chatGetService: ChatGetService,
-    private uiService: UiService,
+    public uiService: UiService,
     private router: Router
   ) {
     this.router.events.subscribe((event) => {

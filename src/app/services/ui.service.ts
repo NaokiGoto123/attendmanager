@@ -6,5 +6,7 @@ import { Injectable } from '@angular/core';
 export class UiService {
   scrollWrapperElement: any;
 
+  deletingAccount = false;
+
   constructor() {}
 }
