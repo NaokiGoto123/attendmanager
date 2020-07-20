@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 30px 0 100px 0;
+  margin: 30px 0 150px 0;
 }
 
 .account-photo {
@@ -46,7 +46,8 @@ image-cropper {
   margin: 0 0 20px 0;
 }
 
-.update-button-container {
+.update-button {
+  width: 60%;
   margin: 0 0 20px 0;
 }
 

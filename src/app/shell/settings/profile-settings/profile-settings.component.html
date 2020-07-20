@@ -60,57 +60,129 @@
 
   <div class="update-toggles">
     <mat-slide-toggle formControlName="covert">
-      <div *ngIf="form.value.covert">
+      <ng-container *ngIf="form.value.covert">
         Covert
-      </div>
-      <div *ngIf="!form.value.covert">
+      </ng-container>
+      <ng-container *ngIf="!form.value.covert">
         Overt
-      </div>
+      </ng-container>
     </mat-slide-toggle>
 
     <mat-slide-toggle class="update-showGroup" formControlName="showGroups">
-      <div *ngIf="form.value.showGroups">
+      <ng-container *ngIf="form.value.showGroups">
         Show my groups
-      </div>
-      <div *ngIf="!form.value.showGroups">
+      </ng-container>
+      <ng-container *ngIf="!form.value.showGroups">
         Do not show my groups
-      </div>
+      </ng-container>
     </mat-slide-toggle>
 
     <mat-slide-toggle
       class="update-showAttendingEvents"
       formControlName="showAttendingEvents"
     >
-      <div *ngIf="form.value.showAttendingEvents">
+      <ng-container *ngIf="form.value.showAttendingEvents">
         Show my attending events
-      </div>
-      <div *ngIf="!form.value.showAttendingEvents">
+      </ng-container>
+      <ng-container *ngIf="!form.value.showAttendingEvents">
         Do not show my attending events
-      </div>
+      </ng-container>
     </mat-slide-toggle>
 
     <mat-slide-toggle
       class="update-showAttendedEvents"
       formControlName="showAttendedEvents"
     >
-      <div *ngIf="form.value.showAttendedEvents">
+      <ng-container *ngIf="form.value.showAttendedEvents">
         Show my attended events
-      </div>
-      <div *ngIf="!form.value.showAttendedEvents">
+      </ng-container>
+      <ng-container *ngIf="!form.value.showAttendedEvents">
         Do not show my attended events
-      </div>
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="showInvitedEvents"
+    >
+      <ng-container *ngIf="form.value.showInvitedEvents">
+        Show my invited events
+      </ng-container>
+      <ng-container *ngIf="!form.value.showInvitedEvents">
+        Do not show my invited events
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="showInvitedGroups"
+    >
+      <ng-container *ngIf="form.value.showInvitedGroups">
+        Show my invited groups
+      </ng-container>
+      <ng-container *ngIf="!form.value.showInvitedGroups">
+        Do not show my invited groups
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="showWaitingEvents"
+    >
+      <ng-container *ngIf="form.value.showWaitingEvents">
+        Show my waiting events
+      </ng-container>
+      <ng-container *ngIf="!form.value.showWaitingEvents">
+        Do not show my waiting events
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="showWaitingGroups"
+    >
+      <ng-container *ngIf="form.value.showWaitingGroups">
+        Show my waiting groups
+      </ng-container>
+      <ng-container *ngIf="!form.value.showWaitingGroups">
+        Do not show my waiting groups
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="showPayingEvents"
+    >
+      <ng-container *ngIf="form.value.showPayingEvents">
+        Show my paying events
+      </ng-container>
+      <ng-container *ngIf="!form.value.showPayingEvents">
+        Do not show my paying events
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="showPayingGroups"
+    >
+      <ng-container *ngIf="form.value.showPayingGroups">
+        Show my paying groups
+      </ng-container>
+      <ng-container *ngIf="!form.value.showPayingGroups">
+        Do not show my paying groups
+      </ng-container>
     </mat-slide-toggle>
   </div>
-  <div class="update-button-container">
-    <button
-      mat-raised-button
-      class="update-button"
-      color="primary"
-      (click)="updateUser()"
-    >
-      Update
-    </button>
-  </div>
+
+  <button
+    mat-raised-button
+    class="update-button"
+    color="primary"
+    (click)="updateUser()"
+  >
+    Update
+  </button>
+
   <div class="other-actions">
     <button
       mat-flat-button

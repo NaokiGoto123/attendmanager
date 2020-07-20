@@ -6,6 +6,7 @@ import { UserService } from 'src/app/services/user.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-profile-settings',
@@ -57,7 +58,8 @@ export class ProfileSettingsComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private userService: UserService,
-    private db: AngularFirestore
+    private db: AngularFirestore,
+    private uiServiec: UiService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
@@ -79,7 +81,10 @@ export class ProfileSettingsComponent implements OnInit {
   }
 
   deleteAccount() {
-    this.userService.deleteAccount(this.user?.uid);
+    this.uiServiec.deletingAccount = true;
+    this.userService
+      .deleteAccount(this.user?.uid)
+      .then(() => (this.uiServiec.deletingAccount = false));
   }
 
   createNewSearchId() {
