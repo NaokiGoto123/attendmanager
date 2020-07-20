@@ -54,8 +54,10 @@
   </div>
 
   <div class="no-events-container" *ngIf="!items?.length">
-    <img class="no-events-image" src="/assets/images/event.svg" />
-    <h1>No events</h1>
-    <h1 routerLink="/create-event">Create events</h1>
+    <img class="no-events-container__image" src="/assets/images/event.svg" />
+    <p class="no-events-container__text">No events</p>
+    <a class="no-events-container__text" routerLink="/create-event"
+      >Create events</a
+    >
   </div>
 </ng-container>

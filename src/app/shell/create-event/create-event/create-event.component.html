@@ -1,193 +1,203 @@
-<div *ngIf="noGroup">
-  <div class="noGroup-container">
-    <mat-icon class="noGroup-icon" [inline]="true">group_add</mat-icon>
-    <h1>
-      You do not belong to any group or you are not an admin of any group.
-    </h1>
-    <h1>You can <a routerLink="/search">search</a> for groups</h1>
-    <h1>or</h1>
-    <h1>You can <a routerLink="/create-group">create</a> one</h1>
-  </div>
+<div *ngIf="initialLoading" class="spinner-container">
+  <mat-spinner></mat-spinner>
 </div>
 
-<div class="container" *ngIf="!noGroup">
-  <form [formGroup]="form">
-    <div *ngIf="ifTarget">
-      <p class="title">Update event</p>
-    </div>
-    <div *ngIf="!ifTarget">
-      <p class="title">Create event</p>
-    </div>
+<ng-container *ngIf="!initialLoading">
+  <div class="noGroup-container" *ngIf="!adminGroups?.length">
+    <mat-icon class="noGroup-container__icon">group_add</mat-icon>
+    <p class="noGroup-container__text">You are not an admin of any group.</p>
+    <p class="noGroup-container__text">
+      You can
+      <a class="noGroup-container__text" routerLink="/search">search</a> for
+      groups
+    </p>
+    <p class="noGroup-container__text">or</p>
+    <p class="noGroup-container__text">
+      You can
+      <a class="noGroup-container__text" routerLink="/create-group">create</a>
+      one
+    </p>
+  </div>
 
-    <div *ngIf="!ifTarget">
+  <div class="container" *ngIf="adminGroups?.length">
+    <form [formGroup]="form">
+      <div *ngIf="ifTarget">
+        <p class="title">Update event</p>
+      </div>
+      <div *ngIf="!ifTarget">
+        <p class="title">Create event</p>
+      </div>
+
+      <div *ngIf="!ifTarget">
+        <mat-form-field appearance="outline" class="field">
+          <mat-label>Which group</mat-label>
+          <mat-select formControlName="groupid" required>
+            <mat-option
+              *ngFor="let adminGroups of adminGroups"
+              [value]="adminGroups.id"
+            >
+              {{ adminGroups.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
       <mat-form-field appearance="outline" class="field">
-        <mat-label>Which group</mat-label>
-        <mat-select formControlName="groupid" required>
-          <mat-option
-            *ngFor="let adminGroups of adminGroups"
-            [value]="adminGroups.id"
-          >
-            {{ adminGroups.name }}
-          </mat-option>
+        <mat-label>What is the event title?</mat-label>
+        <input
+          matInput
+          formControlName="title"
+          type="text"
+          placeholder="E.g. Picnic"
+          required
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Write event description or addtional info</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          placeholder="E.g. Bring your water bottle."
+          type="text"
+        ></textarea>
+      </mat-form-field>
+
+      <p>Is there a limit for number of members?</p>
+      <mat-radio-group
+        aria-label="Select an option"
+        [(ngModel)]="ifMemberLimit"
+        [ngModelOptions]="{ standalone: true }"
+      >
+        <mat-radio-button class="radio-button" [value]="true"
+          >Yes</mat-radio-button
+        >
+        <mat-radio-button [value]="false">No</mat-radio-button>
+      </mat-radio-group>
+
+      <mat-form-field *ngIf="ifMemberLimit" appearance="outline" class="field">
+        <mat-label>What is the limit?</mat-label>
+        <input
+          matInput
+          formControlName="memberlimit"
+          placeholder="E.g. 0"
+          type="number"
+          autocomplete="off"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Choose a date</mat-label>
+        <input
+          matInput
+          formControlName="date"
+          [matDatepicker]="picker"
+          required
+          readonly
+        />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>What time is it happening?</mat-label>
+        <input
+          matInput
+          aria-label="default time"
+          [ngxTimepicker]="defaultValue"
+          formControlName="time"
+          readonly
+          required
+        />
+        <ngx-material-timepicker #defaultValue></ngx-material-timepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-label>Where is it happening?</mat-label>
+        <input
+          matInput
+          formControlName="location"
+          type="text"
+          placeholder="E.g. house"
+          autocomplete="off"
+          required
+        />
+      </mat-form-field>
+
+      <ng-container *ngIf="form.value.price !== 0">
+        <p>Price: {{ form.value.price }} {{ form.value.currency }}</p>
+      </ng-container>
+
+      <mat-form-field class="field">
+        <mat-label>Choose currency</mat-label>
+        <mat-select formControlName="currency">
+          <div *ngFor="let currency of currencies">
+            <mat-option [value]="currency">{{ currency }}</mat-option>
+          </div>
         </mat-select>
       </mat-form-field>
-    </div>
 
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>What is the event title?</mat-label>
-      <input
-        matInput
-        formControlName="title"
-        type="text"
-        placeholder="E.g. Picnic"
-        required
-      />
-    </mat-form-field>
+      <mat-slider
+        class="field"
+        thumbLabel
+        [displayWith]="formatLabel"
+        tickInterval="500"
+        step="500"
+        formControlName="price"
+        min="0"
+        max="30000"
+      ></mat-slider>
 
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Write event description or addtional info</mat-label>
-      <textarea
-        matInput
-        formControlName="description"
-        placeholder="E.g. Bring your water bottle."
-        type="text"
-      ></textarea>
-    </mat-form-field>
+      <mat-slide-toggle formControlName="private" class="toggle">
+        <ng-container *ngIf="form.value.private">
+          Private
+        </ng-container>
+        <ng-container *ngIf="!form.value.private">
+          Public
+        </ng-container>
+      </mat-slide-toggle>
 
-    <p>Is there a limit for number of members?</p>
-    <mat-radio-group
-      aria-label="Select an option"
-      [(ngModel)]="ifMemberLimit"
-      [ngModelOptions]="{ standalone: true }"
-    >
-      <mat-radio-button class="radio-button" [value]="true"
-        >Yes</mat-radio-button
-      >
-      <mat-radio-button [value]="false">No</mat-radio-button>
-    </mat-radio-group>
+      <mat-slide-toggle formControlName="searchable" class="toggle">
+        <ng-container *ngIf="form.value.searchable">
+          Searchable
+        </ng-container>
+        <ng-container *ngIf="!form.value.searchable">
+          Unsearchable
+        </ng-container>
+      </mat-slide-toggle>
 
-    <mat-form-field *ngIf="ifMemberLimit" appearance="outline" class="field">
-      <mat-label>What is the limit?</mat-label>
-      <input
-        matInput
-        formControlName="memberlimit"
-        placeholder="E.g. 0"
-        type="number"
-        autocomplete="off"
-      />
-    </mat-form-field>
+      <div *ngIf="ifTarget">
+        <button
+          mat-raised-button
+          class="other-submit-button"
+          [disabled]="form.invalid"
+          color="primary"
+          (click)="update()"
+        >
+          Update
+        </button>
+        <p>or</p>
+        <button
+          mat-raised-button
+          class="submit-button"
+          color="warn"
+          (click)="delete()"
+        >
+          Delete
+        </button>
+      </div>
 
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Choose a date</mat-label>
-      <input
-        matInput
-        formControlName="date"
-        [matDatepicker]="picker"
-        required
-        readonly
-      />
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker touchUi #picker></mat-datepicker>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>What time is it happening?</mat-label>
-      <input
-        matInput
-        aria-label="default time"
-        [ngxTimepicker]="defaultValue"
-        formControlName="time"
-        readonly
-        required
-      />
-      <ngx-material-timepicker #defaultValue></ngx-material-timepicker>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="field">
-      <mat-label>Where is it happening?</mat-label>
-      <input
-        matInput
-        formControlName="location"
-        type="text"
-        placeholder="E.g. house"
-        autocomplete="off"
-        required
-      />
-    </mat-form-field>
-
-    <ng-container *ngIf="form.value.price !== 0">
-      <p>Price: {{ form.value.price }} {{ form.value.currency }}</p>
-    </ng-container>
-
-    <mat-form-field class="field">
-      <mat-label>Choose currency</mat-label>
-      <mat-select formControlName="currency">
-        <div *ngFor="let currency of currencies">
-          <mat-option [value]="currency">{{ currency }}</mat-option>
-        </div>
-      </mat-select>
-    </mat-form-field>
-
-    <mat-slider
-      class="field"
-      thumbLabel
-      [displayWith]="formatLabel"
-      tickInterval="500"
-      step="500"
-      formControlName="price"
-      min="0"
-      max="30000"
-    ></mat-slider>
-
-    <mat-slide-toggle formControlName="private" class="toggle">
-      <ng-container *ngIf="form.value.private">
-        Private
-      </ng-container>
-      <ng-container *ngIf="!form.value.private">
-        Public
-      </ng-container>
-    </mat-slide-toggle>
-
-    <mat-slide-toggle formControlName="searchable" class="toggle">
-      <ng-container *ngIf="form.value.searchable">
-        Searchable
-      </ng-container>
-      <ng-container *ngIf="!form.value.searchable">
-        Unsearchable
-      </ng-container>
-    </mat-slide-toggle>
-
-    <div *ngIf="ifTarget">
-      <button
-        mat-raised-button
-        class="other-submit-button"
-        [disabled]="form.invalid"
-        color="primary"
-        (click)="update()"
-      >
-        Update
-      </button>
-      <p>or</p>
-      <button
-        mat-raised-button
-        class="submit-button"
-        color="warn"
-        (click)="delete()"
-      >
-        Delete
-      </button>
-    </div>
-
-    <div *ngIf="!ifTarget">
-      <button
-        mat-raised-button
-        class="submit-button"
-        [disabled]="form.invalid || form.pristine"
-        color="primary"
-        (click)="submit()"
-      >
-        Create
-      </button>
-    </div>
-  </form>
-</div>
+      <div *ngIf="!ifTarget">
+        <button
+          mat-raised-button
+          class="submit-button"
+          [disabled]="form.invalid || form.pristine"
+          color="primary"
+          (click)="submit()"
+        >
+          Create
+        </button>
+      </div>
+    </form>
+  </div>
+</ng-container>

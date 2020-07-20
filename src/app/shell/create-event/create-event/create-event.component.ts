@@ -1,6 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { GroupService } from 'src/app/services/group.service';
 import { EventGetService } from 'src/app/services/event-get.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Group } from 'src/app/interfaces/group';
@@ -18,8 +17,6 @@ export class CreateEventComponent implements OnInit {
   isComplete = false;
 
   ifTarget = false;
-
-  noGroup = false;
 
   eventid: string;
 
@@ -45,6 +42,8 @@ export class CreateEventComponent implements OnInit {
     searchable: [true],
   });
 
+  initialLoading = false;
+
   formatLabel(value: number) {
     if (value >= 1000) {
       return Math.round(value / 1000) + 'k';
@@ -58,11 +57,11 @@ export class CreateEventComponent implements OnInit {
     private fb: FormBuilder,
     private db: AngularFirestore,
     private authService: AuthService,
-    private groupService: GroupService,
     private gorupGetService: GroupGetService,
     private eventService: EventService,
     private eventGetService: EventGetService
   ) {
+    this.initialLoading = true;
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const id = params.get('id');
       this.eventGetService.getEvent(id).subscribe((event: Event) => {
@@ -74,17 +73,14 @@ export class CreateEventComponent implements OnInit {
             ...event,
             date: event.date.toDate(),
           });
+          this.initialLoading = false;
         } else {
           const uid: string = this.authService.uid;
           this.gorupGetService
             .getAdminGroup(uid)
             .subscribe((adminGroups: Group[]) => {
-              if (adminGroups.length) {
-                this.noGroup = false;
-                this.adminGroups = adminGroups;
-              } else {
-                this.noGroup = true;
-              }
+              this.adminGroups = adminGroups;
+              this.initialLoading = false;
             });
         }
       });

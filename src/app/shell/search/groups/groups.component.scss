@@ -38,8 +38,10 @@
   align-items: center;
   width: 100%;
   height: calc(100% - 158.5px);
-}
-
-.no-groups-image {
-  height: 65%;
+  &__image {
+    height: 65%;
+  }
+  &__text {
+    font-size: 32px;
+  }
 }
