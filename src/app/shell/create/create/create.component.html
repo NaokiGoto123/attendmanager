@@ -1,18 +1,13 @@
 <div class="create-container">
-  <div class="event">
+  <a class="create-container__event" routerLink="/create-event">
     <img
-      class="event-picture"
+      class="create-container__event__image"
       src="/assets/images/schedule1.svg"
-      routerLink="/create-event"
     />
-    <p class="event-text" routerLink="/create-event">Create event</p>
-  </div>
-  <div class="group">
-    <img
-      class="group-picture"
-      src="/assets/images/camp.svg"
-      routerLink="/create-group"
-    />
-    <p class="group-text" routerLink="/create-group">Create group</p>
-  </div>
+    <p class="create-container__event__text">Create event</p>
+  </a>
+  <a class="create-container__group" routerLink="/create-group">
+    <img class="create-container__group__image" src="/assets/images/camp.svg" />
+    <p class="create-container__group__text">Create group</p>
+  </a>
 </div>
