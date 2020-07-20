@@ -2,11 +2,33 @@
   <mat-spinner></mat-spinner>
 </div>
 
-<div class="groups-container" *ngIf="!initialLoading && allowedToShow">
-  <div *ngFor="let invitedGroup of invitedGroups">
-    <app-group [group]="invitedGroup"></app-group>
+<ng-container *ngIf="!initialLoading && allowedToShow">
+  <div class="groups-container" *ngIf="!invitedGroups?.length">
+    <app-group
+      *ngFor="let invitedGroup of invitedGroups"
+      [group]="invitedGroup"
+    ></app-group>
   </div>
-</div>
+  <div class="no-group-container" *ngIf="!invitedGroups?.length">
+    <div class="no-group-container__left">
+      <img
+        class="no-group-container__left__image"
+        src="/assets/images/team1.svg"
+        alt="no group image"
+      />
+    </div>
+    <div class="no-group-container__right">
+      <p class="no-group-container__right__text">No groups.</p>
+      <a class="no-group-container__right__text" routerLink="/search/groups"
+        >Search for groups</a
+      >
+      <p class="no-group-container__right__text">or</p>
+      <a class="no-group-container__right__text" routerLink="/create-group"
+        >Create group</a
+      >
+    </div>
+  </div>
+</ng-container>
 
 <div class="protected-container" *ngIf="!initialLoading && !allowedToShow">
   <mat-icon class="protected-container__icon">lock</mat-icon>
