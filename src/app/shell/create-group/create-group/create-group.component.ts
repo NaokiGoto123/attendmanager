@@ -55,6 +55,8 @@ export class CreateGroupComponent implements OnInit {
 
   ifMemberLimit = false;
 
+  ifSubscription = false;
+
   form = this.fb.group({
     name: ['', [Validators.required]],
     description: [''],

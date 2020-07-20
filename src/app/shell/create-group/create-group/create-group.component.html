@@ -74,8 +74,8 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="field">
-      <mat-label>Write group description</mat-label>
-      <input matInput formControlName="description" type="text" />
+      <mat-label>Write group description or additional info</mat-label>
+      <textarea matInput formControlName="description" type="text"></textarea>
     </mat-form-field>
 
     <p>Is there a limit for number of members?</p>
@@ -99,8 +99,23 @@
       />
     </mat-form-field>
 
+    <p>Choose the payment model</p>
+    <mat-radio-group
+      aria-label="Select an option"
+      [(ngModel)]="ifSubscription"
+      [ngModelOptions]="{ standalone: true }"
+    >
+      <mat-radio-button class="radio-button" [value]="true"
+        >Pay monthly</mat-radio-button
+      >
+      <mat-radio-button [value]="false">Pay once</mat-radio-button>
+    </mat-radio-group>
+
     <ng-container *ngIf="form.value.price !== 0">
-      <p>{{ form.value.price }} {{ form.value.currency }}</p>
+      <p>
+        Price: {{ form.value.price }} {{ form.value.currency
+        }}<span *ngIf="ifSubscription">/month</span>
+      </p>
     </ng-container>
 
     <mat-form-field class="field">

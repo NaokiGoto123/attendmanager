@@ -45,13 +45,13 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="field">
-      <mat-label>Write event description</mat-label>
-      <input
+      <mat-label>Write event description or addtional info</mat-label>
+      <textarea
         matInput
         formControlName="description"
         placeholder="E.g. Bring your water bottle."
         type="text"
-      />
+      ></textarea>
     </mat-form-field>
 
     <p>Is there a limit for number of members?</p>
@@ -114,7 +114,7 @@
     </mat-form-field>
 
     <ng-container *ngIf="form.value.price !== 0">
-      <p>{{ form.value.price }} {{ form.value.currency }}</p>
+      <p>Price: {{ form.value.price }} {{ form.value.currency }}</p>
     </ng-container>
 
     <mat-form-field class="field">
