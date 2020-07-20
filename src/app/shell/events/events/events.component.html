@@ -5,14 +5,14 @@
 <ng-container *ngIf="!initialLoading">
   <div *ngIf="!events?.length">
     <div class="no-event-container" *ngIf="groups?.length">
-      <div class="no-event-left-container">
+      <div class="no-event-container__left">
         <img
-          class="no-event-image"
+          class="no-event-container__left__image"
           src="/assets/images/schedule1.svg"
           alt="no event image"
         />
       </div>
-      <div class="no-event-right-container">
+      <div class="no-event-container__right">
         <p>You do not have any events.</p>
         <p routerLink="/search/events">Search for events</p>
         <p>or</p>
@@ -21,14 +21,14 @@
     </div>
 
     <div class="no-group-container" *ngIf="!groups?.length">
-      <div class="no-group-left-container">
+      <div class="no-group-container__left">
         <img
-          class="no-group-image"
+          class="no-group-container__left__image"
           src="/assets/images/team1.svg"
           alt="no group image"
         />
       </div>
-      <div class="no-group-right-container">
+      <div class="no-group-container__right">
         <p>You do not belong to any groups.</p>
         <p routerLink="/search/groups">Search for groups</p>
         <p>or</p>
@@ -39,88 +39,90 @@
 
   <div class="container" *ngIf="events?.length">
     <mat-toolbar class="toolbar">
-      <div [formGroup]="form">
+      <ng-container [formGroup]="form">
         <mat-checkbox
           *ngFor="let group of groups"
           [formControlName]="group.id"
-          class="checkbox"
+          class="toolbar__checkbox"
           >{{ group.name }}
         </mat-checkbox>
-      </div>
+      </ng-container>
     </mat-toolbar>
 
     <div class="header-container">
-      <div class="child-header-container">
-        <a routerLink="/create-event">
-          <button class="add-button" mat-fab color="primary">
-            <mat-icon>add</mat-icon>
-          </button>
-        </a>
-
-        <a routerLink="/calendar">
-          <button class="calendar-button" mat-fab color="accent">
-            <mat-icon>calendar_today</mat-icon>
-          </button>
-        </a>
-
-        <a>
-          <button
-            class="list-button"
-            mat-fab
-            color="accent"
-            (click)="toggleView()"
-          >
-            <mat-icon>list</mat-icon>
-          </button>
-        </a>
-
-        <form
-          class="search-field-container"
-          (ngSubmit)="querySearch(valueControl.value, searchOptions)"
+      <div class="buttons-container">
+        <button
+          mat-fab
+          class="buttons-container__button"
+          color="primary"
+          routerLink="/create-event"
         >
-          <mat-form-field class="search-field" appearance="outline">
-            <mat-label>Search from your events</mat-label>
-
-            <input
-              matInput
-              type="text"
-              [formControl]="valueControl"
-              autocomplete="off"
-              [matAutocomplete]="auto"
-            />
-
-            <mat-autocomplete
-              autoActiveFirstOption
-              (optionSelected)="querySearch(valueControl.value, searchOptions)"
-              #auto="matAutocomplete"
-            >
-              <mat-option *ngFor="let option of options" [value]="option.title">
-                {{ option.title }}
-              </mat-option>
-            </mat-autocomplete>
-
-            <button
-              mat-button
-              *ngIf="valueControl.value"
-              matSuffix
-              mat-icon-button
-              aria-label="Clear"
-              type="button"
-              (click)="
-                clearSearch(); querySearch(valueControl.value, searchOptions)
-              "
-            >
-              <mat-icon>close</mat-icon>
-            </button>
-          </mat-form-field>
-        </form>
+          <mat-icon>add</mat-icon>
+        </button>
+        <button
+          mat-fab
+          class="buttons-container__button"
+          color="accent"
+          routerLink="/calendar"
+        >
+          <mat-icon>calendar_today</mat-icon>
+        </button>
+        <button
+          mat-fab
+          class="buttons-container__button"
+          color="accent"
+          (click)="toggleView()"
+        >
+          <mat-icon>list</mat-icon>
+        </button>
       </div>
-      <mat-progress-bar
-        class="progress-bar"
-        mode="indeterminate"
-        *ngIf="loading"
-      ></mat-progress-bar>
+
+      <form
+        class="search-field-container"
+        (ngSubmit)="querySearch(valueControl.value, searchOptions)"
+      >
+        <mat-form-field class="search-field" appearance="outline">
+          <mat-label>Search from your events</mat-label>
+
+          <input
+            matInput
+            type="text"
+            [formControl]="valueControl"
+            autocomplete="off"
+            [matAutocomplete]="auto"
+          />
+
+          <mat-autocomplete
+            autoActiveFirstOption
+            (optionSelected)="querySearch(valueControl.value, searchOptions)"
+            #auto="matAutocomplete"
+          >
+            <mat-option *ngFor="let option of options" [value]="option.title">
+              {{ option.title }}
+            </mat-option>
+          </mat-autocomplete>
+
+          <button
+            mat-button
+            *ngIf="valueControl.value"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            type="button"
+            (click)="
+              clearSearch(); querySearch(valueControl.value, searchOptions)
+            "
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
     </div>
+    <mat-progress-bar
+      class="progress-bar"
+      mode="indeterminate"
+      *ngIf="loading"
+    ></mat-progress-bar>
 
     <div class="events-container" *ngIf="!listView">
       <app-events-and-detail
