@@ -1,3 +1,11 @@
+.spinner-container {
+  display: flex;
+  width: 100%;
+  height: calc(100% - 388.5px);
+  align-items: center;
+  justify-content: center;
+}
+
 .groups-container {
   display: grid;
   margin: 50px;

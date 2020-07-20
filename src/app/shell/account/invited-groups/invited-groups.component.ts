@@ -14,6 +14,8 @@ import { AuthService } from 'src/app/services/auth.service';
 export class InvitedGroupsComponent implements OnInit {
   invitedGroups: Group[];
 
+  initialLoading = false;
+
   allowedToShow = false;
 
   constructor(
@@ -22,6 +24,7 @@ export class InvitedGroupsComponent implements OnInit {
     private userService: UserService,
     private authService: AuthService
   ) {
+    this.initialLoading = true;
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
       this.userService
@@ -42,6 +45,10 @@ export class InvitedGroupsComponent implements OnInit {
             .subscribe((invitedGroups: Group[]) => {
               this.invitedGroups = invitedGroups;
             });
+
+          setTimeout(() => {
+            this.initialLoading = false;
+          }, 1000);
         });
     });
   }

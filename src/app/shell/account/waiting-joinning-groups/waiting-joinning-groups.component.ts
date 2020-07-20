@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { GroupService } from 'src/app/services/group.service';
 import { ActivatedRoute } from '@angular/router';
 import { Group } from 'src/app/interfaces/group';
 import { AuthService } from 'src/app/services/auth.service';
@@ -15,15 +14,17 @@ import { GroupGetService } from 'src/app/services/group-get.service';
 export class WaitingJoinningGroupsComponent implements OnInit {
   waitingJoinningGroups: Group[];
 
+  initialLoading = false;
+
   allowedToShow = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
     private userService: UserService,
-    private groupService: GroupService,
     private groupGetService: GroupGetService
   ) {
+    this.initialLoading = true;
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
       this.userService
@@ -44,6 +45,10 @@ export class WaitingJoinningGroupsComponent implements OnInit {
             .subscribe((waitingJoinningGroups: Group[]) => {
               this.waitingJoinningGroups = waitingJoinningGroups;
             });
+
+          setTimeout(() => {
+            this.initialLoading = false;
+          }, 1000);
         });
     });
   }
