@@ -52,7 +52,7 @@ export class AttendingEventsComponent implements OnInit {
           if (target.uid === this.authService.uid) {
             this.allowedToShow = true;
           } else {
-            if (target.showAttendedEvents) {
+            if (target.showAttendingEvents) {
               this.allowedToShow = true;
             } else {
               this.allowedToShow = false;

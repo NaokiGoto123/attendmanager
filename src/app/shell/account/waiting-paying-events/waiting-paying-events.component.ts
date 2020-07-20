@@ -54,7 +54,7 @@ export class WaitingPayingEventsComponent implements OnInit {
           if (target.uid === this.authService.uid) {
             this.allowedToShow = true;
           } else {
-            if (target.showAttendedEvents) {
+            if (target.showPayingEvents) {
               this.allowedToShow = true;
             } else {
               this.allowedToShow = false;
