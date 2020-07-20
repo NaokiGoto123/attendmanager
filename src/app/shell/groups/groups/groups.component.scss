@@ -2,7 +2,6 @@
   display: grid;
   margin: 50px;
   grid-auto-rows: 385px;
-  grid-template-columns: 1fr 1fr 1fr;
   grid-template-columns: repeat(auto-fit, minmax(385px, 1fr));
   grid-gap: 20px;
 }
