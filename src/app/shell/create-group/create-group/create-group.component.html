@@ -156,10 +156,10 @@
       </ng-container>
     </mat-slide-toggle>
 
-    <div *ngIf="ifTarget">
+    <div class="submit-buttons-container" *ngIf="ifTarget">
       <button
         mat-raised-button
-        class="submit-button"
+        class="other-submit-button"
         [disabled]="form.invalid"
         color="primary"
         (click)="update()"

@@ -15,6 +15,7 @@ export interface Group {
   // waitingJoinningMemberIds: string[]; サブコレ
   // waitingPayingMemberIds: string[]; サブコレ
   price: number;
+  subscription: boolean;
   currency: string;
   private: boolean;
   searchable: boolean;
