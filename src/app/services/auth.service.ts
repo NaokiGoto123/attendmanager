@@ -66,6 +66,12 @@ export class AuthService {
       showGroups: true,
       showAttendingEvents: true,
       showAttendedEvents: true,
+      showInvitedEvents: true,
+      showInvitedGroups: true,
+      showWaitingEvents: true,
+      showWaitingGroups: true,
+      showPayingEvents: true,
+      showPayingGroups: true,
     });
   }
 
@@ -81,6 +87,12 @@ export class AuthService {
     showGroups,
     showAttendingEvents,
     showAttendedEvents,
+    showInvitedEvents,
+    showInvitedGroups,
+    showWaitingEvents,
+    showWaitingGroups,
+    showPayingEvents,
+    showPayingGroups,
   }: User) {
     const userRef: AngularFirestoreDocument<User> = this.db.doc(`users/${uid}`);
 
@@ -96,6 +108,12 @@ export class AuthService {
       showGroups,
       showAttendingEvents,
       showAttendedEvents,
+      showInvitedEvents,
+      showInvitedGroups,
+      showWaitingEvents,
+      showWaitingGroups,
+      showPayingEvents,
+      showPayingGroups,
     };
 
     return userRef

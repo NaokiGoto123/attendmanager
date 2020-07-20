@@ -29,6 +29,12 @@ export class ProfileSettingsComponent implements OnInit {
   showGroups: boolean;
   showAttendingEvents: boolean;
   showAttendedEvents: boolean;
+  showInvitedEvents: boolean;
+  showInvitedGroups: boolean;
+  showWaitingEvents: boolean;
+  showWaitingGroups: boolean;
+  showPayingEvents: boolean;
+  showPayingGroups: boolean;
 
   form = this.fb.group({
     searchId: [this.searchId],
@@ -38,6 +44,12 @@ export class ProfileSettingsComponent implements OnInit {
     showGroups: [this.showGroups],
     showAttendingEvents: [this.showAttendingEvents],
     showAttendedEvents: [this.showAttendedEvents],
+    showInvitedEvents: [this.showInvitedEvents],
+    showInvitedGroups: [this.showInvitedGroups],
+    showWaitingEvents: [this.showWaitingEvents],
+    showWaitingGroups: [this.showWaitingGroups],
+    showPayingEvents: [this.showPayingEvents],
+    showPayingGroups: [this.showPayingGroups],
   });
 
   constructor(
@@ -96,6 +108,12 @@ export class ProfileSettingsComponent implements OnInit {
       showGroups: this.form.value.showGroups,
       showAttendingEvents: this.form.value.showAttendingEvents,
       showAttendedEvents: this.form.value.showAttendedEvents,
+      showInvitedEvents: this.form.value.showInvitedEvents,
+      showInvitedGroups: this.form.value.showInvitedGroups,
+      showWaitingEvents: this.form.value.showWaitingEvents,
+      showWaitingGroups: this.form.value.showWaitingGroups,
+      showPayingEvents: this.form.value.showPayingEvents,
+      showPayingGroups: this.form.value.showPayingGroups,
     });
     this.imageChangedEvent = '';
   }

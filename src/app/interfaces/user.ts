@@ -10,4 +10,10 @@ export interface User {
   showGroups: boolean;
   showAttendingEvents: boolean;
   showAttendedEvents: boolean;
+  showInvitedEvents: boolean;
+  showInvitedGroups: boolean;
+  showWaitingEvents: boolean;
+  showWaitingGroups: boolean;
+  showPayingEvents: boolean;
+  showPayingGroups: boolean;
 }
