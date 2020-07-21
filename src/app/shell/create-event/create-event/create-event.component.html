@@ -4,19 +4,32 @@
 
 <ng-container *ngIf="!initialLoading">
   <div class="noGroup-container" *ngIf="!adminGroups?.length">
-    <mat-icon class="noGroup-container__icon">group_add</mat-icon>
-    <p class="noGroup-container__text">You are not an admin of any group.</p>
-    <p class="noGroup-container__text">
-      You can
-      <a class="noGroup-container__text" routerLink="/search">search</a> for
-      groups
-    </p>
-    <p class="noGroup-container__text">or</p>
-    <p class="noGroup-container__text">
-      You can
-      <a class="noGroup-container__text" routerLink="/create-group">create</a>
-      one
-    </p>
+    <div class="noGroup-container__left">
+      <img
+        class="noGroup-container__left__image"
+        src="/assets/images/alone.svg"
+      />
+    </div>
+    <div class="noGroup-container__right">
+      <p class="noGroup-container__right__text">
+        You are not an admin of any group.
+      </p>
+      <p class="noGroup-container__right__text">
+        You can
+        <a class="noGroup-container__right__text" routerLink="/search"
+          >search</a
+        >
+        for groups
+      </p>
+      <p class="noGroup-container__right__text">or</p>
+      <p class="noGroup-container__right__text">
+        You can
+        <a class="noGroup-container__right__text" routerLink="/create-group"
+          >create</a
+        >
+        one
+      </p>
+    </div>
   </div>
 
   <div class="container" *ngIf="adminGroups?.length">
