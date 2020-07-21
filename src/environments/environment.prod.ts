@@ -10,4 +10,8 @@ export const environment = {
     appId: '1:769641726969:web:58bf3148cd63dde1f37328',
     measurementId: 'G-J82MBM5ZWH',
   },
+  algolia: {
+    appId: 'PBJ3SLBZU1',
+    searchKey: 'dd5074173d20b3765b3045baa3a7e7ff',
+  },
 };
