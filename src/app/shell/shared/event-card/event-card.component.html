@@ -42,7 +42,7 @@
                     color="primary"
                     (click)="payToAttendEvent()"
                   >
-                    Pay {{ event?.price }} to attend
+                    Pay {{ event?.price }}{{ event?.currency }} to attend
                   </button>
 
                   <button
@@ -87,7 +87,7 @@
                   color="primary"
                   (click)="attendEvent()"
                 >
-                  Pay {{ event?.price }} to attend
+                  Pay {{ event?.price }}{{ event?.currency }} to attend
                 </button>
               </div>
             </div>

@@ -36,7 +36,7 @@
                   color="primary"
                   (click)="waitingPayinglistToMember()"
                 >
-                  Pay {{ group.price }} to join
+                  Pay {{ group.price }}{{ group.currency }} to join
                 </button>
                 <button
                   mat-raised-button
@@ -81,7 +81,7 @@
               color="primary"
               (click)="payToJoinGroup()"
             >
-              Pay {{ group.price }} to join
+              Pay {{ group.price }}{{ group.currency }} to join
             </button>
           </div>
           <div *ngIf="group.price !== 0 && invited">
@@ -90,7 +90,7 @@
               color="primary"
               (click)="invitingUserListToMembers()"
             >
-              Pay {{ group.price }} to join
+              Pay {{ group.price }}{{ group.currency }} to join
             </button>
           </div>
         </div>
