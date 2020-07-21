@@ -22,10 +22,12 @@ export class EventsListViewComponent implements OnInit {
   constructor(private groupGetService: GroupGetService) {}
 
   ngOnInit(): void {
+    console.log(this.events);
     this.events.map((event: Event) => {
       this.groupGetService
         .getGroupinfo(event.groupid)
         .subscribe((group: Group) => {
+          const eventsWithGroupNames = [];
           const eventWithGroup: EventWithGroupId = {
             id: event.id,
             title: event.title,
@@ -42,7 +44,8 @@ export class EventsListViewComponent implements OnInit {
             searchable: event.searchable,
             groupName: group.name,
           };
-          this.eventsWithGroupNames.push(eventWithGroup);
+          eventsWithGroupNames.push(eventWithGroup);
+          this.eventsWithGroupNames = eventsWithGroupNames;
         });
     });
   }
