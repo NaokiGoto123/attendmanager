@@ -5,6 +5,8 @@
   padding: 25px 0 25px 40px;
   position: sticky;
   top: 0;
+  z-index: 10;
+  background-color: #fafafa;
 }
 
 .account-photo {
@@ -17,4 +19,6 @@
 nav {
   position: sticky;
   top: 190px;
+  z-index: 10;
+  background-color: #fafafa;
 }
