@@ -68,7 +68,6 @@ export class InvitedEventsComponent implements OnInit {
                     return `id:${invitedEventId}`;
                   }
                 );
-                console.log(facetFilters);
 
                 this.searchOptions = {
                   facetFilters: [facetFilters],
@@ -79,13 +78,10 @@ export class InvitedEventsComponent implements OnInit {
                 this.index
                   .search('', { facetFilters: [facetFilters] })
                   .then((result) => {
-                    console.log(result);
                     this.options = result.hits;
                   });
 
                 this.search('', this.searchOptions);
-
-                console.log('check');
 
                 setTimeout(() => {
                   this.initialLoading = false;
@@ -121,7 +117,6 @@ export class InvitedEventsComponent implements OnInit {
   }
 
   additionalSearch() {
-    console.log('called');
     if (!this.loading) {
       this.loading = true;
       this.searchOptions.page++;

@@ -26,7 +26,6 @@ export class ChatComponent implements OnInit {
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        console.log(this.router.url);
         this.url = this.router.url;
       }
     });

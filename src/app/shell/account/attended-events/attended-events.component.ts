@@ -119,7 +119,6 @@ export class AttendedEventsComponent implements OnInit {
   }
 
   additionalSearch() {
-    console.log('called');
     if (!this.loading) {
       this.loading = true;
       this.searchOptions.page++;

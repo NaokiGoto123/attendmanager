@@ -111,7 +111,6 @@ export class EventsAndDetailComponent implements OnInit {
   }
 
   onScroll() {
-    console.log('scrolled');
     this.scrolls.emit(true);
   }
 }

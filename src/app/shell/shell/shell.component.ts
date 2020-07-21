@@ -34,7 +34,6 @@ export class ShellComponent implements AfterViewInit {
   ) {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        console.log(this.router.url);
         this.url = this.router.url;
       }
     });
@@ -53,7 +52,6 @@ export class ShellComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.uiService.scrollWrapperElement = this.wrap.getElementRef().nativeElement;
-    console.log(this.uiService.scrollWrapperElement);
   }
 
   clearNotificationCount() {

@@ -158,7 +158,6 @@ export class EventGetService {
               attendedEvents.push(attendingEvent);
             }
           });
-          console.log(attendedEvents);
           return attendedEvents;
         })
       );
@@ -232,7 +231,6 @@ export class EventGetService {
               attendedEvents.push(attendingEvent);
             }
           });
-          console.log(attendedEvents);
           return attendedEvents;
         })
       );
@@ -265,7 +263,6 @@ export class EventGetService {
                 attendedEvents.push(attendingEvent);
               }
             });
-            console.log(attendedEvents);
             return attendedEvents;
           } else {
             return [];
@@ -279,7 +276,6 @@ export class EventGetService {
             });
             return attendedEventIds;
           } else {
-            console.log('checking');
             return [];
           }
         })

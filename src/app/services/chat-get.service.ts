@@ -150,7 +150,7 @@ export class ChatGetService {
             const owner: Observable<User> = this.db
               .doc<User>(`users/${message.ownerId}`)
               .valueChanges();
-            return combineLatest(of(message), owner);
+            return combineLatest([of(message), owner]);
           });
           return combineLatest(messagesWithOwners);
         }),
@@ -169,7 +169,6 @@ export class ChatGetService {
             };
             messagesWithUsers.push(messageWithUser);
           });
-          console.log(messagesWithUsers);
           return messagesWithUsers;
         })
       );

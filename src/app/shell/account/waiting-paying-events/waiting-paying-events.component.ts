@@ -69,7 +69,6 @@ export class WaitingPayingEventsComponent implements OnInit {
                     return `id:${waitingPayingEventId}`;
                   }
                 );
-                console.log(facetFilters);
 
                 this.searchOptions = {
                   facetFilters: [facetFilters],
@@ -80,7 +79,6 @@ export class WaitingPayingEventsComponent implements OnInit {
                 this.index
                   .search('', { facetFilters: [facetFilters] })
                   .then((result) => {
-                    console.log(result);
                     this.options = result.hits;
                   });
 
@@ -120,7 +118,6 @@ export class WaitingPayingEventsComponent implements OnInit {
   }
 
   additionalSearch() {
-    console.log('called');
     if (!this.loading) {
       this.loading = true;
       this.searchOptions.page++;

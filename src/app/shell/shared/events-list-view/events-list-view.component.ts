@@ -43,8 +43,6 @@ export class EventsListViewComponent implements OnInit {
             groupName: group.name,
           };
           this.eventsWithGroupNames.push(eventWithGroup);
-          console.log(this.eventsWithGroupNames);
-          console.log(this.events);
         });
     });
   }

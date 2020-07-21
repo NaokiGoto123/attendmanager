@@ -67,7 +67,6 @@ export class AttendingEventsComponent implements OnInit {
                     return `id:${attendingEventId}`;
                   }
                 );
-                console.log(facetFilters);
 
                 this.searchOptions = {
                   facetFilters: [facetFilters],
@@ -117,7 +116,6 @@ export class AttendingEventsComponent implements OnInit {
   }
 
   additionalSearch() {
-    console.log('called');
     if (!this.loading) {
       this.loading = true;
       this.searchOptions.page++;

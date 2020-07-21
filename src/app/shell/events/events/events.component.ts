@@ -79,7 +79,6 @@ export class EventsComponent implements OnInit {
       const filters = selecteds.map((selected) => {
         return `groupid:${selected}`;
       });
-      console.log(filters);
       this.searchOptions = { facetFilters: [filters], page: 0, hitsPerPage: 3 };
       this.index.search('', this.searchOptions).then((result) => {
         this.items = result.hits;
@@ -116,7 +115,6 @@ export class EventsComponent implements OnInit {
   }
 
   additionalSearch() {
-    console.log('called');
     if (!this.loading) {
       this.loading = true;
       this.searchOptions.page++;

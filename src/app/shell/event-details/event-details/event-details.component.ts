@@ -37,7 +37,6 @@ export class EventDetailsComponent implements OnInit {
 
       this.eventGetService.getEvent(id).subscribe((event: Event) => {
         this.event = event;
-        console.log(event);
 
         this.userService.getUser(event.createrId).subscribe((creater: User) => {
           this.creater = creater;

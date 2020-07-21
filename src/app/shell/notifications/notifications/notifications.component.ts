@@ -48,8 +48,6 @@ export class NotificationsComponent implements OnInit {
           this.facetFilters = notificationIds.map((notificationId: string) => {
             return `id:${notificationId}`;
           });
-          console.log(this.facetFilters);
-
           this.searchOptions = {
             facetFilters: [this.facetFilters],
             page: 0,
@@ -77,7 +75,6 @@ export class NotificationsComponent implements OnInit {
   }
 
   additionalSearch() {
-    console.log('called');
     if (!this.loading) {
       this.loading = true;
       this.searchOptions.page++;

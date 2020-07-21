@@ -57,7 +57,6 @@ export class InviteService {
             memberIds.push(attendingMemberId.id);
           });
           if (memberIds.includes(uid)) {
-            console.log('already attending');
             return;
           } else {
             this.db
@@ -71,7 +70,6 @@ export class InviteService {
           }
         });
     } else {
-      console.log('cannot invite yourself');
       return;
     }
   }
