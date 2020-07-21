@@ -1,23 +1,60 @@
-<img class="group-picture" src="{{ group?.grouppicture }}" />
+<div class="container">
+  <mat-toolbar class="container__toolbar">
+    <button mat-icon-button color="primary" (click)="navigateBack()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
 
-<p>{{ event?.title }}</p>
+    <div *ngIf="adminIds?.includes(authService.uid)">
+      <button
+        mat-icon-button
+        routerLink="/create-event"
+        [queryParams]="{ id: event?.id }"
+        color="primary"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
 
-<p>{{ event?.description }}</p>
+  <img class="container__image" src="{{ group?.grouppicture }}" />
 
-<a routerLink="/account" [queryParams]="{ id: creater?.searchId }">{{
-  creater?.displayName
-}}</a>
+  <div class="content-container">
+    <p class="content-container__title">{{ event?.title }}</p>
 
-<p>First {{ event?.memberlimit }} people can attend</p>
+    <p class="content-container__description">{{ event?.description }}</p>
 
-<p>
-  Happening at {{ event?.time }} on
-  {{ event?.date.toDate() | date: 'yyyy/MM/dd' }} in
-  {{ event?.location }}
-</p>
+    <p class="content-container__group">
+      Belongs to
+      <a routerLink="/group-details" [queryParams]="{ id: event?.groupid }">{{
+        group?.name
+      }}</a>
+    </p>
 
-<p>{{ event?.price }}{{ event?.currency }} tp attend</p>
+    <p class="content-container__creater">
+      Created by
+      <a routerLink="/account" [queryParams]="{ id: creater?.searchId }">{{
+        creater?.displayName
+      }}</a>
+    </p>
 
-<button mat-raised-button color="primary" (click)="openDialog()">
-  Invite
-</button>
+    <p class="content-container__limit">
+      First {{ event?.memberlimit }} people can attend
+    </p>
+
+    <p class="content-container__info">
+      Happening at {{ event?.time }} on
+      {{ event?.date.toDate() | date: 'yyyy/MM/dd' }} in
+      {{ event?.location }}
+    </p>
+
+    <p class="content-container__price">
+      {{ event?.price }}{{ event?.currency }} tp attend
+    </p>
+
+    <div class="content-container__buttons">
+      <button mat-raised-button color="primary" (click)="openDialog()">
+        Invite
+      </button>
+    </div>
+  </div>
+</div>

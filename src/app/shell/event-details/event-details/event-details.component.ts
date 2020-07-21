@@ -9,6 +9,8 @@ import { InviteService } from 'src/app/services/invite.service';
 import { EventDialogComponent } from '../event-dialog/event-dialog.component';
 import { GroupGetService } from 'src/app/services/group-get.service';
 import { EventGetService } from 'src/app/services/event-get.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-event-details',
@@ -24,13 +26,17 @@ export class EventDetailsComponent implements OnInit {
 
   searchId: string;
 
+  adminIds: string[];
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private eventGetService: EventGetService,
     private userService: UserService,
     private groupGetService: GroupGetService,
     private inviteService: InviteService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    public authService: AuthService,
+    private location: Location
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const id = params.get('id');
@@ -47,11 +53,21 @@ export class EventDetailsComponent implements OnInit {
           .subscribe((group: Group) => {
             this.group = group;
           });
+
+        this.groupGetService
+          .getAdminIds(event.groupid)
+          .subscribe((adminIds: string[]) => {
+            this.adminIds = adminIds;
+          });
       });
     });
   }
 
   ngOnInit(): void {}
+
+  navigateBack() {
+    this.location.back();
+  }
 
   async openDialog(): Promise<void> {
     const dialogRef = this.dialog.open(EventDialogComponent, {

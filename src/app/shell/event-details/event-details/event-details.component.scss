@@ -1,3 +1,47 @@
-.group-picture {
-  width: 100%;
+.container {
+  &__toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  &__image {
+    width: 100%;
+  }
+}
+
+.content-container {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto;
+  &__title {
+    font-size: 64px;
+  }
+  &__description {
+    font-size: 32px;
+    margin: 0 0 32px 0;
+  }
+  &__group {
+    font-size: 32px;
+    margin: 0 0 32px 0;
+  }
+  &__creater {
+    font-size: 32px;
+    margin: 0 0 32px 0;
+  }
+  &__limit {
+    font-size: 32px;
+    margin: 0 0 32px 0;
+  }
+  &__info {
+    font-size: 32px;
+    margin: 0 0 32px 0;
+  }
+  &__price {
+    font-size: 32px;
+    margin: 0 0 32px 0;
+  }
+  &__buttons {
+    margin: 0 0 150px 0;
+  }
 }

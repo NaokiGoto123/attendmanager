@@ -3,7 +3,7 @@
 </div>
 
 <ng-container *ngIf="!initialLoading">
-  <div class="noGroup-container" *ngIf="!adminGroups?.length">
+  <div class="noGroup-container" *ngIf="!adminGroups?.length && !ifTarget">
     <div class="noGroup-container__left">
       <img
         class="noGroup-container__left__image"
@@ -32,7 +32,7 @@
     </div>
   </div>
 
-  <div class="container" *ngIf="adminGroups?.length">
+  <div class="container" *ngIf="adminGroups?.length || ifTarget">
     <form [formGroup]="form">
       <div *ngIf="ifTarget">
         <p class="title">Update event</p>

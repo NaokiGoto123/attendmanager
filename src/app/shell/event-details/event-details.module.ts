@@ -10,7 +10,8 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
 @NgModule({
   declarations: [EventDetailsComponent, EventDialogComponent],
   imports: [
@@ -22,6 +23,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatButtonModule,
     MatInputModule,
     MatAutocompleteModule,
+    MatToolbarModule,
+    MatIconModule,
   ],
 })
 export class EventDetailsModule {}
