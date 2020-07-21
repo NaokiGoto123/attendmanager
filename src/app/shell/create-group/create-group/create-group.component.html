@@ -70,12 +70,23 @@
   <form [formGroup]="form" class="form">
     <mat-form-field appearance="outline" class="field">
       <mat-label>Name your group</mat-label>
-      <input matInput formControlName="name" type="email" required />
+      <input
+        matInput
+        formControlName="name"
+        type="type"
+        autocomplete="off"
+        required
+      />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="field">
       <mat-label>Write group description or additional info</mat-label>
-      <textarea matInput formControlName="description" type="text"></textarea>
+      <textarea
+        matInput
+        formControlName="description"
+        type="text"
+        autocomplete="off"
+      ></textarea>
     </mat-form-field>
 
     <p>Is there a limit for number of members?</p>
@@ -96,6 +107,7 @@
         formControlName="memberlimit"
         placeholder="E.g. 0"
         type="number"
+        autocomplete="off"
       />
     </mat-form-field>
 
