@@ -282,77 +282,77 @@ export const deleteAccount = functions
     const groupIds = (
       await db.collection(`users/${uid}/groupIds`).get()
     ).docs.map((doc) => doc.data());
-    const DeleteFromGroups = groupIds.map((groupId) => {
+    const deleteFromGroups = groupIds.map((groupId) => {
       db.doc(`groups/${groupId.id}/memberIds/${uid}`);
     });
-    await Promise.all(DeleteFromGroups);
+    await Promise.all(deleteFromGroups);
 
     const waitingJoinningGroupIds = (
       await db.collection(`users/${uid}/waitingJoinningGroupIds`).get()
     ).docs.map((doc) => doc.data());
-    const DeleteFromWaitingJoinningGroups = waitingJoinningGroupIds.map(
+    const deleteFromWaitingJoinningGroups = waitingJoinningGroupIds.map(
       (waitingJoinningGroupId) => {
         db.doc(`groups/${waitingJoinningGroupId.id}/memberIds/${uid}`);
       }
     );
-    await Promise.all(DeleteFromWaitingJoinningGroups);
+    await Promise.all(deleteFromWaitingJoinningGroups);
 
     const waitingPayingGroupIds = (
       await db.collection(`users/${uid}/waitingPayingGroupIds`).get()
     ).docs.map((doc) => doc.data());
-    const DeleteFromWaitingPayingGroups = waitingPayingGroupIds.map(
+    const deleteFromWaitingPayingGroups = waitingPayingGroupIds.map(
       (waitingPayingGroupId) => {
         db.doc(`groups/${waitingPayingGroupId.id}/memberIds/${uid}`);
       }
     );
-    await Promise.all(DeleteFromWaitingPayingGroups);
+    await Promise.all(deleteFromWaitingPayingGroups);
 
     // チャットルームのサブコレクションからの削除
     const chatRoomIds: string[] = [];
     groupIds.map((groupId) => {
       chatRoomIds.push(groupId?.chatRoomId);
     });
-    const DeleteFromChatRooms = chatRoomIds.map((chatRoomId) => {
+    const deleteFromChatRooms = chatRoomIds.map((chatRoomId) => {
       db.doc(`chatRooms/${chatRoomId}/memberIds/${uid}`);
     });
-    await Promise.all(DeleteFromChatRooms);
+    await Promise.all(deleteFromChatRooms);
 
     // // イベントのサブコレクションからの削除
     const eventIds = (
       await db.collection(`users/${uid}/eventIds`).get()
     ).docs.map((doc) => doc.data());
-    const DeleteFromEvents = eventIds.map((eventId) => {
+    const deleteFromEvents = eventIds.map((eventId) => {
       db.doc(`events/${eventId.id}/memberIds/${uid}`);
     });
-    await Promise.all(DeleteFromEvents);
+    await Promise.all(deleteFromEvents);
 
     const waitingJoinningEventIds = (
       await db.collection(`users/${uid}/waitingJoinningEventIds`).get()
     ).docs.map((doc) => doc.data());
-    const DeleteFromWaitingJoinningEvents = waitingJoinningEventIds.map(
+    const deleteFromWaitingJoinningEvents = waitingJoinningEventIds.map(
       (waitingJoinningEventId) => {
         db.doc(`events/${waitingJoinningEventId.id}/memberIds/${uid}`);
       }
     );
-    await Promise.all(DeleteFromWaitingJoinningEvents);
+    await Promise.all(deleteFromWaitingJoinningEvents);
 
     const waitingPayingEventIds = (
       await db.collection(`users/${uid}/waitingPayingEventIds`).get()
     ).docs.map((doc) => doc.data());
-    const DeleteFromWaitingPayingEvents = waitingPayingEventIds.map(
+    const deleteFromWaitingPayingEvents = waitingPayingEventIds.map(
       (waitingPayingEventId) => {
         db.doc(`events/${waitingPayingEventId.id}/memberIds/${uid}`);
       }
     );
-    await Promise.all(DeleteFromWaitingPayingEvents);
+    await Promise.all(deleteFromWaitingPayingEvents);
 
     const invitedEventIds = (
       await db.collection(`users/${uid}/invitedEventIds`).get()
     ).docs.map((doc) => doc.data());
-    const DeleteFromInvitingList = invitedEventIds.map((invitedEventId) => {
+    const deleteFromInvitingList = invitedEventIds.map((invitedEventId) => {
       db.doc(`events/${invitedEventId.id}/invitingUserIds/${uid}`);
     });
-    await Promise.all(DeleteFromInvitingList);
+    await Promise.all(deleteFromInvitingList);
 
     // Usersからの削除
     const pathToAccount = `users/${uid}`;
