@@ -2,11 +2,86 @@
   height: 100%;
 }
 
-.group-picture {
-  width: 100%;
+.container {
+  &__toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+  &__image {
+    width: 100%;
+  }
 }
 
-.actions {
+.content-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  width: 60%;
+  margin: 0 auto;
+  &__name {
+    font-size: 64px;
+  }
+  &__description {
+    font-size: 32px;
+    margin: 0 0 32px 0;
+  }
+  &__private-event {
+    font-size: 32px;
+    color: red;
+    margin: 0 0 32px 0;
+  }
+  &__public-event {
+    font-size: 32px;
+    color: blue;
+    margin: 0 0 32px 0;
+  }
+  &__created {
+    font-size: 32px;
+    margin: 0 0 32px 0;
+  }
+  &__price {
+    font-size: 32px;
+    margin: 0 0 32px 0;
+  }
+  &__admins {
+    font-size: 32px;
+    &__title {
+      margin: 0;
+    }
+    &__content {
+      display: flex;
+      align-items: center;
+      &__name {
+        margin: 0 20px 0 0;
+      }
+    }
+  }
+  &__members {
+    font-size: 32px;
+    &__title {
+      margin: 0;
+    }
+  }
+  &__waiting-users {
+    font-size: 32px;
+  }
+  &__no-waiting-users {
+    font-size: 32px;
+    margin: 0 0 32px 0;
+  }
+  &__inviting-users {
+    font-size: 32px;
+  }
+  &__no-inviting-users {
+    font-size: 32px;
+    margin: 0 0 32px 0;
+  }
+  &__buttons {
+    display: flex;
+    flex-direction: row;
+    margin: 0 0 150px 0;
+    &__button {
+      margin: 0 20px 0 0;
+    }
+  }
 }

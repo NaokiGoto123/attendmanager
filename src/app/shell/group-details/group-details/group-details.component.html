@@ -6,8 +6,8 @@
   />
 </div>
 
-<div *ngIf="group">
-  <mat-toolbar>
+<div class="container" *ngIf="group">
+  <mat-toolbar class="container__toolbar">
     <button mat-icon-button color="primary" (click)="navigateBack()">
       <mat-icon>arrow_back</mat-icon>
     </button>
@@ -21,21 +21,21 @@
     </div>
   </mat-toolbar>
 
-  <img class="group-picture" src="{{ group?.grouppicture }}" />
+  <img class="container__image" src="{{ group?.grouppicture }}" />
 
-  <div>
-    <p>{{ group?.name }}</p>
+  <div class="content-container">
+    <p class="content-container__name">{{ group?.name }}</p>
 
-    <p>{{ group?.description }}</p>
+    <p class="content-container__description">{{ group?.description }}</p>
 
     <div *ngIf="group?.private">
-      <p>This is private group</p>
+      <p class="content-container__private-event">This is private group</p>
     </div>
     <div *ngIf="!group?.private">
-      <p>This is public group</p>
+      <p class="content-container__public-event">This is public group</p>
     </div>
 
-    <p>
+    <p class="content-container__created">
       Created by
       <span routerLink="/account" [queryParams]="{ id: creater?.searchId }">
         {{ creater?.displayName }}
@@ -44,173 +44,177 @@
       {{ group?.createddate.toDate() | date: 'yyyy/MM/dd' }}
     </p>
 
-    <div *ngIf="group?.price === 0">
-      <p>Price: {{ group?.price }}</p>
-    </div>
     <div *ngIf="group?.price !== 0">
-      <p>Price: {{ group?.price }} {{ group?.currency }}</p>
+      <ng-container *ngIf="group?.subscription">
+        <p class="content-container__price">
+          Price: {{ group?.price }} {{ group?.currency }}/month
+        </p>
+      </ng-container>
+      <ng-container *ngIf="!group?.subscription">
+        <p class="content-container__price">
+          Price: {{ group?.price }} {{ group?.currency }}
+        </p>
+      </ng-container>
     </div>
 
-    <div *ngIf="admins?.length">
-      <p>Admins</p>
-      <ul>
-        <div *ngFor="let admin of admins">
-          <li>
-            <span routerLink="/account" [queryParams]="{ id: admin.searchId }">
+    <div class="content-container__admins" *ngIf="admins?.length">
+      <p class="content-container__admins__title">Admins</p>
+      <ul *ngFor="let admin of admins">
+        <li>
+          <div class="content-container__admins__content">
+            <a
+              class="content-container__admins__content__name"
+              routerLink="/account"
+              [queryParams]="{ id: admin.searchId }"
+            >
               {{ admin.displayName }}
-            </span>
+            </a>
             <button
-              mat-button
+              mat-stroked-button
               *ngIf="ifadmin && admin.uid === uid"
               color="warn"
               (click)="deleteAdmin(admin.uid)"
             >
-              Unauthorize
+              Unauthorize yourself
             </button>
-          </li>
-        </div>
+          </div>
+        </li>
       </ul>
     </div>
 
-    <div *ngIf="members?.length">
-      <p>Members</p>
-      <ul>
-        <div *ngFor="let member of members">
-          <li>
-            <p routerLink="/account" [queryParams]="{ id: member.searchId }">
+    <div class="content-container__members" *ngIf="members?.length">
+      <p class="content-container__members__title">Members</p>
+      <ul *ngFor="let member of members">
+        <li>
+          <div>
+            <a routerLink="/account" [queryParams]="{ id: member.searchId }">
               {{ member.displayName }}
-            </p>
+            </a>
             <div
               *ngIf="
                 ifadmin && member.uid !== uid && !adminIds.includes(member.uid)
               "
             >
               <button
-                mat-button
+                mat-stroked-button
                 color="primary"
                 (click)="makeAdmin(member.uid)"
               >
                 Authorize as an admin
               </button>
-              <button mat-button color="warn" (click)="leaveGroup(member.uid)">
+              <button
+                mat-stroked-buttonn
+                color="warn"
+                (click)="leaveGroup(member.uid)"
+              >
                 Kick out
               </button>
             </div>
-          </li>
-        </div>
+          </div>
+        </li>
       </ul>
     </div>
 
-    <div *ngIf="!members?.length">
-      <p>There is no members.</p>
-    </div>
+    <ng-container *ngIf="!members?.length">
+      <p class="content-container__members">There is no members.</p>
+    </ng-container>
 
-    <div *ngIf="(waitingJoinningMembers | async)?.length">
+    <div
+      class="content-container__waiting-users"
+      *ngIf="(waitingJoinningMembers | async)?.length"
+    >
       <p>Waiting users</p>
-      <ul>
-        <div *ngFor="let waitingMember of waitingJoinningMembers | async">
-          <li>
-            <span
-              routerLink="/account"
-              [queryParams]="{ searchId: waitingMember.searchId }"
-            >
-              {{ waitingMember.displayName }}
-            </span>
-            <div *ngIf="ifadmin">
-              <!-- 無料グループの場合 -->
-              <div *ngIf="group?.price === 0">
-                <div>
-                  <button
-                    mat-button
-                    color="primary"
-                    (click)="allowWaitingMember(waitingMember.uid)"
-                  >
-                    Allow
-                  </button>
-                </div>
-                <div class="remove-button">
-                  <button
-                    mat-button
-                    color="warn"
-                    (click)="leaveWaitingList(waitingMember.uid)"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
-              <!-- 有料グループの場合 -->
-              <div *ngIf="group?.price !== 0">
-                <div>
-                  <button
-                    mat-button
-                    color="primary"
-                    (click)="
-                      waitingJoinningMemberToWaitingPayingMember(
-                        waitingMember.uid
-                      )
-                    "
-                  >
-                    Allow
-                  </button>
-                </div>
-
-                <div>
-                  <button
-                    mat-button
-                    color="warn"
-                    (click)="leaveWaitingList(waitingMember.uid)"
-                  >
-                    Remove
-                  </button>
-                </div>
-              </div>
+      <ul *ngFor="let waitingMember of waitingJoinningMembers | async">
+        <li>
+          <span
+            routerLink="/account"
+            [queryParams]="{ searchId: waitingMember.searchId }"
+          >
+            {{ waitingMember.displayName }}
+          </span>
+          <ng-container *ngIf="ifadmin">
+            <div *ngIf="group?.price === 0">
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="allowWaitingMember(waitingMember.uid)"
+              >
+                Allow
+              </button>
+              <button
+                mat-stroked-button
+                color="warn"
+                (click)="leaveWaitingList(waitingMember.uid)"
+              >
+                Remove
+              </button>
             </div>
-          </li>
-        </div>
+            <div *ngIf="group?.price !== 0">
+              <button
+                mat-stroked-button
+                color="primary"
+                (click)="
+                  waitingJoinningMemberToWaitingPayingMember(waitingMember.uid)
+                "
+              >
+                Allow
+              </button>
+              <button
+                mat-stroked-button
+                color="warn"
+                (click)="leaveWaitingList(waitingMember.uid)"
+              >
+                Remove
+              </button>
+            </div>
+          </ng-container>
+        </li>
       </ul>
     </div>
 
-    <div *ngIf="!(waitingJoinningMembers | async)?.length">
-      <p>There is no waiting member.</p>
-    </div>
+    <ng-container *ngIf="!(waitingJoinningMembers | async)?.length">
+      <p class="content-container__no-waiting-users">
+        There are no waiting members.
+      </p>
+    </ng-container>
 
-    <p>Inviting list</p>
-
-    <div *ngIf="invitingUsers?.length">
-      <ul>
-        <div *ngFor="let invitingUser of invitingUsers">
-          <li>
-            <span
-              routerLink="/account"
-              [queryParams]="{ id: invitingUser.searchId }"
-            >
-              {{ invitingUser.displayName }}
-            </span>
-            <button mat-button>
-              Remove
-            </button>
-          </li>
-        </div>
+    <div lass="content-container__inviting-users" *ngIf="invitingUsers?.length">
+      <p>Inviting list</p>
+      <ul *ngFor="let invitingUser of invitingUsers">
+        <li>
+          <span
+            routerLink="/account"
+            [queryParams]="{ id: invitingUser.searchId }"
+          >
+            {{ invitingUser.displayName }}
+          </span>
+          <button mat-button>
+            Remove
+          </button>
+        </li>
       </ul>
     </div>
 
-    <div class="actions">
+    <div>
+      <p class="content-container__no-inviting-users">
+        There are no inviting users.
+      </p>
+    </div>
+
+    <div class="content-container__buttons">
       <button
         mat-raised-button
+        class="content-container__buttons__button"
         *ngIf="ifadmin"
         color="primary"
         (click)="openDialog()"
       >
         Invite people
       </button>
-
-      <button mat-raised-button routerLink="/" color="primary">
-        Check events
-      </button>
-
-      <div *ngIf="ifmember">
+      <ng-container *ngIf="ifmember">
         <button
           mat-raised-button
+          class="content-container__buttons__button"
           *ngIf="!group?.chatRoomId && ifadmin"
           (click)="createChatRoom()"
           color="primary"
@@ -219,6 +223,7 @@
         </button>
         <button
           mat-raised-button
+          class="content-container__buttons__button"
           *ngIf="group?.chatRoomId"
           routerLink="/chat/chat-detail"
           [queryParams]="{ id: group?.chatRoomId }"
@@ -226,7 +231,7 @@
         >
           Go to chat room
         </button>
-      </div>
+      </ng-container>
     </div>
   </div>
 </div>
