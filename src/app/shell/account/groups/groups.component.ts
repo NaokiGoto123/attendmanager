@@ -34,7 +34,7 @@ export class GroupsComponent implements OnInit {
           if (target.uid === this.authService.uid) {
             this.allowedToShow = true;
           } else {
-            if (target.showGroups) {
+            if (target.openedGroups) {
               this.allowedToShow = true;
             } else {
               this.allowedToShow = false;

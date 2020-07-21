@@ -53,7 +53,7 @@ export class InvitedEventsComponent implements OnInit {
           if (target.uid === this.authService.uid) {
             this.allowedToShow = true;
           } else {
-            if (target.showInvitedEvents) {
+            if (target.openedInvitedEvents) {
               this.allowedToShow = true;
             } else {
               this.allowedToShow = false;

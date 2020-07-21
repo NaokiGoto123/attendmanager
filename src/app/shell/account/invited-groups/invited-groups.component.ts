@@ -34,7 +34,7 @@ export class InvitedGroupsComponent implements OnInit {
           if (target.uid === this.authService.uid) {
             this.allowedToShow = true;
           } else {
-            if (target.showInvitedGroups) {
+            if (target.openedInvitedGroups) {
               this.allowedToShow = true;
             } else {
               this.allowedToShow = false;

@@ -34,7 +34,7 @@ export class WaitingJoinningGroupsComponent implements OnInit {
           if (target.uid === this.authService.uid) {
             this.allowedToShow = true;
           } else {
-            if (target.showWaitingGroups) {
+            if (target.openedWaitingGroups) {
               this.allowedToShow = true;
             } else {
               this.allowedToShow = false;

@@ -34,7 +34,7 @@ export class WaitingPayingGroupsComponent implements OnInit {
           if (target.uid === this.authService.uid) {
             this.allowedToShow = true;
           } else {
-            if (target.showPayingGroups) {
+            if (target.openedPayingGroups) {
               this.allowedToShow = true;
             } else {
               this.allowedToShow = false;

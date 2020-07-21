@@ -27,30 +27,30 @@ export class ProfileSettingsComponent implements OnInit {
   displayName: string;
   description: string;
   covert: boolean;
-  showGroups: boolean;
-  showAttendingEvents: boolean;
-  showAttendedEvents: boolean;
-  showInvitedEvents: boolean;
-  showInvitedGroups: boolean;
-  showWaitingEvents: boolean;
-  showWaitingGroups: boolean;
-  showPayingEvents: boolean;
-  showPayingGroups: boolean;
+  openedGroups: boolean;
+  openedAttendingEvents: boolean;
+  openedAttendedEvents: boolean;
+  openedInvitedEvents: boolean;
+  openedInvitedGroups: boolean;
+  openedWaitingEvents: boolean;
+  openedWaitingGroups: boolean;
+  openedPayingEvents: boolean;
+  openedPayingGroups: boolean;
 
   form = this.fb.group({
     searchId: [this.searchId],
     displayName: [this.displayName],
     description: [this.description],
     covert: [this.covert],
-    showGroups: [this.showGroups],
-    showAttendingEvents: [this.showAttendingEvents],
-    showAttendedEvents: [this.showAttendedEvents],
-    showInvitedEvents: [this.showInvitedEvents],
-    showInvitedGroups: [this.showInvitedGroups],
-    showWaitingEvents: [this.showWaitingEvents],
-    showWaitingGroups: [this.showWaitingGroups],
-    showPayingEvents: [this.showPayingEvents],
-    showPayingGroups: [this.showPayingGroups],
+    openedGroups: [this.openedGroups],
+    openedAttendingEvents: [this.openedAttendingEvents],
+    openedAttendedEvents: [this.openedAttendedEvents],
+    openedInvitedEvents: [this.openedInvitedEvents],
+    openedInvitedGroups: [this.openedInvitedGroups],
+    openedWaitingEvents: [this.openedWaitingEvents],
+    openedWaitingGroups: [this.openedWaitingGroups],
+    openedPayingEvents: [this.openedPayingEvents],
+    openedPayingGroups: [this.openedPayingGroups],
   });
 
   constructor(
@@ -110,15 +110,15 @@ export class ProfileSettingsComponent implements OnInit {
       photoURL,
       description: this.form.value.description,
       covert: this.form.value.covert,
-      showGroups: this.form.value.showGroups,
-      showAttendingEvents: this.form.value.showAttendingEvents,
-      showAttendedEvents: this.form.value.showAttendedEvents,
-      showInvitedEvents: this.form.value.showInvitedEvents,
-      showInvitedGroups: this.form.value.showInvitedGroups,
-      showWaitingEvents: this.form.value.showWaitingEvents,
-      showWaitingGroups: this.form.value.showWaitingGroups,
-      showPayingEvents: this.form.value.showPayingEvents,
-      showPayingGroups: this.form.value.showPayingGroups,
+      openedGroups: this.form.value.openedGroups,
+      openedAttendingEvents: this.form.value.openedAttendingEvents,
+      openedAttendedEvents: this.form.value.openedAttendedEvents,
+      openedInvitedEvents: this.form.value.openedInvitedEvents,
+      openedInvitedGroups: this.form.value.openedInvitedGroups,
+      openedWaitingEvents: this.form.value.openedWaitingEvents,
+      openedWaitingGroups: this.form.value.openedWaitingGroups,
+      openedPayingEvents: this.form.value.openedPayingEvents,
+      openedPayingGroups: this.form.value.openedPayingGroups,
     });
     this.imageChangedEvent = '';
   }

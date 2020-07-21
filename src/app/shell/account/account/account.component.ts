@@ -35,7 +35,6 @@ export class AccountComponent implements OnInit {
               .subscribe((user: User) => {
                 this.user = user;
                 this.routerLinks = [
-                  // { label: 'Groups', link: 'groups' },
                   { label: 'Attending events', link: 'attending-events' },
                   { label: 'Attended events', link: 'attended-events' },
                   { label: 'Others' },

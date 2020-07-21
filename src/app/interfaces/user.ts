@@ -7,13 +7,13 @@ export interface User {
   description: string;
   notificationCount: number;
   covert: boolean;
-  showGroups: boolean;
-  showAttendingEvents: boolean;
-  showAttendedEvents: boolean;
-  showInvitedEvents: boolean;
-  showInvitedGroups: boolean;
-  showWaitingEvents: boolean;
-  showWaitingGroups: boolean;
-  showPayingEvents: boolean;
-  showPayingGroups: boolean;
+  openedGroups: boolean;
+  openedAttendingEvents: boolean;
+  openedAttendedEvents: boolean;
+  openedInvitedEvents: boolean;
+  openedInvitedGroups: boolean;
+  openedWaitingEvents: boolean;
+  openedWaitingGroups: boolean;
+  openedPayingEvents: boolean;
+  openedPayingGroups: boolean;
 }
