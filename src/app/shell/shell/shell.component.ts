@@ -44,7 +44,7 @@ export class ShellComponent implements AfterViewInit {
     });
 
     this.chatGetService
-      .getAllMesssageCounts(this.authService.uid)
+      .getAllMesssageCount(this.authService.uid)
       .subscribe((messageCount: number) => {
         this.messageCount = messageCount;
       });

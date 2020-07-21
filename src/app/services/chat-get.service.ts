@@ -48,7 +48,7 @@ export class ChatGetService {
       );
   }
 
-  getAllMesssageCounts(uid: string): Observable<number> {
+  getAllMesssageCount(uid: string): Observable<number> {
     return this.db
       .collection<Id>(`users/${uid}/groupIds`)
       .valueChanges()
