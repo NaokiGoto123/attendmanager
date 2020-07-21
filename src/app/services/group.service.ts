@@ -7,13 +7,15 @@ import { User } from '../interfaces/user';
 import { Id } from '../interfaces/id';
 import { Message } from '../interfaces/message';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { GroupGetService } from './group-get.service';
 @Injectable({
   providedIn: 'root',
 })
 export class GroupService {
   constructor(
     private db: AngularFirestore,
-    private fns: AngularFireFunctions
+    private fns: AngularFireFunctions,
+    private groupGetService: GroupGetService
   ) {}
 
   async createGroup(uid: string, group: Group) {
@@ -36,102 +38,6 @@ export class GroupService {
       });
   }
 
-  getMyGroup(uid: string): Observable<Group[]> {
-    return this.db
-      .collection<Id>(`users/${uid}/groupIds`)
-      .valueChanges()
-      .pipe(
-        switchMap((groupIds: Id[]) => {
-          if (groupIds.length) {
-            const myGroups: Observable<Group>[] = [];
-            groupIds.forEach((groupId: Id) => {
-              myGroups.push(
-                this.db.doc<Group>(`groups/${groupId.id}`).valueChanges()
-              );
-            });
-            return combineLatest(myGroups);
-          } else {
-            return of([]);
-          }
-        })
-      );
-  }
-
-  getAdminGroup(uid: string): Observable<Group[]> {
-    return this.db
-      .collection<Id>(`users/${uid}/adminGroupIds`)
-      .valueChanges()
-      .pipe(
-        switchMap((adminGroupIds: Id[]) => {
-          if (adminGroupIds.length) {
-            const myAdminGroups: Observable<Group>[] = [];
-            adminGroupIds.forEach((adminGroupId: Id) => {
-              myAdminGroups.push(
-                this.db.doc<Group>(`groups/${adminGroupId.id}`).valueChanges()
-              );
-            });
-            return combineLatest(myAdminGroups);
-          } else {
-            return of([]);
-          }
-        })
-      );
-  }
-
-  getWaitingJoinningGroups(uid: string): Observable<Group[]> {
-    return this.db
-      .collection<Id>(`users/${uid}/waitingJoinningGroupIds`)
-      .valueChanges()
-      .pipe(
-        switchMap((waitingJoinningGroupIds: Id[]) => {
-          if (waitingJoinningGroupIds.length) {
-            const result: Observable<Group>[] = [];
-            waitingJoinningGroupIds.map((waitingJoinningGroupId: Id) => {
-              result.push(
-                this.db
-                  .doc<Group>(`groups/${waitingJoinningGroupId.id}`)
-                  .valueChanges()
-              );
-            });
-            return combineLatest(result);
-          } else {
-            return of([]);
-          }
-        })
-      );
-  }
-
-  getWaitingPayingGroups(uid: string) {
-    return this.db
-      .collection<Id>(`users/${uid}/waitingPayingGroupIds`)
-      .valueChanges()
-      .pipe(
-        switchMap((waitingPayingGroupIds: Id[]) => {
-          if (waitingPayingGroupIds.length) {
-            const result: Observable<Group>[] = [];
-            waitingPayingGroupIds.map((waitingPayingGroupId: Id) => {
-              result.push(
-                this.db
-                  .doc<Group>(`groups/${waitingPayingGroupId.id}`)
-                  .valueChanges()
-              );
-            });
-            return combineLatest(result);
-          } else {
-            return of([]);
-          }
-        })
-      );
-  }
-
-  getGroupinfo(groupId: string): Observable<Group> {
-    if (this.db.doc<Group>(`groups/${groupId}`).valueChanges()) {
-      return this.db.doc<Group>(`groups/${groupId}`).valueChanges();
-    } else {
-      return null;
-    }
-  }
-
   ifAdmin(uid: string, groupId: string): Observable<boolean> {
     return this.db
       .collection<Id>(`groups/${groupId}/adminIds`)
@@ -151,104 +57,40 @@ export class GroupService {
       );
   }
 
-  getMemberIds(groupId: string): Observable<string[]> {
-    return this.db
-      .collection<Id>(`groups/${groupId}/memberIds`)
-      .valueChanges()
-      .pipe(
-        map((memberIds: Id[]) => {
-          const MemberIds: string[] = [];
-          memberIds.forEach((memberId: Id) => {
-            MemberIds.push(memberId.id);
-          });
-          return MemberIds;
-        })
-      );
-  }
-
-  getAdminIds(groupId: string): Observable<string[]> {
-    return this.db
-      .collection<Id>(`groups/${groupId}/adminIds`)
-      .valueChanges()
-      .pipe(
-        map((adminIds: Id[]) => {
-          const AdminIds: string[] = [];
-          adminIds.forEach((adminId: Id) => {
-            AdminIds.push(adminId.id);
-          });
-          return AdminIds;
-        })
-      );
-  }
-
-  getWaitingPayingMemberIds(groupId: string): Observable<string[]> {
-    return this.db
-      .collection(`groups/${groupId}/waitingPayingMemberIds`)
-      .valueChanges()
-      .pipe(
-        map((waitingPayingMemberIds: Id[]) => {
-          if (waitingPayingMemberIds.length) {
-            const result: string[] = [];
-            waitingPayingMemberIds.map((waitingPayingMemberId: Id) => {
-              result.push(waitingPayingMemberId.id);
-            });
-            return result;
-          } else {
-            return [];
-          }
-        })
-      );
-  }
-
-  getWaitingJoinningMemberIds(groupId: string): Observable<string[]> {
-    return this.db
-      .collection(`groups/${groupId}/waitingJoinningMemberIds`)
-      .valueChanges()
-      .pipe(
-        map((waitingJoinningMemberIds: Id[]) => {
-          if (waitingJoinningMemberIds.length) {
-            const result: string[] = [];
-            waitingJoinningMemberIds.map((waitingJoinningMemberId: Id) => {
-              result.push(waitingJoinningMemberId.id);
-            });
-            return result;
-          } else {
-            return [];
-          }
-        })
-      );
-  }
-
   makeAdmin(uid: string, groupId: string) {
-    this.getAdminIds(groupId).subscribe((adminIds: string[]) => {
-      if (!adminIds.includes(uid)) {
-        this.db
-          .doc(`groups/${groupId}/adminIds/${uid}`)
-          .set({ id: uid })
-          .then(() => {
-            this.db
-              .doc(`users/${uid}/adminGroupIds/${groupId}`)
-              .set({ id: groupId });
-          });
-      } else {
-        return;
-      }
-    });
+    this.groupGetService
+      .getAdminIds(groupId)
+      .subscribe((adminIds: string[]) => {
+        if (!adminIds.includes(uid)) {
+          this.db
+            .doc(`groups/${groupId}/adminIds/${uid}`)
+            .set({ id: uid })
+            .then(() => {
+              this.db
+                .doc(`users/${uid}/adminGroupIds/${groupId}`)
+                .set({ id: groupId });
+            });
+        } else {
+          return;
+        }
+      });
   }
 
   deleteAdmin(uid: string, groupId: string) {
-    this.getAdminIds(groupId).subscribe((adminIds: string[]) => {
-      if (adminIds.includes(uid)) {
-        this.db
-          .doc(`groups/${groupId}/adminIds/${uid}`)
-          .delete()
-          .then(() => {
-            this.db.doc(`users/${uid}/adminGroupIds/${groupId}`).delete();
-          });
-      } else {
-        return;
-      }
-    });
+    this.groupGetService
+      .getAdminIds(groupId)
+      .subscribe((adminIds: string[]) => {
+        if (adminIds.includes(uid)) {
+          this.db
+            .doc(`groups/${groupId}/adminIds/${uid}`)
+            .delete()
+            .then(() => {
+              this.db.doc(`users/${uid}/adminGroupIds/${groupId}`).delete();
+            });
+        } else {
+          return;
+        }
+      });
   }
 
   async updateGroup(
@@ -350,28 +192,34 @@ export class GroupService {
 
   // member to nothing (private+free, private+pay, public+free, public+pay)
   leaveGroup(uid: string, groupId: string) {
-    this.getMemberIds(groupId).subscribe((memberIds: string[]) => {
-      this.getAdminIds(groupId).subscribe((adminIds: string[]) => {
-        if (memberIds.includes(uid) && memberIds.length === 1) {
-          this.deleteGroup(groupId);
-        } else if (adminIds.includes(uid) && adminIds.length === 1) {
-          this.deleteGroup(groupId);
-        } else {
-          this.db
-            .doc(`groups/${groupId}/memberIds/${uid}`)
-            .delete()
-            .then(() => {
-              this.db.doc(`groups/${groupId}/adminIds/${uid}`).delete();
-            })
-            .then(() => {
-              this.db.doc(`users/${uid}/groupIds/${groupId}`).delete();
-            })
-            .then(() => {
-              this.db.doc(`groups/${uid}/adminGroupIds/${groupId}`).delete();
-            });
-        }
+    this.groupGetService
+      .getMemberIds(groupId)
+      .subscribe((memberIds: string[]) => {
+        this.groupGetService
+          .getAdminIds(groupId)
+          .subscribe((adminIds: string[]) => {
+            if (memberIds.includes(uid) && memberIds.length === 1) {
+              this.deleteGroup(groupId);
+            } else if (adminIds.includes(uid) && adminIds.length === 1) {
+              this.deleteGroup(groupId);
+            } else {
+              this.db
+                .doc(`groups/${groupId}/memberIds/${uid}`)
+                .delete()
+                .then(() => {
+                  this.db.doc(`groups/${groupId}/adminIds/${uid}`).delete();
+                })
+                .then(() => {
+                  this.db.doc(`users/${uid}/groupIds/${groupId}`).delete();
+                })
+                .then(() => {
+                  this.db
+                    .doc(`groups/${uid}/adminGroupIds/${groupId}`)
+                    .delete();
+                });
+            }
+          });
       });
-    });
   }
 
   // nothing to member (public+free)

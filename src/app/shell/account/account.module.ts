@@ -15,15 +15,16 @@ import { SharedModule } from '../shared/shared.module';
 import { GroupsComponent } from './groups/groups.component';
 import { AttendingEventsComponent } from './attending-events/attending-events.component';
 import { AttendedEventsComponent } from './attended-events/attended-events.component';
-import { SettingsComponent } from './settings/settings.component';
 import { WaitingJoinningEventsComponent } from './waiting-joinning-events/waiting-joinning-events.component';
 import { WaitingPayingEventsComponent } from './waiting-paying-events/waiting-paying-events.component';
 import { WaitingJoinningGroupsComponent } from './waiting-joinning-groups/waiting-joinning-groups.component';
 import { WaitingPayingGroupsComponent } from './waiting-paying-groups/waiting-paying-groups.component';
-import { ImageCropperModule } from 'ngx-image-cropper';
 import { InvitedGroupsComponent } from './invited-groups/invited-groups.component';
 import { InvitedEventsComponent } from './invited-events/invited-events.component';
-import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,6 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     GroupsComponent,
     AttendingEventsComponent,
     AttendedEventsComponent,
-    SettingsComponent,
     WaitingJoinningEventsComponent,
     WaitingPayingEventsComponent,
     WaitingJoinningGroupsComponent,
@@ -52,8 +52,10 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     MatSlideToggleModule,
     MatRadioModule,
     SharedModule,
-    ImageCropperModule,
-    MaterialFileInputModule,
+    MatMenuModule,
+    MatAutocompleteModule,
+    MatProgressBarModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class AccountModule {}

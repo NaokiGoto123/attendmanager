@@ -2,7 +2,6 @@
   <div class="group">
     <img class="group-picture" src="{{ group.grouppicture }}" />
     <h1 class="group-name">{{ group.name }}</h1>
-    <h2 class="group-description">{{ group.description }}</h2>
     <div class="join-button-container">
       <div *ngIf="ifMember">
         <button mat-raised-button color="accent" (click)="leaveGroup()">
@@ -60,36 +59,40 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <div *ngIf="!group.private || invited">
-        <div *ngIf="group.price === 0 && invited">
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="PayToInvitingUserListToMembers()"
-          >
-            Join
-          </button>
-        </div>
-        <div *ngIf="group.price === 0 && !invited">
-          <button mat-raised-button color="primary" (click)="joinGroup()">
-            Join
-          </button>
-        </div>
-        <div *ngIf="group.price !== 0 && !invited">
-          <button mat-raised-button color="primary" (click)="payToJoinGroup()">
-            Pay {{ group.price }} tp join
-          </button>
-        </div>
-        <div *ngIf="group.price !== 0 && invited">
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="invitingUserListToMembers()"
-          >
-            Pay {{ group.price }} tp join
-          </button>
+        <div *ngIf="!group.private || invited">
+          <div *ngIf="group.price === 0 && invited">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="PayToInvitingUserListToMembers()"
+            >
+              Join
+            </button>
+          </div>
+          <div *ngIf="group.price === 0 && !invited">
+            <button mat-raised-button color="primary" (click)="joinGroup()">
+              Join
+            </button>
+          </div>
+          <div *ngIf="group.price !== 0 && !invited">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="payToJoinGroup()"
+            >
+              Pay {{ group.price }} to join
+            </button>
+          </div>
+          <div *ngIf="group.price !== 0 && invited">
+            <button
+              mat-raised-button
+              color="primary"
+              (click)="invitingUserListToMembers()"
+            >
+              Pay {{ group.price }} to join
+            </button>
+          </div>
         </div>
       </div>
     </div>

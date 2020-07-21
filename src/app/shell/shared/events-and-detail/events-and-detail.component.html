@@ -1,28 +1,34 @@
-<div *ngIf="existance">
+<div *ngIf="events?.length">
   <div class="container">
-    <div class="event-cards-container">
+    <div class="event-cards-container" #container>
       <div class="event-cards">
-        <div *ngFor="let event of events">
-          <app-event-card
-            [event]="event"
-            (mouseenter)="givenEvent = event; mouseEnter()"
-          ></app-event-card>
-        </div>
+        <app-event-card
+          *ngFor="let event of events"
+          [event]="event"
+          (mouseenter)="givenEvent = event; mouseEnter()"
+        >
+        </app-event-card>
       </div>
+      <div
+        infiniteScroll
+        [infiniteScrollDistance]="2"
+        [infiniteScrollThrottle]="50"
+        [infiniteScrollContainer]="container"
+        (scrolled)="onScroll()"
+      ></div>
     </div>
 
     <div class="event-card-detail-container">
       <div class="event-card-detail">
         <div *ngIf="givenEvent">
           <h1>{{ givenEvent.title }}</h1>
-          <h2>{{ givenEvent.description }}</h2>
-          <div *ngIf="!givenEvent.private">
+          <ng-container *ngIf="!givenEvent.private">
             <h2>Public event</h2>
-          </div>
-          <div *ngIf="givenEvent.private">
+          </ng-container>
+          <ng-container *ngIf="givenEvent.private">
             <h2>Private event</h2>
-          </div>
-          <h2>{{ givenEvent.date.toDate() | date: 'yyyy/MM/dd' }}</h2>
+          </ng-container>
+          <h2>{{ givenEvent.date | date: 'yyyy/MM/dd' }}</h2>
           <h2>
             Happening at {{ givenEvent.time }} in {{ givenEvent.location }}
           </h2>
@@ -31,8 +37,8 @@
             <span
               class="creater-name"
               [routerLink]="['/account']"
-              [queryParams]="{ id: createrId }"
-              >{{ createrName }}</span
+              [queryParams]="{ id: creater?.searchId }"
+              >{{ creater?.displayName }}</span
             >
             in
             <span
@@ -44,11 +50,15 @@
           </h2>
           <h2>Price: {{ givenEvent.price }} {{ givenEvent.currency }}</h2>
 
-          <h2>First {{ givenEvent.memberlimit }} people can attend</h2>
+          <ng-container *ngIf="givenEvent.memberlimit !== null">
+            <h2>First {{ givenEvent.memberlimit }} people can attend</h2>
+          </ng-container>
 
-          <div *ngIf="ifAttendingMembers">
+          <ng-container *ngIf="ifAttendingMembers">
             <h2>Attending members</h2>
-            <div *ngFor="let attendingmember of attendingMembers | async">
+            <ng-container
+              *ngFor="let attendingmember of attendingMembers | async"
+            >
               <ul>
                 <li
                   class="attendingMember-name"
@@ -58,12 +68,12 @@
                   {{ attendingmember.displayName }}
                 </li>
               </ul>
-            </div>
-          </div>
+            </ng-container>
+          </ng-container>
 
-          <div *ngIf="!ifAttendingMembers">
+          <ng-container *ngIf="!ifAttendingMembers">
             <h2>There is no attending member yet.</h2>
-          </div>
+          </ng-container>
 
           <div *ngIf="ifWaitingJoinningMembers">
             <h2>Waiting list</h2>
@@ -142,6 +152,15 @@
           <div *ngIf="!ifWaitingJoinningMembers">
             <h2>There are no waiting users.</h2>
           </div>
+
+          <button
+            mat-icon-button
+            color="primary"
+            routerLink="/event-details"
+            [queryParams]="{ id: givenEvent.id }"
+          >
+            <mat-icon>launch</mat-icon>
+          </button>
         </div>
 
         <div *ngIf="!givenEvent">
@@ -152,8 +171,8 @@
   </div>
 </div>
 
-<div class="no-events-container" *ngIf="!existance">
+<!-- <div class="no-events-container" *ngIf="!events?.length">
   <img class="no-events-image" src="/assets/images/event.svg" />
   <h1>No events</h1>
   <h1 routerLink="/create-event">Create events</h1>
-</div>
+</div> -->

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/interfaces/event';
 import { User } from 'src/app/interfaces/user';
-import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
+import { EventGetService } from 'src/app/services/event-get.service';
+import { FormControl, FormBuilder } from '@angular/forms';
+import { SearchService } from 'src/app/services/search.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-waiting-joinning-events',
@@ -12,36 +14,123 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./waiting-joinning-events.component.scss'],
 })
 export class WaitingJoinningEventsComponent implements OnInit {
-  waitingJoinningEvents: Event[];
+  index = this.searchService.index.events_date;
 
-  waitingJoinningEventsExistance: boolean;
+  form = this.fb.group({});
+
+  searchOptions = {
+    facetFilters: [],
+    page: 0,
+    hitsPerPage: 3,
+  };
+
+  options = [];
+
+  items = [];
+
+  valueControl: FormControl = new FormControl();
+
+  loading = false;
+
+  initialLoading = false;
+
+  allowedToShow = false;
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private authService: AuthService,
+    private fb: FormBuilder,
+    private searchService: SearchService,
     private userService: UserService,
-    private eventService: EventService
+    private eventGetService: EventGetService,
+    private authService: AuthService
   ) {
+    this.initialLoading = true;
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const searchId = params.get('id');
       this.userService
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
           const id = target.uid;
-          this.eventService
-            .getWaitingJoinningEvents(id)
-            .subscribe((waitingJoinningEvents: Event[]) => {
-              if (waitingJoinningEvents.length) {
-                this.waitingJoinningEvents = waitingJoinningEvents;
-                this.waitingJoinningEventsExistance = true;
+          if (target.uid === this.authService.uid) {
+            this.allowedToShow = true;
+          } else {
+            if (target.openedWaitingEvents) {
+              this.allowedToShow = true;
+            } else {
+              this.allowedToShow = false;
+            }
+          }
+          this.eventGetService
+            .getWaitingJoinningEventIds(id)
+            .subscribe((waitingJoinningEventIds: string[]) => {
+              if (waitingJoinningEventIds.length) {
+                const facetFilters = waitingJoinningEventIds.map(
+                  (waitingJoinningEventId: string) => {
+                    return `id:${waitingJoinningEventId}`;
+                  }
+                );
+
+                this.searchOptions = {
+                  facetFilters: [facetFilters],
+                  page: 0,
+                  hitsPerPage: 3,
+                };
+
+                this.index
+                  .search('', { facetFilters: [facetFilters] })
+                  .then((result) => {
+                    this.options = result.hits;
+                  });
+
+                this.search('', this.searchOptions);
+
+                setTimeout(() => {
+                  this.initialLoading = false;
+                }, 1000);
               } else {
-                this.waitingJoinningEvents = waitingJoinningEvents;
-                this.waitingJoinningEventsExistance = false;
+                setTimeout(() => {
+                  this.initialLoading = false;
+                }, 1000);
               }
             });
         });
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.valueControl.valueChanges.subscribe((query) => {
+      this.index.search(query, this.searchOptions).then((result) => {
+        this.options = result.hits;
+      });
+    });
+  }
+
+  search(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.items.push(...result.hits);
+    });
+  }
+
+  querySearch(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.items = result?.hits;
+    });
+  }
+
+  additionalSearch() {
+    if (!this.loading) {
+      this.loading = true;
+      this.searchOptions.page++;
+      setTimeout(() => {
+        this.index.search('', this.searchOptions).then((result) => {
+          this.items.push(...result.hits);
+          this.loading = false;
+        });
+      }, 1000);
+    }
+  }
+
+  clearSearch() {
+    this.valueControl.setValue('');
+  }
 }

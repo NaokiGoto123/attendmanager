@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { GroupService } from 'src/app/services/group.service';
 import { Group } from 'src/app/interfaces/group';
 import { AuthService } from 'src/app/services/auth.service';
-import { Observable } from 'rxjs';
+import { GroupGetService } from 'src/app/services/group-get.service';
 
 @Component({
   selector: 'app-groups',
@@ -10,20 +9,22 @@ import { Observable } from 'rxjs';
   styleUrls: ['./groups.component.scss'],
 })
 export class GroupsComponent implements OnInit {
-  value = '';
-
-  uid: string;
-
   groups: Group[];
 
+  loading = false;
+
   constructor(
-    private groupService: GroupService,
+    private groupGetService: GroupGetService,
     private authService: AuthService
   ) {
-    this.uid = this.authService.uid;
-    this.groupService.getMyGroup(this.uid).subscribe((myGroups: Group[]) => {
-      this.groups = myGroups;
-    });
+    const uid = this.authService.uid;
+    this.loading = true;
+    setTimeout(() => {
+      this.groupGetService.getMyGroup(uid).subscribe((myGroups: Group[]) => {
+        this.groups = myGroups;
+        this.loading = false;
+      });
+    }, 1000);
   }
 
   ngOnInit(): void {}

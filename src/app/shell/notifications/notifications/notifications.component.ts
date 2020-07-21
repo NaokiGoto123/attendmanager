@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NotificationsService } from 'src/app/services/notifications.service';
 import { AuthService } from 'src/app/services/auth.service';
-import { Notification } from 'src/app/interfaces/notification';
+import { SearchService } from 'src/app/services/search.service';
+import { UiService } from 'src/app/services/ui.service';
 
 @Component({
   selector: 'app-notifications',
@@ -9,33 +10,89 @@ import { Notification } from 'src/app/interfaces/notification';
   styleUrls: ['./notifications.component.scss'],
 })
 export class NotificationsComponent implements OnInit {
-  uid: string;
+  index = this.searchService.index.notifications_date;
 
-  notifications: Notification[];
+  searchOptions = {
+    facetFilters: [],
+    page: 0,
+  };
 
-  existance: boolean;
+  result: {
+    nbHits: number;
+    hits: any[];
+  };
+
+  items = [];
+
+  notificationIds: string[];
+
+  loading = false;
+
+  facetFilters = [];
+
+  initialLoading = false;
 
   constructor(
     private authService: AuthService,
-    private notificationService: NotificationsService
+    private notificationService: NotificationsService,
+    private searchService: SearchService,
+    public uiService: UiService
   ) {
-    this.uid = this.authService.uid;
+    this.initialLoading = true;
     this.notificationService
-      .getNotifications(this.uid)
-      .subscribe((notifications: Notification[]) => {
-        if (notifications.length) {
-          this.notifications = notifications;
-          this.existance = true;
+      .getNotificationIds(this.authService.uid)
+      .subscribe((notificationIds: string[]) => {
+        this.notificationIds = notificationIds;
+
+        if (notificationIds.length) {
+          this.facetFilters = notificationIds.map((notificationId: string) => {
+            return `id:${notificationId}`;
+          });
+          this.searchOptions = {
+            facetFilters: [this.facetFilters],
+            page: 0,
+          };
+
+          this.search('', this.searchOptions);
+
+          setTimeout(() => {
+            this.initialLoading = false;
+          }, 1000);
         } else {
-          this.notifications = notifications;
-          this.existance = false;
+          setTimeout(() => {
+            this.initialLoading = false;
+          }, 1000);
         }
       });
   }
 
-  deleteNotification() {
-    this.notificationService.deleteNotifications(this.authService.uid);
+  ngOnInit(): void {}
+
+  search(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.items.push(...result.hits);
+    });
   }
 
-  ngOnInit(): void {}
+  additionalSearch() {
+    if (!this.loading) {
+      this.loading = true;
+      this.searchOptions.page++;
+      setTimeout(() => {
+        this.index.search('', this.searchOptions).then((result) => {
+          this.items.push(...result.hits);
+          this.loading = false;
+        });
+      }, 1000);
+    }
+  }
+
+  deleteNotification() {
+    this.initialLoading = true;
+    this.notificationService
+      .deleteNotifications(this.authService.uid)
+      .then(() => {
+        this.initialLoading = false;
+      });
+  }
 }

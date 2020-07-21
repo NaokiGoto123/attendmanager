@@ -1,5 +1,5 @@
-<div *ngIf="notification.type === 'joinGroup'">
-  <mat-list-item
+<ng-container *ngIf="notification.type === 'joinGroup'">
+  <mat-list-item class="list-item"
     ><img
       routerLink="/account"
       [queryParams]="{ id: personSearchId }"
@@ -18,12 +18,12 @@
     <span routerLink="/group-details" [queryParams]="{ id: groupId }">{{
       groupName
     }}</span
-    ><span class="on">on</span>{{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+    ><span class="on">on</span>{{ date | date: 'yyy/MM/dd HH:mm' }}
   </mat-list-item>
-</div>
+</ng-container>
 
-<div *ngIf="notification.type === 'joinGroupWaitinglist'">
-  <mat-list-item>
+<ng-container *ngIf="notification.type === 'joinGroupWaitinglist'">
+  <mat-list-item class="list-item">
     <img
       routerLink="/account"
       [queryParams]="{ id: personSearchId }"
@@ -50,12 +50,12 @@
 
     <span class="on">on</span>
 
-    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+    {{ date | date: 'yyy/MM/dd HH:mm' }}
   </mat-list-item>
-</div>
+</ng-container>
 
-<div *ngIf="notification.type === 'makeAdmin'">
-  <mat-list-item>
+<ng-container *ngIf="notification.type === 'makeAdmin'">
+  <mat-list-item class="list-item">
     <img
       routerLink="/account"
       [queryParams]="{ id: personSearchId }"
@@ -82,12 +82,12 @@
 
     <span class="on">on</span>
 
-    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+    {{ date | date: 'yyy/MM/dd HH:mm' }}
   </mat-list-item>
-</div>
+</ng-container>
 
-<div *ngIf="notification.type === 'makeEvent'">
-  <mat-list-item>
+<ng-container *ngIf="notification.type === 'makeEvent'">
+  <mat-list-item class="list-item">
     <span>{{ eventName }}</span>
 
     <span class="joined"> is created </span>
@@ -107,12 +107,12 @@
 
     <span class="on">on</span>
 
-    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+    {{ date | date: 'yyy/MM/dd HH:mm' }}
   </mat-list-item>
-</div>
+</ng-container>
 
-<div *ngIf="notification.type === 'joinEvent'">
-  <mat-list-item>
+<ng-container *ngIf="notification.type === 'joinEvent'">
+  <mat-list-item class="list-item">
     <img
       routerLink="/account"
       [queryParams]="{ id: personSearchId }"
@@ -143,12 +143,12 @@
 
     <span class="on">on</span>
 
-    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+    {{ date | date: 'yyy/MM/dd HH:mm' }}
   </mat-list-item>
-</div>
+</ng-container>
 
-<div *ngIf="notification.type === 'joinEventWaitinglist'">
-  <mat-list-item>
+<ng-container *ngIf="notification.type === 'joinEventWaitinglist'">
+  <mat-list-item class="list-item">
     <img
       routerLink="/account"
       [queryParams]="{ id: personSearchId }"
@@ -179,12 +179,12 @@
 
     <span class="on">on</span>
 
-    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+    {{ date | date: 'yyy/MM/dd HH:mm' }}
   </mat-list-item>
-</div>
+</ng-container>
 
-<div *ngIf="notification.type === 'invitingUser'">
-  <mat-list-item>
+<ng-container *ngIf="notification.type === 'invitingUser'">
+  <mat-list-item class="list-item">
     <img
       routerLink="/account"
       [queryParams]="{ id: personSearchId }"
@@ -214,12 +214,12 @@
 
     <span class="on">on</span>
 
-    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+    {{ date | date: 'yyy/MM/dd HH:mm' }}
   </mat-list-item>
-</div>
+</ng-container>
 
-<div *ngIf="notification.type === 'getInvitation'">
-  <mat-list-item>
+<ng-container *ngIf="notification.type === 'getInvitation'">
+  <mat-list-item class="list-item">
     <span class="got-invited-to">Got invited to</span>
 
     <img
@@ -235,6 +235,6 @@
 
     <span class="on">on</span>
 
-    {{ date | date: 'yyy/MM/dd HH:mm:ss' }}
+    {{ date | date: 'yyy/MM/dd HH:mm' }}
   </mat-list-item>
-</div>
+</ng-container>

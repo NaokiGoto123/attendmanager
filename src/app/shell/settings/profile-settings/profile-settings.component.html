@@ -1,0 +1,199 @@
+<form class="update-form" [formGroup]="form">
+  <img class="account-photo" src="{{ photoURL }}" />
+
+  <mat-form-field class="image-selector" appearance="outline">
+    <mat-label>Select an image</mat-label>
+    <ngx-mat-file-input
+      placeholder="Basic outline placeholder"
+      (change)="fileChangeEvent($event)"
+    ></ngx-mat-file-input>
+    <mat-icon matSuffix>folder</mat-icon>
+  </mat-form-field>
+
+  <div class="cropper-container" *ngIf="imageChangedEvent">
+    <img class="selected-image" [src]="croppedImage" />
+
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="1 / 1"
+      [roundCropper]="true"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+      (imageLoaded)="imageLoaded()"
+      (cropperReady)="cropperReady()"
+      (loadImageFailed)="loadImageFailed()"
+    ></image-cropper>
+  </div>
+
+  <div class="update-fields">
+    <mat-form-field appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="displayName" type="text" />
+      <mat-icon matSuffix>person</mat-icon>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Search ID</mat-label>
+      <input
+        matInput
+        formControlName="searchId"
+        type="text"
+        readonly="readonly"
+      />
+      <button
+        mat-icon-button
+        matSuffix
+        (click)="createNewSearchId()"
+        color="primary"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Description</mat-label>
+      <input matInput formControlName="description" type="text" />
+      <mat-icon matSuffix>description</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <div class="update-toggles">
+    <mat-slide-toggle formControlName="covert">
+      <ng-container *ngIf="form.value.covert">
+        Covert
+      </ng-container>
+      <ng-container *ngIf="!form.value.covert">
+        Overt
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle class="update-showGroup" formControlName="openedGroups">
+      <ng-container *ngIf="form.value.openedGroups">
+        Show my groups
+      </ng-container>
+      <ng-container *ngIf="!form.value.openedGroups">
+        Do not show my groups
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendingEvents"
+      formControlName="openedAttendingEvents"
+    >
+      <ng-container *ngIf="form.value.openedAttendingEvents">
+        Show my attending events
+      </ng-container>
+      <ng-container *ngIf="!form.value.openedAttendingEvents">
+        Do not show my attending events
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="openedAttendedEvents"
+    >
+      <ng-container *ngIf="form.value.openedAttendedEvents">
+        Show my attended events
+      </ng-container>
+      <ng-container *ngIf="!form.value.openedttendedEvents">
+        Do not show my attended events
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="openedInvitedEvents"
+    >
+      <ng-container *ngIf="form.value.openedInvitedEvents">
+        Show my invited events
+      </ng-container>
+      <ng-container *ngIf="!form.value.openedInvitedEvents">
+        Do not show my invited events
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="openedInvitedGroups"
+    >
+      <ng-container *ngIf="form.value.openedInvitedGroups">
+        Show my invited groups
+      </ng-container>
+      <ng-container *ngIf="!form.value.openedInvitedGroups">
+        Do not show my invited groups
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="openedWaitingEvents"
+    >
+      <ng-container *ngIf="form.value.openedWaitingEvents">
+        Show my waiting events
+      </ng-container>
+      <ng-container *ngIf="!form.value.openedWaitingEvents">
+        Do not show my waiting events
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="openedWaitingGroups"
+    >
+      <ng-container *ngIf="form.value.openedWaitingGroups">
+        Show my waiting groups
+      </ng-container>
+      <ng-container *ngIf="!form.value.openedWaitingGroups">
+        Do not show my waiting groups
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="openedPayingEvents"
+    >
+      <ng-container *ngIf="form.value.openedPayingEvents">
+        Show my paying events
+      </ng-container>
+      <ng-container *ngIf="!form.value.openedPayingEvents">
+        Do not show my paying events
+      </ng-container>
+    </mat-slide-toggle>
+
+    <mat-slide-toggle
+      class="update-showAttendedEvents"
+      formControlName="openedPayingGroups"
+    >
+      <ng-container *ngIf="form.value.openedPayingGroups">
+        Show my paying groups
+      </ng-container>
+      <ng-container *ngIf="!form.value.openedPayingGroups">
+        Do not show my paying groups
+      </ng-container>
+    </mat-slide-toggle>
+  </div>
+
+  <button
+    mat-raised-button
+    class="update-button"
+    color="primary"
+    (click)="updateUser()"
+  >
+    Update
+  </button>
+
+  <div class="other-actions">
+    <button
+      mat-flat-button
+      class="signout-button"
+      color="warn"
+      (click)="signOut()"
+    >
+      Sign out
+    </button>
+    <button mat-flat-button color="warn" (click)="deleteAccount()">
+      Delete account
+    </button>
+  </div>
+</form>

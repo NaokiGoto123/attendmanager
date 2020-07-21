@@ -1,5 +1,3 @@
-import { Notification } from './notification';
-
 export interface User {
   uid: string;
   searchId: string;
@@ -8,7 +6,14 @@ export interface User {
   photoURL: string;
   description: string;
   notificationCount: number;
-  showGroups: boolean;
-  showAttendingEvents: boolean;
-  showAttendedEvents: boolean;
+  covert: boolean;
+  openedGroups: boolean;
+  openedAttendingEvents: boolean;
+  openedAttendedEvents: boolean;
+  openedInvitedEvents: boolean;
+  openedInvitedGroups: boolean;
+  openedWaitingEvents: boolean;
+  openedWaitingGroups: boolean;
+  openedPayingEvents: boolean;
+  openedPayingGroups: boolean;
 }

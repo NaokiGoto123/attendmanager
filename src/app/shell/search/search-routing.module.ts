@@ -11,6 +11,11 @@ const routes: Routes = [
     component: SearchComponent,
     children: [
       {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'events',
+      },
+      {
         path: 'events',
         component: EventsComponent,
       },

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { EventService } from 'src/app/services/event.service';
 import { Event } from 'src/app/interfaces/event';
 import { Group } from 'src/app/interfaces/group';
@@ -7,6 +7,8 @@ import { GroupService } from 'src/app/services/group.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Observable, combineLatest } from 'rxjs';
 import { UserService } from 'src/app/services/user.service';
+import { EventGetService } from 'src/app/services/event-get.service';
+import { GroupGetService } from 'src/app/services/group-get.service';
 
 @Component({
   selector: 'app-events-and-detail',
@@ -16,14 +18,13 @@ import { UserService } from 'src/app/services/user.service';
 export class EventsAndDetailComponent implements OnInit {
   @Input() events: Event[];
 
-  @Input() existance: boolean;
+  @Output() scrolls: EventEmitter<boolean> = new EventEmitter();
 
   givenEvent: Event;
 
   ifAdmin: boolean;
 
-  createrName: string;
-  createrId: string;
+  creater: User;
   groupName: string;
   groupId: string;
   ifAttendingMembers: boolean;
@@ -35,6 +36,8 @@ export class EventsAndDetailComponent implements OnInit {
 
   constructor(
     private eventService: EventService,
+    private eventGetService: EventGetService,
+    private groupGetService: GroupGetService,
     private groupService: GroupService,
     private authService: AuthService,
     private userService: UserService
@@ -46,11 +49,10 @@ export class EventsAndDetailComponent implements OnInit {
     this.userService
       .getUser(this.givenEvent.createrId)
       .subscribe((creater: User) => {
-        this.createrId = creater.uid;
-        this.createrName = creater.displayName;
+        this.creater = creater;
       });
 
-    this.groupService
+    this.groupGetService
       .getGroupinfo(this.givenEvent.groupid)
       .subscribe((group: Group) => {
         this.groupId = group.id;
@@ -62,7 +64,7 @@ export class EventsAndDetailComponent implements OnInit {
           });
       });
 
-    this.eventService
+    this.eventGetService
       .getAttendingMemberIds(this.givenEvent.id)
       .subscribe((attendingMemberIds: string[]) => {
         if (attendingMemberIds.length) {
@@ -77,7 +79,7 @@ export class EventsAndDetailComponent implements OnInit {
         }
       });
 
-    this.eventService
+    this.eventGetService
       .getWaitingJoinningMemberIds(this.givenEvent.id)
       .subscribe((waitingJoinningMemberIds: string[]) => {
         if (waitingJoinningMemberIds.length) {
@@ -106,5 +108,9 @@ export class EventsAndDetailComponent implements OnInit {
   // waitingJoinning to waitingPaying (pay+private)
   joinWaitingPayingList(uid: string, eventId: string) {
     this.eventService.joinWaitingPayingList(uid, eventId);
+  }
+
+  onScroll() {
+    this.scrolls.emit(true);
   }
 }

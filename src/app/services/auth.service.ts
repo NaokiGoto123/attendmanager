@@ -13,7 +13,6 @@ import { Observable, of } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AngularFireStorage } from '@angular/fire/storage';
 
 @Injectable({
   providedIn: 'root',
@@ -61,11 +60,18 @@ export class AuthService {
     return this.updateUserData({
       ...credential.user,
       searchId: this.db.createId(),
-      description: '',
+      description: `This is ${credential.user.displayName}'s account.`,
       notificationCount: 0,
-      showGroups: true,
-      showAttendingEvents: true,
-      showAttendedEvents: true,
+      covert: false,
+      openedGroups: true,
+      openedAttendingEvents: true,
+      openedAttendedEvents: true,
+      openedInvitedEvents: true,
+      openedInvitedGroups: true,
+      openedWaitingEvents: true,
+      openedWaitingGroups: true,
+      openedPayingEvents: true,
+      openedPayingGroups: true,
     });
   }
 
@@ -77,9 +83,16 @@ export class AuthService {
     photoURL,
     description,
     notificationCount,
-    showGroups,
-    showAttendingEvents,
-    showAttendedEvents,
+    covert,
+    openedGroups,
+    openedAttendingEvents,
+    openedAttendedEvents,
+    openedInvitedEvents,
+    openedInvitedGroups,
+    openedWaitingEvents,
+    openedWaitingGroups,
+    openedPayingEvents,
+    openedPayingGroups,
   }: User) {
     const userRef: AngularFirestoreDocument<User> = this.db.doc(`users/${uid}`);
 
@@ -91,9 +104,16 @@ export class AuthService {
       photoURL,
       description,
       notificationCount,
-      showGroups,
-      showAttendingEvents,
-      showAttendedEvents,
+      covert,
+      openedGroups,
+      openedAttendingEvents,
+      openedAttendedEvents,
+      openedInvitedEvents,
+      openedInvitedGroups,
+      openedWaitingEvents,
+      openedWaitingGroups,
+      openedPayingEvents,
+      openedPayingGroups,
     };
 
     return userRef

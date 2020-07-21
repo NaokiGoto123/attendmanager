@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 
 import { ShellRoutingModule } from './shell-routing.module';
 import { ShellComponent } from './shell/shell.component';
-import { HeaderComponent } from './header/header.component';
 import { SharedModule } from './shared/shared.module';
 
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -14,9 +13,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @NgModule({
-  declarations: [ShellComponent, HeaderComponent],
+  declarations: [ShellComponent],
   imports: [
     CommonModule,
     ShellRoutingModule,
@@ -29,6 +29,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatBadgeModule,
     MatMenuModule,
     MatDividerModule,
+    MatProgressSpinnerModule,
   ],
 })
 export class ShellModule {}

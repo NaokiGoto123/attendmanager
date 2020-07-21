@@ -12,6 +12,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { GroupDetailsDiaplogComponent } from '../group-details-diaplog/group-details-diaplog.component';
 import { UserService } from 'src/app/services/user.service';
 import { InviteService } from 'src/app/services/invite.service';
+import { GroupGetService } from 'src/app/services/group-get.service';
+import { InviteGetService } from 'src/app/services/invite-get.service';
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
@@ -43,18 +45,20 @@ export class GroupDetailsComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private db: AngularFirestore,
     private groupService: GroupService,
+    private groupGetService: GroupGetService,
     private authService: AuthService,
     private userService: UserService,
     private chatService: ChatService,
     private dialog: MatDialog,
-    private inviteService: InviteService
+    private inviteService: InviteService,
+    private inviteGetService: InviteGetService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       this.id = params.get('id');
 
       this.uid = this.authService.uid;
 
-      this.groupService.getGroupinfo(this.id).subscribe((group: Group) => {
+      this.groupGetService.getGroupinfo(this.id).subscribe((group: Group) => {
         this.group = group;
         this.userService
           .getUser(this.group.createrId)
@@ -63,25 +67,27 @@ export class GroupDetailsComponent implements OnInit {
           });
       });
 
-      this.groupService.getAdminIds(this.id).subscribe((adminIds: string[]) => {
-        this.adminIds = adminIds;
-        if (adminIds.length) {
-          if (adminIds.includes(this.uid)) {
-            this.ifadmin = true;
-          } else {
-            this.ifadmin = false;
+      this.groupGetService
+        .getAdminIds(this.id)
+        .subscribe((adminIds: string[]) => {
+          this.adminIds = adminIds;
+          if (adminIds.length) {
+            if (adminIds.includes(this.uid)) {
+              this.ifadmin = true;
+            } else {
+              this.ifadmin = false;
+            }
           }
-        }
-        const admins: User[] = [];
-        adminIds.forEach((adminId: string) => {
-          this.userService.getUser(adminId).subscribe((admin: User) => {
-            admins.push(admin);
+          const admins: User[] = [];
+          adminIds.forEach((adminId: string) => {
+            this.userService.getUser(adminId).subscribe((admin: User) => {
+              admins.push(admin);
+            });
           });
+          this.admins = admins;
         });
-        this.admins = admins;
-      });
 
-      this.groupService
+      this.groupGetService
         .getMemberIds(this.id)
         .subscribe((memberIds: string[]) => {
           this.memberIds = memberIds;
@@ -101,7 +107,7 @@ export class GroupDetailsComponent implements OnInit {
           this.members = members;
         });
 
-      this.groupService
+      this.groupGetService
         .getWaitingJoinningMemberIds(this.id)
         .subscribe((waitingJoinningMemberIds: string[]) => {
           if (waitingJoinningMemberIds.length) {
@@ -116,7 +122,7 @@ export class GroupDetailsComponent implements OnInit {
           }
         });
 
-      this.groupService
+      this.groupGetService
         .getWaitingPayingMemberIds(this.id)
         .subscribe((waitingPayingMemberIds: string[]) => {
           if (waitingPayingMemberIds.length) {
@@ -131,8 +137,8 @@ export class GroupDetailsComponent implements OnInit {
           }
         });
 
-      this.inviteService
-        .getInvitingUsers(this.id)
+      this.inviteGetService
+        .getGroupInvitingUsers(this.id)
         .subscribe((invitingUsers: User[]) => {
           this.invitingUsers = invitingUsers;
         });
@@ -154,10 +160,8 @@ export class GroupDetailsComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(async (result) => {
-      console.log('this is result', result);
       if (result) {
         this.userService.getUserFromSearchId(result).subscribe((user: User) => {
-          console.log(user);
           if (user) {
             this.inviteService.inviteToGroup(user.uid, this.group.id);
           } else {

@@ -195,7 +195,7 @@ export const makeEvent = functions
 
         const EventId = context.params.eventId;
 
-        const event = (await db.doc(`users/${EventId}`).get()).data();
+        const event = (await db.doc(`events/${EventId}`).get()).data();
 
         const adminIds = (
           await db.collection(`groups/${groupId}/adminIds`).get()

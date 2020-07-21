@@ -17,6 +17,13 @@ const routes: Routes = [
           import('./events/events.module').then((m) => m.EventsModule),
       },
       {
+        path: 'event-details',
+        loadChildren: () =>
+          import('./event-details/event-details.module').then(
+            (m) => m.EventDetailsModule
+          ),
+      },
+      {
         path: 'create-event',
         loadChildren: () =>
           import('./create-event/create-event.module').then(
@@ -68,6 +75,11 @@ const routes: Routes = [
         path: 'account',
         loadChildren: () =>
           import('./account/account.module').then((m) => m.AccountModule),
+      },
+      {
+        path: 'settings',
+        loadChildren: () =>
+          import('./settings/settings.module').then((m) => m.SettingsModule),
       },
       {
         path: 'calendar',

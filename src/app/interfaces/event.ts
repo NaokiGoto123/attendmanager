@@ -1,4 +1,5 @@
 import { firestore } from 'firebase';
+import { Group } from './group';
 
 export interface Event {
   id: string;
@@ -14,4 +15,8 @@ export interface Event {
   currency: string;
   private: boolean;
   searchable: boolean;
+}
+
+export interface EventWithGroupId extends Event {
+  groupName: string;
 }

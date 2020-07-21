@@ -1,13 +1,33 @@
-<div class="groups-container">
-  <div class="create-group-grid-container">
-    <div class="create-group-grid">
-      <p>Create new group</p>
-      <button mat-fab routerLink="/create-group" color="none">
-        <mat-icon>add</mat-icon>
-      </button>
+<div class="spinner-container" *ngIf="initialLoading">
+  <mat-spinner></mat-spinner>
+</div>
+
+<ng-container *ngIf="!initialLoading && allowedToShow">
+  <div class="groups-container" *ngIf="groups?.length">
+    <app-group *ngFor="let group of groups" [group]="group"></app-group>
+  </div>
+  <div class="no-group-container" *ngIf="!groups?.length">
+    <div class="no-group-container__left">
+      <img
+        class="no-group-container__left__image"
+        src="/assets/images/team1.svg"
+        alt="no group image"
+      />
+    </div>
+    <div class="no-group-container__right">
+      <p class="no-group-container__right__text">No groups.</p>
+      <a class="no-group-container__right__text" routerLink="/search/groups"
+        >Search for groups</a
+      >
+      <p class="no-group-container__right__text">or</p>
+      <a class="no-group-container__right__text" routerLink="/create-group"
+        >Create group</a
+      >
     </div>
   </div>
-  <div *ngFor="let group of groups">
-    <app-group [group]="group"></app-group>
-  </div>
+</ng-container>
+
+<div class="protected-container" *ngIf="!initialLoading && !allowedToShow">
+  <mat-icon class="protected-container__icon">lock</mat-icon>
+  <p class="protected-container__text">Protected</p>
 </div>

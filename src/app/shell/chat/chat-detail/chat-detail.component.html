@@ -29,24 +29,30 @@
 
   <div *ngIf="!loading">
     <div class="messages">
-      <div *ngIf="!noMessage">
+      <div *ngIf="messagesWithUsers?.length">
         <div
-          *ngFor="let message of messages"
+          *ngFor="let messageWithUser of messagesWithUsers"
           class="message"
-          [class.my-message]="message.ownerId === uid"
-          [class.other-message]="message.ownerId !== uid"
+          [class.my-message]="messageWithUser.ownerId === uid"
+          [class.other-message]="messageWithUser.ownerId !== uid"
         >
           <div class="message-content">
             <small class="sendAt">{{
-              message.sentAt.toMillis() | date: 'MM/dd HH:mm:ss'
+              messageWithUser.sentAt.toMillis() | date: 'MM/dd HH:mm:ss'
             }}</small>
-            <p class="texts">{{ message.content }}</p>
-            <img class="account-picture" src="{{ message.ownerPhotoURL }}" />
+            <p class="texts">{{ messageWithUser.content }}</p>
+            <img
+              class="account-picture"
+              src="{{ messageWithUser.photoURL }}"
+              routerLink="/account"
+              [queryParams]="{ id: messageWithUser.searchId }"
+              matTooltip="{{ messageWithUser.displayName }}"
+            />
           </div>
         </div>
       </div>
 
-      <div *ngIf="noMessage">
+      <div *ngIf="!messagesWithUsers?.length">
         <p class="no-message-text">No message is send yet.</p>
       </div>
     </div>
@@ -54,7 +60,12 @@
     <div class="message-field-container">
       <form [formGroup]="form" (ngSubmit)="send()">
         <mat-form-field class="message-field" appearance="standard">
-          <input matInput type="text" formControlName="message" />
+          <input
+            matInput
+            type="text"
+            formControlName="message"
+            autocomplete="off"
+          />
           <button
             mat-button
             matSuffix
@@ -62,6 +73,7 @@
             [disabled]="
               form.value.message === '' || form.value.message === null
             "
+            matTooltip="Send"
             (click)="send()"
           >
             <mat-icon>send</mat-icon>

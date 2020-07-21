@@ -13,6 +13,7 @@ import { switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { UserService } from 'src/app/services/user.service';
+import { GroupGetService } from 'src/app/services/group-get.service';
 @Component({
   selector: 'app-create-group',
   templateUrl: './create-group.component.html',
@@ -54,6 +55,8 @@ export class CreateGroupComponent implements OnInit {
 
   ifMemberLimit = false;
 
+  ifSubscription = false;
+
   form = this.fb.group({
     name: ['', [Validators.required]],
     description: [''],
@@ -77,6 +80,7 @@ export class CreateGroupComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
     private groupSerive: GroupService,
+    private groupGetService: GroupGetService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private snackbar: MatSnackBar
@@ -84,7 +88,7 @@ export class CreateGroupComponent implements OnInit {
     this.activatedRoute.queryParamMap
       .pipe(
         switchMap((params) => {
-          return this.groupSerive.getGroupinfo(params.get('id'));
+          return this.groupGetService.getGroupinfo(params.get('id'));
         })
       )
       .subscribe((group: Group) => {
@@ -133,6 +137,7 @@ export class CreateGroupComponent implements OnInit {
           createrId: this.authService.uid,
           memberlimit,
           chatRoomId: null,
+          subscription: this.ifSubscription,
           price: this.form.value.price,
           currency: this.form.value.currency,
           private: this.form.value.private,
@@ -164,6 +169,7 @@ export class CreateGroupComponent implements OnInit {
           createrId: this.authService.uid,
           memberlimit,
           chatRoomId: null,
+          subscription: this.ifSubscription,
           price: this.form.value.price,
           currency: this.form.value.currency,
           private: this.form.value.private,
@@ -199,6 +205,7 @@ export class CreateGroupComponent implements OnInit {
           createrId: this.authService.uid,
           memberlimit,
           chatRoomId: null,
+          subscription: this.ifSubscription,
           price: this.form.value.price,
           currency: this.form.value.currency,
           private: this.form.value.private,
@@ -227,6 +234,7 @@ export class CreateGroupComponent implements OnInit {
           description: this.form.value.description,
           memberlimit,
           grouppicture,
+          subscription: this.ifSubscription,
           price: this.form.value.price,
           currency: this.form.value.currency,
           private: this.form.value.private,

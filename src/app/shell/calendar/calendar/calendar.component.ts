@@ -4,6 +4,7 @@ import { EventService } from 'src/app/services/event.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { Event } from 'src/app/interfaces/event';
 import { Location } from '@angular/common';
+import { EventGetService } from 'src/app/services/event-get.service';
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -17,11 +18,12 @@ export class CalendarComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private eventService: EventService,
+    private eventGetService: EventGetService,
     private location: Location
   ) {}
 
   ngOnInit(): void {
-    this.eventService
+    this.eventGetService
       .getMyEvents(this.authService.uid)
       .subscribe((events: Event[]) => {
         const result: { title: string; date: Date }[] = [];

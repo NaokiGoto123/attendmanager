@@ -28,6 +28,9 @@
     </mat-sidenav>
     <mat-sidenav-content>
       <router-outlet></router-outlet>
+      <div class="no-chatroom-selected" *ngIf="url === '/chat'">
+        <p class="no-chatroom-selected__text">No chatroom is selected</p>
+      </div>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

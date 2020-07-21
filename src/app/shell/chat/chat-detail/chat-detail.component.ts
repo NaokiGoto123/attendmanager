@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ChatService } from 'src/app/services/chat.service';
 import { ActivatedRoute } from '@angular/router';
 import { ChatRoom } from 'src/app/interfaces/chat-room';
-import { Message } from 'src/app/interfaces/message';
+import { Message, MessageWithUser } from 'src/app/interfaces/message';
 import { AuthService } from 'src/app/services/auth.service';
 import { firestore } from 'firebase';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { ChatGetService } from 'src/app/services/chat-get.service';
 
 @Component({
   selector: 'app-chat-detail',
@@ -15,8 +16,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 })
 export class ChatDetailComponent implements OnInit {
   loading = true;
-
-  noMessage: boolean;
 
   chatRoomId: string;
 
@@ -30,7 +29,7 @@ export class ChatDetailComponent implements OnInit {
 
   name: string;
 
-  messages: Message[];
+  messagesWithUsers: MessageWithUser[];
 
   groupid: string;
 
@@ -38,6 +37,7 @@ export class ChatDetailComponent implements OnInit {
     private db: AngularFirestore,
     private activatedRoute: ActivatedRoute,
     private chatService: ChatService,
+    private chatGetService: ChatGetService,
     private authService: AuthService,
     private fb: FormBuilder
   ) {}
@@ -49,26 +49,15 @@ export class ChatDetailComponent implements OnInit {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       const chatRoomId = params.get('id');
       this.chatRoomId = chatRoomId;
-      this.chatService
+      this.chatGetService
         .getChatRoom(chatRoomId)
         .subscribe((chatRoom: ChatRoom) => {
           this.name = chatRoom?.name;
           this.groupid = chatRoom?.groupid;
-          this.chatService
-            .getMessages(chatRoomId)
-            .subscribe((messages: Message[]) => {
-              if (messages === null) {
-                this.messages = [];
-                this.noMessage = true;
-              } else {
-                if (messages.length) {
-                  this.messages = messages;
-                  this.noMessage = false;
-                } else {
-                  this.messages = [];
-                  this.noMessage = true;
-                }
-              }
+          this.chatGetService
+            .getMessagesWithUsers(chatRoomId)
+            .subscribe((messagesWithUsers: MessageWithUser[]) => {
+              this.messagesWithUsers = messagesWithUsers;
             });
         });
     });

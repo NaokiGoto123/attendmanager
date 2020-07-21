@@ -27,7 +27,7 @@ export class AccountComponent implements OnInit {
       this.userService
         .getUserFromSearchId(searchId)
         .subscribe((target: User) => {
-          const id = target.uid;
+          const id = target?.uid;
           if (id === this.authService.uid || id === null) {
             this.ifTarget = false;
             this.userService
@@ -35,62 +35,20 @@ export class AccountComponent implements OnInit {
               .subscribe((user: User) => {
                 this.user = user;
                 this.routerLinks = [
-                  { label: 'Settings', link: 'settings' },
-                  { label: 'Invited groups', link: 'invited-groups' },
-                  { label: 'Invited events', link: 'invited-events' },
-                  { label: 'Waiting groups', link: 'waiting-groups' },
-                  { label: 'Paying groups', link: 'paying-groups' },
-                  { label: 'Waiting events', link: 'waiting-events' },
-                  { label: 'Paying events', link: 'paying-events' },
-                  { label: 'Groups', link: 'groups' },
                   { label: 'Attending events', link: 'attending-events' },
                   { label: 'Attended events', link: 'attended-events' },
+                  { label: 'Others' },
                 ];
               });
           } else {
             this.userService.getUser(id).subscribe((user: User) => {
               this.user = user;
-              if (
-                user?.showGroups &&
-                user?.showAttendingEvents &&
-                user?.showAttendingEvents
-              ) {
-                this.routerLinks = [
-                  { label: 'Groups', link: 'groups' },
-                  { label: 'Attending events', link: 'attending-events' },
-                  { label: 'Attended events', link: 'attended-events' },
-                ];
-              } else if (user?.showGroups && user?.showAttendingEvents) {
-                this.routerLinks = [
-                  { label: 'Groups', link: 'groups' },
-                  { label: 'Attending events', link: 'attending-events' },
-                ];
-              } else if (user?.showGroups && user?.showAttendedEvents) {
-                this.routerLinks = [
-                  { label: 'Groups', link: 'groups' },
-                  { label: 'Attended events', link: 'attended-events' },
-                ];
-              } else if (
-                user?.showAttendingEvents &&
-                user?.showAttendedEvents
-              ) {
-                this.routerLinks = [
-                  { label: 'Attending events', link: 'attending-events' },
-                  { label: 'Attended events', link: 'attended-events' },
-                ];
-              } else if (user?.showGroups) {
-                this.routerLinks = [{ label: 'Groups', link: 'groups' }];
-              } else if (user?.showAttendingEvents) {
-                this.routerLinks = [
-                  { label: 'Attending events', link: 'attending-events' },
-                ];
-              } else if (user?.showAttendedEvents) {
-                this.routerLinks = [
-                  { label: 'Attended events', link: 'attended-events' },
-                ];
-              } else {
-                this.routerLinks = [];
-              }
+              this.routerLinks = [
+                { label: 'Attending events', link: 'attending-events' },
+                { label: 'Attended events', link: 'attended-events' },
+                { label: 'Groups', link: 'groups' },
+                { label: 'Others' },
+              ];
             });
           }
         });

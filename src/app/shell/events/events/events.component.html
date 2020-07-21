@@ -1,79 +1,143 @@
-<div *ngIf="!eventsExistance">
-  <div class="no-event-container" *ngIf="groupExistance">
-    <div class="no-event-left-container">
-      <img
-        class="no-event-image"
-        src="/assets/images/schedule1.svg"
-        alt="no event image"
-      />
-    </div>
-    <div class="no-event-right-container">
-      <p>You do not have any events.</p>
-      <p routerLink="/search/events">Search for events</p>
-      <p>or</p>
-      <p routerLink="/create-event">Create event</p>
-    </div>
-  </div>
-
-  <div class="no-group-container" *ngIf="!groupExistance">
-    <div class="no-group-left-container">
-      <img
-        class="no-group-image"
-        src="/assets/images/team1.svg"
-        alt="no group image"
-      />
-    </div>
-    <div class="no-group-right-container">
-      <p>You do not belong to any groups.</p>
-      <p routerLink="/search/groups">Search for groups</p>
-      <p>or</p>
-      <p routerLink="/create-group">Create group</p>
-    </div>
-  </div>
+<div class="spinner-container" *ngIf="initialLoading">
+  <mat-spinner></mat-spinner>
 </div>
 
-<div class="container" *ngIf="eventsExistance">
-  <mat-toolbar class="toolbar">
-    <div *ngFor="let group of groups">
-      <mat-checkbox class="checkbox">{{ group.name }}</mat-checkbox>
+<ng-container *ngIf="!initialLoading">
+  <div *ngIf="!events?.length">
+    <div class="no-event-container" *ngIf="groups?.length">
+      <div class="no-event-container__left">
+        <img
+          class="no-event-container__left__image"
+          src="/assets/images/schedule1.svg"
+          alt="no event image"
+        />
+      </div>
+      <div class="no-event-container__right">
+        <p>You do not have any events.</p>
+        <a routerLink="/search/events">Search for events</a>
+        <p>or</p>
+        <a routerLink="/create-event">Create event</a>
+      </div>
     </div>
-  </mat-toolbar>
 
-  <div class="header-container">
-    <div class="child-header-container">
-      <a routerLink="/create-event">
-        <button class="add-button" mat-fab color="primary">
+    <div class="no-group-container" *ngIf="!groups?.length">
+      <div class="no-group-container__left">
+        <img
+          class="no-group-container__left__image"
+          src="/assets/images/team1.svg"
+          alt="no group image"
+        />
+      </div>
+      <div class="no-group-container__right">
+        <p>You do not belong to any groups.</p>
+        <a routerLink="/search/groups">Search for groups</a>
+        <p>or</p>
+        <a routerLink="/create-group">Create group</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" *ngIf="events?.length">
+    <mat-toolbar class="toolbar">
+      <ng-container [formGroup]="form">
+        <mat-checkbox
+          *ngFor="let group of groups"
+          [formControlName]="group.id"
+          class="toolbar__checkbox"
+          >{{ group.name }}
+        </mat-checkbox>
+      </ng-container>
+    </mat-toolbar>
+
+    <div class="header-container">
+      <div class="buttons-container">
+        <button
+          mat-fab
+          class="buttons-container__button"
+          color="primary"
+          routerLink="/create-event"
+        >
           <mat-icon>add</mat-icon>
         </button>
-      </a>
-
-      <a routerLink="/calendar">
-        <button class="calendar-button" mat-fab color="accent">
+        <button
+          mat-fab
+          class="buttons-container__button"
+          color="accent"
+          routerLink="/calendar"
+        >
           <mat-icon>calendar_today</mat-icon>
         </button>
-      </a>
-
-      <mat-form-field class="search-field">
-        <mat-label>Search bar</mat-label>
-        <input matInput type="text" [(ngModel)]="value" />
         <button
-          mat-button
-          *ngIf="value"
-          matSuffix
-          mat-icon-button
-          aria-label="Clear"
-          (click)="value = ''"
+          mat-fab
+          class="buttons-container__button"
+          color="accent"
+          (click)="toggleView()"
         >
-          <mat-icon>close</mat-icon>
+          <mat-icon>list</mat-icon>
         </button>
-      </mat-form-field>
-    </div>
-  </div>
+      </div>
 
-  <div class="events-container">
-    <app-events-and-detail
-      [events]="events"
-      [existance]="eventsExistance"
-    ></app-events-and-detail>
+      <form
+        class="search-field-container"
+        (ngSubmit)="querySearch(valueControl.value, searchOptions)"
+      >
+        <mat-form-field class="search-field" appearance="outline">
+          <mat-label>Search from your events</mat-label>
+
+          <input
+            matInput
+            type="text"
+            [formControl]="valueControl"
+            autocomplete="off"
+            [matAutocomplete]="auto"
+          />
+
+          <mat-autocomplete
+            autoActiveFirstOption
+            (optionSelected)="querySearch(valueControl.value, searchOptions)"
+            #auto="matAutocomplete"
+          >
+            <mat-option *ngFor="let option of options" [value]="option.title">
+              {{ option.title }}
+            </mat-option>
+          </mat-autocomplete>
+
+          <button
+            mat-button
+            *ngIf="valueControl.value"
+            matSuffix
+            mat-icon-button
+            aria-label="Clear"
+            type="button"
+            (click)="
+              clearSearch(); querySearch(valueControl.value, searchOptions)
+            "
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+      </form>
+    </div>
+    <mat-progress-bar
+      class="progress-bar"
+      mode="indeterminate"
+      *ngIf="loading"
+    ></mat-progress-bar>
+
+    <div class="events-container" *ngIf="!listView">
+      <app-events-and-detail
+        [events]="items"
+        (scrolls)="additionalSearch()"
+      ></app-events-and-detail>
+    </div>
+
+    <ng-container *ngIf="listView">
+      <app-events-list-view
+        [events]="items"
+        [existence]="items?.length"
+        (more)="additionalSearch()"
+      >
+      </app-events-list-view>
+    </ng-container>
   </div>
-</div>
+</ng-container>

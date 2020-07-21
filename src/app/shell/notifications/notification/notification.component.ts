@@ -3,7 +3,6 @@ import { Notification } from 'src/app/interfaces/notification';
 import { AuthService } from 'src/app/services/auth.service';
 import { GroupService } from 'src/app/services/group.service';
 import { EventService } from 'src/app/services/event.service';
-import { User } from 'src/app/interfaces/user';
 import { Event } from 'src/app/interfaces/event';
 import { Group } from 'src/app/interfaces/group';
 
@@ -29,7 +28,7 @@ export class NotificationComponent implements OnInit {
   eventId: string;
   eventName: string;
 
-  date: number;
+  date: any;
 
   constructor(
     private authService: AuthService,
@@ -39,7 +38,7 @@ export class NotificationComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.notification) {
-      this.date = this.notification.date.toMillis();
+      this.date = this.notification.date;
       if (
         this.notification.type === 'joinGroup' ||
         this.notification.type === 'joinGroupWaitinglist' ||

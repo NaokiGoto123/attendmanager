@@ -1,22 +1,14 @@
 .container {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  text-align: center;
 }
 
-.switchUseMyOwnImage-button-container {
-  text-align: center;
-  margin: 0 0 20px 0;
+.title {
+  font-size: 32px;
+  margin: 50px 0 40px 0;
 }
 
-h1 {
-  text-align: center;
-  margin-top: 100px;
-  margin-bottom: 80px;
-}
-
-h3 {
-  text-align: center;
+.userMyOwnImage-button {
+  margin: 0 0 40px 0;
 }
 
 .swiper {
@@ -43,8 +35,8 @@ h3 {
   align-items: center;
 }
 
-.image-input {
-  margin: 0 0 20px 0;
+.file-field {
+  width: 60%;
 }
 
 .cropper-container {
@@ -59,25 +51,40 @@ h3 {
   width: 100%;
 }
 
-.create-group-form {
-  width: 500px;
-  height: 800px;
-  margin: auto;
-  text-align: center;
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60%;
+  margin: 0 auto;
 }
 
-.create-group-field {
-  display: block;
+.field {
+  width: 100%;
 }
 
-.create-button {
-  margin: 30px 0 0 0;
+.radio-button {
+  margin: 0 22px 22px 0;
 }
 
-.buttons {
-  margin: 30px 0 0 0;
+.toggle {
+  display: flex;
+  align-self: flex-start;
+  margin: 0 0 20px 0;
 }
 
-.update-button {
-  margin-right: 10px;
+.submit-buttons-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.submit-button {
+  width: 100%;
+  margin: 0 0 150px 0;
+}
+
+.other-submit-button {
+  width: 100%;
+  margin: 0 0 70px 0;
 }

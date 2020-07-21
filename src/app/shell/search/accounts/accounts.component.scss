@@ -1,0 +1,43 @@
+.spinner-container {
+  display: flex;
+  width: 100%;
+  height: calc(100% - 48px);
+  align-items: center;
+  justify-content: center;
+}
+
+.search-field-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: sticky;
+  z-index: 1;
+  top: 49px;
+  border-bottom: solid 0.3px rgb(224, 224, 224);
+}
+
+.search-field {
+  position: sticky;
+  width: 50%;
+  padding: 21.5px 0 0 0;
+}
+
+mat-list {
+  padding: 0;
+}
+
+.list-item {
+  height: 90px;
+}
+
+.account-picture {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 0 25px 0 0;
+}
+
+.account-displayname {
+  font-size: 20px;
+}

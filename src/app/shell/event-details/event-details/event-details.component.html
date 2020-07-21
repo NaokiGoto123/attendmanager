@@ -1,0 +1,23 @@
+<img class="group-picture" src="{{ group?.grouppicture }}" />
+
+<p>{{ event?.title }}</p>
+
+<p>{{ event?.description }}</p>
+
+<a routerLink="/account" [queryParams]="{ id: creater?.searchId }">{{
+  creater?.displayName
+}}</a>
+
+<p>First {{ event?.memberlimit }} people can attend</p>
+
+<p>
+  Happening at {{ event?.time }} on
+  {{ event?.date.toDate() | date: 'yyyy/MM/dd' }} in
+  {{ event?.location }}
+</p>
+
+<p>{{ event?.price }}{{ event?.currency }} tp attend</p>
+
+<button mat-raised-button color="primary" (click)="openDialog()">
+  Invite
+</button>

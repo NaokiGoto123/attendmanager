@@ -1,22 +1,24 @@
 <div class="container">
-  <div *ngIf="ifTarget; else new">
-    <h1>Update your group</h1>
-  </div>
-  <ng-template #new>
-    <h1>Create your group</h1>
-  </ng-template>
+  <ng-container *ngIf="ifTarget">
+    <p class="title">Update your group</p>
+  </ng-container>
+  <ng-container *ngIf="!ifTarget">
+    <p class="title">Create your group</p>
+  </ng-container>
 
-  <div class="switchUseMyOwnImage-button-container" *ngIf="useMyOwnImage">
-    <button mat-raised-button (click)="switchUseMyOwnImage()" color="primary">
+  <button
+    mat-raised-button
+    class="userMyOwnImage-button"
+    (click)="switchUseMyOwnImage()"
+    color="primary"
+  >
+    <ng-container *ngIf="useMyOwnImage">
       Choose from templates
-    </button>
-  </div>
-
-  <div class="switchUseMyOwnImage-button-container" *ngIf="!useMyOwnImage">
-    <button mat-raised-button (click)="switchUseMyOwnImage()" color="primary">
+    </ng-container>
+    <ng-container *ngIf="!useMyOwnImage">
       Choose from library
-    </button>
-  </div>
+    </ng-container>
+  </button>
 
   <div *ngIf="!useMyOwnImage">
     <div class="swiper">
@@ -34,7 +36,19 @@
   </div>
 
   <div class="select-image-container" *ngIf="useMyOwnImage">
-    <input class="image-input" type="file" (change)="fileChangeEvent($event)" />
+    <mat-form-field
+      class="image-selector"
+      appearance="outline"
+      class="file-field"
+    >
+      <mat-label>Select an image</mat-label>
+      <ngx-mat-file-input
+        placeholder="Basic outline placeholder"
+        (change)="fileChangeEvent($event)"
+      >
+      </ngx-mat-file-input>
+      <mat-icon matSuffix>folder</mat-icon>
+    </mat-form-field>
 
     <div class="cropper-container" *ngIf="imageChangedEvent">
       <img class="selected-image" [src]="croppedImage" />
@@ -53,32 +67,29 @@
     </div>
   </div>
 
-  <form class="create-group-form" [formGroup]="form">
-    <mat-form-field class="create-group-field" appearance="outline">
+  <form [formGroup]="form" class="form">
+    <mat-form-field appearance="outline" class="field">
       <mat-label>Name your group</mat-label>
       <input matInput formControlName="name" type="email" required />
     </mat-form-field>
 
-    <mat-form-field class="create-group-field" appearance="outline">
-      <mat-label>Write group description</mat-label>
-      <input matInput formControlName="description" type="text" />
+    <mat-form-field appearance="outline" class="field">
+      <mat-label>Write group description or additional info</mat-label>
+      <textarea matInput formControlName="description" type="text"></textarea>
     </mat-form-field>
 
     <p>Is there a limit for number of members?</p>
     <mat-radio-group
-      aria-label="Select an option"
       [(ngModel)]="ifMemberLimit"
       [ngModelOptions]="{ standalone: true }"
     >
-      <mat-radio-button [value]="true">Yes</mat-radio-button>
+      <mat-radio-button class="radio-button" [value]="true"
+        >Yes</mat-radio-button
+      >
       <mat-radio-button [value]="false">No</mat-radio-button>
     </mat-radio-group>
 
-    <mat-form-field
-      *ngIf="ifMemberLimit"
-      class="create-group-field"
-      appearance="outline"
-    >
+    <mat-form-field *ngIf="ifMemberLimit" appearance="outline" class="field">
       <mat-label>What is the limit?</mat-label>
       <input
         matInput
@@ -88,9 +99,26 @@
       />
     </mat-form-field>
 
-    <p>{{ form.value.price }} {{ form.value.currency }}</p>
+    <p>Choose the payment model</p>
+    <mat-radio-group
+      aria-label="Select an option"
+      [(ngModel)]="ifSubscription"
+      [ngModelOptions]="{ standalone: true }"
+    >
+      <mat-radio-button class="radio-button" [value]="true"
+        >Pay monthly</mat-radio-button
+      >
+      <mat-radio-button [value]="false">Pay once</mat-radio-button>
+    </mat-radio-group>
 
-    <mat-form-field>
+    <ng-container *ngIf="form.value.price !== 0">
+      <p>
+        Price: {{ form.value.price }} {{ form.value.currency
+        }}<span *ngIf="ifSubscription">/month</span>
+      </p>
+    </ng-container>
+
+    <mat-form-field class="field">
       <mat-label>Choose currency</mat-label>
       <mat-select formControlName="currency">
         <div *ngFor="let currency of currencies">
@@ -100,39 +128,38 @@
     </mat-form-field>
 
     <mat-slider
-      class="create-group-field"
       thumbLabel
+      class="field"
       [displayWith]="formatLabel"
       tickInterval="1000"
       step="500"
       formControlName="price"
       min="0"
       max="50000"
-    >
-    </mat-slider>
+    ></mat-slider>
 
-    <mat-slide-toggle class="create-group-field" formControlName="private">
-      <div *ngIf="form.value.private">
+    <mat-slide-toggle formControlName="private" class="toggle">
+      <ng-container *ngIf="form.value.private">
         Private
-      </div>
-      <div *ngIf="!form.value.private">
+      </ng-container>
+      <ng-container *ngIf="!form.value.private">
         Public
-      </div>
+      </ng-container>
     </mat-slide-toggle>
 
-    <mat-slide-toggle class="create-group-field" formControlName="searchable">
-      <div *ngIf="form.value.searchable">
+    <mat-slide-toggle formControlName="searchable" class="toggle">
+      <ng-container *ngIf="form.value.searchable">
         Searchable
-      </div>
-      <div *ngIf="!form.value.searchable">
+      </ng-container>
+      <ng-container *ngIf="!form.value.searchable">
         Unsearchable
-      </div>
+      </ng-container>
     </mat-slide-toggle>
 
-    <div class="buttons" *ngIf="ifTarget; else create">
+    <div class="submit-buttons-container" *ngIf="ifTarget">
       <button
         mat-raised-button
-        class="update-button"
+        class="other-submit-button"
         [disabled]="form.invalid"
         color="primary"
         (click)="update()"
@@ -141,7 +168,7 @@
       </button>
       <button
         mat-raised-button
-        class="delete-button"
+        class="submit-button"
         [disabled]="form.invalid"
         color="warn"
         (click)="delete()"
@@ -150,16 +177,16 @@
       </button>
     </div>
 
-    <ng-template #create>
+    <ng-container *ngIf="!ifTarget">
       <button
         mat-raised-button
-        class="create-button"
+        class="submit-button"
         [disabled]="form.invalid || form.pristine"
         color="primary"
         (click)="submit()"
       >
         Create
       </button>
-    </ng-template>
+    </ng-container>
   </form>
 </div>

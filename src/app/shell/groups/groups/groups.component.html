@@ -1,30 +1,18 @@
-<div class="search-field-container">
-  <mat-form-field class="search-field">
-    <mat-label>Search bar</mat-label>
-    <input matInput type="text" [(ngModel)]="value" />
-    <button
-      mat-button
-      *ngIf="value"
-      matSuffix
-      mat-icon-button
-      aria-label="Clear"
-      (click)="value = ''"
-    >
-      <mat-icon>close</mat-icon>
-    </button>
-  </mat-form-field>
+<div class="no-group-container" *ngIf="!groups?.length && !loading">
+  <img class="no-group-image" src="/assets/images/smily.svg" />
+  <p class="no-group-text">You do not belong to any groups.</p>
+  <p class="no-group-text">
+    <a routerLink="/search/groups">Search for groups</a> or
+    <a routerLink="/create-group">create one</a>
+  </p>
 </div>
 
-<div class="groups-container">
-  <div class="create-group-grid-container">
-    <div class="create-group-grid">
-      <h1>Create new group</h1>
-      <button mat-fab routerLink="/create-group" color="none">
-        <mat-icon>add</mat-icon>
-      </button>
-    </div>
-  </div>
+<div class="groups-container" *ngIf="groups?.length">
   <div *ngFor="let group of groups">
     <app-group [group]="group"></app-group>
   </div>
+</div>
+
+<div class="spinner-container" *ngIf="loading">
+  <mat-spinner></mat-spinner>
 </div>

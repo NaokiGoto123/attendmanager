@@ -15,7 +15,7 @@ export const createEvent = functions
     });
   });
 
-export const deleteEvent = functions
+export const deleteEventFromIndex = functions
   .region('asia-northeast1')
   .firestore.document('events/{id}')
   .onDelete((snap) => {

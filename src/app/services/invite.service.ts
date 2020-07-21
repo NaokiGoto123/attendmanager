@@ -2,10 +2,6 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { Id } from '../interfaces/id';
-import { switchMap } from 'rxjs/operators';
-import { Observable, combineLatest } from 'rxjs';
-import { Group } from '../interfaces/group';
-import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root',
@@ -24,7 +20,6 @@ export class InviteService {
             memberIds.push(MemberId.id);
           });
           if (memberIds.includes(uid)) {
-            console.log('user is already a member');
             return;
           } else {
             this.db
@@ -35,11 +30,9 @@ export class InviteService {
                   .doc(`users/${uid}/invitedGroupIds/${groupId}`)
                   .set({ id: groupId });
               });
-            console.log('successfully invited the user');
           }
         });
     } else {
-      console.log('cannot invite yourself');
       return;
     }
   }
@@ -53,37 +46,40 @@ export class InviteService {
       });
   }
 
-  getInvitedGroups(uid: string): Observable<Group[]> {
-    return this.db
-      .collection<Id>(`users/${uid}/invitedGroupIds`)
-      .valueChanges()
-      .pipe(
-        switchMap((invitedGroupIds: Id[]) => {
-          const invitedGroups: Observable<Group>[] = [];
-          invitedGroupIds.map((invitedGroupId: Id) => {
-            invitedGroups.push(
-              this.db.doc<Group>(`groups/${invitedGroupId.id}`).valueChanges()
-            );
+  inviteToEvent(uid: string, eventId: string) {
+    if (uid !== this.authService.uid) {
+      const memberIds: string[] = [];
+      this.db
+        .collection<Id>(`events/${eventId}/attendingMemberIds`)
+        .valueChanges()
+        .subscribe((attendingMemberIds: Id[]) => {
+          attendingMemberIds.map((attendingMemberId: Id) => {
+            memberIds.push(attendingMemberId.id);
           });
-          return combineLatest(invitedGroups);
-        })
-      );
+          if (memberIds.includes(uid)) {
+            return;
+          } else {
+            this.db
+              .doc(`events/${eventId}/invitingUserIds/${uid}`)
+              .set({ id: uid })
+              .then(() => {
+                this.db
+                  .doc(`users/${uid}/invitedEventIds/${eventId}`)
+                  .set({ id: eventId });
+              });
+          }
+        });
+    } else {
+      return;
+    }
   }
 
-  getInvitingUsers(groupId: string): Observable<User[]> {
-    return this.db
-      .collection(`groups/${groupId}/invitingUserIds`)
-      .valueChanges()
-      .pipe(
-        switchMap((invitingUserIds: Id[]) => {
-          const invitingUsers: Observable<User>[] = [];
-          invitingUserIds.map((invitingUserId: Id) => {
-            invitingUsers.push(
-              this.db.doc<User>(`users/${invitingUserId.id}`).valueChanges()
-            );
-          });
-          return combineLatest(invitingUsers);
-        })
-      );
+  uninviteFromEvent(uid: string, eventId: string) {
+    this.db
+      .doc(`events/${eventId}/invitingUserIds/${uid}`)
+      .delete()
+      .then(() => {
+        this.db.doc(`users/${uid}/invitedEventIds/${eventId}`).delete();
+      });
   }
 }

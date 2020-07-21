@@ -49,6 +49,6 @@ export class UserService {
     const deleteAccountFunction = this.fns.httpsCallable('deleteAccount');
     const result = await deleteAccountFunction(uid).toPromise();
     await this.afAuth.signOut();
-    await this.router.navigateByUrl('/');
+    await this.router.navigateByUrl('/welcome');
   }
 }

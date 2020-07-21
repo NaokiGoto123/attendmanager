@@ -1,6 +1,63 @@
-<div class="container">
-  <app-events-and-detail
-    [events]="searchableEvents"
-    [existance]="ifSearchableEvents"
-  ></app-events-and-detail>
+<div class="spinner-container" *ngIf="initialLoading">
+  <mat-spinner></mat-spinner>
 </div>
+<ng-container *ngIf="!initialLoading">
+  <form
+    class="search-field-container"
+    (ngSubmit)="querySearch(valueControl.value, searchOptions)"
+  >
+    <mat-form-field class="search-field" appearance="outline">
+      <mat-label>Search from your events</mat-label>
+
+      <input
+        matInput
+        type="text"
+        [formControl]="valueControl"
+        autocomplete="off"
+        [matAutocomplete]="auto"
+      />
+
+      <mat-autocomplete
+        autoActiveFirstOption
+        (optionSelected)="querySearch(valueControl.value, searchOptions)"
+        #auto="matAutocomplete"
+      >
+        <mat-option *ngFor="let option of options" [value]="option.title">
+          {{ option.title }}
+        </mat-option>
+      </mat-autocomplete>
+
+      <button
+        mat-button
+        *ngIf="valueControl.value"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        type="button"
+        (click)="clearSearch(); querySearch(valueControl.value, searchOptions)"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </form>
+  <mat-progress-bar
+    class="progress-bar"
+    mode="indeterminate"
+    *ngIf="loading"
+  ></mat-progress-bar>
+
+  <div class="container" *ngIf="items?.length">
+    <app-events-and-detail
+      [events]="items"
+      (scrolls)="additionalSearch()"
+    ></app-events-and-detail>
+  </div>
+
+  <div class="no-events-container" *ngIf="!items?.length">
+    <img class="no-events-container__image" src="/assets/images/event.svg" />
+    <p class="no-events-container__text">No events</p>
+    <a class="no-events-container__text" routerLink="/create-event"
+      >Create events</a
+    >
+  </div>
+</ng-container>
