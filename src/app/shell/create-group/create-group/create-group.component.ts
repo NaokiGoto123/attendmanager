@@ -151,7 +151,7 @@ export class CreateGroupComponent implements OnInit {
       const a = '/assets/background/';
       const selectedImageId: string = this.selectedImageId.toString();
       const b = a.concat(selectedImageId.toString());
-      const c = '.jpg';
+      const c = '.png';
       const grouppicture: string = b.concat(c);
       let memberlimit: number;
       if (this.ifMemberLimit) {
@@ -219,7 +219,7 @@ export class CreateGroupComponent implements OnInit {
       const a = '/assets/background/';
       const selectedImageId: string = this.selectedImageId.toString();
       const b = a.concat(selectedImageId.toString());
-      const c = '.jpg';
+      const c = '.png';
       const grouppicture = b.concat(c);
       let memberlimit: number;
       if (this.ifMemberLimit) {
