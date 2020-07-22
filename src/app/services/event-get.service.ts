@@ -353,4 +353,12 @@ export class EventGetService {
         })
       );
   }
+
+  getEventsOfGroup(groupId: string): Observable<Event[]> {
+    return this.db
+      .collection<Event>(`events`, (ref) =>
+        ref.where('groupid', '==', groupId).orderBy('date')
+      )
+      .valueChanges();
+  }
 }
