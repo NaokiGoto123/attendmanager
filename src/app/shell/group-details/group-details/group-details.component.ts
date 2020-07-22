@@ -14,6 +14,8 @@ import { UserService } from 'src/app/services/user.service';
 import { InviteService } from 'src/app/services/invite.service';
 import { GroupGetService } from 'src/app/services/group-get.service';
 import { InviteGetService } from 'src/app/services/invite-get.service';
+import { Event } from 'src/app/interfaces/event';
+import { EventGetService } from 'src/app/services/event-get.service';
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
@@ -24,7 +26,7 @@ export class GroupDetailsComponent implements OnInit {
 
   uid: string;
 
-  ifadmin: boolean; // イベントを保有しているグループの管理者であるかの確認。Trueかfalseを返す
+  ifadmin: boolean;
 
   ifmember: boolean;
 
@@ -37,8 +39,11 @@ export class GroupDetailsComponent implements OnInit {
   waitingJoinningMembers: Observable<User[]>;
   waitingPayingMembers: Observable<User[]>;
   invitingUsers: User[];
+  events: Event[];
 
   searchId: string;
+
+  displayedColumns = ['Title', 'Date', 'Location', 'Price', 'Details'];
 
   constructor(
     private location: Location,
@@ -51,7 +56,8 @@ export class GroupDetailsComponent implements OnInit {
     private chatService: ChatService,
     private dialog: MatDialog,
     private inviteService: InviteService,
-    private inviteGetService: InviteGetService
+    private inviteGetService: InviteGetService,
+    private eventGetService: EventGetService
   ) {
     this.activatedRoute.queryParamMap.subscribe((params) => {
       this.id = params.get('id');
@@ -141,6 +147,12 @@ export class GroupDetailsComponent implements OnInit {
         .getGroupInvitingUsers(this.id)
         .subscribe((invitingUsers: User[]) => {
           this.invitingUsers = invitingUsers;
+        });
+
+      this.eventGetService
+        .getEventsOfGroup(this.id)
+        .subscribe((events: Event[]) => {
+          this.events = events;
         });
     });
   }
