@@ -11,8 +11,6 @@ import { Group } from 'src/app/interfaces/group';
 export class EventsListViewComponent implements OnInit {
   @Input() events: Event[];
 
-  @Input() existence: boolean;
-
   @Output() more: EventEmitter<boolean> = new EventEmitter();
 
   eventsWithGroupNames: EventWithGroupId[] = [];

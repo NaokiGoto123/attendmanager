@@ -44,8 +44,8 @@
       <td mat-cell *matCellDef="let eventWithGroupName">
         <button
           mat-icon-button
-          routerLink="group-details"
-          [queryParams]="{ id: eventWithGroupName.groupid }"
+          routerLink="/event-details"
+          [queryParams]="{ id: eventWithGroupName.id }"
         >
           <mat-icon>launch</mat-icon>
         </button>
