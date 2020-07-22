@@ -132,11 +132,7 @@
     </div>
 
     <ng-container *ngIf="listView">
-      <app-events-list-view
-        [events]="items"
-        [existence]="items?.length"
-        (more)="additionalSearch()"
-      >
+      <app-events-list-view [events]="items" (more)="additionalSearch()">
       </app-events-list-view>
     </ng-container>
   </div>
