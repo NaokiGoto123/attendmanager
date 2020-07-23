@@ -5,6 +5,7 @@ import { Observable, combineLatest, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Id } from '../interfaces/id';
 import { AngularFireFunctions } from '@angular/fire/functions';
+import { User } from '../interfaces/user';
 
 @Injectable({
   providedIn: 'root',
@@ -38,6 +39,28 @@ export class GroupGetService {
       );
   }
 
+  getMembers(groupId: string) {
+    return this.db
+      .collection<Id>(`groups/${groupId}/memberIds`)
+      .valueChanges()
+      .pipe(
+        map((memberIds: Id[]) => {
+          const MemberIds: string[] = [];
+          memberIds.forEach((memberId: Id) => {
+            MemberIds.push(memberId.id);
+          });
+          return MemberIds;
+        }),
+        switchMap((memberIds: string[]) => {
+          const members: Observable<User>[] = [];
+          memberIds.map((memberId: string) => {
+            members.push(this.db.doc<User>(`users/${memberId}`).valueChanges());
+          });
+          return combineLatest(members);
+        })
+      );
+  }
+
   getAdminIds(groupId: string): Observable<string[]> {
     return this.db
       .collection<Id>(`groups/${groupId}/adminIds`)
@@ -49,6 +72,28 @@ export class GroupGetService {
             AdminIds.push(adminId.id);
           });
           return AdminIds;
+        })
+      );
+  }
+
+  getAdmins(groupId: string): Observable<User[]> {
+    return this.db
+      .collection<Id>(`groups/${groupId}/adminIds`)
+      .valueChanges()
+      .pipe(
+        map((adminIds: Id[]) => {
+          const AdminIds: string[] = [];
+          adminIds.forEach((adminId: Id) => {
+            AdminIds.push(adminId.id);
+          });
+          return AdminIds;
+        }),
+        switchMap((adminIds: string[]) => {
+          const admins: Observable<User>[] = [];
+          adminIds.map((adminId: string) => {
+            admins.push(this.db.doc<User>(`users/${adminId}`).valueChanges());
+          });
+          return combineLatest(admins);
         })
       );
   }
