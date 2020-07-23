@@ -12,7 +12,7 @@
       <mat-icon>arrow_back</mat-icon>
     </button>
 
-    <div *ngIf="ifadmin">
+    <div *ngIf="adminIds?.includes(uid)">
       <a routerLink="/create-group" [queryParams]="{ id: id }">
         <button mat-icon-button color="primary">
           <mat-icon>edit</mat-icon>
@@ -71,7 +71,7 @@
             </a>
             <button
               mat-stroked-button
-              *ngIf="ifadmin && admin.uid === uid"
+              *ngIf="adminIds?.includes(uid) && admin.uid === uid"
               color="warn"
               (click)="deleteAdmin(admin.uid)"
             >
@@ -97,7 +97,9 @@
             <div
               class="content-container__members__content__buttons"
               *ngIf="
-                ifadmin && member.uid !== uid && !adminIds.includes(member.uid)
+                adminIds?.includes(uid) &&
+                member.uid !== uid &&
+                !adminIds.includes(member.uid)
               "
             >
               <button
@@ -142,7 +144,7 @@
             </a>
             <div
               class="content-container__waiting-users__content__buttons"
-              *ngIf="group?.price === 0 && ifadmin"
+              *ngIf="group?.price === 0 && adminIds?.includes(uid)"
             >
               <button
                 mat-stroked-button
@@ -162,7 +164,7 @@
             </div>
             <div
               class="content-container__waiting-users__content__buttons"
-              *ngIf="group?.price !== 0 && ifadmin"
+              *ngIf="group?.price !== 0 && adminIds?.includes(uid)"
             >
               <button
                 mat-stroked-button
@@ -222,7 +224,7 @@
       </p>
     </ng-container>
 
-    <div class="content-container__events">
+    <div class="content-container__events" *ngIf="events?.length">
       <table
         class="content-container__events__table"
         mat-table
@@ -281,17 +283,17 @@
       <button
         mat-raised-button
         class="content-container__buttons__button"
-        *ngIf="ifadmin"
+        *ngIf="adminIds?.includes(uid)"
         color="primary"
         (click)="openDialog()"
       >
         Invite people
       </button>
-      <ng-container *ngIf="ifmember">
+      <ng-container *ngIf="memberIds?.includes(uid)">
         <button
           mat-raised-button
           class="content-container__buttons__button"
-          *ngIf="!group?.chatRoomId && ifadmin"
+          *ngIf="!group?.chatRoomId && adminIds?.includes(uid)"
           (click)="createChatRoom()"
           color="primary"
         >

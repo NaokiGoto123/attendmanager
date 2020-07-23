@@ -26,16 +26,12 @@ export class GroupDetailsComponent implements OnInit {
 
   uid: string;
 
-  ifadmin: boolean;
-
-  ifmember: boolean;
-
   group: Group;
   creater: User;
-  adminIds: string[];
   admins: User[];
-  memberIds: string[];
+  adminIds: string[];
   members: User[];
+  memberIds: string[];
   waitingJoinningMembers: Observable<User[]>;
   waitingPayingMembers: Observable<User[]>;
   invitingUsers: User[];
@@ -73,45 +69,25 @@ export class GroupDetailsComponent implements OnInit {
           });
       });
 
-      this.groupGetService
-        .getAdminIds(this.id)
-        .subscribe((adminIds: string[]) => {
-          this.adminIds = adminIds;
-          if (adminIds.length) {
-            if (adminIds.includes(this.uid)) {
-              this.ifadmin = true;
-            } else {
-              this.ifadmin = false;
-            }
-          }
-          const admins: User[] = [];
-          adminIds.forEach((adminId: string) => {
-            this.userService.getUser(adminId).subscribe((admin: User) => {
-              admins.push(admin);
-            });
-          });
-          this.admins = admins;
+      this.groupGetService.getAdmins(this.id).subscribe((admins: User[]) => {
+        console.log(admins);
+        this.admins = admins;
+        const adminIds = [];
+        admins.map((admin) => {
+          adminIds.push(admin.uid);
         });
+        this.adminIds = adminIds;
+      });
 
-      this.groupGetService
-        .getMemberIds(this.id)
-        .subscribe((memberIds: string[]) => {
-          this.memberIds = memberIds;
-          if (memberIds.length) {
-            if (memberIds.includes(this.uid)) {
-              this.ifmember = true;
-            } else {
-              this.ifmember = false;
-            }
-          }
-          const members: User[] = [];
-          memberIds.forEach((memberId: string) => {
-            this.userService.getUser(memberId).subscribe((member: User) => {
-              members.push(member);
-            });
-          });
-          this.members = members;
+      this.groupGetService.getMembers(this.id).subscribe((members: User[]) => {
+        console.log(members);
+        this.members = members;
+        const memberIds = [];
+        members.map((member) => {
+          memberIds.push(member.uid);
         });
+        this.memberIds = memberIds;
+      });
 
       this.groupGetService
         .getWaitingJoinningMemberIds(this.id)
