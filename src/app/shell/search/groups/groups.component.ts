@@ -68,6 +68,12 @@ export class GroupsComponent implements OnInit {
     });
   }
 
+  querySearch(query: string, searchOptions) {
+    this.index.search(query, searchOptions).then((result) => {
+      this.items = result?.hits;
+    });
+  }
+
   additionalSearch() {
     if (!this.loading) {
       this.loading = true;
