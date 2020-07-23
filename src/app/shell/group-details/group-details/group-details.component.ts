@@ -32,8 +32,8 @@ export class GroupDetailsComponent implements OnInit {
   adminIds: string[];
   members: User[];
   memberIds: string[];
-  waitingJoinningMembers: Observable<User[]>;
-  waitingPayingMembers: Observable<User[]>;
+  waitingJoinningMembers: User[];
+  waitingPayingMembers: User[];
   invitingUsers: User[];
   events: Event[];
 
@@ -90,33 +90,15 @@ export class GroupDetailsComponent implements OnInit {
       });
 
       this.groupGetService
-        .getWaitingJoinningMemberIds(this.id)
-        .subscribe((waitingJoinningMemberIds: string[]) => {
-          if (waitingJoinningMemberIds.length) {
-            this.waitingJoinningMembers = combineLatest(
-              waitingJoinningMemberIds.map((waitingMemberId) => {
-                const waitingMember: Observable<User> = this.userService.getUser(
-                  waitingMemberId
-                );
-                return waitingMember;
-              })
-            );
-          }
+        .getWaitingJoinningMembers(this.id)
+        .subscribe((waitingJoinningMembers: User[]) => {
+          this.waitingJoinningMembers = waitingJoinningMembers;
         });
 
       this.groupGetService
-        .getWaitingPayingMemberIds(this.id)
-        .subscribe((waitingPayingMemberIds: string[]) => {
-          if (waitingPayingMemberIds.length) {
-            this.waitingPayingMembers = combineLatest(
-              waitingPayingMemberIds.map((waitingPayingMemberId) => {
-                const waitingPayingMember: Observable<User> = this.userService.getUser(
-                  waitingPayingMemberId
-                );
-                return waitingPayingMember;
-              })
-            );
-          }
+        .getWaitingPayingMembers(this.id)
+        .subscribe((waitingPayingMembers: User[]) => {
+          this.waitingPayingMembers = waitingPayingMembers;
         });
 
       this.inviteGetService

@@ -45,18 +45,28 @@ export class GroupGetService {
       .valueChanges()
       .pipe(
         map((memberIds: Id[]) => {
-          const MemberIds: string[] = [];
-          memberIds.forEach((memberId: Id) => {
-            MemberIds.push(memberId.id);
-          });
-          return MemberIds;
+          if (memberIds.length) {
+            const MemberIds: string[] = [];
+            memberIds.forEach((memberId: Id) => {
+              MemberIds.push(memberId.id);
+            });
+            return MemberIds;
+          } else {
+            return [];
+          }
         }),
         switchMap((memberIds: string[]) => {
-          const members: Observable<User>[] = [];
-          memberIds.map((memberId: string) => {
-            members.push(this.db.doc<User>(`users/${memberId}`).valueChanges());
-          });
-          return combineLatest(members);
+          if (memberIds.length) {
+            const members: Observable<User>[] = [];
+            memberIds.map((memberId: string) => {
+              members.push(
+                this.db.doc<User>(`users/${memberId}`).valueChanges()
+              );
+            });
+            return combineLatest(members);
+          } else {
+            return of([]);
+          }
         })
       );
   }
@@ -82,18 +92,26 @@ export class GroupGetService {
       .valueChanges()
       .pipe(
         map((adminIds: Id[]) => {
-          const AdminIds: string[] = [];
-          adminIds.forEach((adminId: Id) => {
-            AdminIds.push(adminId.id);
-          });
-          return AdminIds;
+          if (adminIds.length) {
+            const AdminIds: string[] = [];
+            adminIds.forEach((adminId: Id) => {
+              AdminIds.push(adminId.id);
+            });
+            return AdminIds;
+          } else {
+            return [];
+          }
         }),
         switchMap((adminIds: string[]) => {
-          const admins: Observable<User>[] = [];
-          adminIds.map((adminId: string) => {
-            admins.push(this.db.doc<User>(`users/${adminId}`).valueChanges());
-          });
-          return combineLatest(admins);
+          if (adminIds.length) {
+            const admins: Observable<User>[] = [];
+            adminIds.map((adminId: string) => {
+              admins.push(this.db.doc<User>(`users/${adminId}`).valueChanges());
+            });
+            return combineLatest(admins);
+          } else {
+            return of([]);
+          }
         })
       );
   }
@@ -243,6 +261,40 @@ export class GroupGetService {
       );
   }
 
+  getWaitingPayingMembers(groupId: string): Observable<User[]> {
+    return this.db
+      .collection(`groups/${groupId}/waitingPayingMemberIds`)
+      .valueChanges()
+      .pipe(
+        map((waitingPayingMemberIds: Id[]) => {
+          if (waitingPayingMemberIds.length) {
+            const result: string[] = [];
+            waitingPayingMemberIds.map((waitingPayingMemberId: Id) => {
+              result.push(waitingPayingMemberId.id);
+            });
+            return result;
+          } else {
+            return [];
+          }
+        }),
+        switchMap((waitingPayingMemberIds: string[]) => {
+          if (waitingPayingMemberIds.length) {
+            const waitingPayingMembers: Observable<User>[] = [];
+            waitingPayingMemberIds.map((waitingPayingMemberId: string) => {
+              waitingPayingMembers.push(
+                this.db
+                  .doc<User>(`users/${waitingPayingMemberId}`)
+                  .valueChanges()
+              );
+            });
+            return combineLatest(waitingPayingMembers);
+          } else {
+            return of([]);
+          }
+        })
+      );
+  }
+
   getWaitingJoinningMemberIds(groupId: string): Observable<string[]> {
     return this.db
       .collection(`groups/${groupId}/waitingJoinningMemberIds`)
@@ -257,6 +309,40 @@ export class GroupGetService {
             return result;
           } else {
             return [];
+          }
+        })
+      );
+  }
+
+  getWaitingJoinningMembers(groupId: string): Observable<User[]> {
+    return this.db
+      .collection(`groups/${groupId}/waitingJoinningMemberIds`)
+      .valueChanges()
+      .pipe(
+        map((waitingJoinningMemberIds: Id[]) => {
+          if (waitingJoinningMemberIds.length) {
+            const result: string[] = [];
+            waitingJoinningMemberIds.map((waitingJoinningMemberId: Id) => {
+              result.push(waitingJoinningMemberId.id);
+            });
+            return result;
+          } else {
+            return [];
+          }
+        }),
+        switchMap((waitingJoinningMemberIds: string[]) => {
+          if (waitingJoinningMemberIds.length) {
+            const waitingJoinningMembers: Observable<User>[] = [];
+            waitingJoinningMemberIds.map((waitingJoinningMemberId: string) => {
+              waitingJoinningMembers.push(
+                this.db
+                  .doc<User>(`users/${waitingJoinningMemberId}`)
+                  .valueChanges()
+              );
+            });
+            return combineLatest(waitingJoinningMembers);
+          } else {
+            return of([]);
           }
         })
       );

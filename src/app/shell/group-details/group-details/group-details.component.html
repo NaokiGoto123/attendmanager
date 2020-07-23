@@ -129,18 +129,18 @@
 
     <div
       class="content-container__waiting-users"
-      *ngIf="(waitingJoinningMembers | async)?.length"
+      *ngIf="waitingJoinningMembers?.length"
     >
       <p class="content-container__waiting-users__title">Waiting users</p>
-      <ul *ngFor="let waitingMember of waitingJoinningMembers | async">
+      <ul *ngFor="let waitingJoinningMember of waitingJoinningMembers">
         <li>
           <div class="content-container__waiting-users__content">
             <a
               class="content-container__waiting-users__content__name"
               routerLink="/account"
-              [queryParams]="{ searchId: waitingMember.searchId }"
+              [queryParams]="{ searchId: waitingJoinningMember.searchId }"
             >
-              {{ waitingMember.displayName }}
+              {{ waitingJoinningMember.displayName }}
             </a>
             <div
               class="content-container__waiting-users__content__buttons"
@@ -150,14 +150,14 @@
                 mat-stroked-button
                 class="content-container__waiting-users__content__buttons__button"
                 color="primary"
-                (click)="allowWaitingMember(waitingMember.uid)"
+                (click)="allowWaitingMember(waitingJoinningMember.uid)"
               >
                 Allow
               </button>
               <button
                 mat-stroked-button
                 color="warn"
-                (click)="leaveWaitingList(waitingMember.uid)"
+                (click)="leaveWaitingList(waitingJoinningMember.uid)"
               >
                 Remove
               </button>
@@ -171,7 +171,9 @@
                 class="content-container__waiting-users__content__buttons__button"
                 color="primary"
                 (click)="
-                  waitingJoinningMemberToWaitingPayingMember(waitingMember.uid)
+                  waitingJoinningMemberToWaitingPayingMember(
+                    waitingJoinningMember.uid
+                  )
                 "
               >
                 Allow
@@ -179,7 +181,7 @@
               <button
                 mat-stroked-button
                 color="warn"
-                (click)="leaveWaitingList(waitingMember.uid)"
+                (click)="leaveWaitingList(waitingJoinningMember.uid)"
               >
                 Remove
               </button>
@@ -189,7 +191,7 @@
       </ul>
     </div>
 
-    <ng-container *ngIf="!(waitingJoinningMembers | async)?.length">
+    <ng-container *ngIf="!waitingJoinningMembers?.length">
       <p class="content-container__no-waiting-users">
         There are no waiting members.
       </p>
