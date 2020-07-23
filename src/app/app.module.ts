@@ -11,6 +11,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireFunctionsModule, REGION } from '@angular/fire/functions';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { NgxStripeModule } from 'ngx-stripe';
 
 // angular materials
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -20,7 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { FullCalendarModule } from '@fullcalendar/angular'; // for FullCalendar!
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   declarations: [AppComponent],
@@ -42,6 +43,7 @@ import { FullCalendarModule } from '@fullcalendar/angular'; // for FullCalendar!
     MatBadgeModule,
     MatSnackBarModule,
     FullCalendarModule,
+    NgxStripeModule.forRoot(environment.stripe.publicKey),
   ],
   providers: [{ provide: REGION, useValue: 'asia-northeast1' }],
   bootstrap: [AppComponent],

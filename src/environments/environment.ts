@@ -14,4 +14,8 @@ export const environment = {
     appId: 'PBJ3SLBZU1',
     searchKey: 'dd5074173d20b3765b3045baa3a7e7ff',
   },
+  stripe: {
+    publicKey:
+      'pk_test_51H82CDG3ez18pyZWIl7BJ40ccX1w2p4VzfZGThiyd2zotAIsN2UqAhU9uzMm3zV3CuezpgfWwFX1mjzPdPMmZROw00cGjOPZ2O',
+  },
 };
