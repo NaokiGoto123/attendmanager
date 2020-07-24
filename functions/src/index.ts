@@ -8,4 +8,5 @@ export * from './algolia/event.function';
 export * from './algolia/group.function';
 export * from './algolia/user.function';
 export * from './algolia/notification.function';
-export * from './stripe/user.function';
+export * from './stripe/customer.function';
+export * from './stripe/payment-methods.function';
