@@ -1,0 +1,15 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 70%;
+  height: 100%;
+  margin: 0 auto;
+  &__field {
+    margin: 0 0 40px 0;
+  }
+}
+
+.card-element {
+  margin: 0 0 40px 0;
+}

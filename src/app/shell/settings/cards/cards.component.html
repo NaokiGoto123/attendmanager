@@ -1,1 +1,33 @@
-<p>cards works!</p>
+<form class="form" [formGroup]="form" (ngSubmit)="createCard()">
+  <mat-form-field class="form__field">
+    <mat-label>名前</mat-label>
+    <input
+      type="text"
+      matInput
+      required
+      formControlName="name"
+      autocomplete="name"
+    />
+  </mat-form-field>
+
+  <mat-form-field class="form__field">
+    <mat-label>メール</mat-label>
+    <input
+      type="email"
+      matInput
+      required
+      formControlName="email"
+      autocomplete="email"
+    />
+  </mat-form-field>
+
+  <div class="card-element" #cardElement></div>
+
+  <button
+    mat-raised-button
+    color="primary"
+    [disabled]="form.invalid || form.pristine || !isComplete || loading"
+  >
+    保存
+  </button>
+</form>
