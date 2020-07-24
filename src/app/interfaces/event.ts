@@ -1,5 +1,4 @@
 import { firestore } from 'firebase';
-import { Group } from './group';
 
 export interface Event {
   id: string;
