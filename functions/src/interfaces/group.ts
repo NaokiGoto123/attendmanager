@@ -1,12 +1,14 @@
 export interface Group {
-  id: string; // グループID
-  name: string; // グループ名
-  description: string; // グループ詳細
-  grouppicture: string; // グループ画像
+  id: string;
+  name: string;
+  description: string;
+  grouppicture: string;
   createddate: Date;
-  createrId: string; // グループ作成者
-  chatRoomId: string; // チャットルームID
-  price: number; // 入会金
+  createrId: string;
+  memberlimit: number;
+  chatRoomId: string;
+  price: number;
+  subscription: boolean;
   currency: string;
   private: boolean;
   searchable: boolean;

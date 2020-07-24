@@ -1,15 +1,19 @@
 export interface Event {
-  id: string; // イベントID
-  title: string; // イベントタイトル
-  description: string; // イベント詳細
-  createrId: string; // イベント作った人
-  memberlimit: number; // 参加人数制限
-  date: Date; // イベント日付
-  time: string; // イベント時間
-  location: string; // イベント場所
-  groupid: string; // イベントが作られたグループID
-  price: number; // 参加費
+  id: string;
+  title: string;
+  description: string;
+  createrId: string;
+  memberlimit: number;
+  date: Date;
+  time: string;
+  location: string;
+  groupid: string;
+  price: number;
   currency: string;
   private: boolean;
   searchable: boolean;
+}
+
+export interface EventWithGroupId extends Event {
+  groupName: string;
 }
