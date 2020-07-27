@@ -4,6 +4,7 @@ import * as admin from 'firebase-admin';
 const firebase_tools = require('firebase-tools');
 
 const db = admin.firestore();
+const storage = admin.storage().bucket();
 
 export const deleteGroup = functions
   .runWith({
@@ -168,6 +169,9 @@ export const deleteGroup = functions
       token: functions.config().fb.token,
     });
 
+    // 写真をstorageから削除
+    await storage.deleteFiles({ directory: `groups/${groupId}` });
+
     return;
   });
 
@@ -282,17 +286,29 @@ export const deleteAccount = functions
     const groupIds = (
       await db.collection(`users/${uid}/groupIds`).get()
     ).docs.map((doc) => doc.data());
+    console.log(groupIds);
     const deleteFromGroups = groupIds.map((groupId) => {
       db.doc(`groups/${groupId.id}/memberIds/${uid}`);
     });
     await Promise.all(deleteFromGroups);
+
+    const adminGroupIds = (
+      await db.collection(`users/${uid}/adminGroupIds`).get()
+    ).docs.map((doc) => doc.data());
+    console.log(adminGroupIds);
+    const deleteFromAdminGroups = adminGroupIds.map((adminGroupId) => {
+      db.doc(`groups/${adminGroupId.id}/adminIds/${uid}`);
+    });
+    await Promise.all(deleteFromAdminGroups);
 
     const waitingJoinningGroupIds = (
       await db.collection(`users/${uid}/waitingJoinningGroupIds`).get()
     ).docs.map((doc) => doc.data());
     const deleteFromWaitingJoinningGroups = waitingJoinningGroupIds.map(
       (waitingJoinningGroupId) => {
-        db.doc(`groups/${waitingJoinningGroupId.id}/memberIds/${uid}`);
+        db.doc(
+          `groups/${waitingJoinningGroupId.id}/waitingJoinningMemberIds/${uid}`
+        );
       }
     );
     await Promise.all(deleteFromWaitingJoinningGroups);
@@ -302,7 +318,9 @@ export const deleteAccount = functions
     ).docs.map((doc) => doc.data());
     const deleteFromWaitingPayingGroups = waitingPayingGroupIds.map(
       (waitingPayingGroupId) => {
-        db.doc(`groups/${waitingPayingGroupId.id}/memberIds/${uid}`);
+        db.doc(
+          `groups/${waitingPayingGroupId.id}/waitingPayingMemberIds/${uid}`
+        );
       }
     );
     await Promise.all(deleteFromWaitingPayingGroups);
@@ -322,7 +340,7 @@ export const deleteAccount = functions
       await db.collection(`users/${uid}/eventIds`).get()
     ).docs.map((doc) => doc.data());
     const deleteFromEvents = eventIds.map((eventId) => {
-      db.doc(`events/${eventId.id}/memberIds/${uid}`);
+      db.doc(`events/${eventId.id}/attendingMemberIds/${uid}`);
     });
     await Promise.all(deleteFromEvents);
 
@@ -331,7 +349,9 @@ export const deleteAccount = functions
     ).docs.map((doc) => doc.data());
     const deleteFromWaitingJoinningEvents = waitingJoinningEventIds.map(
       (waitingJoinningEventId) => {
-        db.doc(`events/${waitingJoinningEventId.id}/memberIds/${uid}`);
+        db.doc(
+          `events/${waitingJoinningEventId.id}/waitingJoinningMemberIds/${uid}`
+        );
       }
     );
     await Promise.all(deleteFromWaitingJoinningEvents);
@@ -341,7 +361,9 @@ export const deleteAccount = functions
     ).docs.map((doc) => doc.data());
     const deleteFromWaitingPayingEvents = waitingPayingEventIds.map(
       (waitingPayingEventId) => {
-        db.doc(`events/${waitingPayingEventId.id}/memberIds/${uid}`);
+        db.doc(
+          `events/${waitingPayingEventId.id}/waitingPayingMemberIds/${uid}`
+        );
       }
     );
     await Promise.all(deleteFromWaitingPayingEvents);
@@ -363,6 +385,19 @@ export const deleteAccount = functions
       yes: true,
       token: functions.config().fb.token,
     });
+
+    // Customersからの削除
+    const pathToCustomer = `customers/${uid}`;
+
+    await firebase_tools.firestore.delete(pathToCustomer, {
+      project: process.env.GCLOUD_PROJECT,
+      recursive: true,
+      yes: true,
+      token: functions.config().fb.token,
+    });
+
+    // 写真をstorageから削除
+    await storage.deleteFiles({ directory: `users/${uid}` });
 
     // ユーザー削除
     await admin.auth().deleteUser(uid);
