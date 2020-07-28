@@ -12,13 +12,7 @@ import { AngularFireFunctions } from '@angular/fire/functions';
   providedIn: 'root',
 })
 export class PaymentService {
-  stripeClient: StripeClient;
-
-  constructor(private fns: AngularFireFunctions) {
-    this.getStripeClient().then(
-      (stripeClient) => (this.stripeClient = stripeClient)
-    );
-  }
+  constructor(private fns: AngularFireFunctions) {}
 
   getPaymentMethods(): Promise<Stripe.ApiList<Stripe.PaymentMethod>> {
     const callable = this.fns.httpsCallable('getPaymentMethods');
@@ -35,12 +29,13 @@ export class PaymentService {
   }
 
   async setPaymemtMethod(
+    client: StripeClient,
     card: StripeCardElement,
     name: string,
     email: string
   ): Promise<void> {
     const intent = await this.createStripeSetupIntent();
-    const { setupIntent, error } = await this.stripeClient.confirmCardSetup(
+    const { setupIntent, error } = await client.confirmCardSetup(
       intent.client_secret,
       {
         payment_method: {
@@ -62,6 +57,11 @@ export class PaymentService {
         }).toPromise();
       }
     }
+  }
+
+  setDefaultMethod(id: string): Promise<void> {
+    const callable = this.fns.httpsCallable('setStripeDefaultPaymentMethod');
+    return callable({ id }).toPromise();
   }
 
   deleteStripePaymentMethod(id: string): Promise<void> {
