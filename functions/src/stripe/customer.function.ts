@@ -21,6 +21,34 @@ export const createCustomer = functions
     });
   });
 
+export const getStripeCustomer = functions
+  .region('asia-northeast1')
+  .https.onCall(
+    async (
+      data,
+      context
+    ): Promise<Stripe.Customer | Stripe.DeletedCustomer> => {
+      if (!context.auth) {
+        throw new functions.https.HttpsError('permission-denied', 'not user');
+      }
+
+      const customer = (
+        await db.doc(`customers/${context.auth.uid}`).get()
+      ).data();
+
+      if (!customer) {
+        throw new functions.https.HttpsError(
+          'permission-denied',
+          'there is no customer'
+        );
+      }
+
+      return stripe.customers.retrieve(customer.customerId, {
+        expand: ['subscriptions'],
+      });
+    }
+  );
+
 export const deleteCustomer = functions
   .region('asia-northeast1')
   .firestore.document('users/{uid}')
