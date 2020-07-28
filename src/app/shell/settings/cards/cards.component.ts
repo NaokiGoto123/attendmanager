@@ -3,7 +3,7 @@ import { PaymentService } from 'src/app/services/payment.service';
 import { CustomerService } from 'src/app/services/customer.service';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { StripeCardElement } from '@stripe/stripe-js';
+import { StripeCardElement, Stripe as StripeClient } from '@stripe/stripe-js';
 import Stripe from 'stripe';
 @Component({
   selector: 'app-cards',
@@ -11,7 +11,6 @@ import Stripe from 'stripe';
   styleUrls: ['./cards.component.scss'],
 })
 export class CardsComponent implements OnInit {
-  // 支払方法登録フォームの設置場所を取得しておく
   @ViewChild('cardElement') private cardElementRef: ElementRef;
 
   form = this.fb.group({
@@ -28,6 +27,7 @@ export class CardsComponent implements OnInit {
   isComplete: boolean;
   loading = true;
   inProgress: boolean;
+  stripeClient: StripeClient;
 
   constructor(
     private fb: FormBuilder,
@@ -42,8 +42,8 @@ export class CardsComponent implements OnInit {
   }
 
   async buildForm() {
-    const stripeClient = await this.paymentService.getStripeClient();
-    const elements = stripeClient.elements();
+    this.stripeClient = await this.paymentService.getStripeClient();
+    const elements = this.stripeClient.elements();
     this.cardElement = elements.create('card');
     this.cardElement.mount(this.cardElementRef.nativeElement);
     this.cardElement.on(
@@ -56,6 +56,7 @@ export class CardsComponent implements OnInit {
   getCards() {
     this.paymentService.getPaymentMethods().then((methods) => {
       this.methods = methods.data;
+      console.log(this.methods);
     });
     this.loading = false;
   }
@@ -69,6 +70,7 @@ export class CardsComponent implements OnInit {
       });
       this.paymentService
         .setPaymemtMethod(
+          this.stripeClient,
           this.cardElement,
           this.form.value.name,
           this.form.value.email
@@ -78,6 +80,7 @@ export class CardsComponent implements OnInit {
           this.getCards();
         })
         .catch((error: Error) => {
+          console.error(error.message);
           switch (error.message) {
             case 'expired_card':
               this.snackBar.open('カードの有効期限が切れています');
@@ -91,6 +94,10 @@ export class CardsComponent implements OnInit {
           this.cardElement.clear();
         });
     }
+  }
+
+  setDefaultMethod(id: string) {
+    this.paymentService.setDefaultMethod(id);
   }
 
   // 編集するカードをフォームの初期値にセット
