@@ -15,3 +15,4 @@ export * from './stripe/payment-methods.function';
 export * from './stripe/intent.function';
 export * from './stripe/invoice.function';
 export * from './stripe/customer-portal.function';
+export * from './stripe/connect.function';
