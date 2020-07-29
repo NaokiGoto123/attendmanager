@@ -17,5 +17,6 @@ export const environment = {
   stripe: {
     publicKey:
       'pk_test_51H82CDG3ez18pyZWIl7BJ40ccX1w2p4VzfZGThiyd2zotAIsN2UqAhU9uzMm3zV3CuezpgfWwFX1mjzPdPMmZROw00cGjOPZ2O',
+    clientId: 'ca_HjG2N0sckFKmepR27vvbUqDHZcoEmRRg',
   },
 };
