@@ -21,7 +21,12 @@
         History
       </a>
       <mat-divider></mat-divider>
-      <ng-container *ngIf="connectedAccountId$ | async">
+      <ng-container
+        *ngIf="
+          connectedAccountId$ | async as connectedAccount;
+          else noConnectedAccount
+        "
+      >
         <a
           class="sidenav-item"
           target="_blank"
@@ -35,10 +40,6 @@
             <mat-icon inline class="sidenav-icon">open_in_new</mat-icon>
           </span>
         </a>
-        <mat-list-item class="sidenav-item" routerLink="/manage-products">
-          <mat-icon class="sidenav-icon">store</mat-icon>
-          Manage products
-        </mat-list-item>
         <mat-list-item class="sidenav-item" routerLink="/invoices">
           <mat-icon class="sidenav-icon">receipt</mat-icon>
           Sales history
@@ -52,14 +53,15 @@
           Delete sales account
         </mat-list-item>
       </ng-container>
-      <mat-list-item
-        *ngIf="!connectedAccountId$ | async"
-        class="sidenav-item"
-        (click)="createStripeConnectedAccount()"
-      >
-        <mat-icon class="sidenav-icon">person_add</mat-icon>
-        Create sales account
-      </mat-list-item>
+      <ng-template #noConnectedAccount>
+        <mat-list-item
+          class="sidenav-item"
+          (click)="createStripeConnectedAccount()"
+        >
+          <mat-icon class="sidenav-icon">person_add</mat-icon>
+          Create sales account
+        </mat-list-item>
+      </ng-template>
     </mat-nav-list>
   </mat-sidenav>
   <mat-sidenav-content>
